@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Richard Zuikov</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<nav>
+  <a href="#" class="nav-logo">RZ</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-img-placeholder">
+    <div class="hero-img-frame">
+      <!-- Replace with: <img src="assets/img/photo.jpg" alt="Richard Zuikov"> -->
+      <span class="hero-img-label">Your photo here</span>
+    </div>
+  </div>
+  <div class="hero-bg"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Based in Flensburg, DE</p>
+    <h1 class="hero-name">Richard<br><em>Zuikov</em></h1>
+    <p class="hero-tagline">IT Systems Engineer &<br>Embedded Developer</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Focus</span>
+        <span class="hero-meta-value">Embedded · Low-level · OpSec</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Stack</span>
+        <span class="hero-meta-value">C++ · Go · Linux</span>
+      </div>
+    </div>
+    <a href="#projects" class="hero-cta">View my work</a>
+  </div>
+
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <p class="section-label fade-up">About</p>
+  <div class="about-grid">
+    <div class="fade-up stagger-1">
+      <h2 class="about-title">Hardware to<br>binary — <em>every<br>layer.</em></h2>
+    </div>
+    <div class="fade-up stagger-2">
+      <p class="about-text">
+        19-year-old IT Systems Electronics apprentice in Flensburg, Germany. I work at the intersection of hardware and software — from soldering embedded targets to writing Go parsers that consume the data those targets produce.
+      </p>
+      <p class="about-text">
+        When I'm not debugging ISR-level code on an ATmega or dissecting ELF binaries, I'm expanding my home lab with FPGAs, Raspberry Pis, and an oscilloscope on the desk.
+      </p>
+      <div class="about-facts">
+        <div>
+          <p class="fact-label">Languages</p>
+          <p class="fact-value">Latvian, Russian, German, English, Mandarin (learning)</p>
+        </div>
+        <div>
+          <p class="fact-label">Currently</p>
+          <p class="fact-value">CCNA · Go · Tang Nano 9K FPGA</p>
+        </div>
+        <div>
+          <p class="fact-label">Hardware</p>
+          <p class="fact-value">ESP32 · ATmega · FPGA · RPi</p>
+        </div>
+        <div>
+          <p class="fact-label">GitHub</p>
+          <p class="fact-value">Ri4ards2006</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="skills-section">
+  <p class="section-label fade-up">Expertise</p>
+  <div class="skills-grid">
+    <div class="skill-card fade-up stagger-1">
+      <p class="skill-icon">01</p>
+      <h3 class="skill-name">Embedded Systems</h3>
+      <p class="skill-desc">C++ · ATmega · ESP32 · ISR-level · SPI/I2C/UART</p>
+    </div>
+    <div class="skill-card fade-up stagger-2">
+      <p class="skill-icon">02</p>
+      <h3 class="skill-name">Low-Level Dev</h3>
+      <p class="skill-desc">Go · ELF/PE parsing · Binary analysis · Linux internals</p>
+    </div>
+    <div class="skill-card fade-up stagger-3">
+      <p class="skill-icon">03</p>
+      <h3 class="skill-name">Networking</h3>
+      <p class="skill-desc">CCNA · OpSec · Docker · Cloudflare Tunnels</p>
+    </div>
+    <div class="skill-card fade-up stagger-4">
+      <p class="skill-icon">04</p>
+      <h3 class="skill-name">Digital Logic</h3>
+      <p class="skill-desc">FPGA · Tang Nano 9K · Gowin · Signal analysis</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="projects-header fade-up">
+    <h2 class="projects-title">Selected<br>Projects</h2>
+    <a href="https://github.com/Ri4ards2006" class="projects-link">All on GitHub →</a>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card fade-up stagger-1">
+      <p class="project-num">001</p>
+      <h3 class="project-name">Analog-Digital Clock</h3>
+      <p class="project-desc">ATmega8535 driven clock with shift registers, LED matrix display, and custom 3D-printed housing. Pure C++, no libraries.</p>
+      <div class="project-tags">
+        <span class="tag">C++</span>
+        <span class="tag">ATmega8535</span>
+        <span class="tag">LED Matrix</span>
+        <span class="tag">3D Print</span>
+      </div>
+      <a href="https://github.com/Ri4ards2006/Analog-Digital-Clock" class="project-arrow">View project →</a>
+    </div>
+    <div class="project-card fade-up stagger-2">
+      <p class="project-num">002</p>
+      <h3 class="project-name">Weather Station 2.0</h3>
+      <p class="project-desc">Modular IoT weather station on ESP32. Sensor fusion, WiFi telemetry, and a clean data pipeline.</p>
+      <div class="project-tags">
+        <span class="tag">C++</span>
+        <span class="tag">ESP32</span>
+        <span class="tag">IoT</span>
+        <span class="tag">Modular</span>
+      </div>
+      <a href="https://github.com/Ri4ards2006/Weather_Station2.0" class="project-arrow">View project →</a>
+    </div>
+    <div class="project-card fade-up stagger-3">
+      <p class="project-num">003</p>
+      <h3 class="project-name">GO-CORE-LAB</h3>
+      <p class="project-desc">Personal low-level research framework in Go. ELF/PE binary parsing, hardware bridge for SPI/I2C/UART capture, network probe.</p>
+      <div class="project-tags">
+        <span class="tag">Go</span>
+        <span class="tag">ELF Parser</span>
+        <span class="tag">Binary Analysis</span>
+      </div>
+      <a href="https://github.com/Ri4ards2006/GO-CORE-LAB" class="project-arrow">View project →</a>
+    </div>
+    <div class="project-card fade-up stagger-4">
+      <p class="project-num">004</p>
+      <h3 class="project-name">Traffic Light</h3>
+      <p class="project-desc">Arduino-based traffic light controller written in C. State machine logic, hardware-accurate timing.</p>
+      <div class="project-tags">
+        <span class="tag">C</span>
+        <span class="tag">Arduino</span>
+        <span class="tag">State Machine</span>
+      </div>
+      <a href="https://github.com/Ri4ards2006/Traffic-Light" class="project-arrow">View project →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section">
+  <p class="section-label fade-up" style="justify-content:center;">Contact</p>
+  <h2 class="contact-pre fade-up stagger-1">Let's <em>work<br>together.</em></h2>
+  <a href="mailto:astroricards@gmail.com" class="contact-email fade-up stagger-2">astroricards@gmail.com</a>
+  <div class="contact-links fade-up stagger-3">
+    <a href="https://github.com/Ri4ards2006" class="contact-link">GitHub</a>
+    <a href="#" class="contact-link">LinkedIn</a>
+    <a href="https://richardzuikov.com" class="contact-link">richardzuikov.com</a>
+  </div>
+</section>
+
+<footer>
+  <p class="footer-text">© 2026 Richard Zuikov</p>
+  <p class="footer-text">Flensburg, Germany</p>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
