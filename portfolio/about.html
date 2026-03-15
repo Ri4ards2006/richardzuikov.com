@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,30 +10,33 @@
 </head>
 <body>
 <div id="cursor"></div>
-
 <header>
   <a href="index.html" class="site-name">Richard Zuikov</a>
   <nav>
-    <a href="index.html" class="nav-link">Home</a>
-    <a href="about.html" class="nav-link active">About</a>
-    <a href="projects.html" class="nav-link">Projects</a>
-    <a href="contact.html" class="nav-link">Contact</a>
+    <a href="index.html" class="nav-link" data-i18n="nav-home">Home</a>
+    <a href="about.html" class="nav-link active" data-i18n="nav-about">Über mich</a>
+    <a href="projects.html" class="nav-link" data-i18n="nav-projects">Projekte</a>
+    <a href="contact.html" class="nav-link" data-i18n="nav-contact">Kontakt</a>
   </nav>
-  <button class="burger" id="burger"><span></span><span></span></button>
+  <div class="header-right">
+    <button class="lang-toggle" id="langToggle">EN</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <svg class="icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button class="burger" id="burger"><span></span><span></span></button>
+  </div>
 </header>
-
 <div class="mobile-nav" id="mobileNav">
-  <a href="index.html">Home</a>
-  <a href="about.html">About</a>
-  <a href="projects.html">Projects</a>
-  <a href="contact.html">Contact</a>
+  <a href="index.html" data-i18n="nav-home">Home</a>
+  <a href="about.html" data-i18n="nav-about">Über mich</a>
+  <a href="projects.html" data-i18n="nav-projects">Projekte</a>
+  <a href="contact.html" data-i18n="nav-contact">Kontakt</a>
 </div>
-
 <main class="page-main">
   <div class="page-header fade-up">
     <h1 class="page-title">About</h1>
   </div>
-
   <div class="about-layout">
     <div class="about-sidebar fade-up">
       <div class="sidebar-img-wrap">
@@ -43,28 +46,27 @@
     <div class="about-body">
       <section class="about-section fade-up">
         <h2 class="about-section-title">Profile</h2>
-        <p class="about-p">19-year-old IT Systems Electronics apprentice (IT-Systemelektroniker) based in Flensburg, Germany. Working at the intersection of hardware and software — from soldering embedded targets to writing Go parsers that consume the data those targets produce.</p>
-        <p class="about-p">Previously completed a 3-year ITA apprenticeship covering MATLAB, Kotlin, Java, Jetpack Compose, Docker, electrical engineering, and networking. Now deepening expertise in low-level systems, reverse engineering, and FPGA development.</p>
+        <p class="about-p">19-year-old IT Systems Electronics apprentice (IT-Systemelektroniker) at R2P GmbH in Flensburg, Germany. Working at the intersection of hardware and software — from soldering embedded targets to writing Go parsers that consume the data those targets produce.</p>
+        <p class="about-p">Previously completed a 3-year ITA apprenticeship at RBZ-Eckener covering MATLAB, Kotlin, Java, Jetpack Compose, Docker, electrical engineering, and networking. Volunteer firefighter. Always building.</p>
       </section>
-
       <section class="about-section fade-up">
         <h2 class="about-section-title">Field</h2>
         <div class="field-list">
-          <span>Embedded Systems</span>
+          <span>Embedded Systems & Hardware</span>
           <span>Low-Level Programming</span>
           <span>Networking & OpSec</span>
           <span>Digital Logic / FPGA</span>
           <span>Home Lab & Self-Hosting</span>
-          <span>Reverse Engineering</span>
+          <span>PCB Design (KiCad / EasyEDA)</span>
+          <span>Signal Analysis & Messtechnik</span>
         </div>
       </section>
-
       <section class="about-section fade-up">
         <h2 class="about-section-title">Skills</h2>
         <div class="skills-table">
           <div class="skill-row">
             <span class="skill-cat">Hardware</span>
-            <span class="skill-items">ESP32 · ATmega8535 · STM32 · Tang Nano 9K FPGA · Arduino · Raspberry Pi</span>
+            <span class="skill-items">ESP32 · ATmega · Arduino Mega · STM32 · Tang Nano 9K · Raspberry Pi · Oszilloskop · Signalgenerator</span>
           </div>
           <div class="skill-row">
             <span class="skill-cat">Languages</span>
@@ -72,48 +74,47 @@
           </div>
           <div class="skill-row">
             <span class="skill-cat">Protocols</span>
-            <span class="skill-items">SPI · I2C · UART · TCP/IP · CCNA</span>
+            <span class="skill-items">SPI · I2C · UART · PWM · TCP/IP · VLANs · VPN</span>
           </div>
           <div class="skill-row">
             <span class="skill-cat">Tools</span>
-            <span class="skill-items">Docker · Linux · Git · Oscilloscope · Soldering · 3D Printing</span>
+            <span class="skill-items">Docker · Linux · Git · KiCad · EasyEDA · TIA Portal · VS Code</span>
           </div>
           <div class="skill-row">
             <span class="skill-cat">Spoken</span>
-            <span class="skill-items">Latvian · Russian · German · English · Mandarin (learning)</span>
+            <span class="skill-items">Latvian · Russian (native) · German C1 · English C1 · Danish A2 · Mandarin (learning)</span>
           </div>
         </div>
       </section>
-
       <section class="about-section fade-up">
         <h2 class="about-section-title">Currently</h2>
         <div class="currently-list">
           <div class="currently-item">
             <span class="c-label">Apprenticeship</span>
-            <span class="c-value">IT-Systemelektroniker — finishing summer 2027</span>
+            <span class="c-value">IT-Systemelektroniker @ R2P GmbH — finishing summer 2027</span>
           </div>
           <div class="currently-item">
             <span class="c-label">Learning</span>
-            <span class="c-value">Go · CCNA (May 2026) · Tang Nano 9K FPGA</span>
+            <span class="c-value">Go · CCNA (May 2026) · Tang Nano 9K FPGA · Calculus</span>
           </div>
           <div class="currently-item">
             <span class="c-label">Building</span>
-            <span class="c-value">GO-CORE-LAB · Personal website · Home lab</span>
+            <span class="c-value">GO-CORE-LAB · richardzuikov.com · Home lab</span>
           </div>
           <div class="currently-item">
             <span class="c-label">Reading</span>
-            <span class="c-value">Calculus · Fourier & Laplace · Dostoevsky</span>
+            <span class="c-value">Fourier & Laplace · Dostoevsky · Orthodox Study Bible</span>
+          </div>
+          <div class="currently-item">
+            <span class="c-label">Interests</span>
+            <span class="c-value">Chess · Strength training · Soldering · Traveling · Cooking</span>
           </div>
         </div>
       </section>
     </div>
   </div>
 </main>
-
-<footer>
-  <span>©2026 Richard Zuikov All rights reserved</span>
-</footer>
-
+<footer><span>©2026 Richard Zuikov All rights reserved</span></footer>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
