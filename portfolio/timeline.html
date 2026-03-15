@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timeline — Richard Zuikov</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div id="cursor"></div>
+
+<header>
+  <a href="index.html" class="site-name">Richard Zuikov</a>
+  <nav>
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="about.html" class="nav-link">About</a>
+    <a href="projects.html" class="nav-link">Projects</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+  </nav>
+  <div class="header-right">
+    <span class="nav-hook">19 · Embedded Systems · Open for Repairs & Small Projects</span>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <svg class="icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button class="burger" id="burger"><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="projects.html">Projects</a>
+  <a href="contact.html">Contact</a>
+</div>
+
+<main class="page-main">
+  <div class="page-header fade-up">
+    <h1 class="page-title">Timeline</h1>
+    <p class="page-subtitle">Wie ich dahin kam, wo ich heute bin</p>
+  </div>
+
+  <div class="timeline">
+
+    <div class="tl-item fade-up">
+      <div class="tl-left">
+        <span class="tl-year">2026</span>
+      </div>
+      <div class="tl-right">
+        <span class="tl-tag">Aktuell</span>
+        <h3 class="tl-title">IT-Systemelektroniker Ausbildung</h3>
+        <p class="tl-desc">Verkürzter Ausbildungsgang, Abschluss Sommer 2027. Fokus auf Netzwerktechnik, Elektrotechnik und Systemprogrammierung. Nebenher Mini-Job im IT-Support.</p>
+        <div class="tl-meta">
+          <span>Flensburg</span>
+          <span class="dot">·</span>
+          <span>CCNA in Vorbereitung</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item fade-up">
+      <div class="tl-left">
+        <span class="tl-year">2025</span>
+      </div>
+      <div class="tl-right">
+        <span class="tl-tag">Projekt</span>
+        <h3 class="tl-title">GO-CORE-LAB</h3>
+        <p class="tl-desc">Beginn eines persönlichen Low-Level Forschungsframeworks in Go. ELF/PE Binary Parsing, Hardware-Bridge für SPI/I2C/UART, Netzwerk-Probe. Erste ernsthafte Go-Projekte.</p>
+        <div class="tl-meta">
+          <span>Go</span>
+          <span class="dot">·</span>
+          <span>Binary Analysis</span>
+          <span class="dot">·</span>
+          <span>Self-Hosted NAS</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item fade-up">
+      <div class="tl-left">
+        <span class="tl-year">2024</span>
+      </div>
+      <div class="tl-right">
+        <span class="tl-tag">Hardware</span>
+        <h3 class="tl-title">Embedded Projekte</h3>
+        <p class="tl-desc">Analog-Digital Clock auf ATmega8535 mit eigenem LED-Matrix-Treiber und 3D-gedrucktem Gehäuse. Weather Station 2.0 auf ESP32 mit modularem Sensor-Design und WiFi-Telemetrie.</p>
+        <div class="tl-meta">
+          <span>C++</span>
+          <span class="dot">·</span>
+          <span>ATmega · ESP32</span>
+          <span class="dot">·</span>
+          <span>3D Druck</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item fade-up">
+      <div class="tl-left">
+        <span class="tl-year">2023</span>
+      </div>
+      <div class="tl-right">
+        <span class="tl-tag">Abschluss</span>
+        <h3 class="tl-title">ITA Ausbildung abgeschlossen</h3>
+        <p class="tl-desc">3-jährige Ausbildung zum IT-Assistenten. Inhalte: MATLAB, Kotlin, Java, Jetpack Compose, Docker, Elektrotechnik und Netzwerke. Erste Berührung mit Hardware-naher Programmierung.</p>
+        <div class="tl-meta">
+          <span>Java · Kotlin · Docker</span>
+          <span class="dot">·</span>
+          <span>Elektrotechnik</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item fade-up">
+      <div class="tl-left">
+        <span class="tl-year">2023</span>
+      </div>
+      <div class="tl-right">
+        <span class="tl-tag">Projekt</span>
+        <h3 class="tl-title">Traffic Light Controller</h3>
+        <p class="tl-desc">Erstes ernsthaftes Hardware-Projekt. Arduino-basierte Ampelsteuerung in C mit State-Machine-Logik. Einfach, aber sauber — und der Startpunkt für alles was danach kam.</p>
+        <div class="tl-meta">
+          <span>C</span>
+          <span class="dot">·</span>
+          <span>Arduino</span>
+          <span class="dot">·</span>
+          <span>State Machine</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item fade-up">
+      <div class="tl-left">
+        <span class="tl-year">2021</span>
+      </div>
+      <div class="tl-right">
+        <span class="tl-tag">Anfang</span>
+        <h3 class="tl-title">ITA Ausbildung begonnen</h3>
+        <p class="tl-desc">Ausbildungsstart. Erste Schritte in der Programmierung, Elektrotechnik und Netzwerktechnik. Schnell gemerkt: das Interessanteste liegt dort, wo Hardware auf Software trifft.</p>
+        <div class="tl-meta">
+          <span>Flensburg</span>
+          <span class="dot">·</span>
+          <span>Ausbildungsbeginn</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <span>©2026 Richard Zuikov All rights reserved</span>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

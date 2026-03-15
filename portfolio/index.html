@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +19,14 @@
     <a href="projects.html" class="nav-link">Projects</a>
     <a href="contact.html" class="nav-link">Contact</a>
   </nav>
-  <button class="burger" id="burger"><span></span><span></span></button>
+  <div class="header-right">
+    <span class="nav-hook">19 · Embedded Systems · Open for Repairs & Small Projects</span>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <svg class="icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button class="burger" id="burger"><span></span><span></span></button>
+  </div>
 </header>
 
 <div class="mobile-nav" id="mobileNav">
@@ -32,13 +39,17 @@
 <main class="home-main">
   <div class="home-hero">
     <div class="home-img-wrap">
-      <!-- Replace with: <img src="assets/img/photo.jpg" alt="Richard Zuikov"> -->
+      <!-- Replace with: <img src="assets/img/richard-foto.jpg" alt="Richard Zuikov"> -->
       <div class="img-placeholder">Photo</div>
     </div>
     <div class="home-text">
-      <p class="home-label">IT Systems Engineer / Embedded Developer</p>
+      <p class="home-label">Flensburg, DE · 19</p>
       <h1 class="home-name">Richard<br><em>Zuikov</em></h1>
-      <p class="home-location">Flensburg, Germany — 2026</p>
+      <p class="home-tagline">Low-Level, Hardware<br>und selbst gehostet.</p>
+      <div class="home-buttons">
+        <a href="timeline.html" class="btn-primary">Timeline ansehen</a>
+        <a href="worktogether.html" class="btn-secondary">Zu meinen Services</a>
+      </div>
     </div>
   </div>
   <div class="home-footer-bar">
