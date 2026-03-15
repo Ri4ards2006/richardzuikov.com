@@ -5,180 +5,53 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Richard Zuikov</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@200;300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-
 <div id="cursor"></div>
-<div id="cursor-ring"></div>
 
-<!-- LOADER -->
-<div id="loader">
-  <div class="loader-text">RZ</div>
-  <div class="loader-bar"><div class="loader-fill"></div></div>
+<header>
+  <a href="index.html" class="site-name">Richard Zuikov</a>
+  <nav>
+    <a href="index.html" class="nav-link active">Home</a>
+    <a href="about.html" class="nav-link">About</a>
+    <a href="projects.html" class="nav-link">Projects</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+  </nav>
+  <button class="burger" id="burger"><span></span><span></span></button>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="projects.html">Projects</a>
+  <a href="contact.html">Contact</a>
 </div>
 
-<!-- NAV -->
-<nav id="nav">
-  <a href="#" class="nav-logo">Richard Zuikov</a>
-  <ul class="nav-links">
-    <li><a href="#about" class="nav-link" data-text="About">About</a></li>
-    <li><a href="#projects" class="nav-link" data-text="Projects">Projects</a></li>
-    <li><a href="#contact" class="nav-link" data-text="Contact">Contact</a></li>
-  </ul>
-  <button class="nav-menu-btn" id="menuBtn">
-    <span></span><span></span>
-  </button>
-</nav>
-
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu">
-  <div class="mobile-menu-inner">
-    <a href="#about" class="mobile-link">About</a>
-    <a href="#projects" class="mobile-link">Projects</a>
-    <a href="#contact" class="mobile-link">Contact</a>
-  </div>
-</div>
-
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-number">01</div>
-  <div class="hero-content">
-    <div class="hero-line">
-      <span class="hero-word reveal">Richard</span>
+<main class="home-main">
+  <div class="home-hero">
+    <div class="home-img-wrap">
+      <!-- Replace with: <img src="assets/img/photo.jpg" alt="Richard Zuikov"> -->
+      <div class="img-placeholder">Photo</div>
     </div>
-    <div class="hero-line">
-      <span class="hero-word reveal delay-1"><em>Zuikov</em></span>
-    </div>
-    <div class="hero-sub reveal delay-2">
-      <span>IT Systems Engineer</span>
-      <span class="dot">·</span>
-      <span>Embedded Developer</span>
-      <span class="dot">·</span>
-      <span>Flensburg, DE</span>
+    <div class="home-text">
+      <p class="home-label">IT Systems Engineer / Embedded Developer</p>
+      <h1 class="home-name">Richard<br><em>Zuikov</em></h1>
+      <p class="home-location">Flensburg, Germany — 2026</p>
     </div>
   </div>
-  <div class="hero-scroll-hint reveal delay-3">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
+  <div class="home-footer-bar">
+    <span>Based in Flensburg, DE</span>
+    <span class="dot">·</span>
+    <span>C++ · Go · Linux · Embedded</span>
+    <span class="dot">·</span>
+    <a href="contact.html">Available for work</a>
   </div>
-  <div class="hero-year">2026</div>
-</section>
+</main>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="section-header">
-    <span class="section-num">02</span>
-    <span class="section-title fade-up">About</span>
-  </div>
-  <div class="about-grid">
-    <div class="about-left fade-up">
-      <h2 class="about-heading">Hardware<br>to binary —<br><em>every layer.</em></h2>
-    </div>
-    <div class="about-right fade-up delay-1">
-      <p class="about-text">19-year-old IT Systems Electronics apprentice working at the intersection of hardware and software. From soldering embedded targets to writing Go parsers that consume the data those targets produce.</p>
-      <p class="about-text">Home lab with FPGAs, Raspberry Pis, oscilloscope, 3D printer. Always building, always learning.</p>
-      <div class="about-tags">
-        <span class="tag">C++</span>
-        <span class="tag">Go</span>
-        <span class="tag">Linux</span>
-        <span class="tag">ESP32</span>
-        <span class="tag">ATmega</span>
-        <span class="tag">FPGA</span>
-        <span class="tag">Docker</span>
-        <span class="tag">CCNA</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PROJECTS -->
-<section id="projects">
-  <div class="section-header">
-    <span class="section-num">03</span>
-    <span class="section-title fade-up">Projects</span>
-  </div>
-  <div class="projects-list">
-    <a href="https://github.com/Ri4ards2006/Analog-Digital-Clock" class="project-item fade-up" target="_blank">
-      <div class="project-left">
-        <span class="project-num">001</span>
-        <h3 class="project-name">Analog-Digital Clock</h3>
-      </div>
-      <div class="project-mid">
-        <p class="project-desc">ATmega8535 · LED Matrix · 3D-printed housing. Pure C++, no libraries.</p>
-      </div>
-      <div class="project-right">
-        <span class="project-tags-inline">C++ · ATmega · Hardware</span>
-        <span class="project-arrow">→</span>
-      </div>
-    </a>
-    <a href="https://github.com/Ri4ards2006/Weather_Station2.0" class="project-item fade-up delay-1" target="_blank">
-      <div class="project-left">
-        <span class="project-num">002</span>
-        <h3 class="project-name">Weather Station 2.0</h3>
-      </div>
-      <div class="project-mid">
-        <p class="project-desc">Modular IoT on ESP32. Sensor fusion, WiFi telemetry, clean data pipeline.</p>
-      </div>
-      <div class="project-right">
-        <span class="project-tags-inline">C++ · ESP32 · IoT</span>
-        <span class="project-arrow">→</span>
-      </div>
-    </a>
-    <a href="https://github.com/Ri4ards2006/GO-CORE-LAB" class="project-item fade-up delay-2" target="_blank">
-      <div class="project-left">
-        <span class="project-num">003</span>
-        <h3 class="project-name">GO-CORE-LAB</h3>
-      </div>
-      <div class="project-mid">
-        <p class="project-desc">Low-level research framework in Go. ELF/PE parsing, hardware bridge, network probe.</p>
-      </div>
-      <div class="project-right">
-        <span class="project-tags-inline">Go · Binary · Research</span>
-        <span class="project-arrow">→</span>
-      </div>
-    </a>
-    <a href="https://github.com/Ri4ards2006/Traffic-Light" class="project-item fade-up delay-3" target="_blank">
-      <div class="project-left">
-        <span class="project-num">004</span>
-        <h3 class="project-name">Traffic Light</h3>
-      </div>
-      <div class="project-mid">
-        <p class="project-desc">Arduino traffic light controller in C. State machine logic, hardware-accurate timing.</p>
-      </div>
-      <div class="project-right">
-        <span class="project-tags-inline">C · Arduino · Embedded</span>
-        <span class="project-arrow">→</span>
-      </div>
-    </a>
-  </div>
-  <div class="projects-footer fade-up">
-    <a href="https://github.com/Ri4ards2006" target="_blank" class="github-link">View all on GitHub →</a>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="section-header">
-    <span class="section-num">04</span>
-    <span class="section-title fade-up">Contact</span>
-  </div>
-  <div class="contact-inner">
-    <h2 class="contact-heading fade-up">Let's work<br><em>together.</em></h2>
-    <a href="mailto:astroricards@gmail.com" class="contact-email fade-up delay-1">astroricards@gmail.com</a>
-    <div class="social-links fade-up delay-2">
-      <a href="https://github.com/Ri4ards2006" class="social-link" target="_blank">GitHub</a>
-      <a href="#" class="social-link">Instagram</a>
-      <a href="#" class="social-link">LinkedIn</a>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
 <footer>
-  <span class="footer-text">© 2026 Richard Zuikov</span>
-  <span class="footer-text">Flensburg, Germany</span>
+  <span>©2026 Richard Zuikov All rights reserved</span>
 </footer>
 
 <script src="assets/js/main.js"></script>
