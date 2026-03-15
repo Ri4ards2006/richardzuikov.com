@@ -10,7 +10,6 @@
 </head>
 <body>
 <div id="cursor"></div>
-
 <header>
   <a href="index.html" class="site-name">Richard Zuikov</a>
   <nav>
@@ -20,7 +19,6 @@
     <a href="contact.html" class="nav-link">Contact</a>
   </nav>
   <div class="header-right">
-    <span class="nav-hook">19 · Embedded Systems · Open for Repairs & Small Projects</span>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
       <svg class="icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
       <svg class="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -28,76 +26,54 @@
     <button class="burger" id="burger"><span></span><span></span></button>
   </div>
 </header>
-
 <div class="mobile-nav" id="mobileNav">
   <a href="index.html">Home</a>
   <a href="about.html">About</a>
   <a href="projects.html">Projects</a>
   <a href="contact.html">Contact</a>
 </div>
-
 <main class="page-main">
   <div class="page-header fade-up">
     <h1 class="page-title">Work Together</h1>
     <p class="page-subtitle">Was ich anbiete — ehrlich, direkt, kein Bullshit</p>
   </div>
-
   <div class="services-intro fade-up">
     <p class="about-p">Ich bin kein Freelancer im klassischen Sinne. Aber wenn du ein konkretes Problem hast das in mein Feld fällt — Hardware, Embedded, Netzwerk, Self-Hosting — helfe ich gerne. Schreib mich an, wir reden kurz, und ich sag dir ob ich helfen kann.</p>
   </div>
-
   <div class="services-grid">
-
     <div class="service-card fade-up">
-      <div class="service-num">01</div>
-      <h3 class="service-title">Hardware-Reparatur & Diagnose</h3>
-      <p class="service-desc">Defekte Elektronik, kaputte Platinen, unklare Fehler. Ich schaue mir das an — mit Oszilloskop, Multimeter und Lötkolben. Keine Garantie auf alles, aber ehrliche Einschätzung was machbar ist.</p>
-      <div class="service-tags">
-        <span>Löten</span>
-        <span>Diagnose</span>
-        <span>Platinen</span>
-        <span>Embedded</span>
+      <div class="service-left"><span class="service-num">01</span></div>
+      <div class="service-right">
+        <h3 class="service-title">Hardware-Reparatur & Diagnose</h3>
+        <p class="service-desc">Defekte Elektronik, kaputte Platinen, unklare Fehler. Ich schaue mir das an — mit Oszilloskop, Multimeter und Lötkolben. Keine Garantie auf alles, aber ehrliche Einschätzung was machbar ist.</p>
+        <div class="service-tags"><span>Löten</span><span>Diagnose</span><span>Platinen</span><span>Embedded</span></div>
       </div>
     </div>
-
     <div class="service-card fade-up delay-1">
-      <div class="service-num">02</div>
-      <h3 class="service-title">Kleine Embedded-Projekte</h3>
-      <p class="service-desc">Du brauchst ein kleines Gerät das etwas misst, steuert oder sendet? ESP32, Arduino, ATmega — ich baue dir was Funktionierendes. Keine Massenproduktion, aber saubere Einzelstücke.</p>
-      <div class="service-tags">
-        <span>ESP32</span>
-        <span>Arduino</span>
-        <span>C++</span>
-        <span>Prototyp</span>
+      <div class="service-left"><span class="service-num">02</span></div>
+      <div class="service-right">
+        <h3 class="service-title">Kleine Embedded-Projekte</h3>
+        <p class="service-desc">Du brauchst ein kleines Gerät das etwas misst, steuert oder sendet? ESP32, Arduino, ATmega — ich baue dir was Funktionierendes. Keine Massenproduktion, aber saubere Einzelstücke.</p>
+        <div class="service-tags"><span>ESP32</span><span>Arduino</span><span>C++</span><span>Prototyp</span></div>
       </div>
     </div>
-
     <div class="service-card fade-up">
-      <div class="service-num">03</div>
-      <h3 class="service-title">Home-Lab & Self-Hosting Setup</h3>
-      <p class="service-desc">NAS einrichten, Docker aufsetzen, Cloudflare Tunnel konfigurieren, Services deployen. Wenn du deine eigene Infrastruktur willst ohne dich durch stundenlange Docs zu kämpfen — ich helfe beim Setup.</p>
-      <div class="service-tags">
-        <span>Docker</span>
-        <span>NAS</span>
-        <span>Cloudflare</span>
-        <span>Linux</span>
+      <div class="service-left"><span class="service-num">03</span></div>
+      <div class="service-right">
+        <h3 class="service-title">Home-Lab & Self-Hosting Setup</h3>
+        <p class="service-desc">NAS einrichten, Docker aufsetzen, Cloudflare Tunnel konfigurieren, Services deployen. Wenn du deine eigene Infrastruktur willst ohne dich durch stundenlange Docs zu kämpfen — ich helfe beim Setup.</p>
+        <div class="service-tags"><span>Docker</span><span>NAS</span><span>Cloudflare</span><span>Linux</span></div>
       </div>
     </div>
-
     <div class="service-card fade-up delay-1">
-      <div class="service-num">04</div>
-      <h3 class="service-title">Netzwerk & IT-Support</h3>
-      <p class="service-desc">Netzwerk läuft nicht richtig, Geräte finden sich nicht, VPN-Probleme, Firewall-Konfiguration. Ich schaue drauf. Kein Konzern-IT-Support — direkt, persönlich, lösungsorientiert.</p>
-      <div class="service-tags">
-        <span>Netzwerk</span>
-        <span>VPN</span>
-        <span>Firewall</span>
-        <span>CCNA</span>
+      <div class="service-left"><span class="service-num">04</span></div>
+      <div class="service-right">
+        <h3 class="service-title">Netzwerk & IT-Support</h3>
+        <p class="service-desc">Netzwerk läuft nicht richtig, Geräte finden sich nicht, VPN-Probleme, Firewall-Konfiguration. Ich schaue drauf. Kein Konzern-IT-Support — direkt, persönlich, lösungsorientiert.</p>
+        <div class="service-tags"><span>Netzwerk</span><span>VPN</span><span>Firewall</span><span>CCNA</span></div>
       </div>
     </div>
-
   </div>
-
   <div class="services-cta fade-up">
     <div class="services-cta-inner">
       <h2 class="services-cta-title">Interesse?</h2>
@@ -105,13 +81,8 @@
       <a href="contact.html" class="btn-primary">Kontakt aufnehmen</a>
     </div>
   </div>
-
 </main>
-
-<footer>
-  <span>©2026 Richard Zuikov All rights reserved</span>
-</footer>
-
+<footer><span>©2026 Richard Zuikov All rights reserved</span></footer>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
