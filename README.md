@@ -105,7 +105,7 @@ chmod 755 /volume3/docker/01_Coding/03_Nginx
 ### 2. Clone repo to NAS
 
 ```bash
-ssh Richard@192.168.0.99
+ssh Richard@192.168.0.200
 cd /volume3/docker/01_Coding/03_Nginx
 git clone https://github.com/Ri4ards2006/portfolio.git .
 ```
@@ -117,7 +117,7 @@ In [dash.cloudflare.com](https://dash.cloudflare.com) → Zero Trust → Network
 ```
 Domain:  richardzuikov.com
 Type:    HTTP
-URL:     192.168.0.99:35181
+URL:     192.168.0.200:35181
 ```
 
 ### 4. Update workflow
@@ -129,7 +129,7 @@ git commit -m "update"
 git push origin main
 
 # On NAS — pull latest
-ssh Richard@192.168.0.99
+ssh Richard@192.168.0.200
 cd /volume3/docker/01_Coding/03_Nginx
 git pull
 ```
