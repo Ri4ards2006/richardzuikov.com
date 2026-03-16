@@ -595,3 +595,9 @@ footer {
   .service-card { grid-template-columns: 1fr; gap: 0.25rem; }
   .service-num { display: none; }
 }
+
+a.project-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
