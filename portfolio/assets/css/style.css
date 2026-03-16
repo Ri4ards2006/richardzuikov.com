@@ -601,3 +601,10 @@ a.project-card {
   color: inherit;
   display: block;
 }
+
+.sidebar-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px; /* Optional, falls du abgerundete Ecken magst */
+}
