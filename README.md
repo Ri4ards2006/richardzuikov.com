@@ -173,4 +173,4 @@ Drop your photo into `assets/img/photo.jpg`, then in `index.html` replace:
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE). 
