@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,19 +14,26 @@
 <header>
   <a href="index.html" class="site-name">Richard Zuikov</a>
   <nav>
-    <a href="index.html" class="nav-link">Home</a>
-    <a href="about.html" class="nav-link">About</a>
-    <a href="projects.html" class="nav-link active">Projects</a>
-    <a href="contact.html" class="nav-link">Contact</a>
+    <a href="index.html" class="nav-link" data-i18n="nav-home">Home</a>
+    <a href="about.html" class="nav-link" data-i18n="nav-about">Über mich</a>
+    <a href="projects.html" class="nav-link active" data-i18n="nav-projects">Projekte</a>
+    <a href="contact.html" class="nav-link" data-i18n="nav-contact">Kontakt</a>
   </nav>
-  <button class="burger" id="burger"><span></span><span></span></button>
+  <div class="header-right">
+    <button class="lang-toggle" id="langToggle">EN</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <svg class="icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button class="burger" id="burger"><span></span><span></span></button>
+  </div>
 </header>
 
 <div class="mobile-nav" id="mobileNav">
-  <a href="index.html">Home</a>
-  <a href="about.html">About</a>
-  <a href="projects.html">Projects</a>
-  <a href="contact.html">Contact</a>
+  <a href="index.html" data-i18n="nav-home">Home</a>
+  <a href="about.html" data-i18n="nav-about">Über mich</a>
+  <a href="projects.html" data-i18n="nav-projects">Projekte</a>
+  <a href="contact.html" data-i18n="nav-contact">Kontakt</a>
 </div>
 
 <main class="page-main">
@@ -37,27 +44,43 @@
 
   <div class="projects-grid">
 
-    <div class="project-card fade-up" data-year="2024">
+    <a href="https://github.com/Ri4ards2006/Analog-Digital-Clock" class="project-card fade-up" data-year="2024" target="_blank">
       <div class="project-card-img">
-        <!-- <img src="assets/img/clock.jpg" alt="Analog-Digital Clock"> -->
-        <div class="img-placeholder">Clock</div>
+        <img src="assets/img/AD_DA_Clock.png" alt="AD-LED Clock">
       </div>
       <div class="project-card-body">
         <div class="project-card-meta">
           <span class="project-year">2024</span>
           <span class="project-type">Embedded · Hardware</span>
         </div>
-        <h3 class="project-card-title">Analog-Digital Clock</h3>
-        <p class="project-card-desc">ATmega8535 driven clock with shift registers, LED matrix display, and custom 3D-printed housing. Written in pure C++ without any external libraries — every driver implemented from scratch at the register level.</p>
+        <h3 class="project-card-title">AD-LED Clock</h3>
+        <p class="project-card-desc">ATmega8535 driven LED-Matrix clock with shift registers, brightness control, and time sync. Pure C++ at register level — no external libraries. Circuit designed in KiCad, housing fully 3D-printed.</p>
         <div class="project-card-tags">
-          <span>C++</span><span>ATmega8535</span><span>LED Matrix</span><span>3D Print</span><span>Shift Registers</span>
+          <span>C++</span><span>ATmega8535</span><span>LED Matrix</span><span>KiCad</span><span>3D Print</span>
         </div>
       </div>
-    </div>
+    </a>
 
-    <div class="project-card fade-up delay-1" data-year="2024">
+    <a href="https://github.com/Ri4ards2006/Traffic-Light" class="project-card fade-up delay-1" data-year="2024" target="_blank">
       <div class="project-card-img">
-        <div class="img-placeholder">Weather</div>
+        <img src="assets/img/Traffic_System.jpg" alt="Traffic Light System">
+      </div>
+      <div class="project-card-body">
+        <div class="project-card-meta">
+          <span class="project-year">2024</span>
+          <span class="project-type">Embedded · Hardware</span>
+        </div>
+        <h3 class="project-card-title">Traffic Light System</h3>
+        <p class="project-card-desc">Full street crossing simulation — traffic lights, pedestrian signals, day/night mode, ultrasonic sensors. Arduino Mega, LN298, interrupt-driven pedestrian buttons. Traffic light housings fully 3D-printed and CAD-designed.</p>
+        <div class="project-card-tags">
+          <span>C++</span><span>Arduino Mega</span><span>Ultraschall</span><span>3D Print</span><span>CAD</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="https://github.com/Ri4ards2006/Weather_Station2.0" class="project-card fade-up" data-year="2024" target="_blank">
+      <div class="project-card-img">
+        <img src="assets/img/Weather_Station.png" alt="Weather Station 2.0">
       </div>
       <div class="project-card-body">
         <div class="project-card-meta">
@@ -65,16 +88,16 @@
           <span class="project-type">Embedded · IoT</span>
         </div>
         <h3 class="project-card-title">Weather Station 2.0</h3>
-        <p class="project-card-desc">Modular IoT weather station on ESP32. Multi-sensor fusion, WiFi telemetry, and a clean data pipeline. Designed with modularity in mind — each sensor module is independently swappable.</p>
+        <p class="project-card-desc">Modular IoT weather station on ESP32. Multi-sensor fusion, WiFi telemetry, clean data pipeline. Each sensor module independently swappable — designed for extensibility from the start.</p>
         <div class="project-card-tags">
           <span>C++</span><span>ESP32</span><span>IoT</span><span>WiFi</span><span>Modular</span>
         </div>
       </div>
-    </div>
+    </a>
 
-    <div class="project-card fade-up" data-year="2025">
+    <a href="https://github.com/Ri4ards2006/GO-CORE-LAB" class="project-card fade-up delay-1" data-year="2025" target="_blank">
       <div class="project-card-img">
-        <div class="img-placeholder">GO-CORE</div>
+        <img src="assets/img/Go_Lab_Reworked.png" alt="GO-CORE-LAB">
       </div>
       <div class="project-card-body">
         <div class="project-card-meta">
@@ -82,26 +105,43 @@
           <span class="project-type">Software · Research</span>
         </div>
         <h3 class="project-card-title">GO-CORE-LAB</h3>
-        <p class="project-card-desc">Personal low-level research framework in Go. ELF/PE binary parsing and symbol extraction, hardware bridge for SPI/I2C/UART capture from embedded targets, and a network probe module. Each tool is a statically compiled binary — drop anywhere and run.</p>
+        <p class="project-card-desc">Personal low-level research framework in Go. ELF/PE binary parsing, hardware bridge for SPI/I2C/UART capture from embedded targets, network probe module. Statically compiled — drop anywhere and run.</p>
         <div class="project-card-tags">
           <span>Go</span><span>ELF Parser</span><span>Binary Analysis</span><span>Networking</span>
         </div>
       </div>
-    </div>
+    </a>
 
-    <div class="project-card fade-up delay-1" data-year="2023">
+    <div class="project-card fade-up" data-year="2025">
       <div class="project-card-img">
-        <div class="img-placeholder">Traffic</div>
+        <img src="assets/img/Home_Lab.jpeg" alt="Home Lab Server">
       </div>
       <div class="project-card-body">
         <div class="project-card-meta">
-          <span class="project-year">2023</span>
-          <span class="project-type">Embedded · C</span>
+          <span class="project-year">2025</span>
+          <span class="project-type">Infrastructure · Self-Hosting</span>
         </div>
-        <h3 class="project-card-title">Traffic Light Controller</h3>
-        <p class="project-card-desc">Arduino-based traffic light controller written in C. Implements a state machine with hardware-accurate timing and proper pedestrian crossing logic. One of the first hardware projects — clean, simple, functional.</p>
+        <h3 class="project-card-title">Home Lab — Server & Network</h3>
+        <p class="project-card-desc">Private server infrastructure on Ugreen NAS. Docker services, Cloudflare Tunnels, VPN, VLANs, switch administration, monitoring. This website runs on it. Built and maintained entirely by hand.</p>
         <div class="project-card-tags">
-          <span>C</span><span>Arduino</span><span>State Machine</span>
+          <span>Docker</span><span>Linux</span><span>Cloudflare</span><span>VPN</span><span>VLANs</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card fade-up delay-1" data-year="2025">
+      <div class="project-card-img">
+        <img src="assets/img/Home_Soldering_Station.jpeg" alt="Electronics Workbench">
+      </div>
+      <div class="project-card-body">
+        <div class="project-card-meta">
+          <span class="project-year">2025</span>
+          <span class="project-type">Hardware · Lab</span>
+        </div>
+        <h3 class="project-card-title">Electronics Workbench</h3>
+        <p class="project-card-desc">Personal electronics lab for embedded development and signal analysis. Oscilloscope, signal generator, bench PSU, SMD/THT soldering station. Signal capture (PWM, UART, I2C), PCB design with KiCad and EasyEDA, rapid prototyping with 3D print.</p>
+        <div class="project-card-tags">
+          <span>Oszilloskop</span><span>SMD/THT</span><span>KiCad</span><span>EasyEDA</span><span>3D Print</span>
         </div>
       </div>
     </div>

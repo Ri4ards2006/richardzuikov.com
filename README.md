@@ -1,16 +1,16 @@
 <div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=rect&color=080808&height=140&section=header&text=richardzuikov.com&fontSize=40&fontColor=C9A84C&theme=dark&stroke=C9A84C&strokeWidth=1" width="100%" />
+  <img src="https://capsule-render.vercel.app/api?type=rect&color=F4F0E8&height=140&section=header&text=richardzuikov.com&fontSize=40&fontColor=1a1a18&theme=light&stroke=1a1a18&strokeWidth=1" width="100%" />
 
   <br/>
 
-  ### Personal Portfolio — Cinematic Dark · Gold Accent · Self-Hosted
+  ### Personal Portfolio — Warm Beige · Serif Typography · Self-Hosted
 
-  <sub>Ugreen NAS · Cloudflare Tunnel · nginx · Pure HTML/CSS/JS</sub>
+  <sub>Ugreen NAS · Cloudflare Tunnel · nginx · Pure HTML/CSS/JS · DE/EN</sub>
 
   <br/>
 
-  [![Status](https://img.shields.io/badge/Status-Live-C9A84C?style=flat-square)]()
-  [![Host](https://img.shields.io/badge/Host-Self--Hosted_NAS-1a1a1a?style=flat-square&logo=docker&logoColor=C9A84C)]()
+  [![Status](https://img.shields.io/badge/Status-Live-22C55E?style=flat-square)]()
+  [![Host](https://img.shields.io/badge/Host-Self--Hosted_NAS-1a1a18?style=flat-square&logo=docker&logoColor=white)]()
   [![Tunnel](https://img.shields.io/badge/Tunnel-Cloudflare-F38020?style=flat-square&logo=cloudflare&logoColor=white)](https://cloudflare.com)
   [![License](https://img.shields.io/badge/License-MIT-22C55E?style=flat-square)](LICENSE)
 
@@ -22,7 +22,7 @@
 
 Personal portfolio and digital business card at **[richardzuikov.com](https://richardzuikov.com)**.
 
-Cinematic dark aesthetic — large typography, gold accents, custom cursor, scroll-triggered animations. Designed to work for everyone, not just developers. Built entirely without frameworks — pure HTML, CSS, and vanilla JS.
+Minimalist warm-beige aesthetic — editorial serif typography (EB Garamond), generous whitespace, dark/light mode toggle, DE/EN language switch. Multi-page structure: Home, About, Projects, Timeline, Work Together, Contact.
 
 Self-hosted on a Ugreen NAS via Cloudflare Tunnel. No public IP, no reverse proxy, no overengineering.
 
@@ -31,19 +31,19 @@ Self-hosted on a Ugreen NAS via Cloudflare Tunnel. No public IP, no reverse prox
 ## Design Decisions
 
 **Why no framework?**
-Static portfolio. React/Vue would be overkill and add unnecessary build complexity. Pure HTML/CSS/JS loads faster, is easier to maintain, and lives happily in an nginx container.
+Static portfolio. React/Vue adds unnecessary build complexity. Pure HTML/CSS/JS loads instantly, is trivial to maintain, and runs happily in an nginx container.
 
 **Why no Nginx as reverse proxy?**
-Cloudflare Tunnel points directly at the nginx container serving the static files. No NPM, no Traefik, no extra hop. One container, one job.
+Cloudflare Tunnel points directly at the nginx container. No NPM, no Traefik, no extra hop. One container, one job.
 
 **Why Cloudflare Tunnel?**
-No static public IP needed. The tunnel establishes an outbound connection from the NAS to Cloudflare — traffic comes in through Cloudflare and gets forwarded to the nginx container on the local network.
+No static public IP needed. Configured via Cloudflare API since the new Zero Trust UI removed public hostname management.
 
-**Typography: Cormorant Garamond + DM Sans**
-Editorial serif for display text, clean sans-serif for body. The contrast creates the luxury/cinematic feel without relying on gradients or heavy effects.
+**Typography: EB Garamond + DM Sans**
+Editorial serif for display text, clean sans-serif for UI. Technical-yet-refined feel without heavy effects.
 
-**Color: #C9A84C (Gold) on #080808 (Near-black)**
-Warm, refined, not neon. Works for a technical audience and a general audience equally.
+**Color: #F4F0E8 (warm beige) · #1a1a18 (near-black)**
+Light mode default. Dark mode via toggle, stored in `localStorage` across all pages.
 
 ---
 
@@ -51,27 +51,36 @@ Warm, refined, not neon. Works for a technical audience and a general audience e
 
 | Layer | Tech |
 |:---|:---|
-| Web server | nginx (Docker container) |
-| Tunnel | Cloudflare Tunnel (cloudflared container) |
-| Host | Ugreen NAS (UGOS) |
-| Fonts | Cormorant Garamond + DM Sans (Google Fonts) |
-| Animations | Vanilla JS · IntersectionObserver · requestAnimationFrame |
-| Deploy | Git → SSH pull on NAS |
+| Web server | nginx (Docker, port 35181) |
+| Tunnel | Cloudflare Tunnel (cloudflared, token-based) |
+| Host | Ugreen NAS (UGOS), `/volume3/docker/01_Coding/03_Nginx` |
+| Fonts | EB Garamond + DM Sans (Google Fonts) |
+| JS | Vanilla — cursor, scroll, dark/light toggle, DE/EN i18n |
+| Deploy | local → git push → SSH pull on NAS |
 
 ---
 
-## Repository Structure
+## Structure
 
 ```
 portfolio/
-├── index.html              # Single page, all sections
+├── index.html              # Home — hero, photo, tagline, buttons
+├── about.html              # Profile, skills, currently
+├── projects.html           # Project cards with images
+├── contact.html            # Contact info and links
+├── timeline.html           # Full career timeline from CV
+├── worktogether.html       # Services offered
 ├── assets/
-│   ├── css/
-│   │   └── style.css       # All styles, CSS variables, responsive
-│   ├── js/
-│   │   └── main.js         # Custom cursor, scroll animations, nav
+│   ├── css/style.css       # All styles — variables, dark mode, responsive
+│   ├── js/main.js          # Cursor, scroll, theme toggle, lang toggle
 │   └── img/
-│       └── photo.jpg       # Hero photo (not committed — add your own)
+│       ├── richard-foto.jpg
+│       ├── clock.jpg
+│       ├── ampel.jpg
+│       ├── weather.jpg
+│       ├── gocore.jpg
+│       ├── homelab.jpg
+│       └── messplatz.jpg
 ├── .gitignore
 └── README.md
 ```
@@ -80,97 +89,64 @@ portfolio/
 
 ## Deploy
 
-### Requirements
-
-- Ugreen NAS (UGOS) with Docker
-- Cloudflare account with a domain
-- `git` on the NAS
-
-### 1. nginx Container
-
-In UGOS Container Manager, create a container with:
+### nginx Container (UGOS)
 
 ```
 Image:   nginx:latest
 Port:    35181 → 80 (TCP)
 Volume:  /volume3/docker/01_Coding/03_Nginx → /usr/share/nginx/html (rw)
+Network: cloudflare-tunnel_default
 ```
-
-Set permissions on the host folder:
 
 ```bash
 chmod 755 /volume3/docker/01_Coding/03_Nginx
 ```
 
-### 2. Clone repo to NAS
+### Cloudflare Tunnel — ingress via API
 
 ```bash
+curl -s -X PUT "https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/cfd_tunnel/<TUNNEL_ID>/configurations" \
+  -H "Authorization: Bearer <API_TOKEN>" \
+  -H "Content-Type: application/json" \
+  --data '{"config":{"ingress":[{"hostname":"richardzuikov.com","service":"http://nginx-1:80"},{"service":"http_status:404"}]}}'
+```
+
+### Clone & update
+
+```bash
+# First time
 ssh Richard@192.168.0.200
 cd /volume3/docker/01_Coding/03_Nginx
 git clone https://github.com/Ri4ards2006/portfolio.git .
-```
 
-### 3. Cloudflare Tunnel
-
-In [dash.cloudflare.com](https://dash.cloudflare.com) → Zero Trust → Networks → Tunnels → your tunnel → Public Hostname:
-
-```
-Domain:  richardzuikov.com
-Type:    HTTP
-URL:     192.168.0.200:35181
-```
-
-### 4. Update workflow
-
-```bash
-# Local — develop and push
-git add .
-git commit -m "update"
-git push origin main
-
-# On NAS — pull latest
-ssh Richard@192.168.0.200
-cd /volume3/docker/01_Coding/03_Nginx
-git pull
-```
-
-### 5. Add your photo
-
-Drop your photo into `assets/img/photo.jpg`, then in `index.html` replace:
-
-```html
-<!-- Remove this block -->
-<div class="hero-img-frame">
-  <span class="hero-img-label">Your photo here</span>
-</div>
-
-<!-- Add this -->
-<img src="assets/img/photo.jpg" alt="Richard Zuikov"
-     style="width:38%;height:80%;object-fit:cover;object-position:top center;">
+# Update
+git add . && git commit -m "update" && git push origin main
+ssh Richard@192.168.0.200 "cd /volume3/docker/01_Coding/03_Nginx && git pull"
 ```
 
 ---
 
 ## Roadmap
 
-- [ ] Add hero photo
-- [ ] Dark/light mode toggle
-- [ ] Project detail pages (per-project subpages)
-- [ ] Blog / notes section (markdown-based)
-- [ ] Email via `richardzuikov.com` (self-hosted mail server)
-- [ ] CV / resume download button
-- [ ] `rz-cloud.work` — service dashboard for self-hosted containers
+- [ ] Hero photo + project images
+- [x] Dark / light mode toggle
+- [x] DE / EN language toggle
+- [x] Timeline page (full CV)
+- [x] Work Together / Services page
+- [ ] EN translations for page content
+- [ ] Project detail subpages
+- [ ] Email via `richardzuikov.com`
+- [ ] CV download button
+- [ ] `rz-cloud.work` — self-hosted services dashboard
 
 ---
 
 ## Background
 
-19-year-old IT Systems Electronics apprentice (IT-Systemelektroniker) based in Flensburg, Germany. Working at the intersection of hardware and software — embedded systems, low-level programming, networking, and OpSec.
+19-year-old IT-Systemelektroniker apprentice at R2P GmbH, Flensburg. Hardware, embedded systems, low-level programming, networking, home lab.
 
 **GitHub:** [Ri4ards2006](https://github.com/Ri4ards2006)
 
 ---
 
-## License
-
-MIT — see [LICENSE](LICENSE). 
+MIT — see [LICENSE](LICENSE).
