@@ -1,0 +1,53 @@
+// --- DARK SOULS CONFIG ---
+$gold: #c1a35f;
+$bg-dark: #050505;
+$ash: #1a1a1a;
+$red-soul: #8a0707;
+
+// Basis Setup
+body {
+  background: radial-gradient(circle, $ash 0%, $bg-dark 100%);
+  color: #d1d1d1;
+  font-family: 'Cinzel', serif; // Wirkt ritterlich
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+// Die Überschrift (Wie eine Boss-Anzeige)
+h1 {
+  color: $gold;
+  text-transform: uppercase;
+  letter-spacing: 0.7rem;
+  font-size: 3rem;
+  border-bottom: 1px solid rgba($gold, 0.3);
+  padding-bottom: 20px;
+  text-shadow: 0 0 15px rgba($gold, 0.5);
+  animation: fadeIn 3s ease-in;
+}
+
+// Deine Projekt-Karten (Oder Links)
+.card {
+  background: rgba(20, 20, 20, 0.9);
+  border-left: 3px solid $gold;
+  padding: 1.5rem;
+  margin: 10px;
+  transition: all 0.4s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba($gold, 0.1);
+    transform: translateX(10px);
+    border-left: 3px solid $red-soul;
+  }
+}
+
+// Animation für den Vibe
+@keyframes fadeIn {
+  from { opacity: 0; filter: blur(10px); }
+  to { opacity: 1; filter: blur(0); }
+}
