@@ -247,8 +247,9 @@ footer {
   display: grid;
   grid-template-columns: 280px 1fr;
   gap: 5rem;
-  align-items: start;r; gap: 0.75rem; font-size: 0.65rem; letter-spacing: 0.12em; color: var(--dim); }
-
+  align-items: start;; gap: 0.75rem; font-size: 0.65rem; letter-spacing: 0.12em; color: var(--dim); 
+}
+  
 /* ── SERVICES ── */
 .services-intro { margin-bottom: 4rem; max-width: 640px; }
 .services-grid { display: flex; flex-direction: column; border-top: 1px solid var(--border); margin-bottom: 5rem; }
@@ -268,7 +269,7 @@ footer {
 .services-cta-sub { font-size: 0.85rem; line-height: 1.8; color: var(--muted); font-weight: 300; margin-bottom: 2rem; }
 
 /* ── RESPONSIVE ── */
-}
+
 .about-sidebar { position: sticky; top: 110px; }
 .about-section { margin-bottom: 4rem; }
 .about-section-title {
