@@ -18,7 +18,7 @@ function Lab() {
           rel="noreferrer"
         >
           <div className="project-card-img">
-            <img src="/assets-shared/img/AD_DA_Clock.png" alt="AD-LED Clock" />
+            <img src="/src/assets/AD_DA_Clock.png" alt="AD-LED Clock" />
           </div>
           <div className="project-card-body">
             <div className="project-card-meta">
@@ -45,7 +45,7 @@ function Lab() {
           rel="noreferrer"
         >
           <div className="project-card-img">
-            <img src="/assets-shared/img/Traffic_System.jpg" alt="Traffic Light System" />
+            <img src="/src/assets/Traffic_System.jpg" alt="Traffic Light System" />
           </div>
           <div className="project-card-body">
             <div className="project-card-meta">
@@ -72,7 +72,7 @@ function Lab() {
           rel="noreferrer"
         >
           <div className="project-card-img">
-            <img src="/assets-shared/img/Weather_Station.png" alt="Weather Station 2.0" />
+            <img src="/src/assets/Weather_Station.png" alt="Weather Station 2.0" />
           </div>
           <div className="project-card-body">
             <div className="project-card-meta">
@@ -99,7 +99,7 @@ function Lab() {
           rel="noreferrer"
         >
           <div className="project-card-img">
-            <img src="/assets-shared/img/Go_Lab_Reworked.png" alt="GO-CORE-LAB" />
+            <img src="/src/assets/Go_Lab_Reworked.png" alt="GO-CORE-LAB" />
           </div>
           <div className="project-card-body">
             <div className="project-card-meta">
@@ -120,7 +120,7 @@ function Lab() {
         {/* PROJECT 5: Home Lab */}
         <div className="project-card" data-year="2025">
           <div className="project-card-img">
-            <img src="/assets-shared/img/Home_Lab.jpeg" alt="Home Lab Server" />
+            <img src="/src/assets/Home_Lab.jpeg" alt="Home Lab Server" />
           </div>
           <div className="project-card-body">
             <div className="project-card-meta">
@@ -141,7 +141,7 @@ function Lab() {
         {/* PROJECT 6: Electronics Workbench */}
         <div className="project-card" data-year="2025">
           <div className="project-card-img">
-            <img src="/assets-shared/img/Home_Soldering_Station.jpeg" alt="Electronics Workbench" />
+            <img src="/src/assets/Home_Soldering_Station.jpeg" alt="Electronics Workbench" />
           </div>
           <div className="project-card-body">
             <div className="project-card-meta">
