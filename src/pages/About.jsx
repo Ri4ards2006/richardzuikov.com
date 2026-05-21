@@ -1,4 +1,5 @@
 import React from 'react';
+import mePicture from '../assets/Me_Picture.png';
 
 function About() {
   return (
@@ -12,7 +13,7 @@ function About() {
         <div className="about-sidebar">
           <div className="sidebar-img-wrap">
             <img 
-              src="/assets-shared/img/Me_Picture.png" 
+              src={mePicture} 
               alt="Richard Zuikov" 
               className="sidebar-img" 
             />
