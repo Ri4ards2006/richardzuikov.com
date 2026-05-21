@@ -1,34 +1,30 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import bossImg from '../assets/Me_Picture.png';
 
 function Home() {
   return (
     <main className="home-main">
       <div className="home-hero">
         <div className="home-img-wrap">
-          {/* Wichtig: Der Pfad zu deinen Assets bleibt derselbe */}
-          <img src="/assets-shared/img/Me_Picture.png" alt="Richard Zuikov" />
+          <img src={bossImg} alt="Richard Zuikov" className="boss-img" />
         </div>
-        
         <div className="home-text">
           <p className="home-label">Flensburg, DE · Soul Level 19</p>
-          <h1 className="home-name">
-            Richard<br /><em>Zuikov</em>
-          </h1>
-          <p className="home-tagline">
-            Low-Level Architekt, Hardware Enthusiast & Linux Geek
-          </p>
+          <h1 className="home-name">Richard<br /><em>Zuikov</em></h1>
+          <p className="home-tagline">Low-Level Architekt, Hardware Enthusiast<br />& Linux Guardian.</p>
           
           <div className="home-buttons">
-            <a href="/timeline" className="btn-primary">Quest Log ansehen</a>
-            <a href="/worktogether" className="btn-secondary">Beschwörung anfordern</a>
+            <Link to="/career" className="btn-primary">Quest Log ansehen</Link>
+            <Link to="/contact" className="btn-secondary">Beschwörung anfordern</Link>
           </div>
         </div>
       </div>
 
       <div className="home-footer-bar">
-        <span>© {new Date().getFullYear()} Richard Zuikov. All rights reserved.</span>
+        <span>C++ · Go · Linux · Embedded</span>
         <span className="dot">·</span>
-        <a href="https://github.com/Ri4ards2006" target="_blank" rel="noreferrer">GitHub</a>
+        <span className="status-online">Available for Co-op</span>
       </div>
     </main>
   );
