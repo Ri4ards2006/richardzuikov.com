@@ -1,6 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import bossImg from '../assets/Me_Picture.png';
+// Importiere das neue MacBook!
+import { MacbookScroll } from '../components/MacbookScroll';
+// Falls du ein Bild im Mac anzeigen willst, importierst du es hier:
+// import labScreen from '../assets/Home_Lab.jpeg';
 
 function Home() {
   return (
@@ -19,6 +23,15 @@ function Home() {
             <Link to="/contact" className="btn-secondary">Beschwörung anfordern</Link>
           </div>
         </div>
+      </div>
+
+      {/* HIER ENTSTEHT DAS ANIMIERTE MACBOOK */}
+      <div className="macbook-section-wrapper">
+        <MacbookScroll 
+          title="ARMORY INCOMING · HARDWARE ENVIRONMENT"
+          src={bossImg} // Hier kannst du später dein Lab-Bild reinbauen!
+          badge={<span style={{color: 'red'}}>SL 19</span>}
+        />
       </div>
 
       <div className="home-footer-bar">
