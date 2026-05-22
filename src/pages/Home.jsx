@@ -2,9 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import bossImg from '../assets/Me_Picture.png';
 // Importiere das neue MacBook!
-import { MacbookScroll } from '../components/MacbookScroll';
-// Falls du ein Bild im Mac anzeigen willst, importierst du es hier:
-// import labScreen from '../assets/Home_Lab.jpeg';
+import { MacbookScroll } from "../components/ui/macbook-scroll";
 
 function Home() {
   return (
