@@ -2,16 +2,20 @@ import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
 
-function Layout({ children }) {
+export default function Layout({ children }) {
   return (
-    <div className="app-container">
+    // min-h-screen zwingt den Viewport auf die volle Höhe, flex-col stapelt Header, Content und Footer
+    <div className="min-h-screen flex flex-col bg-black text-white">
+      {/* Dein globaler Header */}
       <Header />
-      <div className="content-wrapper">
+      
+      {/* flex-grow dehnt den Content aus, damit der Footer nach ganz unten gedrückt wird */}
+      <main className="flex-grow">
         {children}
-      </div>
+      </main>
+      
+      {/* Dein neuer, ausbalancierter High-End Footer */}
       <Footer />
     </div>
   );
 }
-
-export default Layout;
