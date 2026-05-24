@@ -104,7 +104,7 @@ export default function Footer() {
                 </a>
               </li>
               <li className="text-xs text-zinc-500 font-mono pt-1">
-                SL 19 · Level 19
+                RZ 20 · Level 20
               </li>
             </ul>
           </div>

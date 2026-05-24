@@ -33,13 +33,13 @@ export default function Home() {
   const inverseTickerX = useTransform(smoothProgress, [0.2, 0.6], [-1000, 200]);
   const terminalSkew = useTransform(smoothProgress, [0.3, 0.6], [4, 0]);
 
-  const tickerItems = [
-    { text: "C++ HARDWARE LAYER", img: bossImg },
-    { text: "GO / SYSTEMS", img: bossImg },
-    { text: "LINUX GUARDIAN INFRA", img: bossImg },
-    { text: "AVR / ARM ARCHITECTURE", img: bossImg },
-    { text: "BARE METAL DEV", img: bossImg },
-  ];
+const tickerItems = [
+  { text: "REGISTER-LEVEL C++", img: bossImg },
+  { text: "KERNEL-SPACE DEVELOPMENT", img: bossImg },
+  { text: "SYSTEMS PROGRAMMING (GO)", img: bossImg },
+  { text: "AVR / ARM FIRMWARE", img: bossImg },
+  { text: "BARE-METAL ARCHITECTURE", img: bossImg },
+];
 
   const showcaseImages = [bossImg, bossImg, bossImg, bossImg, bossImg];
 
@@ -65,14 +65,14 @@ export default function Home() {
         <div className="md:col-span-7 space-y-8 text-center md:text-left">
           <div className="inline-flex items-center space-x-2 bg-zinc-900/90 border border-zinc-800 px-4 py-1.5 rounded-full backdrop-blur-md">
             <span className="h-2 w-2 rounded-full bg-[#00979D] animate-ping" />
-            <span className="text-xs font-mono text-zinc-400 tracking-wider">SYSTEM STATUS: OPERATIONAL · SL 19</span>
+            <span className="text-xs font-mono text-zinc-400 tracking-wider">SYSTEM STATUS: OPERATIONAL · RZ 20</span>
           </div>
           <div className="space-y-4 overflow-hidden">
             <motion.h1 style={{ x: textLeftX }} className="text-6xl md:text-8xl font-black tracking-tighter uppercase leading-none">Richard</motion.h1>
             <motion.h1 style={{ x: textRightX }} className="text-6xl md:text-8xl font-black tracking-tighter uppercase leading-none text-transparent bg-clip-text bg-gradient-to-r from-zinc-200 via-zinc-500 to-[#00979D]">Zuikov</motion.h1>
           </div>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="text-zinc-400 text-lg md:text-xl font-sans max-w-xl leading-relaxed">
-            Low-Level Architekt, Hardware Enthusiast & <span className="text-white font-mono font-bold">// Linux Guardian.</span>
+            Low-Level Architekt, Hardware Enthusiast & <span className="text-white font-mono font-bold">// System Engineer</span>
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="flex flex-wrap gap-4 justify-center md:justify-start">
             <Link to="/career" className="px-8 py-4 bg-white text-black font-black rounded-xl hover:bg-zinc-200 transition duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)] text-xs uppercase tracking-widest">Quest Log öffnen</Link>
@@ -133,20 +133,73 @@ export default function Home() {
       </section>
 
       <div className="w-full relative z-10 bg-black pt-12">
-        <MacbookScroll title={<h2 className="text-3xl font-black text-white">Infrastruktur im Forge.</h2>} src={bossImg} />
+        <MacbookScroll title={<h2 className="text-3xl font-black text-white">Coding with my Pure Heart</h2>} src={bossImg} />
       </div>
 
-      <section className="w-full bg-zinc-950 border-t border-zinc-900 py-32">
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-5 text-center lg:text-left space-y-6">
-            <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase">Baltic Roots.<br /><span className="text-[#00979D]">German Engineering.</span></h2>
-          </div>
-          {/* PLATZHALTER STATT GLOBE */}
-          <div className="lg:col-span-7 w-full h-[500px] border-2 border-dashed border-zinc-800 rounded-2xl flex items-center justify-center text-zinc-600 font-mono">
-            3D-GLOBE PLACEHOLDER
-          </div>
+
+
+
+
+
+      <section className="w-full bg-zinc-950 border-t border-zinc-900 py-32 relative overflow-hidden">
+  {/* Subtile Grid-Linien für den Engineering-Vibe */}
+  <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+  
+  <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+    
+    {/* Links: Die Message */}
+    <div className="lg:col-span-5 space-y-6">
+      <span className="text-[#00979D] font-mono tracking-widest uppercase text-xs">// Infrastructure_Forge</span>
+      <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase">
+        Baltic Roots.<br />
+        <span className="text-[#00979D]">German Engineering.</span>
+      </h2>
+      <p className="text-zinc-400 leading-relaxed text-lg">
+        Mein Setup ist kein Standard-Hosting. Auf dem Ugreen-NAS laufen dedizierte Container-Umgebungen, 
+        die meine Hardware-Projekte und CI/CD-Pipelines autark steuern.
+      </p>
+    </div>
+
+    {/* Rechts: Die Live-Infrastructure-Visualisierung */}
+    <div className="lg:col-span-7 grid grid-cols-2 gap-4">
+      {/* Box 1: Hardware-Stack */}
+      <div className="p-6 bg-black border border-zinc-800 rounded-2xl space-y-4">
+        <div className="flex justify-between items-center text-xs font-mono text-zinc-500">
+          <span>SERVER_NODE_01</span>
+          <span className="text-emerald-500">ONLINE</span>
         </div>
-      </section>
+        <div className="h-1 bg-zinc-900 rounded-full overflow-hidden">
+          <div className="w-[14%] h-full bg-[#00979D]"></div>
+        </div>
+        <p className="text-xs text-zinc-300 font-mono">Ugreen NAS / Docker Cluster</p>
+      </div>
+
+      {/* Box 2: Network-Stack */}
+      <div className="p-6 bg-black border border-zinc-800 rounded-2xl space-y-4">
+        <div className="flex justify-between items-center text-xs font-mono text-zinc-500">
+          <span>VPN_GATEWAY</span>
+          <span className="text-emerald-500">ACTIVE</span>
+        </div>
+        <div className="h-1 bg-zinc-900 rounded-full overflow-hidden">
+          <div className="w-[42%] h-full bg-[#00979D]"></div>
+        </div>
+        <p className="text-xs text-zinc-300 font-mono">Cloudflare / WireGuard</p>
+      </div>
+
+      {/* Box 3: Lab-Status (Full-Width) */}
+      <div className="col-span-2 p-8 bg-black border border-[#00979D]/30 rounded-2xl flex items-center justify-between">
+        <div>
+          <h4 className="font-bold text-lg">Lab Performance</h4>
+          <p className="text-zinc-500 text-sm font-mono">Status: Bare-Metal ready</p>
+        </div>
+        <div className="text-right font-mono text-[#00979D]">
+          <span className="text-4xl font-black">99.9</span>
+          <span className="text-sm">% Uptime</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
     </main>
   );
 }

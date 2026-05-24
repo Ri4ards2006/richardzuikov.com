@@ -1,13 +1,18 @@
-"use client";
-
 import React, { useRef } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
-import { Cpu, Terminal, Zap, Anchor, BookOpen, GitBranch } from 'lucide-react';
+import { useNavigate } from 'react-router-dom'; // <-- Neu für die Seiten-Navigation
+import { Cpu, Terminal, Zap, BookOpen, GitBranch } from 'lucide-react';
 import Carousel from "../components/ui/carousel"; 
+
+// 1. IMPORTIERE DEINE ECHTEN HARDWARE-BILDER
 import bossImg from "../assets/Me_Picture.png";
+import solderingStationImg from "../assets/Home_Soldering_Station.jpeg";
+import homeLabImg from "../assets/Home_Lab.jpeg";
+import trafficSystemImg from "../assets/Traffic_System.jpg";
 
 export default function About() {
   const containerRef = useRef(null);
+  const navigate = useNavigate(); // <-- Navigation-Triebwerk starten
   const { scrollYProgress } = useScroll({ target: containerRef });
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
@@ -18,8 +23,16 @@ export default function About() {
     { title: "Lab-Philosophie", icon: <BookOpen />, desc: "Mein Weg zum IT-Systemelektroniker bis 2027." }
   ];
 
+  // Handler, der anspringt, wenn der Button im Karussell geklickt wird
+  const handleSlideButtonClick = (slide) => {
+    if (slide.link) {
+      navigate(slide.link); // Schiebt den User auf die /lab Seite
+    }
+  };
+
   return (
     <main ref={containerRef} className="bg-black text-white selection:bg-[#00979D]">
+      {/* Fortschrittsbalken oben */}
       <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-[#00979D] origin-left z-[999]" style={{ scaleX }} />
 
       {/* 1. HERO: Fokus auf DICH */}
@@ -27,16 +40,15 @@ export default function About() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
           <div className="relative group">
             <div className="absolute -inset-4 bg-gradient-to-r from-[#00979D] to-zinc-800 rounded-3xl blur opacity-20 group-hover:opacity-40 transition" />
-            <img src={bossImg} alt="Richard Zuikov" className="relative z-10 rounded-2xl grayscale hover:grayscale-0 transition duration-700" />
+            <img src={bossImg} alt="Richard Zuikov" className="relative z-10 rounded-2xl grayscale hover:grayscale-0 transition duration-700 w-100 object-cover" />
           </div>
           <div className="space-y-6">
             <span className="text-[#00979D] font-mono text-sm tracking-widest">// ABOUT ME</span>
-            <h1 className="text-6xl font-black uppercase">Richard Zuikov</h1>
+            <h1 className="text-6xl font-black uppercase">Richard<br />Zuikov</h1>
             <p className="text-zinc-400 text-lg leading-relaxed">
-              Ich bin nicht nur hier, um zu programmieren. Ich bin hier, um zu verstehen, wie das, 
-              was wir benutzen, eigentlich existiert. Vom Transistor-Gate bis zum Kernel-Space.
+              Software ist die Abstraktion, Hardware ist die Realität. Ich arbeite an der Schnittstelle, wo beides kollidiert.
             </p>
-            <div className="flex gap-4 pt-4">
+            <div className="flex flex-wrap gap-4 pt-4">
               {['Lötkolben-Enthusiast', 'Kernel-Interessiert', 'Home-Lab Betreiber'].map(tag => (
                 <span key={tag} className="px-3 py-1 border border-zinc-800 rounded-md text-xs text-zinc-500 font-mono">{tag}</span>
               ))}
@@ -61,17 +73,21 @@ export default function About() {
         </div>
       </section>
 
-      {/* 3. WORKBENCH CAROUSEL (Visuelles Setup) */}
+      {/* 3. WORKBENCH CAROUSEL */}
       <section className="py-32">
          <div className="text-center mb-16">
             <h3 className="text-3xl font-bold uppercase tracking-widest mb-4">// Mein "Meta" Setup</h3>
-            <p className="text-zinc-600">Ein Blick auf die Dinge, die meinen Alltag prägen.</p>
+            <p className="text-zinc-400">Ein Blick auf die Dinge, die meinen Alltag prägen.</p>
          </div>
-         <Carousel slides={[
-            { title: "Workbench Chaos", src: bossImg, button: "Details" },
-            { title: "Server Rack", src: bossImg, button: "Details" },
-            { title: "Deep Focus Mode", src: bossImg, button: "Details" }
-         ]} />
+         {/* Hier lassen wir bei den ersten beiden den Button einfach weg! */}
+         <Carousel 
+            slides={[
+              { title: "Workbench Chaos", src: solderingStationImg },
+              { title: "Server Rack", src: homeLabImg },
+              { title: "RTOS Traffic Control", src: trafficSystemImg, button: "Armory öffnen", link: "/lab" }
+            ]} 
+            onSlideButtonClick={handleSlideButtonClick}
+         />
       </section>
 
       {/* 4. METAL MINDSET (Philosophie) */}
@@ -82,7 +98,7 @@ export default function About() {
            an der die digitale Illusion auf die physische Realität trifft."
          </p>
          <div className="mt-12 p-8 bg-[#00979D]/5 border border-[#00979D]/20 rounded-2xl">
-            <p className="text-[#00979D] font-mono">
+            <p className="text-[#00979D] font-mono leading-relaxed">
               // Aktueller Status: Ausbildungsphase <br/>
               // Fokus: Systemarchitektur & Hardware-Integration <br/>
               // Motto: Keep it low, keep it fast.
@@ -90,14 +106,13 @@ export default function About() {
          </div>
       </section>
 
-
-{/* 5. ORIGIN STORY & BIO (Unten angehängt) */}
+      {/* 5. ORIGIN STORY & BIO */}
       <section className="py-32 px-12 bg-zinc-900/10 border-t border-zinc-900">
         <div className="max-w-4xl mx-auto space-y-12">
           <h3 className="text-4xl font-bold">// Mein Werdegang</h3>
           
           <div className="flex gap-8 items-start">
-            <div className="mt-2 text-[#00979D]">
+            <div className="mt-2 text-[#00979D] shrink-0">
               <Zap size={32} />
             </div>
             <div>
@@ -111,7 +126,7 @@ export default function About() {
           </div>
 
           <div className="flex gap-8 items-start">
-            <div className="mt-2 text-[#00979D]">
+            <div className="mt-2 text-[#00979D] shrink-0">
               <Cpu size={32} />
             </div>
             <div>
@@ -144,14 +159,16 @@ export default function About() {
       {/* 6. CALL TO ACTION */}
       <section className="h-[30vh] flex flex-col items-center justify-center border-t border-zinc-900">
         <h3 className="text-2xl font-bold mb-6">Lass uns was bauen.</h3>
-        <button className="px-12 py-4 bg-[#00979D] text-white font-bold rounded-full hover:bg-white hover:text-black transition-all uppercase tracking-widest text-sm">
+        <button 
+          onClick={() => navigate('/contact')}
+          className="px-12 py-4 bg-[#00979D] text-white font-bold rounded-full hover:bg-white hover:text-black transition-all uppercase tracking-widest text-sm cursor-pointer"
+        >
           Kontakt aufnehmen
         </button>
       </section>
 
-
       <footer className="py-20 text-center border-t border-zinc-900">
-         <button className="text-zinc-500 hover:text-white transition">Nachricht hinterlassen?</button>
+         <button onClick={() => navigate('/contact')} className="text-zinc-500 hover:text-white transition cursor-pointer">Nachricht hinterlassen?</button>
       </footer>
     </main>
   );
