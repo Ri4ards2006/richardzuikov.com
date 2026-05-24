@@ -1,7 +1,13 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
+
+// PLATZHALTER FÜR DEIN GEILES 3D MARQUEE HINTERGRUND-SYSTEM
+import bossImg from "../assets/Me_Picture.png";
+
+// Eigene, sichere Hilfsfunktion für Tailwind Klassen
+const cn = (...classes) => classes.filter(Boolean).join(' ');
 
 export default function Home() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -24,66 +30,78 @@ export default function Home() {
     { id: "03", title: "Contact", link: "/contact", sub: "Get in touch" }
   ];
 
+  // Wir füttern das Marquee mit reichlich Bildern für nahtlose Spalten
+  const marqueePlaceholderImages = [
+    bossImg, bossImg, bossImg, bossImg,
+    bossImg, bossImg, bossImg, bossImg,
+    bossImg, bossImg, bossImg, bossImg,
+    bossImg, bossImg, bossImg, bossImg
+  ];
+
   return (
-    <main className="w-full h-screen bg-black text-white relative overflow-hidden flex flex-col justify-center items-center selection:bg-[#00979D]/30">
+    <main className="w-full h-screen bg-[#030303] text-[#F9F9F9] relative overflow-hidden flex flex-col justify-center items-center selection:bg-[#FFB000]/30">
       
-      {/* ─── HINTERGRUND (GIF / VIDEO / GLOW) ─── */}
-      <div className="absolute inset-0 z-0 overflow-hidden opacity-20 pointer-events-none">
-        {/* Hier dein GIF-Background einfügen. Beispiel: 
-            <img src={yourGif} className="w-full h-full object-cover" /> 
-        */}
+      {/* ─── CRANK AF 3D MARQUEE BACKGROUND ENGINE (JETZT IN FARBE) ─── */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-[0.40] select-none">
         <motion.div 
-          animate={{ x: mousePos.x * -30, y: mousePos.y * -30 }}
-          className="w-full h-full bg-[radial-gradient(circle_at_center,#111_0%,#000_100%)] flex items-center justify-center"
+          animate={{ x: mousePos.x * -40, y: mousePos.y * -40 }}
+          transition={{ type: "smooth", stiffness: 40, damping: 25 }}
+          className="w-full h-full"
         >
-            <div className="w-[150%] h-[150%] bg-[linear-gradient(to_right,#1f293708_1px,transparent_1px),linear-gradient(to_bottom,#1f293708_1px,transparent_1px)] bg-[size:10rem_10rem]" />
+          <ThreeDMarquee images={marqueePlaceholderImages} />
         </motion.div>
       </div>
 
-      {/* ─── MAIN CONTENT AREA ─── */}
-      <div className="relative z-10 flex flex-col items-center">
+      {/* ─── SOFT BACKDROP SHADOW FÜR BESSERE LESBARKEIT BEI FARBBILDERN ─── */}
+      <div className="absolute inset-0 z-0 bg-black/30 pointer-events-none" />
+
+      {/* ─── MAIN CONTENT AREA (TAKUYA LOOK) ─── */}
+      <div className="relative z-10 flex flex-col items-center select-none bg-black/20 backdrop-blur-[2px] p-10 rounded-2xl">
         
         {/* Name / Title - Zentriert & Mächtig */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-20 text-center"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-16 text-center"
         >
-          <h1 className="text-[12vw] sm:text-[8vw] font-normal leading-none tracking-tight">
+          <h1 className="text-[12vw] sm:text-[7vw] font-light leading-none tracking-tight font-sans drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
             Richard Zuikov
           </h1>
-          <p className="mt-4 text-zinc-600 font-mono text-[10px] sm:text-xs tracking-[0.4em] uppercase">
-            Low-Level Architekt / Systems Engineer
+          <p className="mt-4 text-zinc-400 font-mono text-[10px] sm:text-xs tracking-[0.5em] uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            Low-Level Architekt <span className="text-[#FFB000]/60">//</span> Systems Engineer
           </p>
         </motion.div>
 
-        {/* ─── VERTICAL NAVIGATION (DIE "RUNTERGEBALLERTE" LISTE) ─── */}
-        <nav className="flex flex-col items-center space-y-6">
+        {/* ─── VERTICAL NAVIGATION (RUNTERGEBALLERT) ─── */}
+        <nav className="flex flex-col items-center space-y-4">
           {menuItems.map((item, index) => (
             <motion.div
               key={item.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 + index * 0.1, duration: 0.8 }}
+              transition={{ delay: 0.3 + index * 0.1, duration: 1, ease: [0.16, 1, 0.3, 1] }}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
-              className="relative group"
+              className="relative flex flex-col items-center h-20"
             >
               <Link to={item.link} className="flex flex-col items-center">
                 {/* Die Hauptüberschrift */}
-                <span className="text-4xl sm:text-6xl font-light tracking-wide text-zinc-500 group-hover:text-white transition-all duration-500 ease-out">
+                <span className="text-4xl sm:text-5xl font-light tracking-wide text-zinc-400 hover:text-[#F9F9F9] transition-all duration-500 ease-out drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]">
                   {item.title}
                 </span>
                 
-                {/* Sub-Info (Takyua Style Detail) */}
-                <span className={`text-[9px] font-mono tracking-[0.2em] uppercase mt-2 transition-all duration-500 ${hoveredIndex === index ? 'text-[#00979D] opacity-100' : 'text-zinc-800 opacity-0'}`}>
-                  {item.sub}
+                {/* Sub-Info (Amber Terminal Style Detail) */}
+                <span className={cn(
+                  "text-[9px] font-mono tracking-[0.2em] uppercase mt-2 transition-all duration-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]",
+                  hoveredIndex === index ? 'text-[#FFB000] opacity-100' : 'text-transparent opacity-0'
+                )}>
+                  [{item.sub}]
                 </span>
 
                 {/* Hover-Line-Animation */}
                 <motion.div 
-                   className="h-[1px] bg-white mt-1"
+                   className="h-[1px] bg-[#F9F9F9] mt-1 shadow-xl"
                    initial={{ width: 0 }}
                    animate={{ width: hoveredIndex === index ? "100%" : 0 }}
                    transition={{ duration: 0.4 }}
@@ -95,11 +113,111 @@ export default function Home() {
       </div>
 
       {/* ─── FOOTER INFO ─── */}
-      <footer className="absolute bottom-8 w-full max-w-7xl px-8 flex justify-between items-center z-10 font-mono text-[9px] text-zinc-700 tracking-widest uppercase">
-        <span>RZ.OS.V1 // 2026</span>
-        <span>© Richard Zuikov All rights reserved</span>
+      <footer className="absolute bottom-8 w-full max-w-7xl px-8 flex justify-between items-center z-10 font-mono text-[9px] text-zinc-500 tracking-widest uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+        <span>RZ.OS.V2 // 2026</span>
+        <span>© All rights reserved</span>
       </footer>
 
     </main>
   );
 }
+
+{/* ─── INTERNAL SUB-COMPONENTS FOR HIGH-END 3D EFFECT ─── */}
+
+const ThreeDMarquee = ({ images, className }) => {
+  const chunkSize = Math.ceil(images.length / 4);
+  const chunks = Array.from({ length: 4 }, (_, colIndex) => {
+    const start = colIndex * chunkSize;
+    return images.slice(start, start + chunkSize);
+  });
+
+  return (
+    <div className={cn("mx-auto block h-screen w-screen overflow-hidden", className)}>
+      <div className="flex size-full items-center justify-center">
+        <div className="size-[1720px] shrink-0 scale-50 sm:scale-75 lg:scale-100">
+          <div
+            style={{ transform: "rotateX(55deg) rotateY(0deg) rotateZ(-45deg)" }}
+            className="relative top-48 right-[10%] grid size-full origin-top-left grid-cols-4 gap-8 style-3d"
+          >
+            {chunks.map((subarray, colIndex) => (
+              <motion.div
+                animate={{ y: colIndex % 2 === 0 ? [0, -400] : [-400, 0] }}
+                transition={{
+                  duration: colIndex % 2 === 0 ? 25 : 30,
+                  repeat: Infinity,
+                  repeatType: "loop",
+                  ease: "linear"
+                }}
+                key={colIndex + "marquee"}
+                className="flex flex-col items-start gap-8"
+              >
+                <GridLineVertical className="-left-4" offset="80px" />
+                {subarray.map((image, imageIndex) => (
+                  <div className="relative" key={imageIndex + image}>
+                    <GridLineHorizontal className="-top-4" offset="20px" />
+                    <img
+                      src={image}
+                      alt={`Blueprint Grid ${imageIndex + 1}`}
+                      // FILTER ENTFERNT -> VOLLE FARBE AKTIERT!
+                      className="aspect-[970/700] rounded-none object-cover border border-zinc-900 shadow-2xl"
+                      width={970}
+                      height={700} 
+                    />
+                  </div>
+                ))}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const GridLineHorizontal = ({ className, offset }) => {
+  return (
+    <div
+      style={{
+        "--background": "#ffffff",
+        "--color": "rgba(255, 255, 255, 0.08)",
+        "--height": "1px",
+        "--width": "6px",
+        "--fade-stop": "90%",
+        "--offset": offset || "200px",
+        "--color-dark": "rgba(255, 255, 255, 0.08)",
+        maskComposite: "exclude"
+      }}
+      className={cn(
+        "absolute left-[calc(var(--offset)/2*-1)] h-[var(--height)] w-[calc(100%+var(--offset))]",
+        "bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)]",
+        "[background-size:var(--width)_var(--height)]",
+        "z-30",
+        className
+      )}
+    />
+  );
+};
+
+const GridLineVertical = ({ className, offset }) => {
+  return (
+    <div
+      style={{
+        "--background": "#ffffff",
+        "--color": "rgba(255, 255, 255, 0.08)",
+        "--height": "6px",
+        "--width": "1px",
+        "--fade-stop": "90%",
+        "--offset": offset || "150px",
+        "--color-dark": "rgba(255, 255, 255, 0.08)",
+        maskComposite: "exclude"
+      }}
+      className={cn(
+        "absolute top-[calc(var(--offset)/2*-1)] h-[calc(100%+var(--offset))] w-[var(--width)]",
+        "bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)]",
+        "[background-size:var(--width)_var(--height)]",
+        "z-30",
+        className
+      )}
+    />
+  );
+};
