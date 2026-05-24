@@ -7,6 +7,7 @@ import Career from './pages/Career';
 import Lab from './pages/Lab';
 import Dev from './pages/Dev';
 import Contact from './pages/Contact';
+import Portfolio from './pages/Portfolio'; // <-- HIER NEU HINZUGEFÜGT!
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/lab" element={<Lab />} />
           <Route path="/dev" element={<Dev />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/portfolio" element={<Portfolio />} /> {/* <-- HIER DIE ROUTE ZUGEFÜGT! */}
         </Routes>
       </Layout>
     </Router>

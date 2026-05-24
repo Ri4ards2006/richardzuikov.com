@@ -1,10 +1,23 @@
 "use client";
 import React, { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { useOutsideClick } from "../hooks/use-outside-click";
+
+// DEIN STANDARD-HINTERGRUNDBILD
+import bossImg from "../assets/Me_Picture.png";
+
+// Echte Projekt-Bilder importieren
+import adLedClockImg from "../assets/AD_DA_Clock.png";
+import trafficSystemImg from "../assets/Traffic_System.jpg";
+import weatherStationImg from "../assets/Weather_Station.png";
+import goCoreLabImg from "../assets/Go_Lab_Reworked.png";
+import homeLabImg from "../assets/Home_Lab.jpeg";
+import workbenchImg from "../assets/Home_Soldering_Station.jpeg";
 
 export default function Lab() {
   const [active, setActive] = useState(null);
+  const [hoveredCard, setHoveredCard] = useState(null);
   const id = useId();
   const ref = useRef(null);
 
@@ -14,311 +27,280 @@ export default function Lab() {
         setActive(false);
       }
     }
-
-    if (active && typeof active === "object") {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [active]);
 
   useOutsideClick(ref, () => setActive(null));
 
+  // Takuya Background Engine Logik
+  const currentBgImage = active?.src || hoveredCard?.src || bossImg;
+
   return (
-    <main className="page-main min-h-screen bg-black text-white py-12 px-4">
-      {/* Header passend zu deinem Style */}
-      <div className="max-w-6xl mx-auto mb-12 text-center md:text-left">
-        <h1 className="text-5xl font-extrabold tracking-wider text-white uppercase mb-2">
-          Projects
-        </h1>
-        <p className="text-[#00979D] text-lg font-mono">
-         
-        </p>
+    <main className="relative min-h-screen bg-[#020202] text-[#F5F5F7] overflow-x-hidden selection:bg-white/20 font-sans">
+      
+      {/* ─── DYNAMIC FULLSCREEN BACKGROUND ─── */}
+      <div className="fixed inset-0 z-0 w-full h-full overflow-hidden pointer-events-none select-none">
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={currentBgImage}
+            src={currentBgImage}
+            initial={{ opacity: 0, scale: 1.02 }}
+            animate={{ opacity: 0.60, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full h-full object-cover object-center filter contrast-100 brightness-100"
+            alt="System Background"
+          />
+        </AnimatePresence>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-transparent to-[#020202]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#020202_100%)]" />
       </div>
 
-      <AnimatePresence>
-        {active && typeof active === "object" && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 h-full w-full z-10 backdrop-blur-sm"
-          />
-        )}
-      </AnimatePresence>
+      {/* ─── SCROLLABLE PORTFOLIO CONTAINER ─── */}
+      <div className="relative z-10 max-w-7xl mx-auto py-24 px-6 md:px-16 flex flex-col min-h-screen justify-between">
+        
+        {/* Minimal Header */}
+        <header className="mb-24 text-center md:text-left select-none">
+          <span className="text-[10px] font-mono tracking-[0.5em] text-zinc-600 uppercase block mb-2">
+            // CORE.SYSTEM.LAB
+          </span>
+          <h1 className="text-5xl md:text-6xl font-light tracking-tighter text-[#F5F5F7]">
+            Works
+          </h1>
+        </header>
 
+        {/* ─── PORTFOLIO LISTE MIT MIT REDIRECT-LOGIK FÜR 01 ─── */}
+        <div className="w-full border-t border-zinc-900">
+          {projectCards(bossImg, adLedClockImg, trafficSystemImg, weatherStationImg, goCoreLabImg, homeLabImg, workbenchImg).map((card) => {
+            
+            // Einheitliches Innendesign für alle Listenelemente (01 bis 07)
+            const cardInnerContent = (
+              <>
+                {/* Riesige Index-Zahl + Projekttitel */}
+                <div className="flex items-center space-x-8 md:space-x-16 z-10">
+                  <span className="text-5xl md:text-7xl font-mono font-extralight text-zinc-800 group-hover:text-zinc-400 transition-colors duration-400 tracking-tighter">
+                    {card.id}
+                  </span>
+                  
+                  <div className="flex flex-col">
+                    <h3 className="text-3xl md:text-5xl font-light text-zinc-500 group-hover:text-[#F5F5F7] transition-all duration-300 tracking-tight">
+                      {card.title}
+                    </h3>
+                    <span className="text-xs font-mono text-zinc-700 group-hover:text-zinc-500 transition-colors duration-300 mt-1 uppercase tracking-wider">
+                      {card.description}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Tech-Tag */}
+                <div className="flex items-center mt-4 md:mt-0 z-10 font-mono text-xs text-zinc-700 group-hover:text-zinc-400 transition-colors duration-300">
+                  <span className="tracking-widest uppercase border border-zinc-900 group-hover:border-zinc-800 px-3 py-1 rounded">
+                    {card.tag.split(" · ")[0]}
+                  </span>
+                </div>
+
+                {/* Hover-Overlay */}
+                <div className="absolute inset-0 bg-zinc-950/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+              </>
+            );
+
+            // WENN ID "01" IST -> GEH DIREKT PER ROUTER-LINK AUF DIE PORTFOLIO SEITE
+            if (card.id === "01") {
+              return (
+                <Link
+                  key={card.title}
+                  to="/portfolio"
+                  onMouseEnter={() => setHoveredCard(card)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                  className="group relative flex flex-col md:flex-row md:items-center justify-between py-10 border-b border-zinc-900 cursor-pointer transition-all duration-300"
+                >
+                  {cardInnerContent}
+                </Link>
+              );
+            }
+
+            // FÜR ALLE ANDEREN PROJEKTE (02 - 07) -> ÖFFNE DAS PREVIEW-MODAL CHILLIG AUF DER SEITE
+            return (
+              <motion.div
+                key={card.title}
+                layoutId={`card-${card.title}-${id}`}
+                onClick={() => setActive(card)}
+                onMouseEnter={() => setHoveredCard(card)}
+                onMouseLeave={() => setHoveredCard(null)}
+                className="group relative flex flex-col md:flex-row md:items-center justify-between py-10 border-b border-zinc-900 cursor-pointer transition-all duration-300"
+              >
+                {cardInnerContent}
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Footer */}
+        <footer className="mt-24 flex justify-between items-center font-mono text-[9px] text-zinc-800 uppercase tracking-widest select-none">
+          <span>INDEX // SYSTEM_STABLE</span>
+          <span>© RICHARD ZUIKOV</span>
+        </footer>
+      </div>
+
+      {/* ─── EXPANDED PORTFOLIO MODAL ─── */}
       <AnimatePresence>
-        {active && typeof active === "object" ? (
-          <div className="fixed inset-0 grid place-items-center z-[100] p-4">
-            <motion.button
-              key={`button-${active.title}-${id}`}
-              layout
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0, transition: { duration: 0.05 } }}
-              className="flex absolute top-4 right-4 items-center justify-center bg-zinc-900 border border-zinc-800 text-white rounded-full h-8 w-8 hover:bg-zinc-800 transition"
+        {active && (
+          <div className="fixed inset-0 grid place-items-center z-[100] p-4 bg-black/80 backdrop-blur-lg">
+            
+            <button
+              className="absolute top-6 right-6 flex items-center justify-center bg-[#0d0d0d] border border-zinc-900 text-zinc-400 rounded-full h-12 w-12 hover:text-white hover:border-zinc-700 transition z-[110]"
               onClick={() => setActive(null)}
             >
               <CloseIcon />
-            </motion.button>
+            </button>
             
             <motion.div
               layoutId={`card-${active.title}-${id}`}
               ref={ref}
-              className="w-full max-w-[650px] h-auto max-h-[90vh] flex flex-col bg-[#161b22] border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl"
+              className="w-full max-w-[750px] h-auto max-h-[85vh] flex flex-col bg-[#080808] border border-zinc-900 rounded-lg overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.9)]"
             >
-              <motion.div layoutId={`image-${active.title}-${id}`}>
-                <img
-                  src={active.src}
-                  alt={active.title}
-                  className="w-full h-64 md:h-72 object-cover object-center border-b border-zinc-800"
-                />
-              </motion.div>
-
-              <div className="overflow-y-auto p-6 custom-scrollbar">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <motion.span 
-                      layoutId={`tag-${active.tag}-${id}`}
-                      className="text-xs font-mono px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 border border-zinc-700 uppercase"
-                    >
-                      {active.tag}
-                    </motion.span>
-                    <motion.h3
-                      layoutId={`title-${active.title}-${id}`}
-                      className="font-bold text-2xl text-white mt-1"
-                    >
-                      {active.title}
-                    </motion.h3>
-                  </div>
-
-                  {active.ctaLink && (
-                    <motion.a
-                      layout
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      href={active.ctaLink}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="px-4 py-2 text-xs font-mono font-bold rounded border border-[#00979D] text-[#00979D] hover:bg-[#00979D]/10 transition"
-                    >
-                      {active.ctaText}
-                    </motion.a>
-                  )}
+              <div className="overflow-y-auto p-8 md:p-12 space-y-8 custom-scrollbar">
+                
+                <div className="border-b border-zinc-900 pb-6">
+                  <span className="text-[10px] font-mono px-2 py-1 bg-zinc-950 border border-zinc-900 text-zinc-500 uppercase tracking-widest">
+                    {active.tag}
+                  </span>
+                  <h2 className="font-light text-4xl text-[#F5F5F7] mt-6 tracking-tight">
+                    {active.title}
+                  </h2>
                 </div>
 
-                <motion.p
-                  layoutId={`description-${active.description}-${id}`}
-                  className="text-[#00979D] font-mono text-xs mb-4"
-                >
-                  {active.year} · {active.description}
-                </motion.p>
-
-                <div className="text-zinc-300 text-sm leading-relaxed space-y-4 font-sans border-t border-zinc-800/60 pt-4">
+                <div className="text-zinc-400 text-sm leading-relaxed space-y-4 font-mono border-b border-zinc-900 pb-6">
                   {typeof active.content === "function" ? active.content() : active.content}
                 </div>
 
-                <div className="flex flex-wrap gap-2 mt-6">
-                  {active.tags.map((tag, idx) => (
-                    <span key={idx} className="bg-[#21262d] text-zinc-400 font-mono text-xs px-2 py-1 rounded">
-                      {tag}
-                    </span>
-                  ))}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-2">
+                  <div className="flex flex-wrap gap-1.5">
+                    {active.tags.map((tag, idx) => (
+                      <span key={idx} className="bg-[#0d0d0d] border border-zinc-900 text-zinc-600 font-mono text-[10px] px-2.5 py-1 rounded">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {active.ctaLink && (
+                    <a
+                      href={active.ctaLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-center text-center px-5 py-2.5 text-xs font-mono tracking-wider rounded border border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-500 transition duration-300"
+                    >
+                      {active.ctaText}
+                    </a>
+                  )}
                 </div>
+
               </div>
             </motion.div>
           </div>
-        ) : null}
+        )}
       </AnimatePresence>
-
-      {/* Das Grid mit deinen echten Assets */}
-      <ul className="max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projectCards.map((card) => (
-          <motion.div
-            layoutId={`card-${card.title}-${id}`}
-            key={card.title}
-            onClick={() => setActive(card)}
-            className="p-4 flex flex-col bg-[#111418] border border-zinc-800/80 rounded-xl cursor-pointer hover:border-[#00979D]/50 hover:bg-[#161b22] transition group"
-          >
-            <div className="flex gap-4 flex-col w-full">
-              <motion.div layoutId={`image-${card.title}-${id}`} className="overflow-hidden rounded-lg">
-                <img
-                  src={card.src}
-                  alt={card.title}
-                  className="h-48 w-full object-cover object-center group-hover:scale-102 transition duration-300"
-                />
-              </motion.div>
-              <div className="flex flex-col p-2">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400 uppercase">
-                    {card.tag}
-                  </span>
-                  <span className="text-xs font-mono text-zinc-500">{card.year}</span>
-                </div>
-                <motion.h3
-                  layoutId={`title-${card.title}-${id}`}
-                  className="font-bold text-lg text-white group-hover:text-[#00979D] transition"
-                >
-                  {card.title}
-                </motion.h3>
-                <motion.p
-                  layoutId={`description-${card.description}-${id}`}
-                  className="text-zinc-400 text-xs mt-1 line-clamp-2"
-                >
-                  {card.rawDesc}
-                </motion.p>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </ul>
     </main>
   );
 }
 
-export const CloseIcon = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-4 w-4"
-    >
-      <line x1="18" y1="6" x2="6" y2="18" />
-      <line x1="6" y1="6" x2="18" y2="12" />
-    </svg>
-  );
-};
+const CloseIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="6" />
+  </svg>
+);
 
-// Hier sind 100% deine echten Daten, Pfade und Links drin!
-const projectCards = [
+const projectCards = (bossImg, img1, img2, img3, img4, img5, img6) => [
   {
-    year: "2024",
+    id: "01",
+    tag: "Overview · Showreel",
+    title: "Portfolio",
+    description: "Systems Engineering & Hardware Architecture Core",
+    src: bossImg,
+    ctaText: null,
+    ctaLink: null,
+    tags: ["Low-Level", "Hardware", "Embedded", "Kernel Research"],
+    content: () => (
+      <p>Welcome to the central engineering directory. This space logs physical computing modules, low-level register interactions, automated telemetry frameworks, and dedicated self-hosted network arrays. Select any system node below to inspect deep documentation.</p>
+    ),
+  },
+  {
+    id: "02",
     tag: "Embedded · Hardware",
     title: "AD-LED Clock",
-    description: "Target: AVR RISC Register Level",
-    rawDesc: "ATmega8535 driven LED-Matrix clock with shift registers, brightness control, and time sync.",
-    src: "/src/assets/AD_DA_Clock.png",
-    ctaText: "GitHub Repo",
+    description: "AVR RISC Register Level",
+    src: img1,
+    ctaText: "CODEBASE",
     ctaLink: "https://github.com/Ri4ards2006/Analog-Digital-Clock",
-    tags: ["C++", "ATmega8535", "LED Matrix", "KiCad", "3D Print"],
+    tags: ["C++", "ATmega8535", "LED Matrix", "KiCad"],
     content: () => (
-      <div className="space-y-4">
-        <p>
-          ATmega8535 driven LED-Matrix clock with shift registers, brightness control, and time sync. 
-          Pure C++ at register level — no external libraries. Circuit designed in KiCad, housing fully 3D-printed.
-        </p>
-        <p>
-          Die Ansteuerung erfolgt hardwarenah über direkte Registermanipulation, um maximale Performance und 
-          präzise Timings ohne Overhead zu garantieren.
-        </p>
-      </div>
+      <p>ATmega8535 driven LED-Matrix clock with shift registers. Pure C++ at register level — no external libraries. Circuit designed in KiCad, housing fully 3D-printed.</p>
     ),
   },
   {
-    year: "2024",
+    id: "03",
     tag: "Embedded · Hardware",
     title: "Traffic Light System",
-    description: "Target: Arduino Mega 2560",
-    rawDesc: "Full street crossing simulation — traffic lights, pedestrian signals, day/night mode, ultrasonic sensors.",
-    src: "/src/assets/Traffic_System.jpg",
-    ctaText: "GitHub Repo",
+    description: "Arduino Mega 2560 Architecture",
+    src: img2,
+    ctaText: "CODEBASE",
     ctaLink: "https://github.com/Ri4ards2006/Traffic-Light",
-    tags: ["C++", "Arduino Mega", "Ultraschall", "3D Print", "CAD"],
+    tags: ["C++", "Arduino Mega", "Ultraschall", "3D Print"],
     content: () => (
-      <div className="space-y-4">
-        <p>
-          Full street crossing simulation — traffic lights, pedestrian signals, day/night mode, ultrasonic sensors. 
-          Arduino Mega, LN298, interrupt-driven pedestrian buttons. Traffic light housings fully 3D-printed and CAD-designed.
-        </p>
-      </div>
+      <p>Full street crossing simulation — traffic lights, pedestrian signals, day/night mode, ultrasonic sensors. Arduino Mega, LN298, interrupt-driven pedestrian buttons.</p>
     ),
   },
   {
-    year: "2024",
+    id: "04",
     tag: "Embedded · IoT",
     title: "Weather Station 2.0",
-    description: "Target: ESP32 Dual-Core",
-    rawDesc: "Modular IoT weather station on ESP32. Multi-sensor fusion, WiFi telemetry, clean data pipeline.",
-    src: "/src/assets/Weather_Station.png",
-    ctaText: "GitHub Repo",
+    description: "ESP32 Dual-Core Telemetry",
+    src: img3,
+    ctaText: "CODEBASE",
     ctaLink: "https://github.com/Ri4ards2006/Weather_Station2.0",
-    tags: ["C++", "ESP32", "IoT", "WiFi", "Modular"],
+    tags: ["C++", "ESP32", "IoT", "WiFi"],
     content: () => (
-      <div className="space-y-4">
-        <p>
-          Modular IoT weather station on ESP32. Multi-sensor fusion, WiFi telemetry, clean data pipeline. 
-          Each sensor module independently swappable — designed for extensibility from the start.
-        </p>
-      </div>
+      <p>Modular IoT weather station on ESP32. Multi-sensor fusion, WiFi telemetry, clean data pipeline. Each sensor module independently swappable.</p>
     ),
   },
   {
-    year: "2025",
+    id: "05",
     tag: "Software · Research",
     title: "GO-CORE-LAB",
-    description: "Target: Static Go Binary",
-    rawDesc: "Personal low-level research framework in Go. ELF/PE binary parsing, hardware bridge for SPI/I2C/UART.",
-    src: "/src/assets/Go_Lab_Reworked.png",
-    ctaText: "GitHub Repo",
+    description: "Static Go Binary Analysis Engine",
+    src: img4,
+    ctaText: "CODEBASE",
     ctaLink: "https://github.com/Ri4ards2006/GO-CORE-LAB",
-    tags: ["Go", "ELF Parser", "Binary Analysis", "Networking"],
+    tags: ["Go", "ELF Parser", "Binary Analysis"],
     content: () => (
-      <div className="space-y-4">
-        <p>
-          Personal low-level research framework in Go. ELF/PE binary parsing, hardware bridge for 
-          SPI/I2C/UART capture from embedded targets, network probe module. Statically compiled — drop anywhere and run.
-        </p>
-      </div>
+      <p>Personal low-level research framework in Go. ELF/PE binary parsing, hardware bridge for SPI/I2C/UART capture from embedded targets, network probe module.</p>
     ),
   },
   {
-    year: "2025",
+    id: "06",
     tag: "Infrastructure",
-    title: "Home Lab — Server & Network",
-    description: "Target: Self-Hosted Infrastructure",
-    rawDesc: "Private server infrastructure on Ugreen NAS. Docker services, Cloudflare Tunnels, VPN, VLANs.",
-    src: "/src/assets/Home_Lab.jpeg",
+    title: "Home Lab Infrastructure",
+    description: "Private Server & Switch Administration",
+    src: img5,
     ctaText: null,
     ctaLink: null,
-    tags: ["Docker", "Linux", "Cloudflare", "VPN", "VLANs"],
+    tags: ["Docker", "Linux", "Cloudflare", "VPN"],
     content: () => (
-      <div className="space-y-4">
-        <p>
-          Private server infrastructure on Ugreen NAS. Docker services, Cloudflare Tunnels, VPN, VLANs, 
-          switch administration, monitoring. This website runs on it. Built and maintained entirely by hand.
-        </p>
-      </div>
+      <p>Private server infrastructure on Ugreen NAS. Docker services, Cloudflare Tunnels, VPN, VLANs, switch administration, monitoring. This website runs on it.</p>
     ),
   },
   {
-    year: "2025",
+    id: "07",
     tag: "Hardware · Lab",
     title: "Electronics Workbench",
-    description: "Target: Signal Analysis & Prototyping",
-    rawDesc: "Personal electronics lab for embedded development and signal analysis. Oscilloscope, signal generator.",
-    src: "/src/assets/Home_Soldering_Station.jpeg",
+    description: "Signal Analysis & Rapid Prototyping Hardware",
+    src: img6,
     ctaText: null,
     ctaLink: null,
-    tags: ["Oszilloskop", "SMD/THT", "KiCad", "EasyEDA", "3D Print"],
+    tags: ["Oszilloskop", "SMD/THT", "KiCad", "3D Print"],
     content: () => (
-      <div className="space-y-4">
-        <p>
-          Personal electronics lab for embedded development and signal analysis. Oscilloscope, signal generator, 
-          bench PSU, SMD/THT soldering station. Signal capture (PWM, UART, I2C), PCB design with KiCad and EasyEDA, 
-          rapid prototyping with 3D print.
-        </p>
-      </div>
+      <p>Personal electronics lab for embedded development and signal analysis. Signal capture (PWM, UART, I2C), PCB design with KiCad and EasyEDA, rapid prototyping with 3D print.</p>
     ),
   },
 ];
