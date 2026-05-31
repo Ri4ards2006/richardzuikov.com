@@ -1,25 +1,25 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+// Header.jsx
+import React, { useState } from 'react';
+import MenuOverlay from './MenuOverlay';
 
-function Header() {
-  const location = useLocation();
+export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="main-header">
-      <Link to="/" className="site-name">Richard Zuikov</Link>
-      <nav>
-        <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>Home</Link>
-        <Link to="/about" className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`}>About</Link>
-        <Link to="/career" className={`nav-link ${location.pathname === '/career' ? 'active' : ''}`}>Timeline</Link>
-        <Link to="/lab" className={`nav-link ${location.pathname === '/lab' ? 'active' : ''}`}>Projects</Link>
-        <Link to="/contact" className={`nav-link ${location.pathname === '/contact' ? 'active' : ''}`}>Contact</Link>
-      </nav>
-      <div className="header-right">
-        <span className="nav-hook">RZ 20 · Embedded Systems</span>
-        <button className="lang-toggle">EN</button>
-      </div>
-    </header>
+    <>
+      <button 
+        onClick={() => setIsMenuOpen(true)}
+        className="fixed top-8 right-8 z-[999] w-12 h-12 flex items-center justify-center rounded-full border border-zinc-400 hover:border-black transition-all"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="black">
+          <circle cx="12" cy="12" r="1.5" />
+          <circle cx="7" cy="12" r="1.5" />
+          <circle cx="17" cy="12" r="1.5" />
+        </svg>
+      </button>
+
+      {/* Das Overlay wird nur gerendert, wenn isMenuOpen true ist */}
+      {isMenuOpen && <MenuOverlay isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />}
+    </>
   );
 }
-
-export default Header;
