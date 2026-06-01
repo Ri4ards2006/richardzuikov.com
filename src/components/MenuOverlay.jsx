@@ -13,10 +13,13 @@ export default function MenuOverlay({ isOpen, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-         className="fixed top-8 right-8 z-[99999] p-10 bg-red-500 border border-black cursor-pointer"
->
+          className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-red-600"
+        >
           {/* Close Button */}
-          <button onClick={onClose} className="absolute top-10 right-10 text-white font-mono hover:text-zinc-400">
+          <button 
+            onClick={onClose} 
+            className="absolute top-10 right-10 text-white font-mono hover:text-zinc-200 text-xl"
+          >
             [ CLOSE ]
           </button>
 
@@ -27,7 +30,7 @@ export default function MenuOverlay({ isOpen, onClose }) {
                 key={item} 
                 to={item === 'Home' ? '/' : `/${item.toLowerCase()}`} 
                 onClick={onClose}
-                className="text-4xl font-light text-white hover:text-zinc-500 transition-all tracking-widest"
+                className="text-4xl font-light text-white hover:text-black transition-all tracking-widest"
               >
                 {item}
               </Link>
@@ -38,24 +41,30 @@ export default function MenuOverlay({ isOpen, onClose }) {
           <div className="absolute bottom-16 flex flex-col items-center gap-8">
             
             {/* Settings */}
-            <div className="flex gap-8 text-zinc-400">
-              <button className="hover:text-white transition-colors" title="Sprache ändern">
-                <Globe size={20} />
+            <div className="flex gap-8 text-white">
+              <button className="hover:text-black transition-colors" title="Sprache ändern">
+                <Globe size={24} />
               </button>
               <button 
-                className="hover:text-white transition-colors" 
+                className="hover:text-black transition-colors" 
                 onClick={() => setIsDarkMode(!isDarkMode)}
                 title="Theme wechseln"
               >
-                {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
               </button>
             </div>
             
             {/* Social Icons */}
-            <div className="flex gap-8 text-zinc-500">
-              <a href="https://github.com/Ri4ards2006" target="_blank" rel="noreferrer" className="hover:text-white"><Github size={20} /></a>
-              <a href="https://linkedin.com/in/dein-profil" target="_blank" rel="noreferrer" className="hover:text-white"><Linkedin size={20} /></a>
-              <a href="mailto:deine@email.com" className="hover:text-white"><Mail size={20} /></a>
+            <div className="flex gap-8 text-white">
+              <a href="https://github.com/Ri4ards2006" target="_blank" rel="noreferrer" className="hover:text-black">
+                <Github size={24} />
+              </a>
+              <a href="https://linkedin.com/in/dein-profil" target="_blank" rel="noreferrer" className="hover:text-black">
+                <Linkedin size={24} />
+              </a>
+              <a href="mailto:deine@email.com" className="hover:text-black">
+                <Mail size={24} />
+              </a>
             </div>
           </div>
         </motion.div>

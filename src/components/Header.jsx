@@ -1,22 +1,29 @@
 import React, { useState } from 'react';
-import MenuOverlay from './MenuOverlay'; // Hier importieren
+import MenuOverlay from './MenuOverlay';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <>
-      <button 
-  onClick={() => {
-    console.log("Button geklickt!");
-    setIsMenuOpen(true);
-  }}
-  className="fixed top-8 right-8 z-[999] p-4 bg-white border border-black"
->
-  MENU
-</button>
+      <div 
+        style={{
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          zIndex: 999999,
+          cursor: 'pointer',
+          padding: '15px 25px',
+          backgroundColor: 'black',
+          color: 'white',
+          borderRadius: '50px',
+          fontFamily: 'monospace'
+        }}
+        onClick={() => setIsMenuOpen(true)}
+      >
+        [ MENU ]
+      </div>
 
-      {/* DIESE ZEILE HAT GEFEHLT! */}
       {isMenuOpen && (
         <MenuOverlay isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       )}
