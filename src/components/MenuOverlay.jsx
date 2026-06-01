@@ -13,7 +13,7 @@ export default function MenuOverlay({ isOpen, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-         className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/90 backdrop-blur-xl"
+         className="fixed top-8 right-8 z-[99999] p-10 bg-red-500 border border-black cursor-pointer"
 >
           {/* Close Button */}
           <button onClick={onClose} className="absolute top-10 right-10 text-white font-mono hover:text-zinc-400">
