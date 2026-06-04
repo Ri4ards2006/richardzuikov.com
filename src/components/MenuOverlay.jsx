@@ -25,6 +25,13 @@ export default function MenuOverlay({ onClose }) {
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#FAF9F5]/98 dark:bg-[#030303]/98 backdrop-blur-xl transition-colors duration-300"
     >
+      {/* Rotated vertical MENU text on the far left edge */}
+      <div className="absolute left-6 md:left-8 top-1/2 -translate-y-1/2 hidden md:block select-none pointer-events-none">
+        <span className="text-zinc-300 dark:text-zinc-800 font-mono text-[10px] tracking-[1.5em] [writing-mode:vertical-lr] rotate-180 uppercase font-light">
+          MENU
+        </span>
+      </div>
+
       {/* Top Right Controls Group (Equal circular buttons aligned in a row) */}
       <div className="fixed top-8 right-8 z-[10000] flex items-center gap-3 md:gap-4 select-none">
         {/* Language Switcher */}
@@ -50,7 +57,7 @@ export default function MenuOverlay({ onClose }) {
         {/* Close Button */}
         <button 
           onClick={onClose} 
-          className="w-12 h-12 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md text-zinc-650 dark:text-zinc-400 hover:text-zinc-955 dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-500 transition-all duration-305"
+          className="w-12 h-12 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md text-zinc-655 dark:text-zinc-400 hover:text-zinc-955 dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-500 transition-all duration-305"
           aria-label="Close Menu"
         >
           <X size={20} />
@@ -61,18 +68,28 @@ export default function MenuOverlay({ onClose }) {
       <div className="w-full max-w-6xl h-full flex flex-col justify-between py-16 px-8 md:px-16">
         
         {/* Main Grid content */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 my-auto w-full">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 my-auto w-full">
           
-          {/* Left Column: Vertically Rotated MENU text (Takuya Oshima Inspiration) */}
-          <div className="hidden md:flex col-span-4 items-center justify-center border-r border-zinc-200 dark:border-zinc-900/80 pr-12 h-80">
-            <span className="text-zinc-400 dark:text-zinc-600 font-mono text-xs tracking-[1.5em] select-none [writing-mode:vertical-lr] rotate-180 uppercase font-light">
-              MENU // RZ.OS.V2
+          {/* Left Column: Greeting/Bio (Hello world text) */}
+          <div className="col-span-12 md:col-span-6 flex flex-col justify-center space-y-4 text-left order-last md:order-first md:pr-12 border-t md:border-t-0 border-zinc-200 dark:border-zinc-900 pt-8 md:pt-0">
+            <span className="text-[10px] font-mono tracking-widest text-[#FFB000] uppercase block select-none">
+              // ARCHITECTURE // LAB
             </span>
+            <h2 className="text-2xl md:text-3xl font-light tracking-tight text-zinc-900 dark:text-white leading-snug">
+              {language === 'de' 
+                ? "Hallo Welt, ich bin Richard Zuikov." 
+                : "Hello world, I'm Richard Zuikov."}
+            </h2>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-light">
+              {language === 'de' 
+                ? "Ich arbeite als System- und Softwarearchitekt an der Schnittstelle zwischen Hardware und Low-Level-Software. Diese Webseite ermöglicht es Ihnen, meine Projekte sowie meinen beruflichen Werdegang einzusehen." 
+                : "I work as a systems and low-level software architect at the boundary where hardware and software collide. This website showcases my engineering projects and professional career."}
+            </p>
           </div>
 
-          {/* Right Column: Menu Links (Right aligned) */}
-          <div className="col-span-12 md:col-span-8 flex flex-col justify-center items-end text-right md:pr-12 space-y-6 md:space-y-8 select-none w-full">
-            <nav className="flex flex-col space-y-4 md:space-y-6 w-full">
+          {/* Right Column: Menu Links (Right aligned, fixed sizes) */}
+          <div className="col-span-12 md:col-span-6 flex flex-col justify-center items-end text-right md:pr-4 space-y-5 md:space-y-6 select-none w-full order-first md:order-last">
+            <nav className="flex flex-col space-y-3 md:space-y-4 w-full">
               {menuItems.map((item) => {
                 const isActive = window.location.pathname === item.path;
                 return (
@@ -80,21 +97,17 @@ export default function MenuOverlay({ onClose }) {
                     key={item.id} 
                     to={item.path} 
                     onClick={onClose}
-                    className="group flex items-baseline justify-end gap-4 md:gap-6 text-right transform hover:-translate-x-2 transition-transform duration-300 w-full"
+                    className="group flex items-baseline justify-end gap-3 text-right transform hover:-translate-x-2 transition-transform duration-300 w-full"
                   >
                     {/* Sub-label (left of label, visible on hover) */}
-                    <span className="text-[10px] font-mono tracking-widest text-[#FFB000] opacity-0 group-hover:opacity-100 transition-opacity duration-300 uppercase mr-2 hidden sm:inline">
+                    <span className="text-[9px] font-mono tracking-widest text-[#FFB000] opacity-0 group-hover:opacity-100 transition-opacity duration-300 uppercase mr-2 hidden sm:inline">
                       {item.sub[language]} //
                     </span>
-                    {/* Index number */}
-                    <span className="font-mono text-xs md:text-sm text-zinc-400 dark:text-zinc-600 group-hover:text-[#FFB000] transition-colors duration-300">
-                      {item.id}
-                    </span>
-                    {/* Label (Increased size to text-5xl md:text-7xl lg:text-8xl) */}
-                    <span className={`text-5xl md:text-7xl lg:text-8xl font-extralight tracking-wide transition-all duration-300 ${
+                    {/* Label (Defined stable font sizes as requested) */}
+                    <span className={`text-3xl md:text-4xl lg:text-5xl font-extralight tracking-wide transition-all duration-300 ${
                       isActive 
                         ? 'text-zinc-900 dark:text-white font-normal' 
-                        : 'text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-900 group-hover:dark:text-white'
+                        : 'text-zinc-450 dark:text-zinc-500 group-hover:text-zinc-900 group-hover:dark:text-white'
                     }`}>
                       {item.label[language]}
                     </span>
