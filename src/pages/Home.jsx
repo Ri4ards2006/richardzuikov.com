@@ -58,7 +58,7 @@ export default function Home() {
   ];
 
   return (
-    <main className="w-full h-screen bg-[#FAF9F5] text-zinc-900 dark:bg-[#030303] dark:text-[#F9F9F9] relative overflow-hidden flex flex-col justify-center items-center selection:bg-[#FFB000]/30 transition-colors duration-300">
+    <main className="w-full h-screen bg-white text-black dark:bg-[#030303] dark:text-[#F9F9F9] relative overflow-hidden flex flex-col justify-center items-center selection:bg-[#FFB000]/30 transition-colors duration-300">
       
       {/* ─── CRANK AF 3D MARQUEE BACKGROUND ENGINE (JETZT IN FARBE) ─── */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-[0.12] dark:opacity-[0.40] select-none transition-opacity duration-300">

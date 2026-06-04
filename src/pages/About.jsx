@@ -31,7 +31,7 @@ export default function About() {
   };
 
   return (
-    <main ref={containerRef} className="bg-[#FAF9F5] text-zinc-900 dark:bg-black dark:text-white selection:bg-[#00979D] transition-colors duration-300">
+    <main ref={containerRef} className="bg-white text-black dark:bg-black dark:text-white selection:bg-[#00979D] transition-colors duration-300">
       {/* Fortschrittsbalken oben */}
 
       <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-[#00979D] origin-left z-[999]" style={{ scaleX }} />
@@ -46,7 +46,7 @@ export default function About() {
           <div className="space-y-6">
             <span className="text-[#00979D] font-mono text-sm tracking-widest">// ABOUT ME</span>
             <h1 className="text-6xl font-black uppercase">Richard<br />Zuikov</h1>
-            <p className="text-zinc-400 text-lg leading-relaxed">
+            <p className="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed">
               Software ist die Abstraktion, Hardware ist die Realität. Ich arbeite an der Schnittstelle, wo beides kollidiert.
             </p>
             <div className="flex flex-wrap gap-4 pt-4">
@@ -59,7 +59,7 @@ export default function About() {
       </section>
 
       {/* 2. LOGBUCH STATT PROJEKTE */}
-      <section className="py-32 px-12 bg-zinc-950/20">
+      <section className="py-32 px-12 bg-zinc-50 dark:bg-zinc-950/20">
         <div className="max-w-7xl mx-auto">
           <h3 className="text-3xl font-bold mb-16">// Aktuelle Gedanken & Tech-Insights</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -93,9 +93,9 @@ export default function About() {
       </section>
 
       {/* 4. METAL MINDSET (Philosophie) */}
-      <section className="py-32 px-12 max-w-4xl mx-auto border-t border-zinc-900">
+      <section className="py-32 px-12 max-w-4xl mx-auto border-t border-zinc-200 dark:border-zinc-900">
          <h3 className="text-5xl font-black mb-10">// Das Ziel für 2027</h3>
-         <p className="text-2xl text-zinc-400 font-light italic">
+         <p className="text-2xl text-zinc-650 dark:text-zinc-400 font-light italic">
            "Ich will nicht nur ein IT-Systemelektroniker sein. Ich will die Schnittstelle beherrschen, 
            an der die digitale Illusion auf die physische Realität trifft."
          </p>
@@ -109,7 +109,7 @@ export default function About() {
       </section>
 
       {/* 5. ORIGIN STORY & BIO */}
-      <section className="py-32 px-12 bg-zinc-900/10 border-t border-zinc-900">
+      <section className="py-32 px-12 bg-zinc-50 dark:bg-zinc-900/10 border-t border-zinc-200 dark:border-zinc-900">
         <div className="max-w-4xl mx-auto space-y-12">
           <h3 className="text-4xl font-bold">// Mein Werdegang</h3>
           
@@ -119,7 +119,7 @@ export default function About() {
             </div>
             <div>
               <h4 className="text-2xl font-bold mb-2">Die Informatik-Wurzeln</h4>
-              <p className="text-zinc-400 leading-relaxed">
+              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
                 Alles begann vor Jahren mit reiner Informatik – Logik, Algorithmen und die Welt des Codes. 
                 Doch schnell wurde mir klar: Software ist nur die halbe Miete. Ich wollte verstehen, 
                 was unter der Haube passiert, wie Strom in logische Zustände übersetzt wird.
@@ -133,7 +133,7 @@ export default function About() {
             </div>
             <div>
               <h4 className="text-2xl font-bold mb-2">Der Pivot zur Hardware</h4>
-              <p className="text-zinc-400 leading-relaxed">
+              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
                 Der Weg zum IT-Systemelektroniker war für mich kein Zufall, sondern die Konsequenz 
                 meines Drangs nach Kontrolle. Mit 20 Jahren habe ich nun das Ziel vor Augen: 
                 Abschluss 2027. Bis dahin ist mein Lab mein Klassenzimmer.
@@ -142,7 +142,7 @@ export default function About() {
           </div>
 
           {/* Quick Facts */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-12 border-t border-zinc-800">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-12 border-t border-zinc-200 dark:border-zinc-800">
             {[
               { label: "Alter", val: "20 Jahre" },
               { label: "Fokus", val: "System-Integration" },
@@ -151,7 +151,7 @@ export default function About() {
             ].map((fact, i) => (
               <div key={i} className="space-y-1">
                 <div className="text-zinc-500 text-xs uppercase tracking-widest">{fact.label}</div>
-                <div className="text-xl font-bold text-white">{fact.val}</div>
+                <div className="text-xl font-bold text-zinc-900 dark:text-white">{fact.val}</div>
               </div>
             ))}
           </div>
@@ -159,7 +159,7 @@ export default function About() {
       </section>
 
       {/* 6. CALL TO ACTION */}
-      <section className="h-[30vh] flex flex-col items-center justify-center border-t border-zinc-900">
+      <section className="h-[30vh] flex flex-col items-center justify-center border-t border-zinc-200 dark:border-zinc-900">
         <h3 className="text-2xl font-bold mb-6">Lass uns was bauen.</h3>
         <button 
           onClick={() => navigate('/contact')}
@@ -169,8 +169,8 @@ export default function About() {
         </button>
       </section>
 
-      <footer className="py-20 text-center border-t border-zinc-900">
-         <button onClick={() => navigate('/contact')} className="text-zinc-500 hover:text-white transition cursor-pointer">Nachricht hinterlassen?</button>
+      <footer className="py-20 text-center border-t border-zinc-200 dark:border-zinc-900">
+         <button onClick={() => navigate('/contact')} className="text-zinc-500 hover:text-black dark:hover:text-white transition cursor-pointer">Nachricht hinterlassen?</button>
       </footer>
     </main>
   );

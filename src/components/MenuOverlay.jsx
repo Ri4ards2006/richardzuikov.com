@@ -23,7 +23,7 @@ export default function MenuOverlay({ onClose }) {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.99 }}
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#FAF9F5]/98 dark:bg-[#030303]/98 backdrop-blur-xl transition-colors duration-300"
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white/98 dark:bg-[#030303]/98 backdrop-blur-xl transition-colors duration-300"
     >
       {/* Rotated vertical MENU text on the far left edge (M at the top, legs pointing left, giant & bold, scales on mobile) */}
       <div className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 select-none pointer-events-none">
@@ -37,7 +37,7 @@ export default function MenuOverlay({ onClose }) {
         {/* Language Switcher */}
         <button 
           onClick={toggleLanguage}
-          className="w-12 h-12 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md text-zinc-650 dark:text-zinc-400 hover:text-zinc-955 dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-500 transition-all duration-305 font-mono text-xs font-bold"
+          className="w-12 h-12 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-500 transition-all duration-305 font-mono text-xs font-bold"
           title={language === 'de' ? 'Switch to English' : 'Wechsle zu Deutsch'}
           aria-label="Toggle Language"
         >
@@ -47,7 +47,7 @@ export default function MenuOverlay({ onClose }) {
         {/* Theme switcher */}
         <button 
           onClick={toggleTheme}
-          className="w-12 h-12 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md text-zinc-650 dark:text-zinc-400 hover:text-zinc-955 dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-500 transition-all duration-305"
+          className="w-12 h-12 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-500 transition-all duration-305"
           title={language === 'de' ? 'Theme wechseln' : 'Switch Theme'}
           aria-label="Toggle Theme"
         >
@@ -57,7 +57,7 @@ export default function MenuOverlay({ onClose }) {
         {/* Close Button */}
         <button 
           onClick={onClose} 
-          className="w-12 h-12 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md text-zinc-655 dark:text-zinc-400 hover:text-zinc-955 dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-500 transition-all duration-305"
+          className="w-12 h-12 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-500 transition-all duration-305"
           aria-label="Close Menu"
         >
           <X size={20} />
@@ -87,7 +87,7 @@ export default function MenuOverlay({ onClose }) {
                   <span className={`text-3xl md:text-4xl lg:text-5xl font-extralight tracking-wide transition-all duration-300 ${
                     isActive 
                       ? 'text-zinc-900 dark:text-white font-normal' 
-                      : 'text-zinc-450 dark:text-zinc-550 group-hover:text-zinc-900 group-hover:dark:text-white'
+                      : 'text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-900 group-hover:dark:text-white'
                   }`}>
                     {item.label[language]}
                   </span>
@@ -101,7 +101,7 @@ export default function MenuOverlay({ onClose }) {
         <div className="w-full flex flex-col md:flex-row md:items-end justify-between mt-auto gap-6 select-none">
           
           {/* Left Side: Biography text placed in the lower section */}
-          <div className="max-w-md text-left font-mono text-[9px] sm:text-[10px] text-zinc-400 dark:text-zinc-550 leading-relaxed">
+          <div className="max-w-md text-left font-mono text-[9px] sm:text-[10px] text-zinc-500 dark:text-zinc-400 leading-relaxed">
             <span className="text-[#FFB000] uppercase block mb-1 font-semibold tracking-wider">// RZ.OS.V2 // ARCHITECTURE // LAB</span>
             {language === 'de' 
               ? "Hallo Welt, ich bin Richard Zuikov. Ich arbeite als System- und Softwarearchitekt an der Schnittstelle zwischen Hardware und Low-Level-Software. Diese Webseite zeigt meine Projekte und meinen Werdegang." 

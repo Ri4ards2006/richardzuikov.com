@@ -49,10 +49,10 @@ const certificates = [
   ];
 
   return (
-    <main className="relative min-h-screen bg-[#060606] text-[#F5F5F7] overflow-x-hidden selection:bg-white/20 font-sans antialiased">
+    <main className="relative min-h-screen bg-white text-black dark:bg-[#060606] dark:text-[#F5F5F7] overflow-x-hidden selection:bg-zinc-200 dark:selection:bg-white/20 font-sans antialiased transition-colors duration-300">
       
       <div className="absolute top-16 left-8 md:left-24 z-50">
-        <Link to="/" className="group flex items-center gap-2 font-mono text-xs tracking-widest text-zinc-500 hover:text-white transition-colors duration-300">
+        <Link to="/" className="group flex items-center gap-2 font-mono text-xs tracking-widest text-zinc-500 hover:text-zinc-955 dark:hover:text-white transition-colors duration-300">
           <ArrowLeft className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" />
           <span>BACK</span>
         </Link>
@@ -61,118 +61,116 @@ const certificates = [
       <div className="relative z-20 max-w-5xl mx-auto px-8 md:px-24 pt-48 pb-48 flex flex-col space-y-32">
         
         <section className="space-y-6">
-          <h1 className="text-6xl md:text-8xl font-bold tracking-tighter text-white">Richard Zuikov</h1>
-          <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 text-zinc-400 font-mono text-sm uppercase tracking-widest">
+          <h1 className="text-6xl md:text-8xl font-bold tracking-tighter text-zinc-950 dark:text-white transition-colors duration-300">Richard Zuikov</h1>
+          <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 text-zinc-500 dark:text-zinc-400 font-mono text-sm uppercase tracking-widest transition-colors duration-300">
             <span>System Engineer</span>
-            <span className="hidden md:block text-zinc-700">•</span>
+            <span className="hidden md:block text-zinc-300 dark:text-zinc-700">•</span>
             <span>5+ Years Experience</span>
-            <span className="hidden md:block text-zinc-700">•</span>
+            <span className="hidden md:block text-zinc-300 dark:text-zinc-700">•</span>
             <span>Flensburg, DE</span>
           </div>
         </section>
 
         <section>
-          <p className="text-xl md:text-2xl font-light leading-relaxed text-zinc-300 max-w-3xl">
+          <p className="text-xl md:text-2xl font-light leading-relaxed text-zinc-700 dark:text-zinc-300 max-w-3xl transition-colors duration-300">
             Spezialisiert auf die Schnittstelle zwischen Hardware und Software. Fokus auf Konzeption robuster 
             IT & E-Tech-Systeme. von der Register-Ebene über automatisiertes Linux-Deployment bis zur 
             Inbetriebnahme industrieller Netzwerke.
           </p>
         </section>
 
-       {/* SKILLS */}
-<section className="space-y-12 pt-12">
-  <h2 className="text-2xl font-bold text-white tracking-tight">Technical Stack</h2>
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-    
-    {/* 1. Systems & Low-Level */}
-    <div className="space-y-4">
-      <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Systems</h3>
-      <div className="space-y-2 text-zinc-400 font-light">
-        <p>Go (Automation)</p>
-        <p>C / C++ / Assembly</p>
-        <p>VHDL / FPGA</p>
-        <p>Python / MATLAB</p>
-      </div>
-    </div>
+        {/* SKILLS */}
+        <section className="space-y-12 pt-12">
+          <h2 className="text-2xl font-bold text-zinc-950 dark:text-white tracking-tight transition-colors duration-300">Technical Stack</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            
+            {/* 1. Systems & Low-Level */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest transition-colors duration-300">Systems</h3>
+              <div className="space-y-2 text-zinc-600 dark:text-zinc-400 font-light transition-colors duration-300">
+                <p>Go (Automation)</p>
+                <p>C / C++ / Assembly</p>
+                <p>VHDL / FPGA</p>
+                <p>Python / MATLAB</p>
+              </div>
+            </div>
 
-    {/* 2. Web & Frontend */}
-    <div className="space-y-4">
-      <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Web / FE</h3>
-      <div className="space-y-2 text-zinc-400 font-light">
-        <p>React / Next.js</p>
-        <p>TypeScript / JavaScript</p>
-        <p>CSS / SCSS / Tailwind</p>
-        <p>WordPress / CMS</p>
-      </div>
-    </div>
+            {/* 2. Web & Frontend */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest transition-colors duration-300">Web / FE</h3>
+              <div className="space-y-2 text-zinc-600 dark:text-zinc-400 font-light transition-colors duration-300">
+                <p>React / Next.js</p>
+                <p>TypeScript / JavaScript</p>
+                <p>CSS / SCSS / Tailwind</p>
+                <p>WordPress / CMS</p>
+              </div>
+            </div>
 
-    {/* 3. Infra & Hardware */}
-    <div className="space-y-4">
-      <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Infra</h3>
-      <div className="space-y-2 text-zinc-400 font-light">
-        <p>Linux / Bash</p>
-        <p>Docker / Git</p>
-        <p>PCB (KiCad)</p>
-        <p>AVR / ARM</p>
-      </div>
-    </div>
+            {/* 3. Infra & Hardware */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest transition-colors duration-300">Infra</h3>
+              <div className="space-y-2 text-zinc-600 dark:text-zinc-400 font-light transition-colors duration-300">
+                <p>Linux / Bash</p>
+                <p>Docker / Git</p>
+                <p>PCB (KiCad)</p>
+                <p>AVR / ARM</p>
+              </div>
+            </div>
 
-    {/* 4. Design & Strategy */}
-    <div className="space-y-4">
-      <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Design / Other</h3>
-      <div className="space-y-2 text-zinc-400 font-light">
-        <p>Figma / UI Design</p>
-        <p>Photoshop / Video</p>
-        <p>Web Planning / Dir.</p>
-        <p>Web Marketing</p>
-      </div>
-    </div>
+            {/* 4. Design & Strategy */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest transition-colors duration-300">Design / Other</h3>
+              <div className="space-y-2 text-zinc-600 dark:text-zinc-400 font-light transition-colors duration-300">
+                <p>Figma / UI Design</p>
+                <p>Photoshop / Video</p>
+                <p>Web Planning / Dir.</p>
+                <p>Web Marketing</p>
+              </div>
+            </div>
 
-  </div>
-</section>
+          </div>
+        </section>
 
-
-
-       {/* CREDENTIALS */}
+        {/* CREDENTIALS */}
         <section className="space-y-8 pt-12">
-          <h2 className="text-2xl font-bold text-white tracking-tight">Credentials</h2>
+          <h2 className="text-2xl font-bold text-zinc-950 dark:text-white tracking-tight transition-colors duration-300">Credentials</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {certificates.map((cert, idx) => (
-              <div key={idx} className="bg-[#0a0a0a] p-6 rounded-xl flex flex-col gap-2">
+              <div key={idx} className="bg-white dark:bg-[#0a0a0a] border border-zinc-200 dark:border-zinc-900/60 p-6 rounded-xl flex flex-col gap-2 shadow-sm dark:shadow-none transition-colors duration-300">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-zinc-950 rounded-lg shrink-0">{cert.icon}</div>
-                  <h3 className="text-base font-medium text-white">{cert.title}</h3>
+                  <div className="p-2 bg-zinc-100 dark:bg-zinc-950 rounded-lg shrink-0 transition-colors duration-300">{cert.icon}</div>
+                  <h3 className="text-base font-medium text-zinc-900 dark:text-white transition-colors duration-300">{cert.title}</h3>
                 </div>
                 <div className="pl-[52px]">
-                  <p className="text-sm text-zinc-400 font-light">{cert.issuer} • {cert.date}</p>
-                  <p className="text-xs text-zinc-600 font-mono mt-1">ID: {cert.id}</p>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400 font-light transition-colors duration-300">{cert.issuer} • {cert.date}</p>
+                  <p className="text-xs text-zinc-400 dark:text-zinc-650 font-mono mt-1 transition-colors duration-300">ID: {cert.id}</p>
                 </div>
               </div>
             ))}
           </div>
         </section>
 
-    {/* CHRONOLOGY */}
+        {/* CHRONOLOGY */}
         <section className="space-y-8 pt-12">
-          <h2 className="text-2xl font-bold text-white tracking-tight">Chronology</h2>
+          <h2 className="text-2xl font-bold text-zinc-950 dark:text-white tracking-tight transition-colors duration-300">Chronology</h2>
           <div className="space-y-6">
             {careerTimeline.map((item, idx) => {
               const isExpanded = expandedIndex === idx;
               return (
                 <div 
                   key={idx} 
-                  className="bg-[#0a0a0a] rounded-xl overflow-hidden cursor-pointer transition-colors hover:bg-[#0f0f0f]" 
+                  className="bg-white dark:bg-[#0a0a0a] border border-zinc-200 dark:border-zinc-900/60 rounded-xl overflow-hidden cursor-pointer transition-colors hover:bg-zinc-50 dark:hover:bg-[#0f0f0f] shadow-sm dark:shadow-none transition-all duration-300" 
                   onClick={() => setExpandedIndex(isExpanded ? null : idx)}
                 >
                   <div className="flex items-center justify-between p-8">
                     <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
-                      <span className="text-white font-bold text-xl tracking-tight">{item.year}</span>
+                      <span className="text-zinc-900 dark:text-white font-bold text-xl tracking-tight transition-colors duration-300">{item.year}</span>
                       <div className="flex flex-col">
-                        <span className="text-zinc-200 text-lg font-medium">{item.title}</span>
+                        <span className="text-zinc-800 dark:text-zinc-200 text-lg font-medium transition-colors duration-300">{item.title}</span>
                         <span className="text-zinc-500 text-sm font-mono uppercase tracking-wider mt-1">{item.type}</span>
                       </div>
                     </div>
-                    <ChevronDown className={`w-5 h-5 text-zinc-600 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-5 h-5 text-zinc-400 dark:text-zinc-600 transition-transform duration-300 ${isExpanded ? 'rotate-180 text-zinc-900 dark:text-white' : ''}`} />
                   </div>
                   
                   <AnimatePresence>
@@ -181,14 +179,14 @@ const certificates = [
                         initial={{ height: 0, opacity: 0 }} 
                         animate={{ height: "auto", opacity: 1 }} 
                         exit={{ height: 0, opacity: 0 }} 
-                        className="px-8 pb-8 text-zinc-400 text-base leading-relaxed"
+                        className="px-8 pb-8 text-zinc-600 dark:text-zinc-400 text-base leading-relaxed transition-colors duration-300"
                       >
                         {item.desc}
                         
                         {/* Optionale Tags für mehr Tiefe */}
                         <div className="flex flex-wrap gap-2 mt-4">
                           {item.tags.map(tag => (
-                            <span key={tag} className="text-[10px] uppercase tracking-widest bg-zinc-950 px-2 py-1 rounded text-zinc-600 font-mono">
+                            <span key={tag} className="text-[10px] uppercase tracking-widest bg-zinc-50 dark:bg-zinc-950 px-2 py-1 rounded text-zinc-500 dark:text-zinc-600 font-mono transition-colors duration-300 border border-zinc-100 dark:border-zinc-900">
                               {tag}
                             </span>
                           ))}

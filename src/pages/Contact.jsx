@@ -8,7 +8,7 @@ export default function Contact() {
   const [language] = useLanguage();
 
   return (
-    <main className="relative min-h-screen bg-[#FAF9F5] text-zinc-900 dark:bg-[#060606] dark:text-[#F5F5F7] overflow-x-hidden selection:bg-white/20 font-sans antialiased flex flex-col justify-between transition-colors duration-300">
+    <main className="relative min-h-screen bg-white text-black dark:bg-[#060606] dark:text-[#F5F5F7] overflow-x-hidden selection:bg-white/20 font-sans antialiased flex flex-col justify-between transition-colors duration-300">
       
       {/* ─── TOP NAVIGATION ─── */}
       <div className="absolute top-16 left-8 md:left-24 z-50">

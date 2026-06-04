@@ -85,7 +85,7 @@ export default function Portfolio() {
   };
 
   return (
-    <main className="relative min-h-screen bg-[#FAF9F5] text-zinc-900 dark:bg-[#060606] dark:text-[#F5F5F7] overflow-x-hidden selection:bg-white/20 font-sans antialiased transition-colors duration-300">
+    <main className="relative min-h-screen bg-white text-black dark:bg-[#060606] dark:text-[#F5F5F7] overflow-x-hidden selection:bg-white/20 font-sans antialiased transition-colors duration-300">
       
       {/* ─── LAYER 1: MARQUEES IM VORDERGRUND (Z-10) ─── */}
       <div className="absolute left-0 w-screen overflow-hidden pointer-events-none select-none z-10 pt-[45vh] space-y-6 opacity-[0.015] dark:opacity-[0.03] transition-opacity duration-300">
@@ -127,7 +127,7 @@ export default function Portfolio() {
           <div className="font-mono text-xs space-y-4 max-w-xl text-zinc-500">
             <div className="flex">
               <span className="w-24 shrink-0">URL：</span>
-              <a href="https://richardzuikov.com" className="text-zinc-400 hover:text-white transition-colors flex items-center gap-1">
+              <a href="https://richardzuikov.com" className="text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white transition-colors flex items-center gap-1">
                 https://richardzuikov.com <ArrowUpRight className="w-3 h-3" />
               </a>
             </div>
@@ -139,7 +139,7 @@ export default function Portfolio() {
               <a 
                 href="/cv/CV_Richard_Zuikov.pdf" 
                 download="CV_Richard_Zuikov.pdf"
-                className="inline-flex items-center gap-2 px-6 py-2.5 font-mono text-xs border border-zinc-800 hover:border-zinc-500 rounded bg-zinc-950/40 hover:bg-zinc-900/60 hover:text-white text-zinc-300 transition-all duration-300"
+                className="inline-flex items-center gap-2 px-6 py-2.5 font-mono text-xs border border-zinc-300 dark:border-zinc-800 hover:border-zinc-500 rounded bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-950/40 dark:hover:bg-zinc-900/60 text-zinc-800 dark:text-zinc-300 hover:text-black dark:hover:text-white transition-all duration-300"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -286,7 +286,7 @@ export default function Portfolio() {
       </div>
 
       {/* FOOTER */}
-      <footer className="w-full py-16 px-8 md:px-24 border-t border-zinc-200 dark:border-zinc-955 bg-white dark:bg-[#040404] flex flex-col sm:flex-row justify-between items-center gap-4 font-mono text-[10px] text-zinc-500 dark:text-zinc-600 tracking-widest uppercase select-none transition-colors duration-300">
+      <footer className="w-full py-16 px-8 md:px-24 border-t border-zinc-200 dark:border-zinc-900 bg-white dark:bg-[#040404] flex flex-col sm:flex-row justify-between items-center gap-4 font-mono text-[10px] text-zinc-500 dark:text-zinc-600 tracking-widest uppercase select-none transition-colors duration-300">
         <span>©2026 Richard Zuikov All rights reserved</span>
         <span className="text-zinc-400 dark:text-zinc-500">Portfolio ver.2026｜Works｜Richard Zuikov</span>
       </footer>

@@ -40,7 +40,7 @@ export default function Lab() {
   const currentBgImage = active?.src || hoveredCard?.src || bossImg;
 
   return (
-    <main className="relative min-h-screen bg-[#FAF9F5] text-zinc-900 dark:bg-[#020202] dark:text-[#F5F5F7] overflow-x-hidden selection:bg-white/20 font-sans transition-colors duration-300">
+    <main className="relative min-h-screen bg-white text-black dark:bg-[#020202] dark:text-[#F5F5F7] overflow-x-hidden selection:bg-white/20 font-sans transition-colors duration-300">
       
       {/* ─── TOP NAVIGATION ─── */}
       <div className="absolute top-16 left-8 md:left-24 z-50">
@@ -60,15 +60,15 @@ export default function Lab() {
             key={currentBgImage}
             src={currentBgImage}
             initial={{ opacity: 0, scale: 1.02 }}
-            animate={{ opacity: theme === 'dark' ? 0.70 : 0.40, scale: 1 }}
+            animate={{ opacity: 0.70, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full h-full object-cover object-center filter contrast-100 brightness-100 dark:opacity-75"
+            className="w-full h-full object-cover object-center filter contrast-100 brightness-100"
             alt="System Background"
           />
         </AnimatePresence>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#FAF9F5] via-transparent to-[#FAF9F5] dark:from-[#020202] dark:to-[#020202] transition-colors duration-300" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#FAF9F5_100%)] dark:bg-[radial-gradient(circle_at_center,transparent_20%,#020202_100%)] transition-colors duration-300" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-white dark:from-[#020202] dark:to-[#020202] transition-colors duration-300" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#ffffff_100%)] dark:bg-[radial-gradient(circle_at_center,transparent_20%,#020202_100%)] transition-colors duration-300" />
       </div>
 
 
