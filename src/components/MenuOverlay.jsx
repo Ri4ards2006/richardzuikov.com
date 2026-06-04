@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Mail, Globe, Sun, Moon } from 'lucide-react';
+import { Mail, Globe, Sun, Moon, X } from 'lucide-react';
 
 export default function MenuOverlay({ onClose }) {
   const [isDarkMode, setIsDarkMode] = React.useState(true);
@@ -14,13 +14,15 @@ export default function MenuOverlay({ onClose }) {
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/95 backdrop-blur-xl"
     >
-      {/* Close Button */}
+      {/* Close Button (Gleiche Position/Style wie der Menü-Button für perfekten Übergang) */}
       <button 
         onClick={onClose} 
-        className="absolute top-10 right-10 text-zinc-500 font-mono text-xs hover:text-white transition-colors duration-300"
+        className="fixed top-8 right-8 z-[10000] w-12 h-12 flex items-center justify-center rounded-full border border-zinc-800 hover:border-zinc-500 bg-zinc-900/60 backdrop-blur-md text-zinc-400 hover:text-white transition-all duration-300"
+        aria-label="Close Menu"
       >
-        [ CLOSE ]
+        <X size={20} />
       </button>
+
 
       {/* Menü Links */}
       <nav className="flex flex-col items-center space-y-8 select-none">
