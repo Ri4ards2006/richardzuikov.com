@@ -31,8 +31,9 @@ export default function About() {
   };
 
   return (
-    <main ref={containerRef} className="bg-black text-white selection:bg-[#00979D]">
+    <main ref={containerRef} className="bg-[#FAF9F5] text-zinc-900 dark:bg-black dark:text-white selection:bg-[#00979D] transition-colors duration-300">
       {/* Fortschrittsbalken oben */}
+
       <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-[#00979D] origin-left z-[999]" style={{ scaleX }} />
 
       {/* 1. HERO: Fokus auf DICH */}
@@ -63,13 +64,14 @@ export default function About() {
           <h3 className="text-3xl font-bold mb-16">// Aktuelle Gedanken & Tech-Insights</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {logEntries.map((entry, i) => (
-              <div key={i} className="p-8 bg-zinc-900 border border-zinc-800 rounded-2xl hover:bg-zinc-800 transition">
+              <div key={i} className="p-8 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-300">
                 <div className="text-[#00979D] mb-6">{entry.icon}</div>
                 <h4 className="text-xl font-bold mb-4">{entry.title}</h4>
-                <p className="text-zinc-500 text-sm leading-relaxed">{entry.desc}</p>
+                <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">{entry.desc}</p>
               </div>
             ))}
           </div>
+
         </div>
       </section>
 

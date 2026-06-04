@@ -2,9 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Mail, Globe, Sun, Moon, X } from 'lucide-react';
+import { useTheme } from '../hooks/use-theme';
 
 export default function MenuOverlay({ onClose }) {
-  const [isDarkMode, setIsDarkMode] = React.useState(true);
+  const [theme, toggleTheme] = useTheme();
 
   return (
     <motion.div 
@@ -22,7 +23,6 @@ export default function MenuOverlay({ onClose }) {
       >
         <X size={20} />
       </button>
-
 
       {/* Menü Links */}
       <nav className="flex flex-col items-center space-y-8 select-none">
@@ -48,12 +48,13 @@ export default function MenuOverlay({ onClose }) {
           </button>
           <button 
             className="hover:text-white transition-colors" 
-            onClick={() => setIsDarkMode(!isDarkMode)}
+            onClick={toggleTheme}
             title="Theme wechseln"
           >
-            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
           </button>
         </div>
+
         
         {/* Social Icons */}
         <div className="flex gap-8 text-zinc-500 items-center">

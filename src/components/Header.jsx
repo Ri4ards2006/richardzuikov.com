@@ -1,15 +1,28 @@
 import React, { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
+import { Sun, Moon } from 'lucide-react';
+import { useTheme } from '../hooks/use-theme';
 import MenuOverlay from './MenuOverlay';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [theme, toggleTheme] = useTheme();
 
   return (
     <>
+      {/* Light/Dark Toggle Button */}
+      <button 
+        onClick={toggleTheme}
+        className="fixed top-8 right-24 z-[999] w-12 h-12 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-500 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all duration-300"
+        aria-label="Toggle Theme"
+      >
+        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+      </button>
+
+      {/* Menu Button */}
       <button 
         onClick={() => setIsMenuOpen(true)}
-        className="fixed top-8 right-8 z-[999] w-12 h-12 flex items-center justify-center rounded-full border border-zinc-800 hover:border-zinc-500 bg-zinc-900/60 backdrop-blur-md text-zinc-400 hover:text-white transition-all duration-300"
+        className="fixed top-8 right-8 z-[999] w-12 h-12 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-500 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all duration-300"
         aria-label="Open Menu"
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">

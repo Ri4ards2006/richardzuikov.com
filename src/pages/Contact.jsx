@@ -5,13 +5,13 @@ import { ArrowLeft } from 'lucide-react';
 
 export default function Contact() {
   return (
-    <main className="relative min-h-screen bg-[#060606] text-[#F5F5F7] overflow-x-hidden selection:bg-white/20 font-sans antialiased flex flex-col justify-between">
+    <main className="relative min-h-screen bg-[#FAF9F5] text-zinc-900 dark:bg-[#060606] dark:text-[#F5F5F7] overflow-x-hidden selection:bg-white/20 font-sans antialiased flex flex-col justify-between transition-colors duration-300">
       
       {/* ─── TOP NAVIGATION ─── */}
       <div className="absolute top-16 left-8 md:left-24 z-50">
         <Link 
           to="/" 
-          className="group flex items-center gap-2 font-mono text-xs tracking-widest text-zinc-500 hover:text-white transition-colors duration-300"
+          className="group flex items-center gap-2 font-mono text-xs tracking-widest text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors duration-300"
         >
           <ArrowLeft className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" />
           <span>BACK // HOME</span>
@@ -26,16 +26,16 @@ export default function Contact() {
           <span className="text-xs font-mono tracking-[0.4em] text-zinc-600 uppercase block select-none">
           
           </span>
-          <p className="text-sm md:text-base font-mono text-zinc-400 leading-relaxed uppercase tracking-wider">
-           Kontaktieren Sie mich für Projektanfragen. von Web-Design & Frontend über komplexe Netzwerktechnik bis hin zu Elektronik und Systemreparaturen       </p>
+          <p className="text-sm md:text-base font-mono text-zinc-500 dark:text-zinc-400 leading-relaxed uppercase tracking-wider">
+            Kontaktieren Sie mich für Projektanfragen. von Web-Design & Frontend über komplexe Netzwerktechnik bis hin zu Elektronik und Systemreparaturen       </p>
         </div>
 
         {/* Monumentale E-Mail Headline */}
         <div className="space-y-6">
-          <h1 className="text-4xl md:text-7xl font-extralight tracking-tighter text-white leading-none break-all select-all">
+          <h1 className="text-4xl md:text-7xl font-extralight tracking-tighter text-zinc-950 dark:text-white leading-none break-all select-all">
             <a 
               href="mailto:contact@richardzuikov.com" 
-              className="hover:text-zinc-400 transition-colors duration-500"
+              className="hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors duration-500"
             >
               contact@richardzuikov.com
             </a>
@@ -50,7 +50,7 @@ export default function Contact() {
             href="https://www.linkedin.com/in/richard-zuikov-526745343" 
             target="_blank" 
             rel="noreferrer"
-            className="text-zinc-600 hover:text-white transform hover:scale-105 transition-all duration-300"
+            className="text-zinc-400 dark:text-zinc-600 hover:text-zinc-900 dark:hover:text-white transform hover:scale-105 transition-all duration-300"
             aria-label="LinkedIn"
           >
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -65,7 +65,7 @@ export default function Contact() {
             href="https://github.com/Ri4ards2006" 
             target="_blank" 
             rel="noreferrer"
-            className="text-zinc-600 hover:text-white transform hover:scale-105 transition-all duration-300"
+            className="text-zinc-400 dark:text-zinc-600 hover:text-zinc-900 dark:hover:text-white transform hover:scale-105 transition-all duration-300"
             aria-label="GitHub"
           >
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -78,7 +78,7 @@ export default function Contact() {
             href="https://instagram.com" 
             target="_blank" 
             rel="noreferrer"
-            className="text-zinc-600 hover:text-white transform hover:scale-105 transition-all duration-300"
+            className="text-zinc-400 dark:text-zinc-600 hover:text-zinc-900 dark:hover:text-white transform hover:scale-105 transition-all duration-300"
             aria-label="Instagram"
           >
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -87,10 +87,10 @@ export default function Contact() {
               <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
             </svg>
           </a>
-
         </div>
 
       </div>
+
 
       {/* ─── MINIMAL FOOTER ─── */}
       <footer className="w-full max-w-5xl mx-auto px-8 md:px-24 pb-16 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 font-mono text-[10px] text-zinc-600 tracking-widest uppercase select-none">

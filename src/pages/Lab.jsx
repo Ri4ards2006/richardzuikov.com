@@ -37,7 +37,7 @@ export default function Lab() {
   const currentBgImage = active?.src || hoveredCard?.src || bossImg;
 
   return (
-    <main className="relative min-h-screen bg-[#020202] text-[#F5F5F7] overflow-x-hidden selection:bg-white/20 font-sans">
+    <main className="relative min-h-screen bg-[#FAF9F5] text-zinc-900 dark:bg-[#020202] dark:text-[#F5F5F7] overflow-x-hidden selection:bg-white/20 font-sans transition-colors duration-300">
       
       {/* ─── DYNAMIC FULLSCREEN BACKGROUND ─── */}
       <div className="fixed inset-0 z-0 w-full h-full overflow-hidden pointer-events-none select-none">
@@ -46,15 +46,15 @@ export default function Lab() {
             key={currentBgImage}
             src={currentBgImage}
             initial={{ opacity: 0, scale: 1.02 }}
-            animate={{ opacity: 0.60, scale: 1 }}
+            animate={{ opacity: 0.12, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full h-full object-cover object-center filter contrast-100 brightness-100"
+            className="w-full h-full object-cover object-center filter contrast-100 brightness-100 dark:opacity-60"
             alt="System Background"
           />
         </AnimatePresence>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-transparent to-[#020202]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#020202_100%)]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#FAF9F5] via-transparent to-[#FAF9F5] dark:from-[#020202] dark:to-[#020202] transition-colors duration-300" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#FAF9F5_100%)] dark:bg-[radial-gradient(circle_at_center,transparent_20%,#020202_100%)] transition-colors duration-300" />
       </div>
 
       {/* ─── SCROLLABLE PORTFOLIO CONTAINER ─── */}
@@ -62,16 +62,16 @@ export default function Lab() {
         
         {/* Minimal Header */}
         <header className="mb-24 text-center md:text-left select-none">
-          <span className="text-[10px] font-mono tracking-[0.5em] text-zinc-600 uppercase block mb-2">
+          <span className="text-[10px] font-mono tracking-[0.5em] text-zinc-500 dark:text-zinc-600 uppercase block mb-2">
             // CORE.SYSTEM.LAB
           </span>
-          <h1 className="text-5xl md:text-6xl font-light tracking-tighter text-[#F5F5F7]">
+          <h1 className="text-5xl md:text-6xl font-light tracking-tighter text-zinc-900 dark:text-[#F5F5F7]">
             Works
           </h1>
         </header>
-
+ 
         {/* ─── PORTFOLIO LISTE MIT MIT REDIRECT-LOGIK FÜR 01 ─── */}
-        <div className="w-full border-t border-zinc-900">
+        <div className="w-full border-t border-zinc-200 dark:border-zinc-900">
           {projectCards(bossImg, adLedClockImg, trafficSystemImg, weatherStationImg, goCoreLabImg, homeLabImg, workbenchImg).map((card) => {
             
             // Einheitliches Innendesign für alle Listenelemente (01 bis 07)
@@ -79,29 +79,29 @@ export default function Lab() {
               <>
                 {/* Riesige Index-Zahl + Projekttitel */}
                 <div className="flex items-center space-x-8 md:space-x-16 z-10">
-                  <span className="text-5xl md:text-7xl font-mono font-extralight text-zinc-800 group-hover:text-zinc-400 transition-colors duration-400 tracking-tighter">
+                  <span className="text-5xl md:text-7xl font-mono font-extralight text-zinc-300 dark:text-zinc-800 group-hover:text-zinc-500 dark:group-hover:text-zinc-400 transition-colors duration-400 tracking-tighter">
                     {card.id}
                   </span>
                   
                   <div className="flex flex-col">
-                    <h3 className="text-3xl md:text-5xl font-light text-zinc-500 group-hover:text-[#F5F5F7] transition-all duration-300 tracking-tight">
+                    <h3 className="text-3xl md:text-5xl font-light text-zinc-450 dark:text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-[#F5F5F7] transition-all duration-300 tracking-tight">
                       {card.title}
                     </h3>
-                    <span className="text-xs font-mono text-zinc-700 group-hover:text-zinc-500 transition-colors duration-300 mt-1 uppercase tracking-wider">
+                    <span className="text-xs font-mono text-zinc-400 dark:text-zinc-700 group-hover:text-zinc-600 dark:group-hover:text-zinc-500 transition-colors duration-300 mt-1 uppercase tracking-wider">
                       {card.description}
                     </span>
                   </div>
                 </div>
 
                 {/* Tech-Tag */}
-                <div className="flex items-center mt-4 md:mt-0 z-10 font-mono text-xs text-zinc-700 group-hover:text-zinc-400 transition-colors duration-300">
-                  <span className="tracking-widest uppercase border border-zinc-900 group-hover:border-zinc-800 px-3 py-1 rounded">
+                <div className="flex items-center mt-4 md:mt-0 z-10 font-mono text-xs text-zinc-500 dark:text-zinc-700 group-hover:text-zinc-900 dark:group-hover:text-zinc-400 transition-colors duration-300">
+                  <span className="tracking-widest uppercase border border-zinc-200 dark:border-zinc-900 group-hover:border-zinc-400 dark:group-hover:border-zinc-800 px-3 py-1 rounded">
                     {card.tag.split(" · ")[0]}
                   </span>
                 </div>
 
                 {/* Hover-Overlay */}
-                <div className="absolute inset-0 bg-zinc-950/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                <div className="absolute inset-0 bg-zinc-950/5 dark:bg-zinc-950/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
               </>
             );
 
@@ -113,7 +113,7 @@ export default function Lab() {
                   to="/portfolio"
                   onMouseEnter={() => setHoveredCard(card)}
                   onMouseLeave={() => setHoveredCard(null)}
-                  className="group relative flex flex-col md:flex-row md:items-center justify-between py-10 border-b border-zinc-900 cursor-pointer transition-all duration-300"
+                  className="group relative flex flex-col md:flex-row md:items-center justify-between py-10 border-b border-zinc-200 dark:border-zinc-900 cursor-pointer transition-all duration-300"
                 >
                   {cardInnerContent}
                 </Link>
@@ -128,7 +128,7 @@ export default function Lab() {
                 onClick={() => setActive(card)}
                 onMouseEnter={() => setHoveredCard(card)}
                 onMouseLeave={() => setHoveredCard(null)}
-                className="group relative flex flex-col md:flex-row md:items-center justify-between py-10 border-b border-zinc-900 cursor-pointer transition-all duration-300"
+                className="group relative flex flex-col md:flex-row md:items-center justify-between py-10 border-b border-zinc-200 dark:border-zinc-900 cursor-pointer transition-all duration-300"
               >
                 {cardInnerContent}
               </motion.div>
@@ -149,7 +149,7 @@ export default function Lab() {
           <div className="fixed inset-0 grid place-items-center z-[100] p-4 bg-black/80 backdrop-blur-lg">
             
             <button
-              className="absolute top-6 right-6 flex items-center justify-center bg-[#0d0d0d] border border-zinc-900 text-zinc-400 rounded-full h-12 w-12 hover:text-white hover:border-zinc-700 transition z-[110]"
+              className="absolute top-6 right-6 flex items-center justify-center bg-white dark:bg-[#0d0d0d] border border-zinc-200 dark:border-zinc-900 text-zinc-500 dark:text-zinc-400 rounded-full h-12 w-12 hover:text-black hover:dark:text-white hover:border-zinc-400 hover:dark:border-zinc-700 transition z-[110]"
               onClick={() => setActive(null)}
             >
               <CloseIcon />
@@ -158,27 +158,27 @@ export default function Lab() {
             <motion.div
               layoutId={`card-${active.title}-${id}`}
               ref={ref}
-              className="w-full max-w-[750px] h-auto max-h-[85vh] flex flex-col bg-[#080808] border border-zinc-900 rounded-lg overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.9)]"
+              className="w-full max-w-[750px] h-auto max-h-[85vh] flex flex-col bg-white dark:bg-[#080808] border border-zinc-200 dark:border-zinc-900 rounded-lg overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.15)] dark:shadow-[0_0_80px_rgba(0,0,0,0.9)] transition-colors duration-300"
             >
               <div className="overflow-y-auto p-8 md:p-12 space-y-8 custom-scrollbar">
                 
-                <div className="border-b border-zinc-900 pb-6">
-                  <span className="text-[10px] font-mono px-2 py-1 bg-zinc-950 border border-zinc-900 text-zinc-500 uppercase tracking-widest">
+                <div className="border-b border-zinc-200 dark:border-zinc-900 pb-6">
+                  <span className="text-[10px] font-mono px-2 py-1 bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-900 text-zinc-500 uppercase tracking-widest">
                     {active.tag}
                   </span>
-                  <h2 className="font-light text-4xl text-[#F5F5F7] mt-6 tracking-tight">
+                  <h2 className="font-light text-4xl text-zinc-900 dark:text-[#F5F5F7] mt-6 tracking-tight">
                     {active.title}
                   </h2>
                 </div>
 
-                <div className="text-zinc-400 text-sm leading-relaxed space-y-4 font-mono border-b border-zinc-900 pb-6">
+                <div className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed space-y-4 font-mono border-b border-zinc-200 dark:border-zinc-900 pb-6">
                   {typeof active.content === "function" ? active.content() : active.content}
                 </div>
 
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-2">
                   <div className="flex flex-wrap gap-1.5">
                     {active.tags.map((tag, idx) => (
-                      <span key={idx} className="bg-[#0d0d0d] border border-zinc-900 text-zinc-600 font-mono text-[10px] px-2.5 py-1 rounded">
+                      <span key={idx} className="bg-zinc-100 dark:bg-[#0d0d0d] border border-zinc-200 dark:border-zinc-900 text-zinc-550 dark:text-zinc-600 font-mono text-[10px] px-2.5 py-1 rounded">
                         {tag}
                       </span>
                     ))}
@@ -189,7 +189,7 @@ export default function Lab() {
                       href={active.ctaLink}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-center text-center px-5 py-2.5 text-xs font-mono tracking-wider rounded border border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-500 transition duration-300"
+                      className="inline-center text-center px-5 py-2.5 text-xs font-mono tracking-wider rounded border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-black hover:dark:text-white hover:border-zinc-400 hover:dark:border-zinc-500 transition duration-300"
                     >
                       {active.ctaText}
                     </a>
