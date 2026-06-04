@@ -24,10 +24,9 @@ export default function MenuOverlay({ onClose }) {
       exit={{ opacity: 0, scale: 0.99 }}
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#FAF9F5]/98 dark:bg-[#030303]/98 backdrop-blur-xl transition-colors duration-300"
-    >
-      {/* Rotated vertical MENU text on the far left edge (M at the top, legs pointing left) */}
-      <div className="absolute left-8 top-1/2 -translate-y-1/2 hidden md:block select-none pointer-events-none">
-        <span className="text-zinc-350 dark:text-zinc-800 font-mono text-[13px] tracking-[1.8em] [writing-mode:vertical-lr] uppercase font-light">
+    >      {/* Rotated vertical MENU text on the far left edge (M at the top, legs pointing left, giant & bold) */}
+      <div className="absolute left-6 md:left-8 top-1/2 -translate-y-1/2 hidden md:block select-none pointer-events-none">
+        <span className="text-zinc-200/60 dark:text-zinc-900/35 font-sans text-7xl md:text-8xl lg:text-[7.5rem] font-black tracking-[0.25em] [writing-mode:vertical-lr] uppercase leading-none">
           MENU
         </span>
       </div>
@@ -68,11 +67,11 @@ export default function MenuOverlay({ onClose }) {
       <div className="w-full h-full flex flex-col justify-between py-16 pl-8 md:pl-28 pr-8 md:pr-16 lg:pr-24">
         
         {/* Main Grid content */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 my-auto w-full">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 my-auto w-full items-stretch">
           
-          {/* Left Column: Greeting/Bio (Hello world text, placed in the center-left area) */}
-          <div className="col-span-12 md:col-start-3 md:col-span-5 flex flex-col justify-center space-y-4 text-left order-last md:order-first border-t md:border-t-0 border-zinc-200 dark:border-zinc-900 pt-8 md:pt-0 max-w-md">
-            <span className="text-[10px] font-mono tracking-widest text-[#FFB000] uppercase block select-none">
+          {/* Left Column: Greeting/Bio (Hello world text, placed in the center-left area, text-center, shifted lower down) */}
+          <div className="col-span-12 md:col-start-3 md:col-span-5 flex flex-col justify-end items-center text-center order-last md:order-first border-t md:border-t-0 border-zinc-200 dark:border-zinc-900 pt-8 md:pt-0 max-w-md self-end pb-6 md:pb-12">
+            <span className="text-[10px] font-mono tracking-widest text-[#FFB000] uppercase block select-none mb-1">
               // ARCHITECTURE // LAB
             </span>
             <h2 className="text-2xl md:text-3xl font-light tracking-tight text-zinc-900 dark:text-white leading-snug">
@@ -80,7 +79,7 @@ export default function MenuOverlay({ onClose }) {
                 ? "Hallo Welt, ich bin Richard Zuikov." 
                 : "Hello world, I'm Richard Zuikov."}
             </h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-light">
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-light mt-2">
               {language === 'de' 
                 ? "Ich arbeite als System- und Softwarearchitekt an der Schnittstelle zwischen Hardware und Low-Level-Software. Diese Webseite ermöglicht es Ihnen, meine Projekte sowie meinen beruflichen Werdegang einzusehen." 
                 : "I work as a systems and low-level software architect at the boundary where hardware and software collide. This website showcases my engineering projects and professional career."}
