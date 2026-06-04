@@ -25,9 +25,9 @@ export default function MenuOverlay({ onClose }) {
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#FAF9F5]/98 dark:bg-[#030303]/98 backdrop-blur-xl transition-colors duration-300"
     >
-      {/* Rotated vertical MENU text on the far left edge */}
-      <div className="absolute left-6 md:left-8 top-1/2 -translate-y-1/2 hidden md:block select-none pointer-events-none">
-        <span className="text-zinc-300 dark:text-zinc-800 font-mono text-[10px] tracking-[1.5em] [writing-mode:vertical-lr] rotate-180 uppercase font-light">
+      {/* Rotated vertical MENU text on the far left edge (M at the top, legs pointing left) */}
+      <div className="absolute left-8 top-1/2 -translate-y-1/2 hidden md:block select-none pointer-events-none">
+        <span className="text-zinc-350 dark:text-zinc-800 font-mono text-[13px] tracking-[1.8em] [writing-mode:vertical-lr] uppercase font-light">
           MENU
         </span>
       </div>
@@ -64,14 +64,14 @@ export default function MenuOverlay({ onClose }) {
         </button>
       </div>
 
-      {/* Inner Centered Container */}
-      <div className="w-full max-w-6xl h-full flex flex-col justify-between py-16 px-8 md:px-16">
+      {/* Inner Full-Width Container (Indented left for the vertical menu text) */}
+      <div className="w-full h-full flex flex-col justify-between py-16 pl-8 md:pl-28 pr-8 md:pr-16 lg:pr-24">
         
         {/* Main Grid content */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 my-auto w-full">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 my-auto w-full">
           
-          {/* Left Column: Greeting/Bio (Hello world text) */}
-          <div className="col-span-12 md:col-span-6 flex flex-col justify-center space-y-4 text-left order-last md:order-first md:pr-12 border-t md:border-t-0 border-zinc-200 dark:border-zinc-900 pt-8 md:pt-0">
+          {/* Left Column: Greeting/Bio (Hello world text, placed in the center-left area) */}
+          <div className="col-span-12 md:col-start-3 md:col-span-5 flex flex-col justify-center space-y-4 text-left order-last md:order-first border-t md:border-t-0 border-zinc-200 dark:border-zinc-900 pt-8 md:pt-0 max-w-md">
             <span className="text-[10px] font-mono tracking-widest text-[#FFB000] uppercase block select-none">
               // ARCHITECTURE // LAB
             </span>
@@ -87,8 +87,8 @@ export default function MenuOverlay({ onClose }) {
             </p>
           </div>
 
-          {/* Right Column: Menu Links (Right aligned, fixed sizes) */}
-          <div className="col-span-12 md:col-span-6 flex flex-col justify-center items-end text-right md:pr-4 space-y-5 md:space-y-6 select-none w-full order-first md:order-last">
+          {/* Right Column: Menu Links (Right aligned, flush with right edge) */}
+          <div className="col-span-12 md:col-start-9 md:col-span-4 flex flex-col justify-center items-end text-right space-y-5 md:space-y-6 select-none w-full order-first md:order-last">
             <nav className="flex flex-col space-y-3 md:space-y-4 w-full">
               {menuItems.map((item) => {
                 const isActive = window.location.pathname === item.path;
@@ -103,7 +103,7 @@ export default function MenuOverlay({ onClose }) {
                     <span className="text-[9px] font-mono tracking-widest text-[#FFB000] opacity-0 group-hover:opacity-100 transition-opacity duration-300 uppercase mr-2 hidden sm:inline">
                       {item.sub[language]} //
                     </span>
-                    {/* Label (Defined stable font sizes as requested) */}
+                    {/* Label */}
                     <span className={`text-3xl md:text-4xl lg:text-5xl font-extralight tracking-wide transition-all duration-300 ${
                       isActive 
                         ? 'text-zinc-900 dark:text-white font-normal' 
