@@ -5,8 +5,15 @@ import { motion } from 'framer-motion';
 import { useTheme } from '../hooks/use-theme';
 import { useLanguage } from '../hooks/use-language';
 
-// PLATZHALTER FÜR DEIN GEILES 3D MARQUEE HINTERGRUND-SYSTEM
 import bossImg from "../assets/Me_Picture.png";
+import imgChina from "../assets/Me_China.jpg";
+import imgDenmark from "../assets/Me_Denmark.jpg";
+import imgFirefighter from "../assets/Me_Firefighter.png";
+import imgGym from "../assets/Me_Gym.jpg";
+import imgKorea from "../assets/Me_Korea.jpg";
+import imgMuseum from "../assets/Me_Museum.jpg";
+import imgUzbekistan from "../assets/Me_Uzbekistan.jpg";
+import imgSundown from "../assets/Mu_Sundown.jpg";
 
 // Eigene, sichere Hilfsfunktion für Tailwind Klassen
 const cn = (...classes) => classes.filter(Boolean).join(' ');
@@ -51,10 +58,10 @@ export default function Home() {
 
   // Wir füttern das Marquee mit reichlich Bildern für nahtlose Spalten
   const marqueePlaceholderImages = [
-    bossImg, bossImg, bossImg, bossImg,
-    bossImg, bossImg, bossImg, bossImg,
-    bossImg, bossImg, bossImg, bossImg,
-    bossImg, bossImg, bossImg, bossImg
+    bossImg, imgChina, imgDenmark, imgFirefighter,
+    imgGym, imgKorea, imgMuseum, imgUzbekistan,
+    imgSundown, bossImg, imgChina, imgDenmark,
+    imgFirefighter, imgGym, imgKorea, imgMuseum
   ];
 
   return (

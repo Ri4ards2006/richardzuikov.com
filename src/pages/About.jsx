@@ -3,6 +3,7 @@ import { motion, useScroll, useSpring } from 'framer-motion';
 import { useNavigate } from 'react-router-dom'; // <-- Neu für die Seiten-Navigation
 import { Cpu, Terminal, Zap, BookOpen, GitBranch } from 'lucide-react';
 import Carousel from "../components/ui/carousel"; 
+import { useLanguage } from '../hooks/use-language'; // <-- Neu für Mehrsprachigkeit
 
 // 1. IMPORTIERE DEINE ECHTEN HARDWARE-BILDER
 import bossImg from "../assets/Me_Picture.png";
@@ -10,9 +11,20 @@ import solderingStationImg from "../assets/Home_Soldering_Station.jpeg";
 import homeLabImg from "../assets/Home_Lab.jpeg";
 import trafficSystemImg from "../assets/Traffic_System.jpg";
 
+// ECHTE BILDER VON RICHARD
+import imgChina from "../assets/Me_China.jpg";
+import imgDenmark from "../assets/Me_Denmark.jpg";
+import imgFirefighter from "../assets/Me_Firefighter.png";
+import imgGym from "../assets/Me_Gym.jpg";
+import imgKorea from "../assets/Me_Korea.jpg";
+import imgMuseum from "../assets/Me_Museum.jpg";
+import imgUzbekistan from "../assets/Me_Uzbekistan.jpg";
+import imgSundown from "../assets/Mu_Sundown.jpg";
+
 export default function About() {
   const containerRef = useRef(null);
   const navigate = useNavigate(); // <-- Navigation-Triebwerk starten
+  const [language] = useLanguage();
   const { scrollYProgress } = useScroll({ target: containerRef });
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
@@ -152,6 +164,50 @@ export default function About() {
               <div key={i} className="space-y-1">
                 <div className="text-zinc-500 text-xs uppercase tracking-widest">{fact.label}</div>
                 <div className="text-xl font-bold text-zinc-900 dark:text-white">{fact.val}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5.5 LIFE BEYOND THE CONSOLE (TRAVELS & ENGAGEMENTS) */}
+      <section className="py-32 px-12 border-t border-zinc-200 dark:border-zinc-900">
+        <div className="max-w-4xl mx-auto space-y-12">
+          <div className="text-center md:text-left select-none">
+            <span className="text-[10px] font-mono tracking-[0.5em] text-zinc-500 dark:text-zinc-600 uppercase block mb-2">
+              // LIFE.BEYOND.THE.CONSOLE
+            </span>
+            <h3 className="text-3xl font-bold uppercase tracking-widest">
+              {language === 'de' ? '// Impressionen & Aktivitäten' : '// Travel & Activities'}
+            </h3>
+            <p className="text-zinc-500 dark:text-zinc-400 mt-2 text-sm leading-relaxed">
+              {language === 'de' 
+                ? 'Einblicke in Reisen, Ehrenamt und Ausgleich abseits der Tastatur.' 
+                : 'Insights into volunteer engagements, travel, and balance away from the keyboard.'}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {[
+              { src: imgFirefighter, label: { de: "Feuerwehr Ehrenamt", en: "Volunteer Firefighter" } },
+              { src: imgKorea, label: { de: "Reise nach Südkorea", en: "Travel in South Korea" } },
+              { src: imgChina, label: { de: "Reise nach China", en: "Travel in China" } },
+              { src: imgDenmark, label: { de: "Reise nach Dänemark", en: "Travel in Denmark" } },
+              { src: imgUzbekistan, label: { de: "Reise nach Usbekistan", en: "Travel in Uzbekistan" } },
+              { src: imgGym, label: { de: "Ausgleich im Gym", en: "Workout / Gym" } },
+              { src: imgMuseum, label: { de: "Museum & Geschichte", en: "Museum & History" } },
+              { src: imgSundown, label: { de: "Sonnenuntergang", en: "Sundown Moment" } }
+            ].map((pic, idx) => (
+              <div key={idx} className="group relative overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/40 p-2 transition-all duration-300 hover:border-[#00979D]/40 hover:shadow-md cursor-pointer">
+                <div className="overflow-hidden rounded-lg aspect-[4/3] relative">
+                  <img src={pic.src} alt={pic.label.de} className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500" />
+                </div>
+                <div className="mt-2 px-1 py-0.5">
+                  <span className="text-[9px] font-mono text-zinc-400 dark:text-zinc-600 uppercase block tracking-wider">// {idx + 1 === 1 ? 'VOLUNTEER' : idx + 1 <= 5 ? 'TRAVEL' : 'LIFE'}</span>
+                  <span className="text-[11px] font-medium text-zinc-800 dark:text-zinc-200 transition-colors group-hover:text-[#00979D]">
+                    {language === 'de' ? pic.label.de : pic.label.en}
+                  </span>
+                </div>
               </div>
             ))}
           </div>
