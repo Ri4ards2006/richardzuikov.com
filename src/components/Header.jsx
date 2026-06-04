@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import MenuOverlay from './MenuOverlay'; // Hier importieren
+import { AnimatePresence } from 'framer-motion';
+import MenuOverlay from './MenuOverlay';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -7,19 +8,22 @@ export default function Header() {
   return (
     <>
       <button 
-  onClick={() => {
-    console.log("Button geklickt!");
-    setIsMenuOpen(true);
-  }}
-  className="fixed top-8 right-8 z-[999] p-4 bg-white border border-black"
->
-  MENU
-</button>
+        onClick={() => setIsMenuOpen(true)}
+        className="fixed top-8 right-8 z-[999] w-12 h-12 flex items-center justify-center rounded-full border border-zinc-800 hover:border-zinc-500 bg-zinc-900/60 backdrop-blur-md text-zinc-400 hover:text-white transition-all duration-300"
+        aria-label="Open Menu"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="12" cy="12" r="1.5" />
+          <circle cx="6" cy="12" r="1.5" />
+          <circle cx="18" cy="12" r="1.5" />
+        </svg>
+      </button>
 
-      {/* DIESE ZEILE HAT GEFEHLT! */}
-      {isMenuOpen && (
-        <MenuOverlay isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      )}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <MenuOverlay onClose={() => setIsMenuOpen(false)} />
+        )}
+      </AnimatePresence>
     </>
   );
 }
