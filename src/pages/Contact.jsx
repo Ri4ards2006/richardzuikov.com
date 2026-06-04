@@ -2,8 +2,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { useLanguage } from '../hooks/use-language';
 
 export default function Contact() {
+  const [language] = useLanguage();
+
   return (
     <main className="relative min-h-screen bg-[#FAF9F5] text-zinc-900 dark:bg-[#060606] dark:text-[#F5F5F7] overflow-x-hidden selection:bg-white/20 font-sans antialiased flex flex-col justify-between transition-colors duration-300">
       
@@ -14,7 +17,7 @@ export default function Contact() {
           className="group flex items-center gap-2 font-mono text-xs tracking-widest text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors duration-300"
         >
           <ArrowLeft className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" />
-          <span>BACK // HOME</span>
+          <span>{language === 'de' ? 'ZURÜCK // START' : 'BACK // HOME'}</span>
         </Link>
       </div>
 
@@ -27,7 +30,11 @@ export default function Contact() {
           
           </span>
           <p className="text-sm md:text-base font-mono text-zinc-500 dark:text-zinc-400 leading-relaxed uppercase tracking-wider">
-            Kontaktieren Sie mich für Projektanfragen. von Web-Design & Frontend über komplexe Netzwerktechnik bis hin zu Elektronik und Systemreparaturen       </p>
+            {language === 'de' 
+              ? 'Kontaktieren Sie mich für Projektanfragen. Von Web-Design & Frontend über komplexe Netzwerktechnik bis hin zu Elektronik und Systemreparaturen.' 
+              : 'Contact me for project inquiries. From web design & frontend, complex network engineering, to electronics and system repairs.'
+            }
+          </p>
         </div>
 
         {/* Monumentale E-Mail Headline */}

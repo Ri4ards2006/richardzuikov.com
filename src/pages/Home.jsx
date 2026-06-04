@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTheme } from '../hooks/use-theme';
+import { useLanguage } from '../hooks/use-language';
 
 // PLATZHALTER FÜR DEIN GEILES 3D MARQUEE HINTERGRUND-SYSTEM
 import bossImg from "../assets/Me_Picture.png";
@@ -14,6 +15,7 @@ export default function Home() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [theme] = useTheme();
+  const [language] = useLanguage();
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -27,9 +29,24 @@ export default function Home() {
   }, []);
 
   const menuItems = [
-    { id: "01", title: "Works", link: "/lab", sub: "Hardware & Systems" },
-    { id: "02", title: "Profile", link: "/career", sub: "System Engineer" },
-    { id: "03", title: "Contact", link: "/contact", sub: "Get in touch" }
+    { 
+      id: "01", 
+      title: language === 'de' ? "Projekte" : "Works", 
+      link: "/lab", 
+      sub: language === 'de' ? "Hardware & Systeme" : "Hardware & Systems" 
+    },
+    { 
+      id: "02", 
+      title: language === 'de' ? "Werdegang" : "Profile", 
+      link: "/career", 
+      sub: language === 'de' ? "Systemarchitekt" : "System Engineer" 
+    },
+    { 
+      id: "03", 
+      title: language === 'de' ? "Kontakt" : "Contact", 
+      link: "/contact", 
+      sub: language === 'de' ? "Schreib mir" : "Get in touch" 
+    }
   ];
 
   // Wir füttern das Marquee mit reichlich Bildern für nahtlose Spalten
@@ -71,7 +88,7 @@ export default function Home() {
             Richard Zuikov
           </h1>
           <p className="mt-4 text-zinc-500 dark:text-zinc-400 font-mono text-[10px] sm:text-xs tracking-[0.5em] uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.05)] dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] transition-colors duration-300">
-            Low-Level Architekt <span className="text-[#FFB000]/60">//</span> Systems Engineer
+            {language === 'de' ? 'Low-Level Architekt' : 'Low-Level Architect'} <span className="text-[#FFB000]/60">//</span> Systems Engineer
           </p>
         </motion.div>
  
@@ -107,7 +124,7 @@ export default function Home() {
                    initial={{ width: 0 }}
                    animate={{ width: hoveredIndex === index ? "100%" : 0 }}
                    transition={{ duration: 0.4 }}
-                />
+                 />
               </Link>
             </motion.div>
           ))}
@@ -117,7 +134,7 @@ export default function Home() {
       {/* ─── FOOTER INFO ─── */}
       <footer className="absolute bottom-8 w-full max-w-7xl px-8 flex justify-between items-center z-10 font-mono text-[9px] text-zinc-400 dark:text-zinc-500 tracking-widest uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.05)] dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] transition-colors duration-300">
         <span>RZ.OS.V2 // 2026</span>
-        <span>© All rights reserved</span>
+        <span>© {language === 'de' ? 'Alle Rechte vorbehalten' : 'All rights reserved'}</span>
       </footer>
  
     </main>
