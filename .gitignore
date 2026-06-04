@@ -1,0 +1,17 @@
+# Vite & Node Dependencies (Der dicke lokale Ordner)
+node_modules/
+.pnpm-store/
+
+# Build-Ausgaben (Kompilierte Files)
+dist/
+dist-ssr/
+*.local
+
+# OS-Müll (Besonders wichtig bei Arch/Mac Mix)
+.DS_Store
+Thumbs.db
+
+# Entwicklungsspezifische Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

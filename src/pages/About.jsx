@@ -1,0 +1,233 @@
+import React, { useRef } from 'react';
+import { motion, useScroll, useSpring } from 'framer-motion';
+import { useNavigate } from 'react-router-dom'; // <-- Neu für die Seiten-Navigation
+import { Cpu, Terminal, Zap, BookOpen, GitBranch } from 'lucide-react';
+import Carousel from "../components/ui/carousel"; 
+import { useLanguage } from '../hooks/use-language'; // <-- Neu für Mehrsprachigkeit
+
+// 1. IMPORTIERE DEINE ECHTEN HARDWARE-BILDER
+import bossImg from "../assets/Me_Picture.png";
+import solderingStationImg from "../assets/Home_Soldering_Station.jpeg";
+import homeLabImg from "../assets/Home_Lab.jpeg";
+import trafficSystemImg from "../assets/Traffic_System.jpg";
+
+// ECHTE BILDER VON RICHARD
+import imgChina from "../assets/Me_China.jpg";
+import imgDenmark from "../assets/Me_Denmark.jpg";
+import imgFirefighter from "../assets/Me_Firefighter.png";
+import imgGym from "../assets/Me_Gym.jpg";
+import imgKorea from "../assets/Me_Korea.jpg";
+import imgMuseum from "../assets/Me_Museum.jpg";
+import imgUzbekistan from "../assets/Me_Uzbekistan.jpg";
+import imgSundown from "../assets/Mu_Sundown.jpg";
+
+export default function About() {
+  const containerRef = useRef(null);
+  const navigate = useNavigate(); // <-- Navigation-Triebwerk starten
+  const [language] = useLanguage();
+  const { scrollYProgress } = useScroll({ target: containerRef });
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+
+  const logEntries = [
+    { title: "Register Level Thinking", icon: <Cpu />, desc: "Warum ich Abstraktionen hasse, wenn man sie selbst schreiben kann." },
+    { title: "Architektur-Struggle", icon: <GitBranch />, desc: "Die Herausforderung, Hardware & Software synchron zu halten." },
+    { title: "Warum C++ & Go?", icon: <Terminal />, desc: "Der Konflikt zwischen maximaler Kontrolle und moderner Skalierbarkeit." },
+    { title: "Lab-Philosophie", icon: <BookOpen />, desc: "Mein Weg zum IT-Systemelektroniker bis 2027." }
+  ];
+
+  // Handler, der anspringt, wenn der Button im Karussell geklickt wird
+  const handleSlideButtonClick = (slide) => {
+    if (slide.link) {
+      navigate(slide.link); // Schiebt den User auf die /lab Seite
+    }
+  };
+
+  return (
+    <main ref={containerRef} className="bg-white text-black dark:bg-black dark:text-white selection:bg-[#00979D] transition-colors duration-300">
+      {/* Fortschrittsbalken oben */}
+
+      <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-[#00979D] origin-left z-[999]" style={{ scaleX }} />
+
+      {/* 1. HERO: Fokus auf DICH */}
+      <section className="min-h-[90vh] flex items-center justify-center pt-32 px-12 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+          <div className="relative group">
+            <div className="absolute -inset-4 bg-gradient-to-r from-[#00979D] to-zinc-800 rounded-3xl blur opacity-20 group-hover:opacity-40 transition" />
+            <img src={bossImg} alt="Richard Zuikov" className="relative z-10 rounded-2xl grayscale hover:grayscale-0 transition duration-700 w-100 object-cover" />
+          </div>
+          <div className="space-y-6">
+            <span className="text-[#00979D] font-mono text-sm tracking-widest">// ABOUT ME</span>
+            <h1 className="text-6xl font-black uppercase">Richard<br />Zuikov</h1>
+            <p className="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed">
+              Software ist die Abstraktion, Hardware ist die Realität. Ich arbeite an der Schnittstelle, wo beides kollidiert.
+            </p>
+            <div className="flex flex-wrap gap-4 pt-4">
+              {['Lötkolben-Enthusiast', 'Kernel-Interessiert', 'Home-Lab Betreiber'].map(tag => (
+                <span key={tag} className="px-3 py-1 border border-zinc-800 rounded-md text-xs text-zinc-500 font-mono">{tag}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. LOGBUCH STATT PROJEKTE */}
+      <section className="py-32 px-12 bg-zinc-50 dark:bg-zinc-950/20">
+        <div className="max-w-7xl mx-auto">
+          <h3 className="text-3xl font-bold mb-16">// Aktuelle Gedanken & Tech-Insights</h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {logEntries.map((entry, i) => (
+              <div key={i} className="p-8 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-300">
+                <div className="text-[#00979D] mb-6">{entry.icon}</div>
+                <h4 className="text-xl font-bold mb-4">{entry.title}</h4>
+                <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">{entry.desc}</p>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* 3. WORKBENCH CAROUSEL */}
+      <section className="py-32">
+         <div className="text-center mb-16">
+            <h3 className="text-3xl font-bold uppercase tracking-widest mb-4">// Mein "Meta" Setup</h3>
+            <p className="text-zinc-400">Ein Blick auf die Dinge, die meinen Alltag prägen.</p>
+         </div>
+         {/* Hier lassen wir bei den ersten beiden den Button einfach weg! */}
+         <Carousel 
+            slides={[
+              { title: "Workbench Chaos", src: solderingStationImg },
+              { title: "Server Rack", src: homeLabImg },
+              { title: "RTOS Traffic Control", src: trafficSystemImg, button: "Armory öffnen", link: "/lab" }
+            ]} 
+            onSlideButtonClick={handleSlideButtonClick}
+         />
+      </section>
+
+      {/* 4. METAL MINDSET (Philosophie) */}
+      <section className="py-32 px-12 max-w-4xl mx-auto border-t border-zinc-200 dark:border-zinc-900">
+         <h3 className="text-5xl font-black mb-10">// Das Ziel für 2027</h3>
+         <p className="text-2xl text-zinc-650 dark:text-zinc-400 font-light italic">
+           "Ich will nicht nur ein IT-Systemelektroniker sein. Ich will die Schnittstelle beherrschen, 
+           an der die digitale Illusion auf die physische Realität trifft."
+         </p>
+         <div className="mt-12 p-8 bg-[#00979D]/5 border border-[#00979D]/20 rounded-2xl">
+            <p className="text-[#00979D] font-mono leading-relaxed">
+              // Aktueller Status: Ausbildungsphase <br/>
+              // Fokus: Systemarchitektur & Hardware-Integration <br/>
+              // Motto: Keep it low, keep it fast.
+            </p>
+         </div>
+      </section>
+
+      {/* 5. ORIGIN STORY & BIO */}
+      <section className="py-32 px-12 bg-zinc-50 dark:bg-zinc-900/10 border-t border-zinc-200 dark:border-zinc-900">
+        <div className="max-w-4xl mx-auto space-y-12">
+          <h3 className="text-4xl font-bold">// Mein Werdegang</h3>
+          
+          <div className="flex gap-8 items-start">
+            <div className="mt-2 text-[#00979D] shrink-0">
+              <Zap size={32} />
+            </div>
+            <div>
+              <h4 className="text-2xl font-bold mb-2">Die Informatik-Wurzeln</h4>
+              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                Alles begann vor Jahren mit reiner Informatik – Logik, Algorithmen und die Welt des Codes. 
+                Doch schnell wurde mir klar: Software ist nur die halbe Miete. Ich wollte verstehen, 
+                was unter der Haube passiert, wie Strom in logische Zustände übersetzt wird.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-8 items-start">
+            <div className="mt-2 text-[#00979D] shrink-0">
+              <Cpu size={32} />
+            </div>
+            <div>
+              <h4 className="text-2xl font-bold mb-2">Der Pivot zur Hardware</h4>
+              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                Der Weg zum IT-Systemelektroniker war für mich kein Zufall, sondern die Konsequenz 
+                meines Drangs nach Kontrolle. Mit 20 Jahren habe ich nun das Ziel vor Augen: 
+                Abschluss 2027. Bis dahin ist mein Lab mein Klassenzimmer.
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Facts */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-12 border-t border-zinc-200 dark:border-zinc-800">
+            {[
+              { label: "Alter", val: "20 Jahre" },
+              { label: "Fokus", val: "System-Integration" },
+              { label: "Ziel", val: "Abschluss 2027" },
+              { label: "Mentalität", val: "Hard- & Software" }
+            ].map((fact, i) => (
+              <div key={i} className="space-y-1">
+                <div className="text-zinc-500 text-xs uppercase tracking-widest">{fact.label}</div>
+                <div className="text-xl font-bold text-zinc-900 dark:text-white">{fact.val}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5.5 LIFE BEYOND THE CONSOLE (TRAVELS & ENGAGEMENTS) */}
+      <section className="py-32 px-12 border-t border-zinc-200 dark:border-zinc-900">
+        <div className="max-w-4xl mx-auto space-y-12">
+          <div className="text-center md:text-left select-none">
+            <span className="text-[10px] font-mono tracking-[0.5em] text-zinc-500 dark:text-zinc-600 uppercase block mb-2">
+              // LIFE.BEYOND.THE.CONSOLE
+            </span>
+            <h3 className="text-3xl font-bold uppercase tracking-widest">
+              {language === 'de' ? '// Impressionen & Aktivitäten' : '// Travel & Activities'}
+            </h3>
+            <p className="text-zinc-500 dark:text-zinc-400 mt-2 text-sm leading-relaxed">
+              {language === 'de' 
+                ? 'Einblicke in Reisen, Ehrenamt und Ausgleich abseits der Tastatur.' 
+                : 'Insights into volunteer engagements, travel, and balance away from the keyboard.'}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {[
+              { src: imgFirefighter, label: { de: "Feuerwehr Ehrenamt", en: "Volunteer Firefighter" } },
+              { src: imgKorea, label: { de: "Reise nach Südkorea", en: "Travel in South Korea" } },
+              { src: imgChina, label: { de: "Reise nach China", en: "Travel in China" } },
+              { src: imgDenmark, label: { de: "Reise nach Dänemark", en: "Travel in Denmark" } },
+              { src: imgUzbekistan, label: { de: "Reise nach Usbekistan", en: "Travel in Uzbekistan" } },
+              { src: imgGym, label: { de: "Ausgleich im Gym", en: "Workout / Gym" } },
+              { src: imgMuseum, label: { de: "Museum & Geschichte", en: "Museum & History" } },
+              { src: imgSundown, label: { de: "Sonnenuntergang", en: "Sundown Moment" } }
+            ].map((pic, idx) => (
+              <div key={idx} className="group relative overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/40 p-2 transition-all duration-300 hover:border-[#00979D]/40 hover:shadow-md cursor-pointer">
+                <div className="overflow-hidden rounded-lg aspect-[4/3] relative">
+                  <img src={pic.src} alt={pic.label.de} className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500" />
+                </div>
+                <div className="mt-2 px-1 py-0.5">
+                  <span className="text-[9px] font-mono text-zinc-400 dark:text-zinc-600 uppercase block tracking-wider">// {idx + 1 === 1 ? 'VOLUNTEER' : idx + 1 <= 5 ? 'TRAVEL' : 'LIFE'}</span>
+                  <span className="text-[11px] font-medium text-zinc-800 dark:text-zinc-200 transition-colors group-hover:text-[#00979D]">
+                    {language === 'de' ? pic.label.de : pic.label.en}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. CALL TO ACTION */}
+      <section className="h-[30vh] flex flex-col items-center justify-center border-t border-zinc-200 dark:border-zinc-900">
+        <h3 className="text-2xl font-bold mb-6">Lass uns was bauen.</h3>
+        <button 
+          onClick={() => navigate('/contact')}
+          className="px-12 py-4 bg-[#00979D] text-white font-bold rounded-full hover:bg-white hover:text-black transition-all uppercase tracking-widest text-sm cursor-pointer"
+        >
+          Kontakt aufnehmen
+        </button>
+      </section>
+
+      <footer className="py-20 text-center border-t border-zinc-200 dark:border-zinc-900">
+         <button onClick={() => navigate('/contact')} className="text-zinc-500 hover:text-black dark:hover:text-white transition cursor-pointer">Nachricht hinterlassen?</button>
+      </footer>
+    </main>
+  );
+}

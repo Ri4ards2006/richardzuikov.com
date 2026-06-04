@@ -1,0 +1,16 @@
+/* src/css/style.scss */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Hier steht ABSICHTLICH nichts weiter drin, damit kein CSS-Hintergrund erzwingt wird */
+body {
+  margin: 0;
+  padding: 0;
+  background: transparent !important;
+}
+
+#root {
+  background-color: transparent !important;
+  min-height: 100vh;
+}
