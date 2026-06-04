@@ -2,6 +2,8 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+import { useTheme } from "../hooks/use-theme";
 import { useOutsideClick } from "../hooks/use-outside-click";
 
 // DEIN STANDARD-HINTERGRUNDBILD
@@ -18,6 +20,7 @@ import workbenchImg from "../assets/Home_Soldering_Station.jpeg";
 export default function Lab() {
   const [active, setActive] = useState(null);
   const [hoveredCard, setHoveredCard] = useState(null);
+  const [theme] = useTheme();
   const id = useId();
   const ref = useRef(null);
 
@@ -39,6 +42,17 @@ export default function Lab() {
   return (
     <main className="relative min-h-screen bg-[#FAF9F5] text-zinc-900 dark:bg-[#020202] dark:text-[#F5F5F7] overflow-x-hidden selection:bg-white/20 font-sans transition-colors duration-300">
       
+      {/* ─── TOP NAVIGATION ─── */}
+      <div className="absolute top-16 left-8 md:left-24 z-50">
+        <Link 
+          to="/" 
+          className="group flex items-center gap-2 font-mono text-xs tracking-widest text-zinc-500 hover:text-zinc-950 dark:hover:text-white transition-colors duration-300"
+        >
+          <ArrowLeft className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" />
+          <span>BACK // HOME</span>
+        </Link>
+      </div>
+
       {/* ─── DYNAMIC FULLSCREEN BACKGROUND ─── */}
       <div className="fixed inset-0 z-0 w-full h-full overflow-hidden pointer-events-none select-none">
         <AnimatePresence mode="wait">
@@ -46,16 +60,17 @@ export default function Lab() {
             key={currentBgImage}
             src={currentBgImage}
             initial={{ opacity: 0, scale: 1.02 }}
-            animate={{ opacity: 0.12, scale: 1 }}
+            animate={{ opacity: theme === 'dark' ? 0.70 : 0.40, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full h-full object-cover object-center filter contrast-100 brightness-100 dark:opacity-60"
+            className="w-full h-full object-cover object-center filter contrast-100 brightness-100 dark:opacity-75"
             alt="System Background"
           />
         </AnimatePresence>
         <div className="absolute inset-0 bg-gradient-to-t from-[#FAF9F5] via-transparent to-[#FAF9F5] dark:from-[#020202] dark:to-[#020202] transition-colors duration-300" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#FAF9F5_100%)] dark:bg-[radial-gradient(circle_at_center,transparent_20%,#020202_100%)] transition-colors duration-300" />
       </div>
+
 
       {/* ─── SCROLLABLE PORTFOLIO CONTAINER ─── */}
       <div className="relative z-10 max-w-7xl mx-auto py-24 px-6 md:px-16 flex flex-col min-h-screen justify-between">
