@@ -81,56 +81,56 @@ export default function Home() {
       {/* ─── SOFT BACKDROP SHADOW FÜR BESSERE LESBARKEIT BEI FARBBILDERN ─── */}
       <div className="absolute inset-0 z-0 bg-white/20 dark:bg-black/30 pointer-events-none transition-colors duration-300" />
  
-      {/* ─── MAIN CONTENT AREA (TAKUYA LOOK) ─── */}
-      <div className="relative z-10 flex flex-col items-center select-none bg-white/40 dark:bg-black/20 border border-zinc-200/30 dark:border-transparent backdrop-blur-[2px] p-10 rounded-2xl transition-all duration-300">
+      {/* ─── MAIN CONTENT AREA ─── */}
+      <div className="relative z-10 flex flex-col items-center select-none bg-white/40 dark:bg-black/20 border border-zinc-200/30 dark:border-transparent backdrop-blur-[2px] p-8 sm:p-14 md:p-16 rounded-3xl transition-all duration-300">
         
-        {/* Name / Title - Zentriert & Mächtig */}
+        {/* Name / Title - Zentriert & Ruhig */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-16 text-center"
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-14 sm:mb-20 text-center"
         >
-          <h1 className="text-[12vw] sm:text-[7vw] font-light leading-none tracking-tight font-sans text-zinc-900 dark:text-[#F9F9F9] drop-shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] transition-colors duration-300">
+          <h1 className="text-[11vw] sm:text-[6vw] font-light leading-none tracking-tight font-sans text-zinc-900 dark:text-[#F9F9F9] transition-colors duration-300">
             Richard Zuikov
           </h1>
-          <p className="mt-4 text-zinc-500 dark:text-zinc-400 font-mono text-[10px] sm:text-xs tracking-[0.5em] uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.05)] dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] transition-colors duration-300">
-            {language === 'de' ? 'Low-Level Architekt' : 'Low-Level Architect'} <span className="text-[#FFB000]/60">//</span> Systems Engineer
+          <p className="mt-4 sm:mt-5 text-zinc-500 dark:text-zinc-400 font-mono text-[10px] sm:text-xs tracking-[0.25em] uppercase transition-colors duration-300">
+            {language === 'de' ? 'Low-Level Architekt' : 'Low-Level Architect'} <span className="text-zinc-300 dark:text-zinc-700 mx-2 sm:mx-3">·</span> Systems Engineer
           </p>
         </motion.div>
  
-        {/* ─── VERTICAL NAVIGATION (RUNTERGEBALLERT) ─── */}
-        <nav className="flex flex-col items-center space-y-4">
+        {/* ─── VERTICAL NAVIGATION (EDITORIAL & OFFEN) ─── */}
+        <nav className="flex flex-col items-center space-y-6 sm:space-y-8">
           {menuItems.map((item, index) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 + index * 0.1, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ delay: 0.2 + index * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
-              className="relative flex flex-col items-center h-20"
+              className="relative flex flex-col items-center py-2 min-h-[4.5rem] sm:min-h-[5.25rem]"
             >
-              <Link to={item.link} className="flex flex-col items-center">
+              <Link to={item.link} className="flex flex-col items-center group">
                 {/* Die Hauptüberschrift */}
-                <span className="text-4xl sm:text-5xl font-light tracking-wide text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-[#F9F9F9] transition-all duration-500 ease-out drop-shadow-[0_4px_8px_rgba(0,0,0,0.05)] dark:drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]">
+                <span className="text-4xl sm:text-5xl md:text-6xl font-extralight tracking-wide text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-[#F9F9F9] transition-all duration-300 ease-out">
                   {item.title}
                 </span>
                 
-                {/* Sub-Info (Amber Terminal Style Detail) */}
+                {/* Sub-Info (Zartes Editorial Detail) */}
                 <span className={cn(
-                  "text-[9px] font-mono tracking-[0.2em] uppercase mt-2 transition-all duration-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.05)] dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]",
-                  hoveredIndex === index ? 'text-[#FFB000] opacity-100' : 'text-transparent opacity-0'
+                  "text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase mt-2 transition-all duration-300",
+                  hoveredIndex === index ? 'text-[#FFB000] opacity-100 translate-y-0' : 'text-transparent opacity-0 -translate-y-1'
                 )}>
-                  [{item.sub}]
+                  {item.sub}
                 </span>
  
                 {/* Hover-Line-Animation */}
                 <motion.div 
-                   className="h-[1px] bg-zinc-900 dark:bg-[#F9F9F9] mt-1 shadow-xl"
+                   className="h-[1px] bg-zinc-900 dark:bg-[#F9F9F9] mt-1"
                    initial={{ width: 0 }}
                    animate={{ width: hoveredIndex === index ? "100%" : 0 }}
-                   transition={{ duration: 0.4 }}
+                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                  />
               </Link>
             </motion.div>
@@ -139,9 +139,21 @@ export default function Home() {
       </div>
  
       {/* ─── FOOTER INFO ─── */}
-      <footer className="absolute bottom-8 w-full max-w-7xl px-8 flex justify-between items-center z-10 font-mono text-[9px] text-zinc-400 dark:text-zinc-500 tracking-widest uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.05)] dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] transition-colors duration-300">
-        <span>RZ.OS.V2 // 2026</span>
-        <span>© {language === 'de' ? 'Alle Rechte vorbehalten' : 'All rights reserved'}</span>
+      <footer className="absolute bottom-8 w-full max-w-7xl px-8 sm:px-12 flex flex-col sm:flex-row justify-between items-center gap-3 z-10 font-mono text-[9px] sm:text-[10px] text-zinc-400 dark:text-zinc-500 tracking-widest uppercase transition-colors duration-300">
+        <div className="flex items-center gap-2">
+          <span>Richard Zuikov</span>
+          <span className="text-zinc-300 dark:text-zinc-800">·</span>
+          <span>2026</span>
+        </div>
+        <div className="flex items-center gap-4 text-[9px] sm:text-[10px]">
+          <Link to="/impressum" className="hover:text-zinc-800 dark:hover:text-zinc-300 transition-colors">
+            {language === 'de' ? 'Impressum' : 'Legal'}
+          </Link>
+          <span className="text-zinc-300 dark:text-zinc-800">·</span>
+          <Link to="/datenschutz" className="hover:text-zinc-800 dark:hover:text-zinc-300 transition-colors">
+            {language === 'de' ? 'Datenschutz' : 'Privacy'}
+          </Link>
+        </div>
       </footer>
  
     </main>

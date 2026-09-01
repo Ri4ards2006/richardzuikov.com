@@ -80,8 +80,8 @@ export default function MenuOverlay({ onClose }) {
                   className="group flex items-baseline justify-end gap-3 text-right transform hover:-translate-x-2 transition-transform duration-300 w-full"
                 >
                   {/* Sub-label (left of label, visible on hover) */}
-                  <span className="text-[9px] font-mono tracking-widest text-[#FFB000] opacity-0 group-hover:opacity-100 transition-opacity duration-300 uppercase mr-2 hidden sm:inline">
-                    {item.sub[language]} //
+                  <span className="text-[10px] font-mono tracking-widest text-[#FFB000] opacity-0 group-hover:opacity-100 transition-opacity duration-300 uppercase mr-3 hidden sm:inline">
+                    {item.sub[language]}
                   </span>
                   {/* Label */}
                   <span className={`text-3xl md:text-4xl lg:text-5xl font-extralight tracking-wide transition-all duration-300 ${
@@ -102,7 +102,7 @@ export default function MenuOverlay({ onClose }) {
           
           {/* Left Side: Biography text placed in the lower section */}
           <div className="max-w-md text-left font-mono text-[9px] sm:text-[10px] text-zinc-500 dark:text-zinc-400 leading-relaxed">
-            <span className="text-[#FFB000] uppercase block mb-1 font-semibold tracking-wider">// RZ.OS.V2 // ARCHITECTURE // LAB</span>
+            <span className="text-[#FFB000] uppercase block mb-1 font-semibold tracking-wider">SYSTEM ARCHITECTURE · LAB</span>
             {language === 'de' 
               ? "Hallo Welt, ich bin Richard Zuikov. Ich arbeite als System- und Softwarearchitekt an der Schnittstelle zwischen Hardware und Low-Level-Software. Diese Webseite zeigt meine Projekte und meinen Werdegang." 
               : "Hello world, I'm Richard Zuikov. I work as a systems and low-level software architect at the boundary where hardware and software collide. This website showcases my projects and career."}
