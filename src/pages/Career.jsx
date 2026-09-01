@@ -2,175 +2,211 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ChevronDown, Award, ShieldCheck, FileCode } from 'lucide-react';
+import { ArrowLeft, ChevronDown, Award, ShieldCheck, FileCode, ExternalLink, Cpu, Server, CircuitBoard, Layers } from 'lucide-react';
+import { useLanguage } from '../hooks/use-language';
+import CertificateModal from '../components/ui/CertificateModal';
 
 export default function Career() {
+  const { t } = useLanguage();
   const [expandedIndex, setExpandedIndex] = useState(null);
+  const [selectedCert, setSelectedCert] = useState(null);
 
-const certificates = [
-    { 
-      title: "AZ-900: Microsoft Azure Fundamentals", 
-      issuer: "Microsoft", 
-      date: "Mai 2026", 
-      id: "7Y5OLV313LZX", 
-      icon: <ShieldCheck className="w-5 h-5 text-zinc-400" /> 
-    },
-    { 
-      title: "Linux & Private Cloud Admin on IBM Power Systems", 
-      issuer: "Red Hat", 
-      date: "Mai 2026", 
-      id: "T6LTXVIVD8PF", 
-      icon: <FileCode className="w-5 h-5 text-zinc-400" /> 
-    },
-    { 
-      title: "Google IT Automation with Python", 
-      issuer: "Google", 
-      date: "Apr. 2026", 
-      id: "P9EALFL0QGOT", 
-      icon: <Award className="w-5 h-5 text-zinc-400" /> 
-    },
-    { 
-      title: "IBM Systems and Solutions Architect", 
-      issuer: "IBM", 
-      date: "Apr. 2026", 
-      id: "ZXZ4ANI6JFX4", 
-      icon: <Award className="w-5 h-5 text-zinc-400" /> 
+  const domainIcons = {
+    lowLevel: <Cpu className="w-4 h-4 text-[#FFB000]" />,
+    infra: <Server className="w-4 h-4 text-[#FFB000]" />,
+    hardware: <CircuitBoard className="w-4 h-4 text-[#FFB000]" />,
+    software: <Layers className="w-4 h-4 text-[#FFB000]" />
+  };
+
+  const getCertIcon = (idx) => {
+    switch (idx) {
+      case 0: return <ShieldCheck className="w-5 h-5 text-amber-500" />;
+      case 1: return <FileCode className="w-5 h-5 text-red-500" />;
+      case 2: return <Award className="w-5 h-5 text-blue-500" />;
+      case 3: return <Award className="w-5 h-5 text-emerald-500" />;
+      default: return <Award className="w-5 h-5 text-zinc-400" />;
     }
-  ];
-
-  const careerTimeline = [
-    { year: "2025–2027", type: "Aktuell · Duale Entwicklung", title: "IT-Systemelektroniker — R2P GmbH", desc: "Verkürzter Ausbildungsgang aufgrund hoher Vorkenntnisse. Montage, Inbetriebnahme und Wartung von video- und netzwerkbasierten Sicherheitssystemen. Technische Fehlersuche auf Hardware- und Systemebene. Nebenher IT-Support (Helpdesk, Tickets, Enterprise-Netzwerke).", tags: ["Enterprise Network", "Hardware Diagnostics", "CCNA Systems"] },
-    { year: "2024–2025", type: "Infrastruktur-Fokus", title: "Fachinformatiker Systemintegration — R2P GmbH", desc: "Aufbau, Reparatur und Provisionierung von IT-Arbeitsplätzen. Linux-basierte Systemarbeit: Entwicklung von Bash-Workflows, automatisierten Deployment-Prozessen und maßgeschneiderten, bootfähigen USB-Images.", tags: ["Linux", "Bash Scripting", "Automated Deployment"] },
-    { year: "2025", type: "Forschung & Software", title: "GO-CORE-LAB Framework", desc: "Persönliches Low-Level Forschungsframework in Go. Parsing von ELF/PE Binaries, direkte Hardware-Bridges für serielle Busse (SPI/I2C/UART) und Netzwerk-Probes. Statisch kompiliert für universelle Infrastruktur-Kompatibilität.", tags: ["Go / Systems", "Binary Analysis", "Hardware Bridge"] },
-    { year: "2024", type: "Hardware-Labor", title: "Embedded Systems & Messtechnik", desc: "Entwicklung einer AD-LED Clock auf ATmega8535 (KiCad PCB-Layout, 3D-gedrucktes Gehäuse, ISR-Level C++). Simulation von Verkehrskreuzen per Arduino Mega & Sensorik. Aufbau eines professionellen Messplatzes (Oszilloskop, Labornetzteil, Signalgenerator).", tags: ["C++", "AVR / ATmega", "KiCad PCB Design", "Lab Gear"] },
-    { year: "2022–2025", type: "Akademisches Fundament", title: "Informationstechnischer Assistent — RBZ-Eckener", desc: "3-jährige vollschulische Ausbildung gekoppelt mit der Fachhochschulreife. Fundierte Ausbildung in Netzwerktechnik, Elektrotechnik, Digitaltechnik und Kommunikationstechnik. Angewandte Programmierung in Kotlin, Java, Jetpack Compose und Docker.", tags: ["Network Tech", "Digital & E-Tech", "Docker", "Java / Kotlin"] },
-    { year: "2023", type: "Industrie-Praktikum", title: "Elektroniker für Betriebstechnik — M. Jürgensen", desc: "Löten und messtechnische Reparatur komplexer elektronischer Baugruppen und Industriemaschinen. Fehleranalyse in Heizöfen und erste praktische Berührungspunkte mit speicherprogrammierbaren Steuerungen (SPS).", tags: ["Löten / Reparatur", "SPS Basics", "Industrial Electronics"] },
-    { year: "2021", type: "Anlagen-Praktikum", title: "Elektroniker für Gebäudetechnik — ETS GmbH", desc: "Planung, Strukturierung und physische Montage von industriellen Schaltanlagen. Erste praxisnahe Berührungen mit Steuerungstechnik und ESMR-Infrastrukturen.", tags: ["Schaltanlagen", "SPS", "ESMR-Technik"] }
-  ];
+  };
 
   return (
-    <main className="relative min-h-screen bg-white text-black dark:bg-[#060606] dark:text-[#F5F5F7] overflow-x-hidden selection:bg-zinc-200 dark:selection:bg-white/20 font-sans antialiased transition-colors duration-300">
+    <main className="relative min-h-screen bg-white text-zinc-900 dark:bg-[#09090b] dark:text-[#f4f4f5] overflow-x-hidden selection:bg-[#FFB000]/30 font-sans antialiased transition-colors duration-300">
       
-      <div className="absolute top-16 left-8 md:left-24 z-50">
-        <Link to="/" className="group flex items-center gap-2 font-mono text-xs tracking-widest text-zinc-500 hover:text-zinc-955 dark:hover:text-white transition-colors duration-300">
+      {/* ─── TOP NAVIGATION ─── */}
+      <div className="pt-12 px-6 sm:px-12 md:px-24 max-w-5xl mx-auto flex items-center justify-between">
+        <Link 
+          to="/" 
+          className="group inline-flex items-center gap-2 font-mono text-xs tracking-widest text-zinc-500 hover:text-zinc-950 dark:hover:text-white transition-colors duration-300"
+        >
           <ArrowLeft className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" />
-          <span>BACK</span>
+          <span>{t.nav.backHome.toUpperCase()}</span>
         </Link>
+
+        <span className="font-mono text-[11px] text-zinc-400 dark:text-zinc-600 hidden sm:inline tracking-wider">
+          RZ.CAREER · SYSTEMS ARCHITECT
+        </span>
       </div>
 
-      <div className="relative z-20 max-w-5xl mx-auto px-8 md:px-24 pt-48 pb-48 flex flex-col space-y-32">
+      {/* ─── MAIN CONTENT CONTAINER ─── */}
+      <div className="max-w-5xl mx-auto px-6 sm:px-12 md:px-24 pt-12 pb-32 flex flex-col space-y-24">
         
-        <section className="space-y-6">
-          <h1 className="text-6xl md:text-8xl font-bold tracking-tighter text-zinc-950 dark:text-white transition-colors duration-300">Richard Zuikov</h1>
-          <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 text-zinc-500 dark:text-zinc-400 font-mono text-sm uppercase tracking-widest transition-colors duration-300">
-            <span>System Engineer</span>
-            <span className="hidden md:block text-zinc-300 dark:text-zinc-700">•</span>
-            <span>5+ Years Experience</span>
-            <span className="hidden md:block text-zinc-300 dark:text-zinc-700">•</span>
-            <span>Flensburg, DE</span>
+        {/* 1. HERO HEADER */}
+        <section className="space-y-6 border-b border-zinc-200 dark:border-zinc-800/80 pb-12">
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-100/80 dark:bg-zinc-900/60 font-mono text-[10px] text-zinc-600 dark:text-zinc-400 tracking-wider">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span>{t.telemetry.status}</span>
           </div>
-        </section>
 
-        <section>
-          <p className="text-xl md:text-2xl font-light leading-relaxed text-zinc-700 dark:text-zinc-300 max-w-3xl transition-colors duration-300">
-            Spezialisiert auf die Schnittstelle zwischen Hardware und Software. Fokus auf Konzeption robuster 
-            IT & E-Tech-Systeme. von der Register-Ebene über automatisiertes Linux-Deployment bis zur 
-            Inbetriebnahme industrieller Netzwerke.
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extralight tracking-tight text-zinc-950 dark:text-white">
+            Richard Zuikov
+          </h1>
+
+          <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-zinc-500 dark:text-zinc-400 font-mono text-xs uppercase tracking-wider">
+            <span>{t.career.role}</span>
+            <span className="text-zinc-300 dark:text-zinc-700">·</span>
+            <span>{t.telemetry.experience}</span>
+            <span className="text-zinc-300 dark:text-zinc-700">·</span>
+            <span>{t.telemetry.location}</span>
+          </div>
+
+          <p className="text-base sm:text-lg font-light leading-relaxed text-zinc-700 dark:text-zinc-300 max-w-3xl pt-2">
+            {t.career.summary}
           </p>
         </section>
 
-        {/* SKILLS */}
-        <section className="space-y-12 pt-12">
-          <h2 className="text-2xl font-bold text-zinc-950 dark:text-white tracking-tight transition-colors duration-300">Technical Stack</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            
-            {/* 1. Systems & Low-Level */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest transition-colors duration-300">Systems</h3>
-              <div className="space-y-2 text-zinc-600 dark:text-zinc-400 font-light transition-colors duration-300">
-                <p>Go (Automation)</p>
-                <p>C / C++ / Assembly</p>
-                <p>VHDL / FPGA</p>
-                <p>Python / MATLAB</p>
-              </div>
-            </div>
-
-            {/* 2. Web & Frontend */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest transition-colors duration-300">Web / FE</h3>
-              <div className="space-y-2 text-zinc-600 dark:text-zinc-400 font-light transition-colors duration-300">
-                <p>React / Next.js</p>
-                <p>TypeScript / JavaScript</p>
-                <p>CSS / SCSS / Tailwind</p>
-                <p>WordPress / CMS</p>
-              </div>
-            </div>
-
-            {/* 3. Infra & Hardware */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest transition-colors duration-300">Infra</h3>
-              <div className="space-y-2 text-zinc-600 dark:text-zinc-400 font-light transition-colors duration-300">
-                <p>Linux / Bash</p>
-                <p>Docker / Git</p>
-                <p>PCB (KiCad)</p>
-                <p>AVR / ARM</p>
-              </div>
-            </div>
-
-            {/* 4. Design & Strategy */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest transition-colors duration-300">Design / Other</h3>
-              <div className="space-y-2 text-zinc-600 dark:text-zinc-400 font-light transition-colors duration-300">
-                <p>Figma / UI Design</p>
-                <p>Photoshop / Video</p>
-                <p>Web Planning / Dir.</p>
-                <p>Web Marketing</p>
-              </div>
-            </div>
-
+        {/* 2. EDITORIAL TECHNICAL STACK DOMAINS */}
+        <section className="space-y-8">
+          <div className="space-y-1">
+            <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-zinc-950 dark:text-white">
+              {t.career.techStackTitle}
+            </h2>
+            <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
+              {t.telemetry.domain.toUpperCase()} ARCHITECTURE & ACTIVE TOOLING
+            </p>
           </div>
-        </section>
 
-        {/* CREDENTIALS */}
-        <section className="space-y-8 pt-12">
-          <h2 className="text-2xl font-bold text-zinc-950 dark:text-white tracking-tight transition-colors duration-300">Credentials</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {certificates.map((cert, idx) => (
-              <div key={idx} className="bg-white dark:bg-[#0a0a0a] border border-zinc-200 dark:border-zinc-900/60 p-6 rounded-xl flex flex-col gap-2 shadow-sm dark:shadow-none transition-colors duration-300">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-zinc-100 dark:bg-zinc-950 rounded-lg shrink-0 transition-colors duration-300">{cert.icon}</div>
-                  <h3 className="text-base font-medium text-zinc-900 dark:text-white transition-colors duration-300">{cert.title}</h3>
+            {Object.entries(t.career.domains).map(([key, domain]) => (
+              <div 
+                key={key} 
+                className="p-6 sm:p-7 rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-[#121212]/50 backdrop-blur-sm space-y-4 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-lg border border-zinc-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+                    {domainIcons[key] || <Cpu className="w-4 h-4 text-[#FFB000]" />}
+                  </div>
+                  <div>
+                    <h3 className="text-base font-medium text-zinc-900 dark:text-zinc-100">
+                      {domain.name}
+                    </h3>
+                    <p className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400">
+                      {domain.desc}
+                    </p>
+                  </div>
                 </div>
-                <div className="pl-[52px]">
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400 font-light transition-colors duration-300">{cert.issuer} • {cert.date}</p>
-                  <p className="text-xs text-zinc-400 dark:text-zinc-650 font-mono mt-1 transition-colors duration-300">ID: {cert.id}</p>
+
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {domain.items.map((item, idx) => (
+                    <span 
+                      key={idx}
+                      className="px-2.5 py-1 rounded-md border border-zinc-200/80 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-900/80 text-zinc-700 dark:text-zinc-300 font-mono text-[11px]"
+                    >
+                      {item}
+                    </span>
+                  ))}
                 </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* CHRONOLOGY */}
-        <section className="space-y-8 pt-12">
-          <h2 className="text-2xl font-bold text-zinc-950 dark:text-white tracking-tight transition-colors duration-300">Chronology</h2>
-          <div className="space-y-6">
-            {careerTimeline.map((item, idx) => {
+        {/* 3. VERIFIED CREDENTIALS (WITH HIGH-END INSPECTOR MODAL) */}
+        <section className="space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+            <div className="space-y-1">
+              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-zinc-950 dark:text-white">
+                {t.career.credentialsTitle}
+              </h2>
+              <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
+                {t.career.credentialsSubtitle}
+              </p>
+            </div>
+            <span className="text-[10px] font-mono text-[#FFB000] tracking-widest uppercase">
+              // VERIFIED_PROFILES
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            {t.career.certificates.map((cert, idx) => (
+              <div 
+                key={cert.id} 
+                onClick={() => setSelectedCert(cert)}
+                className="group relative p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-[#121212]/50 hover:bg-zinc-100/70 dark:hover:bg-[#18181b]/70 hover:border-zinc-400 dark:hover:border-zinc-600 transition-all duration-200 cursor-pointer flex flex-col justify-between gap-4 shadow-sm hover:shadow-md"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shrink-0">
+                      {getCertIcon(idx)}
+                    </div>
+                    <div className="space-y-0.5">
+                      <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-[#FFB000] transition-colors leading-snug">
+                        {cert.title}
+                      </h3>
+                      <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
+                        {cert.issuer} · {cert.date}
+                      </p>
+                    </div>
+                  </div>
+
+                  <ExternalLink className="w-4 h-4 text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 mt-1" />
+                </div>
+
+                <div className="flex items-center justify-between border-t border-zinc-200/60 dark:border-zinc-800/60 pt-3 text-[10px] font-mono text-zinc-500">
+                  <span>ID: {cert.id}</span>
+                  <span className="text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">
+                    INSPECT ↗
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* 4. CHRONOLOGY TIMELINE */}
+        <section className="space-y-8">
+          <div className="space-y-1">
+            <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-zinc-950 dark:text-white">
+              {t.career.chronologyTitle}
+            </h2>
+            <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
+              DUALE AUSBILDUNG · INFRASTRUKTUR · FORSCHUNG
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {t.career.timeline.map((item, idx) => {
               const isExpanded = expandedIndex === idx;
               return (
                 <div 
                   key={idx} 
-                  className="bg-white dark:bg-[#0a0a0a] border border-zinc-200 dark:border-zinc-900/60 rounded-xl overflow-hidden cursor-pointer transition-colors hover:bg-zinc-50 dark:hover:bg-[#0f0f0f] shadow-sm dark:shadow-none transition-all duration-300" 
+                  className="rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-[#121212]/50 overflow-hidden cursor-pointer hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-200" 
                   onClick={() => setExpandedIndex(isExpanded ? null : idx)}
                 >
-                  <div className="flex items-center justify-between p-8">
-                    <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
-                      <span className="text-zinc-900 dark:text-white font-bold text-xl tracking-tight transition-colors duration-300">{item.year}</span>
+                  <div className="flex items-center justify-between p-6 sm:p-7">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
+                      <span className="text-zinc-900 dark:text-white font-mono font-medium text-sm sm:text-base tracking-tight shrink-0">
+                        {item.year}
+                      </span>
                       <div className="flex flex-col">
-                        <span className="text-zinc-800 dark:text-zinc-200 text-lg font-medium transition-colors duration-300">{item.title}</span>
-                        <span className="text-zinc-500 text-sm font-mono uppercase tracking-wider mt-1">{item.type}</span>
+                        <span className="text-zinc-900 dark:text-zinc-100 text-base font-normal">
+                          {item.title}
+                        </span>
+                        <span className="text-zinc-500 text-xs font-mono uppercase tracking-wider mt-0.5">
+                          {item.type}
+                        </span>
                       </div>
                     </div>
-                    <ChevronDown className={`w-5 h-5 text-zinc-400 dark:text-zinc-600 transition-transform duration-300 ${isExpanded ? 'rotate-180 text-zinc-900 dark:text-white' : ''}`} />
+
+                    <ChevronDown className={`w-5 h-5 text-zinc-400 dark:text-zinc-600 transition-transform duration-300 shrink-0 ml-4 ${isExpanded ? 'rotate-180 text-zinc-900 dark:text-white' : ''}`} />
                   </div>
                   
                   <AnimatePresence>
@@ -179,18 +215,23 @@ const certificates = [
                         initial={{ height: 0, opacity: 0 }} 
                         animate={{ height: "auto", opacity: 1 }} 
                         exit={{ height: 0, opacity: 0 }} 
-                        className="px-8 pb-8 text-zinc-600 dark:text-zinc-400 text-base leading-relaxed transition-colors duration-300"
+                        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                        className="px-6 sm:px-7 pb-6 text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed border-t border-zinc-200/60 dark:border-zinc-800/60 pt-4 space-y-4"
                       >
-                        {item.desc}
+                        <p>{item.desc}</p>
                         
-                        {/* Optionale Tags für mehr Tiefe */}
-                        <div className="flex flex-wrap gap-2 mt-4">
-                          {item.tags.map(tag => (
-                            <span key={tag} className="text-[10px] uppercase tracking-widest bg-zinc-50 dark:bg-zinc-950 px-2 py-1 rounded text-zinc-500 dark:text-zinc-600 font-mono transition-colors duration-300 border border-zinc-100 dark:border-zinc-900">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
+                        {item.tags && item.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-2 pt-1">
+                            {item.tags.map((tag, tagIdx) => (
+                              <span 
+                                key={tagIdx} 
+                                className="text-[10px] uppercase tracking-wider bg-zinc-100 dark:bg-zinc-900 px-2.5 py-1 rounded text-zinc-600 dark:text-zinc-400 font-mono border border-zinc-200 dark:border-zinc-800"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -199,7 +240,16 @@ const certificates = [
             })}
           </div>
         </section>
+
       </div>
+
+      {/* High-Fidelity Credential Inspector Modal */}
+      <CertificateModal 
+        certificate={selectedCert}
+        isOpen={Boolean(selectedCert)}
+        onClose={() => setSelectedCert(null)}
+      />
+
     </main>
   );
 }

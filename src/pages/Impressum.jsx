@@ -62,19 +62,19 @@ function ProtectedAddress() {
       <p className="font-semibold text-zinc-900 dark:text-zinc-100">Richard Zuikov</p>
       <p>Friedrichstraße 1</p>
       <p>24937 Flensburg</p>
-      <p className="text-xs text-zinc-500 mt-1">Deutschland // Germany</p>
+      <p className="text-xs text-zinc-500 mt-1">Deutschland · Germany</p>
     </div>
   );
 }
 
 export default function Impressum() {
-  const [language] = useLanguage();
+  const { language } = useLanguage();
   const [activeTab, setActiveTab] = useState('all'); // 'all' | 'impressum' | 'privacy'
 
   const t = {
     de: {
-      back: 'ZURÜCK // START',
-      tag: '// RECHTLICHE HINWEISE // § 5 DDG & DSGVO',
+      back: 'ZURÜCK · START',
+      tag: 'RECHTLICHE HINWEISE · § 5 DDG & DSGVO',
       title: 'Impressum & Datenschutz',
       subtitle: 'Transparenz, gesetzliche Pflichtangaben (§ 5 DDG) und Datenschutzerklärung für richardzuikov.com',
       tabAll: 'Alles anzeigen',
@@ -129,8 +129,8 @@ export default function Impressum() {
       ]
     },
     en: {
-      back: 'BACK // HOME',
-      tag: '// LEGAL NOTICE // § 5 DDG & GDPR',
+      back: 'BACK · HOME',
+      tag: 'LEGAL NOTICE · § 5 DDG & GDPR',
       title: 'Legal Notice & Privacy',
       subtitle: 'Mandatory provider disclosure (§ 5 DDG) and privacy notice for richardzuikov.com',
       tabAll: 'Show All',

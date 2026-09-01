@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../hooks/use-language';
 
 export default function Footer() {
-  const [language] = useLanguage();
+  const { t } = useLanguage();
 
   return (
     <footer className="w-full border-t border-zinc-200/80 dark:border-zinc-800/80 mt-24 transition-colors duration-300">
@@ -28,21 +28,21 @@ export default function Footer() {
             to="/contact" 
             className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors uppercase"
           >
-            {language === 'de' ? 'Kontakt' : 'Contact'}
+            {t.nav.contact}
           </Link>
           <span className="text-zinc-300 dark:text-zinc-800">·</span>
           <Link 
             to="/impressum" 
             className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors uppercase"
           >
-            {language === 'de' ? 'Impressum' : 'Legal'}
+            {t.nav.impressum}
           </Link>
           <span className="text-zinc-300 dark:text-zinc-800">·</span>
           <Link 
             to="/datenschutz" 
             className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors uppercase"
           >
-            {language === 'de' ? 'Datenschutz' : 'Privacy'}
+            {t.nav.datenschutz}
           </Link>
         </div>
       </div>

@@ -1,17 +1,18 @@
+"use client";
 import React, { useRef } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
-import { useNavigate } from 'react-router-dom'; // <-- Neu für die Seiten-Navigation
-import { Cpu, Terminal, Zap, BookOpen, GitBranch } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Cpu, Terminal, Zap, BookOpen, GitBranch, ArrowLeft, Layers, Compass } from 'lucide-react';
 import Carousel from "../components/ui/carousel"; 
-import { useLanguage } from '../hooks/use-language'; // <-- Neu für Mehrsprachigkeit
+import { useLanguage } from '../hooks/use-language';
 
-// 1. IMPORTIERE DEINE ECHTEN HARDWARE-BILDER
+// Hardware assets
 import bossImg from "../assets/Me_Picture.png";
 import solderingStationImg from "../assets/Home_Soldering_Station.jpeg";
 import homeLabImg from "../assets/Home_Lab.jpeg";
 import trafficSystemImg from "../assets/Traffic_System.jpg";
 
-// ECHTE BILDER VON RICHARD
+// Lifestyle / engagement assets
 import imgChina from "../assets/Me_China.jpg";
 import imgDenmark from "../assets/Me_Denmark.jpg";
 import imgFirefighter from "../assets/Me_Firefighter.png";
@@ -23,211 +24,264 @@ import imgSundown from "../assets/Mu_Sundown.jpg";
 
 export default function About() {
   const containerRef = useRef(null);
-  const navigate = useNavigate(); // <-- Navigation-Triebwerk starten
-  const [language] = useLanguage();
+  const navigate = useNavigate();
+  const { language, t } = useLanguage();
   const { scrollYProgress } = useScroll({ target: containerRef });
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
-  const logEntries = [
-    { title: "Register Level Thinking", icon: <Cpu />, desc: "Warum ich Abstraktionen hasse, wenn man sie selbst schreiben kann." },
-    { title: "Architektur-Struggle", icon: <GitBranch />, desc: "Die Herausforderung, Hardware & Software synchron zu halten." },
-    { title: "Warum C++ & Go?", icon: <Terminal />, desc: "Der Konflikt zwischen maximaler Kontrolle und moderner Skalierbarkeit." },
-    { title: "Lab-Philosophie", icon: <BookOpen />, desc: "Mein Weg zum IT-Systemelektroniker bis 2027." }
+  const insightIcons = [
+    <Cpu className="w-5 h-5 text-[#FFB000]" />,
+    <GitBranch className="w-5 h-5 text-[#FFB000]" />,
+    <Terminal className="w-5 h-5 text-[#FFB000]" />,
+    <BookOpen className="w-5 h-5 text-[#FFB000]" />
   ];
 
-  // Handler, der anspringt, wenn der Button im Karussell geklickt wird
   const handleSlideButtonClick = (slide) => {
     if (slide.link) {
-      navigate(slide.link); // Schiebt den User auf die /lab Seite
+      navigate(slide.link);
     }
   };
 
   return (
-    <main ref={containerRef} className="bg-white text-black dark:bg-black dark:text-white selection:bg-[#00979D] transition-colors duration-300">
-      {/* Fortschrittsbalken oben */}
+    <main ref={containerRef} className="relative min-h-screen bg-white text-zinc-900 dark:bg-[#09090b] dark:text-[#f4f4f5] selection:bg-[#FFB000]/30 font-sans antialiased transition-colors duration-300">
+      
+      {/* Top Scroll Indicator */}
+      <motion.div className="fixed top-0 left-0 right-0 h-1 bg-[#FFB000] origin-left z-[999]" style={{ scaleX }} />
 
-      <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-[#00979D] origin-left z-[999]" style={{ scaleX }} />
+      {/* ─── TOP NAVIGATION ─── */}
+      <div className="pt-12 px-6 sm:px-12 md:px-24 max-w-6xl mx-auto flex items-center justify-between">
+        <Link 
+          to="/" 
+          className="group inline-flex items-center gap-2 font-mono text-xs tracking-widest text-zinc-500 hover:text-zinc-950 dark:hover:text-white transition-colors duration-300"
+        >
+          <ArrowLeft className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" />
+          <span>{t.nav.backHome.toUpperCase()}</span>
+        </Link>
 
-      {/* 1. HERO: Fokus auf DICH */}
-      <section className="min-h-[90vh] flex items-center justify-center pt-32 px-12 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+        <span className="font-mono text-[11px] text-zinc-400 dark:text-zinc-600 hidden sm:inline tracking-wider">
+          RZ.PROFILE · BIOGRAPHY
+        </span>
+      </div>
+
+      {/* ─── 1. HERO SECTION ─── */}
+      <section className="min-h-[80vh] flex items-center justify-center pt-16 pb-24 px-6 sm:px-12 md:px-24 max-w-6xl mx-auto border-b border-zinc-200 dark:border-zinc-800/80">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 sm:gap-20 items-center">
           <div className="relative group">
-            <div className="absolute -inset-4 bg-gradient-to-r from-[#00979D] to-zinc-800 rounded-3xl blur opacity-20 group-hover:opacity-40 transition" />
-            <img src={bossImg} alt="Richard Zuikov" className="relative z-10 rounded-2xl grayscale hover:grayscale-0 transition duration-700 w-100 object-cover" />
+            <div className="absolute -inset-2 bg-gradient-to-r from-[#FFB000]/20 to-zinc-800/20 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-500" />
+            <img 
+              src={bossImg} 
+              alt="Richard Zuikov" 
+              className="relative z-10 rounded-2xl grayscale hover:grayscale-0 transition duration-700 w-full max-w-md object-cover shadow-xl border border-zinc-200 dark:border-zinc-800" 
+            />
           </div>
+
           <div className="space-y-6">
-            <span className="text-[#00979D] font-mono text-sm tracking-widest">// ABOUT ME</span>
-            <h1 className="text-6xl font-black uppercase">Richard<br />Zuikov</h1>
-            <p className="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed">
-              Software ist die Abstraktion, Hardware ist die Realität. Ich arbeite an der Schnittstelle, wo beides kollidiert.
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-100/80 dark:bg-zinc-900/60 font-mono text-[10px] text-zinc-600 dark:text-zinc-400 tracking-wider">
+              <span>{t.about.tag.toUpperCase()}</span>
+            </div>
+
+            <h1 className="text-4xl sm:text-6xl font-extralight uppercase tracking-tight text-zinc-950 dark:text-white">
+              Richard<br />Zuikov
+            </h1>
+
+            <p className="text-zinc-600 dark:text-zinc-300 text-base sm:text-lg leading-relaxed font-light">
+              {t.about.headline}
             </p>
-            <div className="flex flex-wrap gap-4 pt-4">
-              {['Lötkolben-Enthusiast', 'Kernel-Interessiert', 'Home-Lab Betreiber'].map(tag => (
-                <span key={tag} className="px-3 py-1 border border-zinc-800 rounded-md text-xs text-zinc-500 font-mono">{tag}</span>
+
+            <div className="flex flex-wrap gap-2 pt-2">
+              {t.about.tags.map((tag, idx) => (
+                <span 
+                  key={idx} 
+                  className="px-3 py-1 border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/50 rounded-lg text-xs text-zinc-600 dark:text-zinc-400 font-mono"
+                >
+                  {tag}
+                </span>
               ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. LOGBUCH STATT PROJEKTE */}
-      <section className="py-32 px-12 bg-zinc-50 dark:bg-zinc-950/20">
-        <div className="max-w-7xl mx-auto">
-          <h3 className="text-3xl font-bold mb-16">// Aktuelle Gedanken & Tech-Insights</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {logEntries.map((entry, i) => (
-              <div key={i} className="p-8 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-300">
-                <div className="text-[#00979D] mb-6">{entry.icon}</div>
-                <h4 className="text-xl font-bold mb-4">{entry.title}</h4>
-                <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">{entry.desc}</p>
+      {/* ─── 2. SYSTEM INSIGHTS & LOGBOOK ─── */}
+      <section className="py-24 px-6 sm:px-12 md:px-24 max-w-6xl mx-auto border-b border-zinc-200 dark:border-zinc-800/80">
+        <div className="space-y-12">
+          <div className="space-y-1">
+            <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-zinc-950 dark:text-white">
+              {t.about.insightsTitle}
+            </h2>
+            <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
+              ARCHITECTURAL FOCUS & HARDWARE OBSERVATIONS
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {t.about.logEntries.map((entry, idx) => (
+              <div 
+                key={idx} 
+                className="p-7 bg-zinc-50/50 dark:bg-[#121212]/50 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors duration-300 space-y-4"
+              >
+                <div className="p-2 w-fit rounded-lg border border-zinc-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+                  {insightIcons[idx]}
+                </div>
+                <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">
+                  {entry.title}
+                </h3>
+                <p className="text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm leading-relaxed font-mono">
+                  {entry.desc}
+                </p>
               </div>
             ))}
           </div>
-
         </div>
       </section>
 
-      {/* 3. WORKBENCH CAROUSEL */}
-      <section className="py-32">
-         <div className="text-center mb-16">
-            <h3 className="text-3xl font-bold uppercase tracking-widest mb-4">// Mein "Meta" Setup</h3>
-            <p className="text-zinc-400">Ein Blick auf die Dinge, die meinen Alltag prägen.</p>
-         </div>
-         {/* Hier lassen wir bei den ersten beiden den Button einfach weg! */}
-         <Carousel 
-            slides={[
-              { title: "Workbench Chaos", src: solderingStationImg },
-              { title: "Server Rack", src: homeLabImg },
-              { title: "RTOS Traffic Control", src: trafficSystemImg, button: "Armory öffnen", link: "/lab" }
-            ]} 
-            onSlideButtonClick={handleSlideButtonClick}
-         />
+      {/* ─── 3. WORKBENCH CAROUSEL ─── */}
+      <section className="py-24 px-6 sm:px-12 md:px-24 max-w-6xl mx-auto border-b border-zinc-200 dark:border-zinc-800/80">
+        <div className="text-center md:text-left mb-12 space-y-1">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-zinc-950 dark:text-white">
+            {t.about.workbenchTitle}
+          </h2>
+          <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
+            {t.about.workbenchSubtitle}
+          </p>
+        </div>
+
+        <Carousel 
+          slides={[
+            { title: language === 'de' ? "Lötplatz & Messgeräte" : "Electronics Workbench", src: solderingStationImg },
+            { title: language === 'de' ? "Server Rack Array" : "Server Rack Array", src: homeLabImg },
+            { title: language === 'de' ? "RTOS Verkehrssteuerung" : "RTOS Traffic Control", src: trafficSystemImg, button: language === 'de' ? "Labor öffnen" : "Open Lab", link: "/lab" }
+          ]} 
+          onSlideButtonClick={handleSlideButtonClick}
+        />
       </section>
 
-      {/* 4. METAL MINDSET (Philosophie) */}
-      <section className="py-32 px-12 max-w-4xl mx-auto border-t border-zinc-200 dark:border-zinc-900">
-         <h3 className="text-5xl font-black mb-10">// Das Ziel für 2027</h3>
-         <p className="text-2xl text-zinc-650 dark:text-zinc-400 font-light italic">
-           "Ich will nicht nur ein IT-Systemelektroniker sein. Ich will die Schnittstelle beherrschen, 
-           an der die digitale Illusion auf die physische Realität trifft."
-         </p>
-         <div className="mt-12 p-8 bg-[#00979D]/5 border border-[#00979D]/20 rounded-2xl">
-            <p className="text-[#00979D] font-mono leading-relaxed">
-              // Aktueller Status: Ausbildungsphase <br/>
-              // Fokus: Systemarchitektur & Hardware-Integration <br/>
-              // Motto: Keep it low, keep it fast.
-            </p>
-         </div>
+      {/* ─── 4. PHILOSOPHY ─── */}
+      <section className="py-24 px-6 sm:px-12 md:px-24 max-w-4xl mx-auto border-b border-zinc-200 dark:border-zinc-800/80 space-y-8">
+        <h2 className="text-3xl sm:text-4xl font-extralight tracking-tight text-zinc-950 dark:text-white">
+          {t.about.philosophyTitle}
+        </h2>
+        
+        <blockquote className="text-xl sm:text-2xl text-zinc-700 dark:text-zinc-300 font-light italic leading-relaxed border-l-2 border-[#FFB000] pl-6">
+          {t.about.philosophyQuote}
+        </blockquote>
+
+        <div className="p-6 bg-zinc-50/70 dark:bg-[#121212]/70 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl">
+          <p className="text-xs sm:text-sm font-mono text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            {t.about.statusNote}
+          </p>
+        </div>
       </section>
 
-      {/* 5. ORIGIN STORY & BIO */}
-      <section className="py-32 px-12 bg-zinc-50 dark:bg-zinc-900/10 border-t border-zinc-200 dark:border-zinc-900">
-        <div className="max-w-4xl mx-auto space-y-12">
-          <h3 className="text-4xl font-bold">// Mein Werdegang</h3>
-          
-          <div className="flex gap-8 items-start">
-            <div className="mt-2 text-[#00979D] shrink-0">
-              <Zap size={32} />
+      {/* ─── 5. ORIGIN & BIOGRAPHY ─── */}
+      <section className="py-24 px-6 sm:px-12 md:px-24 max-w-4xl mx-auto border-b border-zinc-200 dark:border-zinc-800/80 space-y-12">
+        <h2 className="text-3xl sm:text-4xl font-extralight tracking-tight text-zinc-950 dark:text-white">
+          {t.about.originTitle}
+        </h2>
+        
+        <div className="space-y-8">
+          <div className="flex gap-6 items-start">
+            <div className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-[#FFB000] shrink-0 mt-1">
+              <Zap size={22} />
             </div>
-            <div>
-              <h4 className="text-2xl font-bold mb-2">Die Informatik-Wurzeln</h4>
-              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                Alles begann vor Jahren mit reiner Informatik – Logik, Algorithmen und die Welt des Codes. 
-                Doch schnell wurde mir klar: Software ist nur die halbe Miete. Ich wollte verstehen, 
-                was unter der Haube passiert, wie Strom in logische Zustände übersetzt wird.
+            <div className="space-y-1">
+              <h3 className="text-xl font-medium text-zinc-900 dark:text-zinc-100">
+                {t.about.originRootsTitle}
+              </h3>
+              <p className="text-zinc-600 dark:text-zinc-400 text-sm sm:text-base leading-relaxed font-light">
+                {t.about.originRootsDesc}
               </p>
             </div>
           </div>
 
-          <div className="flex gap-8 items-start">
-            <div className="mt-2 text-[#00979D] shrink-0">
-              <Cpu size={32} />
+          <div className="flex gap-6 items-start">
+            <div className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-[#FFB000] shrink-0 mt-1">
+              <Cpu size={22} />
             </div>
-            <div>
-              <h4 className="text-2xl font-bold mb-2">Der Pivot zur Hardware</h4>
-              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                Der Weg zum IT-Systemelektroniker war für mich kein Zufall, sondern die Konsequenz 
-                meines Drangs nach Kontrolle. Mit 20 Jahren habe ich nun das Ziel vor Augen: 
-                Abschluss 2027. Bis dahin ist mein Lab mein Klassenzimmer.
+            <div className="space-y-1">
+              <h3 className="text-xl font-medium text-zinc-900 dark:text-zinc-100">
+                {t.about.originHardwareTitle}
+              </h3>
+              <p className="text-zinc-600 dark:text-zinc-400 text-sm sm:text-base leading-relaxed font-light">
+                {t.about.originHardwareDesc}
               </p>
             </div>
           </div>
+        </div>
 
-          {/* Quick Facts */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-12 border-t border-zinc-200 dark:border-zinc-800">
-            {[
-              { label: "Alter", val: "20 Jahre" },
-              { label: "Fokus", val: "System-Integration" },
-              { label: "Ziel", val: "Abschluss 2027" },
-              { label: "Mentalität", val: "Hard- & Software" }
-            ].map((fact, i) => (
-              <div key={i} className="space-y-1">
-                <div className="text-zinc-500 text-xs uppercase tracking-widest">{fact.label}</div>
-                <div className="text-xl font-bold text-zinc-900 dark:text-white">{fact.val}</div>
+        {/* Quick Facts Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-zinc-200 dark:border-zinc-800/80">
+          {t.about.quickFacts.map((fact, idx) => (
+            <div key={idx} className="p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/40 space-y-1">
+              <div className="text-zinc-400 dark:text-zinc-500 text-[10px] font-mono uppercase tracking-wider">
+                {fact.label}
               </div>
-            ))}
-          </div>
+              <div className="text-sm sm:text-base font-medium text-zinc-900 dark:text-white">
+                {fact.val}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* 5.5 LIFE BEYOND THE CONSOLE (TRAVELS & ENGAGEMENTS) */}
-      <section className="py-32 px-12 border-t border-zinc-200 dark:border-zinc-900">
-        <div className="max-w-4xl mx-auto space-y-12">
-          <div className="text-center md:text-left select-none">
-            <span className="text-[10px] font-mono tracking-[0.5em] text-zinc-500 dark:text-zinc-600 uppercase block mb-2">
-              // LIFE.BEYOND.THE.CONSOLE
-            </span>
-            <h3 className="text-3xl font-bold uppercase tracking-widest">
-              {language === 'de' ? '// Impressionen & Aktivitäten' : '// Travel & Activities'}
-            </h3>
-            <p className="text-zinc-500 dark:text-zinc-400 mt-2 text-sm leading-relaxed">
-              {language === 'de' 
-                ? 'Einblicke in Reisen, Ehrenamt und Ausgleich abseits der Tastatur.' 
-                : 'Insights into volunteer engagements, travel, and balance away from the keyboard.'}
-            </p>
-          </div>
+      {/* ─── 6. LIFE BEYOND CONSOLE (TRAVELS & ENGAGEMENTS) ─── */}
+      <section className="py-24 px-6 sm:px-12 md:px-24 max-w-6xl mx-auto border-b border-zinc-200 dark:border-zinc-800/80 space-y-12">
+        <div className="space-y-1 text-center md:text-left">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-zinc-950 dark:text-white">
+            {t.about.travelTitle}
+          </h2>
+          <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
+            {t.about.travelSubtitle}
+          </p>
+        </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              { src: imgFirefighter, label: { de: "Feuerwehr Ehrenamt", en: "Volunteer Firefighter" } },
-              { src: imgKorea, label: { de: "Reise nach Südkorea", en: "Travel in South Korea" } },
-              { src: imgChina, label: { de: "Reise nach China", en: "Travel in China" } },
-              { src: imgDenmark, label: { de: "Reise nach Dänemark", en: "Travel in Denmark" } },
-              { src: imgUzbekistan, label: { de: "Reise nach Usbekistan", en: "Travel in Uzbekistan" } },
-              { src: imgGym, label: { de: "Ausgleich im Gym", en: "Workout / Gym" } },
-              { src: imgMuseum, label: { de: "Museum & Geschichte", en: "Museum & History" } },
-              { src: imgSundown, label: { de: "Sonnenuntergang", en: "Sundown Moment" } }
-            ].map((pic, idx) => (
-              <div key={idx} className="group relative overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/40 p-2 transition-all duration-300 hover:border-[#00979D]/40 hover:shadow-md cursor-pointer">
-                <div className="overflow-hidden rounded-lg aspect-[4/3] relative">
-                  <img src={pic.src} alt={pic.label.de} className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500" />
-                </div>
-                <div className="mt-2 px-1 py-0.5">
-                  <span className="text-[9px] font-mono text-zinc-400 dark:text-zinc-600 uppercase block tracking-wider">// {idx + 1 === 1 ? 'VOLUNTEER' : idx + 1 <= 5 ? 'TRAVEL' : 'LIFE'}</span>
-                  <span className="text-[11px] font-medium text-zinc-800 dark:text-zinc-200 transition-colors group-hover:text-[#00979D]">
-                    {language === 'de' ? pic.label.de : pic.label.en}
-                  </span>
-                </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+          {[
+            { src: imgFirefighter, label: { de: "Feuerwehr Ehrenamt", en: "Volunteer Firefighter" } },
+            { src: imgKorea, label: { de: "Reise nach Südkorea", en: "Travel in South Korea" } },
+            { src: imgChina, label: { de: "Reise nach China", en: "Travel in China" } },
+            { src: imgDenmark, label: { de: "Reise nach Dänemark", en: "Travel in Denmark" } },
+            { src: imgUzbekistan, label: { de: "Reise nach Usbekistan", en: "Travel in Uzbekistan" } },
+            { src: imgGym, label: { de: "Ausgleich im Gym", en: "Workout / Gym" } },
+            { src: imgMuseum, label: { de: "Museum & Geschichte", en: "Museum & History" } },
+            { src: imgSundown, label: { de: "Sonnenuntergang", en: "Sundown Moment" } }
+          ].map((pic, idx) => (
+            <div 
+              key={idx} 
+              className="group relative overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#121212]/40 p-2 transition-all duration-300 hover:border-zinc-400 dark:hover:border-zinc-600 shadow-sm"
+            >
+              <div className="overflow-hidden rounded-lg aspect-[4/3] relative bg-zinc-100 dark:bg-zinc-900">
+                <img 
+                  src={pic.src} 
+                  alt={pic.label[language] || pic.label.de} 
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500" 
+                />
               </div>
-            ))}
-          </div>
+              <div className="mt-2.5 px-1 py-0.5">
+                <span className="text-[11px] font-mono text-zinc-700 dark:text-zinc-300 block truncate">
+                  {pic.label[language] || pic.label.de}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* 6. CALL TO ACTION */}
-      <section className="h-[30vh] flex flex-col items-center justify-center border-t border-zinc-200 dark:border-zinc-900">
-        <h3 className="text-2xl font-bold mb-6">Lass uns was bauen.</h3>
-        <button 
-          onClick={() => navigate('/contact')}
-          className="px-12 py-4 bg-[#00979D] text-white font-bold rounded-full hover:bg-white hover:text-black transition-all uppercase tracking-widest text-sm cursor-pointer"
-        >
-          Kontakt aufnehmen
-        </button>
+      {/* ─── 7. CALL TO ACTION ─── */}
+      <section className="py-24 px-6 text-center space-y-6">
+        <h2 className="text-3xl sm:text-4xl font-extralight tracking-tight text-zinc-950 dark:text-white">
+          {t.about.ctaTitle}
+        </h2>
+        <div>
+          <button 
+            onClick={() => navigate('/contact')}
+            className="px-10 py-3.5 bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 font-mono text-xs font-semibold rounded-full hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all uppercase tracking-widest cursor-pointer shadow-lg"
+          >
+            {t.about.ctaButton}
+          </button>
+        </div>
       </section>
 
-      <footer className="py-20 text-center border-t border-zinc-200 dark:border-zinc-900">
-         <button onClick={() => navigate('/contact')} className="text-zinc-500 hover:text-black dark:hover:text-white transition cursor-pointer">Nachricht hinterlassen?</button>
-      </footer>
     </main>
   );
 }

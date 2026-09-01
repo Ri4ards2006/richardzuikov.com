@@ -22,7 +22,7 @@ export default function Home() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [theme] = useTheme();
-  const [language] = useLanguage();
+  const { language, t } = useLanguage();
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -38,21 +38,21 @@ export default function Home() {
   const menuItems = [
     { 
       id: "01", 
-      title: language === 'de' ? "Projekte" : "Works", 
+      title: t.home.worksTitle, 
       link: "/lab", 
-      sub: language === 'de' ? "Hardware & Systeme" : "Hardware & Systems" 
+      sub: t.home.worksSub 
     },
     { 
       id: "02", 
-      title: language === 'de' ? "Werdegang" : "Profile", 
+      title: t.home.careerTitle, 
       link: "/career", 
-      sub: language === 'de' ? "Systemarchitekt" : "System Engineer" 
+      sub: t.home.careerSub 
     },
     { 
       id: "03", 
-      title: language === 'de' ? "Kontakt" : "Contact", 
+      title: t.home.contactTitle, 
       link: "/contact", 
-      sub: language === 'de' ? "Schreib mir" : "Get in touch" 
+      sub: t.home.contactSub 
     }
   ];
 
@@ -95,7 +95,7 @@ export default function Home() {
             Richard Zuikov
           </h1>
           <p className="mt-4 sm:mt-5 text-zinc-500 dark:text-zinc-400 font-mono text-[10px] sm:text-xs tracking-[0.25em] uppercase transition-colors duration-300">
-            {language === 'de' ? 'Low-Level Architekt' : 'Low-Level Architect'} <span className="text-zinc-300 dark:text-zinc-700 mx-2 sm:mx-3">·</span> Systems Engineer
+            {t.home.subtitle}
           </p>
         </motion.div>
  
@@ -147,11 +147,11 @@ export default function Home() {
         </div>
         <div className="flex items-center gap-4 text-[9px] sm:text-[10px]">
           <Link to="/impressum" className="hover:text-zinc-800 dark:hover:text-zinc-300 transition-colors">
-            {language === 'de' ? 'Impressum' : 'Legal'}
+            {t.nav.impressum}
           </Link>
           <span className="text-zinc-300 dark:text-zinc-800">·</span>
           <Link to="/datenschutz" className="hover:text-zinc-800 dark:hover:text-zinc-300 transition-colors">
-            {language === 'de' ? 'Datenschutz' : 'Privacy'}
+            {t.nav.datenschutz}
           </Link>
         </div>
       </footer>
