@@ -106,6 +106,15 @@ export default function MenuOverlay({ onClose }) {
             {language === 'de' 
               ? "Hallo Welt, ich bin Richard Zuikov. Ich arbeite als System- und Softwarearchitekt an der Schnittstelle zwischen Hardware und Low-Level-Software. Diese Webseite zeigt meine Projekte und meinen Werdegang." 
               : "Hello world, I'm Richard Zuikov. I work as a systems and low-level software architect at the boundary where hardware and software collide. This website showcases my projects and career."}
+            <div className="mt-2 flex gap-3 text-[9px] font-mono text-zinc-400 dark:text-zinc-500">
+              <Link 
+                to="/impressum" 
+                onClick={onClose}
+                className="hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors underline decoration-zinc-300 dark:decoration-zinc-800 underline-offset-2"
+              >
+                {language === 'de' ? 'Impressum & Datenschutz' : 'Legal & Privacy'}
+              </Link>
+            </div>
           </div>
 
           {/* Right Side: Social Icons */}

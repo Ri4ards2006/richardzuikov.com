@@ -105,8 +105,12 @@ export default function Contact() {
           <div>Available for technical co-op</div>
           <div>Engineering base: Flensburg, DE 🇩🇪</div>
         </div>
-        <div className="text-zinc-700">
-          ©2026 Richard Zuikov · All rights reserved
+        <div className="flex items-center gap-3 text-zinc-600 dark:text-zinc-500">
+          <span>©2026 Richard Zuikov</span>
+          <span>·</span>
+          <Link to="/impressum" className="hover:text-zinc-900 dark:hover:text-white transition-colors underline decoration-zinc-400 dark:decoration-zinc-700 underline-offset-2">
+            {language === 'de' ? 'Impressum & Datenschutz' : 'Legal & Privacy'}
+          </Link>
         </div>
       </footer>
 

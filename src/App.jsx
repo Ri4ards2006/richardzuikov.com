@@ -9,6 +9,7 @@ import Lab from './pages/Lab';
 import Dev from './pages/Dev';
 import Contact from './pages/Contact';
 import Portfolio from './pages/Portfolio'; // <-- HIER NEU HINZUGEFÜGT!
+import Impressum from './pages/Impressum';
 import IntroScreen from './components/IntroScreen';
 
 function App() {
@@ -42,6 +43,9 @@ function App() {
             <Route path="/dev" element={<Dev />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/portfolio" element={<Portfolio />} /> {/* <-- HIER DIE ROUTE ZUGEFÜGT! */}
+            <Route path="/impressum" element={<Impressum />} />
+            <Route path="/datenschutz" element={<Impressum />} />
+            <Route path="/legal" element={<Impressum />} />
           </Routes>
         </Layout>
       </Router>
