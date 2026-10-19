@@ -2,9 +2,15 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowLeft, ExternalLink, Github, Cpu, X, Box } from "lucide-react";
+import { ArrowLeft, ExternalLink, Cpu, X } from "lucide-react";
 import { useLanguage } from "../hooks/use-language";
 import { useOutsideClick } from "../hooks/use-outside-click";
+
+const GithubIcon = ({ className = "w-4 h-4" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+  </svg>
+);
 
 // Asset imports
 import bossImg from "../assets/Me_Picture.png";
@@ -57,7 +63,7 @@ export default function Lab() {
           className="group inline-flex items-center gap-2 font-mono text-xs tracking-widest text-zinc-500 hover:text-zinc-950 dark:hover:text-white transition-colors duration-300"
         >
           <ArrowLeft className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" />
-          <span>{t.nav.backHome.toUpperCase()}</span>
+          <span>{(t?.nav?.backHome || 'Back · Home').toUpperCase()}</span>
         </Link>
 
         <span className="font-mono text-[11px] text-zinc-400 dark:text-zinc-600 hidden sm:inline tracking-wider">
@@ -93,67 +99,65 @@ export default function Lab() {
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-extralight tracking-tight text-zinc-950 dark:text-white">
-            {t.lab.title}
+            {t?.lab?.title || 'Selected Works'}
           </h1>
           <p className="text-sm font-mono text-zinc-500 dark:text-zinc-400 max-w-2xl">
-            {t.lab.subtitle}
+            {t?.lab?.subtitle || 'Laboratory Engineering Directory'}
           </p>
         </header>
  
         {/* ─── EDITORIAL PROJECT SHOWCASE LIST ─── */}
         <div className="w-full border-t border-zinc-200 dark:border-zinc-800/80 divide-y divide-zinc-200 dark:divide-zinc-800/80">
-          {t.lab.projects.map((project) => {
-            const projectImg = projectImages[project.id] || bossImg;
-
-            return (
-              <div
-                key={project.id}
-                onMouseEnter={() => setHoveredCard(project)}
-                onMouseLeave={() => setHoveredCard(null)}
-                className="group py-8 sm:py-10 flex flex-col md:flex-row md:items-center justify-between gap-6 transition-all duration-300 cursor-pointer"
-                onClick={() => setActive(project)}
-              >
-                {/* Left: ID & Title & Summary */}
-                <div className="flex items-start sm:items-center gap-6 sm:gap-10 z-10">
-                  <span className="text-3xl sm:text-5xl font-mono font-extralight text-zinc-300 dark:text-zinc-700 group-hover:text-[#FFB000] transition-colors duration-300 tracking-tighter shrink-0">
-                    {project.id}
-                  </span>
-                  
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-3">
-                      <h2 className="text-xl sm:text-3xl font-light text-zinc-900 dark:text-zinc-100 group-hover:text-[#FFB000] transition-colors duration-300 tracking-tight">
-                        {project.title}
-                      </h2>
-                      {project.isLiveApp && (
-                        <span className="px-2 py-0.5 rounded border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 font-mono text-[9px] uppercase tracking-wider">
-                          3D APP
-                        </span>
-                      )}
-                    </div>
+          {(t?.lab?.projects || []).map((project) => {
+              return (
+                <div
+                  key={project?.id}
+                  onMouseEnter={() => setHoveredCard(project)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                  className="group py-8 sm:py-10 flex flex-col md:flex-row md:items-center justify-between gap-6 transition-all duration-300 cursor-pointer"
+                  onClick={() => setActive(project)}
+                >
+                  {/* Left: ID & Title & Summary */}
+                  <div className="flex items-start sm:items-center gap-6 sm:gap-10 z-10">
+                    <span className="text-3xl sm:text-5xl font-mono font-extralight text-zinc-300 dark:text-zinc-700 group-hover:text-[#FFB000] transition-colors duration-300 tracking-tighter shrink-0">
+                      {project?.id}
+                    </span>
                     
-                    <p className="text-xs sm:text-sm font-mono text-zinc-500 dark:text-zinc-400 max-w-xl">
-                      {project.desc}
-                    </p>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-3">
+                        <h2 className="text-xl sm:text-3xl font-light text-zinc-900 dark:text-zinc-100 group-hover:text-[#FFB000] transition-colors duration-300 tracking-tight">
+                          {project?.title}
+                        </h2>
+                        {project?.isLiveApp && (
+                          <span className="px-2 py-0.5 rounded border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 font-mono text-[9px] uppercase tracking-wider">
+                            3D APP
+                          </span>
+                        )}
+                      </div>
+                      
+                      <p className="text-xs sm:text-sm font-mono text-zinc-500 dark:text-zinc-400 max-w-xl">
+                        {project?.desc}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Right: Category tag & action indicator */}
+                  <div className="flex items-center gap-4 z-10 self-start md:self-auto font-mono text-xs text-zinc-500">
+                    <span className="px-3 py-1 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/60 text-[11px] text-zinc-600 dark:text-zinc-400 uppercase tracking-wider">
+                      {project?.tag}
+                    </span>
+                    <span className="text-[11px] text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors hidden sm:inline">
+                      INSPECT ↗
+                    </span>
                   </div>
                 </div>
-
-                {/* Right: Category tag & action indicator */}
-                <div className="flex items-center gap-4 z-10 self-start md:self-auto font-mono text-xs text-zinc-500">
-                  <span className="px-3 py-1 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/60 text-[11px] text-zinc-600 dark:text-zinc-400 uppercase tracking-wider">
-                    {project.tag}
-                  </span>
-                  <span className="text-[11px] text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors hidden sm:inline">
-                    INSPECT ↗
-                  </span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
 
         {/* Minimal Footer Info */}
         <footer className="pt-12 border-t border-zinc-200 dark:border-zinc-800/80 flex flex-col sm:flex-row justify-between items-center gap-4 font-mono text-[10px] text-zinc-500">
-          <span>{t.telemetry.overview.toUpperCase()} · FLENSBURG LAB NODE</span>
+          <span>{(t?.telemetry?.overview || 'OVERVIEW').toUpperCase()} · FLENSBURG LAB NODE</span>
           <span>© {new Date().getFullYear()} RICHARD ZUIKOV</span>
         </footer>
       </div>
@@ -163,109 +167,109 @@ export default function Lab() {
         {active && (
           <div 
             className="fixed inset-0 grid place-items-center z-[1000] p-4 sm:p-6 bg-black/70 backdrop-blur-md"
-            role="dialog"
-            aria-modal="true"
-          >
-            {/* Close Button */}
-            <button
-              className="fixed top-6 right-6 flex items-center justify-center bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-full h-12 w-12 hover:text-black hover:dark:text-white hover:border-zinc-400 dark:hover:border-zinc-600 transition z-[1010] cursor-pointer shadow-lg"
-              onClick={() => setActive(null)}
-              aria-label={t.nav.closeMenu}
+              role="dialog"
+              aria-modal="true"
             >
-              <X className="w-5 h-5" />
-            </button>
-            
-            {/* Modal Card */}
-            <motion.div
-              ref={ref}
-              initial={{ opacity: 0, scale: 0.96, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 10 }}
-              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full max-w-2xl max-h-[85vh] flex flex-col bg-white dark:bg-[#121212] border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-2xl z-10 transition-colors duration-300"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Preview Image Header */}
-              {projectImages[active.id] && (
-                <div className="relative aspect-[16/8] w-full overflow-hidden border-b border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-950">
-                  <img 
-                    src={projectImages[active.id]} 
-                    alt={active.title} 
-                    className="w-full h-full object-cover grayscale contrast-110"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="px-2.5 py-1 rounded-full border border-zinc-900/40 bg-zinc-950/80 backdrop-blur-md text-[10px] font-mono text-white tracking-wider uppercase">
-                      {active.tag}
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              {/* Modal Body */}
-              <div className="overflow-y-auto p-6 sm:p-8 space-y-6">
-                
-                <div className="space-y-1 border-b border-zinc-200 dark:border-zinc-800/80 pb-4">
-                  <span className="text-[10px] font-mono text-[#FFB000] uppercase tracking-wider block">
-                    // PROJECT_ID_{active.id}
-                  </span>
-                  <h2 className="text-2xl sm:text-3xl font-light text-zinc-950 dark:text-white tracking-tight">
-                    {active.title}
-                  </h2>
-                </div>
-
-                <div className="text-zinc-600 dark:text-zinc-300 text-sm sm:text-base leading-relaxed font-light space-y-3">
-                  <p>{active.fullText || active.desc}</p>
-                </div>
-
-                {/* Tech Tags */}
-                {active.tags && (
-                  <div className="space-y-2 pt-2 border-t border-zinc-200 dark:border-zinc-800/80">
-                    <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block">
-                      {t.telemetry.specs}
-                    </span>
-                    <div className="flex flex-wrap gap-2">
-                      {active.tags.map((tag, idx) => (
-                        <span 
-                          key={idx} 
-                          className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 font-mono text-xs px-2.5 py-1 rounded-md"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+              {/* Close Button */}
+              <button
+                className="fixed top-6 right-6 flex items-center justify-center bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-full h-12 w-12 hover:text-black hover:dark:text-white hover:border-zinc-400 dark:hover:border-zinc-600 transition z-[1010] cursor-pointer shadow-lg"
+                onClick={() => setActive(null)}
+                aria-label={t?.nav?.closeMenu || 'Close'}
+              >
+                <X className="w-5 h-5" />
+              </button>
+              
+              {/* Modal Card */}
+              <motion.div
+                ref={ref}
+                initial={{ opacity: 0, scale: 0.96, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.96, y: 10 }}
+                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full max-w-2xl max-h-[85vh] flex flex-col bg-white dark:bg-[#121212] border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-2xl z-10 transition-colors duration-300"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Preview Image Header */}
+                {projectImages[active?.id] && (
+                  <div className="relative aspect-[16/8] w-full overflow-hidden border-b border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-950">
+                    <img 
+                      src={projectImages[active.id]} 
+                      alt={active.title || 'Project Preview'} 
+                      className="w-full h-full object-cover grayscale contrast-110"
+                    />
+                    <div className="absolute top-4 left-4">
+                      <span className="px-2.5 py-1 rounded-full border border-zinc-900/40 bg-zinc-950/80 backdrop-blur-md text-[10px] font-mono text-white tracking-wider uppercase">
+                        {active.tag}
+                      </span>
                     </div>
                   </div>
                 )}
 
-                {/* Dual Action Buttons (Source Code + Live App) */}
-                <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800/80">
-                  {active.repo && (
-                    <a
-                      href={active.repo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 hover:text-black dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-600 text-xs font-mono transition-colors duration-200"
-                    >
-                      <Github className="w-4 h-4" />
-                      <span>{t.telemetry.sourceCode}</span>
-                    </a>
+                {/* Modal Body */}
+                <div className="overflow-y-auto p-6 sm:p-8 space-y-6">
+                  
+                  <div className="space-y-1 border-b border-zinc-200 dark:border-zinc-800/80 pb-4">
+                    <span className="text-[10px] font-mono text-[#FFB000] uppercase tracking-wider block">
+                      // PROJECT_ID_{active?.id}
+                    </span>
+                    <h2 className="text-2xl sm:text-3xl font-light text-zinc-950 dark:text-white tracking-tight">
+                      {active?.title}
+                    </h2>
+                  </div>
+
+                  <div className="text-zinc-600 dark:text-zinc-300 text-sm sm:text-base leading-relaxed font-light space-y-3">
+                    <p>{active?.fullText || active?.desc}</p>
+                  </div>
+
+                  {/* Tech Tags */}
+                  {(active?.tags || []).length > 0 && (
+                    <div className="space-y-2 pt-2 border-t border-zinc-200 dark:border-zinc-800/80">
+                      <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block">
+                        {t?.telemetry?.specs || 'Specifications'}
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                        {(active?.tags || []).map((tag, idx) => (
+                          <span 
+                            key={idx} 
+                            className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 font-mono text-xs px-2.5 py-1 rounded-md"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   )}
 
-                  {active.liveUrl && (
-                    <a
-                      href={active.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-zinc-950 dark:bg-zinc-100 text-white dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-white text-xs font-mono font-semibold transition-colors duration-200 shadow-md"
-                    >
-                      <span>{active.isLiveApp ? t.telemetry.sandbox : t.telemetry.liveDemo}</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  )}
+                  {/* Dual Action Buttons (Source Code + Live App) */}
+                  <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800/80">
+                    {active?.repo && (
+                      <a
+                        href={active.repo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 hover:text-black dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-600 text-xs font-mono transition-colors duration-200"
+                      >
+                        <GithubIcon className="w-4 h-4" />
+                        <span>{t?.telemetry?.sourceCode || 'Source Code'}</span>
+                      </a>
+                    )}
+
+                    {active?.liveUrl && (
+                      <a
+                        href={active.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-zinc-950 dark:bg-zinc-100 text-white dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-white text-xs font-mono font-semibold transition-colors duration-200 shadow-md"
+                      >
+                        <span>{active.isLiveApp ? (t?.telemetry?.sandbox || '3D Sandbox') : (t?.telemetry?.liveDemo || 'Live Demo')}</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                  </div>
+
                 </div>
-
-              </div>
-            </motion.div>
-          </div>
+              </motion.div>
+            </div>
         )}
       </AnimatePresence>
 
