@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, ChevronDown, Award, ShieldCheck, FileCode, ExternalLink, Cpu, Server, CircuitBoard, Layers } from 'lucide-react';
 import { useLanguage } from '../hooks/use-language';
 import CertificateModal from '../components/ui/CertificateModal';
-import ErrorBoundary from '../components/ui/ErrorBoundary';
 
 export default function Career() {
   const { t } = useLanguage();
@@ -77,9 +76,8 @@ export default function Career() {
         </section>
 
         {/* 2. EDITORIAL TECHNICAL STACK DOMAINS */}
-        <ErrorBoundary componentName="Technical Domains Grid" isInline={true}>
-          <section className="space-y-8">
-            <div className="space-y-1">
+        <section className="space-y-8">
+          <div className="space-y-1">
               <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-zinc-950 dark:text-white">
                 {t?.career?.techStackTitle || 'Technical Stack'}
               </h2>
@@ -122,11 +120,9 @@ export default function Career() {
               ))}
             </div>
           </section>
-        </ErrorBoundary>
 
         {/* 3. VERIFIED CREDENTIALS (WITH HIGH-END INSPECTOR MODAL) */}
-        <ErrorBoundary componentName="Verified Credentials" isInline={true}>
-          <section className="space-y-8">
+        <section className="space-y-8">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
               <div className="space-y-1">
                 <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-zinc-950 dark:text-white">
@@ -176,11 +172,9 @@ export default function Career() {
               ))}
             </div>
           </section>
-        </ErrorBoundary>
 
         {/* 4. CHRONOLOGY TIMELINE */}
-        <ErrorBoundary componentName="Career Chronology Timeline" isInline={true}>
-          <section className="space-y-8">
+        <section className="space-y-8">
             <div className="space-y-1">
               <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-zinc-950 dark:text-white">
                 {t?.career?.chronologyTitle || 'Timeline'}
@@ -248,18 +242,15 @@ export default function Career() {
               })}
             </div>
           </section>
-        </ErrorBoundary>
 
       </div>
 
       {/* High-Fidelity Credential Inspector Modal */}
-      <ErrorBoundary componentName="Certificate Modal View" isInline={false}>
-        <CertificateModal 
-          certificate={selectedCert}
-          isOpen={Boolean(selectedCert)}
-          onClose={() => setSelectedCert(null)}
-        />
-      </ErrorBoundary>
+      <CertificateModal 
+        certificate={selectedCert}
+        isOpen={Boolean(selectedCert)}
+        onClose={() => setSelectedCert(null)}
+      />
 
     </main>
   );
