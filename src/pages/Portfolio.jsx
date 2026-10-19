@@ -9,7 +9,7 @@ export default function Portfolio() {
   const { t } = useLanguage();
   const [expandedIndex, setExpandedIndex] = useState(null);
   
-  const row1Text = "RICHARD ZUIKOV SYSTEM ENGINEER LOW-LEVEL DEV ";
+  const row1Text = "RICHARD ZUIKOV EMBEDDED SYSTEMS & HARDWARE DEVELOPER LOW-LEVEL DEV ";
   const row2Text = "BARE METAL AVR ARCHITECTURE LINUX KERNEL ";
   const row3Text = "INFRASTRUCTURE NETWORK SECURITY TELEMETRY ";
 
@@ -69,7 +69,7 @@ export default function Portfolio() {
             </div>
             <div className="flex">
               <span className="w-24 shrink-0">Domain:</span>
-              <span className="text-zinc-700 dark:text-zinc-300">Systems Engineering & Low-Level Architecture</span>
+              <span className="text-zinc-700 dark:text-zinc-300">Embedded Systems & Hardware Development</span>
             </div>
             <div className="flex pt-3">
               <a 
@@ -101,7 +101,7 @@ export default function Portfolio() {
           </span>
 
           <div className="space-y-4 max-w-4xl">
-            {t.career.timeline.map((item, idx) => {
+            {(t?.career?.timeline || []).map((item, idx) => {
               const isExpanded = expandedIndex === idx;
               return (
                 <div 
@@ -112,9 +112,9 @@ export default function Portfolio() {
                   {/* Header */}
                   <div className="flex items-center justify-between p-6 sm:p-7 select-none">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 font-mono">
-                      <span className="text-sm sm:text-base text-zinc-950 dark:text-white font-medium w-28 shrink-0">{item.year}</span>
-                      <span className="text-[11px] text-zinc-500 uppercase tracking-wider">{item.type}</span>
-                      <span className="text-sm text-zinc-800 dark:text-zinc-200 font-sans">{item.title}</span>
+                      <span className="text-sm sm:text-base text-zinc-950 dark:text-white font-medium w-28 shrink-0">{item?.year}</span>
+                      <span className="text-[11px] text-zinc-500 uppercase tracking-wider">{item?.type}</span>
+                      <span className="text-sm text-zinc-800 dark:text-zinc-200 font-sans">{item?.title}</span>
                     </div>
                     <ChevronDown className={`w-4 h-4 text-zinc-400 transition-transform duration-300 ${isExpanded ? 'rotate-180 text-zinc-950 dark:text-white' : ''}`} />
                   </div>
@@ -130,10 +130,10 @@ export default function Portfolio() {
                       >
                         <div className="px-6 pb-6 sm:px-7 sm:pb-7 pt-2 space-y-4 border-t border-zinc-200/60 dark:border-zinc-800/60">
                           <p className="text-zinc-600 dark:text-zinc-400 font-light text-sm leading-relaxed">
-                            {item.desc}
+                            {item?.desc}
                           </p>
                           <div className="flex flex-wrap gap-2 pt-1">
-                            {item.tags.map((tag, tagIdx) => (
+                            {(item?.tags || []).map((tag, tagIdx) => (
                               <span key={tagIdx} className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 font-mono text-[11px] text-zinc-600 dark:text-zinc-400 px-2.5 py-1 rounded">
                                 {tag}
                               </span>

@@ -23,7 +23,7 @@ export const translations = {
     },
     telemetry: {
       location: "Flensburg, Deutschland",
-      experience: "5+ Jahre Erfahrung",
+      experience: "Low-Level IT & Network Specialist",
       status: "Verfügbar für Projekte",
       coop: "Verfügbar für technische Kooperationen",
       engineeringBase: "Engineering Base: Flensburg, DE 🇩🇪",
@@ -45,11 +45,11 @@ export const translations = {
     },
     home: {
       title: "Richard Zuikov",
-      subtitle: "Low-Level Architekt · Systems Engineer",
+      subtitle: "Low-Level Architekt · Embedded Systems & Hardware Developer",
       worksTitle: "Projekte",
       worksSub: "Hardware & Systeme",
       careerTitle: "Werdegang",
-      careerSub: "Systemarchitekt",
+      careerSub: "Embedded Systems & Hardware Developer",
       contactTitle: "Kontakt",
       contactSub: "Schreib mir"
     },
@@ -100,7 +100,7 @@ export const translations = {
       ctaSub: "Nachricht hinterlassen?"
     },
     career: {
-      role: "System Engineer & Architekt",
+      role: "Embedded Systems & Hardware Developer",
       summary: "Spezialisiert auf die Schnittstelle zwischen Hardware und Low-Level-Software. Konzeption robuster IT- & Elektronik-Systeme von der Register-Ebene über automatisiertes Linux-Deployment bis zur industriellen Netzwerkinfrastruktur.",
       techStackTitle: "Technologischer Stack & Domänen",
       credentialsTitle: "Zertifikate & Qualifikationen",
@@ -115,7 +115,7 @@ export const translations = {
         infra: {
           name: "Systeme & Infrastruktur",
           desc: "Enterprise-Netzwerke, Virtualisierung und Container-Orchestrierung.",
-          items: ["Linux (RHEL / Debian / Alpine)", "Docker & Container Swarm", "Proxmox VE Virtualisierung", "Cisco CCNA Netzwerktechnik", "Cloudflare Tunnels & WireGuard"]
+          items: ["Linux (RHEL / Debian / Alpine)", "Docker & Container Swarm", "Kubernetes (k8s) / CKA", "Proxmox VE Virtualisierung", "Cisco CCNA Netzwerktechnik", "Cloudflare Tunnels & WireGuard"]
         },
         hardware: {
           name: "Hardware & Elektronik",
@@ -160,20 +160,36 @@ export const translations = {
           date: "Apr. 2026",
           verifyUrl: "https://www.credly.com",
           skills: ["Enterprise Systems Design", "High Availability Clusters", "Disaster Recovery", "Hybrid Infrastructure"]
+        },
+        {
+          id: "CSCO-CCNA",
+          title: "Cisco Certified Network Associate (CCNA)",
+          issuer: "Cisco",
+          date: "Mai 2026",
+          verifyUrl: "https://www.credly.com",
+          skills: ["Routing & Switching", "IP Services & Security", "Network Fundamentals", "VLAN & Subnetting", "Automation & Programmability"]
+        },
+        {
+          id: "LF-CKA",
+          title: "Certified Kubernetes Administrator (CKA)",
+          issuer: "Cloud Native Computing Foundation (CNCF) & Linux Foundation",
+          date: "Mai 2026",
+          verifyUrl: "https://www.credly.com",
+          skills: ["Cluster Architecture & Installation", "Workloads & Scheduling", "Services & Networking", "Cluster Maintenance & Troubleshooting", "K8s Storage"]
         }
       ],
       timeline: [
         {
           year: "2025–2027",
           type: "Aktuell · Duale Entwicklung",
-          title: "IT-Systemelektroniker — R2P GmbH",
+          title: "IT-Systemelektroniker | R2P GmbH",
           desc: "Verkürzter Ausbildungsgang aufgrund hoher Vorkenntnisse. Montage, Inbetriebnahme und Wartung von video- und netzwerkbasierten Sicherheitssystemen. Technische Fehlersuche auf Hardware- und Systemebene. Nebenher IT-Support (Helpdesk, Tickets, Enterprise-Netzwerke).",
           tags: ["Enterprise Network", "Hardware Diagnostics", "CCNA Systems", "Flensburg"]
         },
         {
           year: "2024–2025",
           type: "Infrastruktur-Fokus",
-          title: "Fachinformatiker Systemintegration — R2P GmbH",
+          title: "Fachinformatiker Systemintegration | R2P GmbH",
           desc: "Aufbau, Reparatur und Provisionierung von IT-Arbeitsplätzen. Linux-basierte Systemarbeit: Entwicklung von Bash-Workflows, automatisierten Deployment-Prozessen und maßgeschneiderten, bootfähigen USB-Images.",
           tags: ["Linux", "Bash Scripting", "Automated Deployment"]
         },
@@ -194,21 +210,21 @@ export const translations = {
         {
           year: "2022–2025",
           type: "Akademisches Fundament",
-          title: "Informationstechnischer Assistent — RBZ-Eckener",
+          title: "Informationstechnischer Assistent | RBZ-Eckener",
           desc: "3-jährige vollschulische Ausbildung gekoppelt mit der Fachhochschulreife. Fundierte Ausbildung in Netzwerktechnik, Elektrotechnik, Digitaltechnik und Kommunikationstechnik. Angewandte Programmierung in Kotlin, Java, Jetpack Compose und Docker.",
           tags: ["Network Tech", "Digital & E-Tech", "Docker", "Java / Kotlin"]
         },
         {
           year: "2023",
           type: "Industrie-Praktikum",
-          title: "Elektroniker für Betriebstechnik — M. Jürgensen",
+          title: "Elektroniker für Betriebstechnik | M. Jürgensen",
           desc: "Löten und messtechnische Reparatur komplexer elektronischer Baugruppen und Industriemaschinen. Fehleranalyse in Heizöfen und erste praktische Berührungspunkte mit speicherprogrammierbaren Steuerungen (SPS).",
           tags: ["Löten / Reparatur", "SPS Basics", "Industrial Electronics"]
         },
         {
           year: "2021",
           type: "Anlagen-Praktikum",
-          title: "Elektroniker für Gebäudetechnik — ETS GmbH",
+          title: "Elektroniker für Gebäudetechnik | ETS GmbH",
           desc: "Planung, Strukturierung und physische Montage von industriellen Schaltanlagen. Erste praxisnahe Berührungen mit Steuerungstechnik und ESMR-Infrastrukturen.",
           tags: ["Schaltanlagen", "SPS", "ESMR-Technik"]
         }
@@ -321,7 +337,7 @@ export const translations = {
     },
     telemetry: {
       location: "Flensburg, Germany",
-      experience: "5+ Years Experience",
+      experience: "Low-Level IT & Network Specialist",
       status: "Available for Projects",
       coop: "Available for technical co-op",
       engineeringBase: "Engineering Base: Flensburg, DE 🇩🇪",
@@ -343,11 +359,11 @@ export const translations = {
     },
     home: {
       title: "Richard Zuikov",
-      subtitle: "Low-Level Architect · Systems Engineer",
+      subtitle: "Low-Level Architect · Embedded Systems & Hardware Developer",
       worksTitle: "Works",
       worksSub: "Hardware & Systems",
       careerTitle: "Profile",
-      careerSub: "System Engineer",
+      careerSub: "Embedded Systems & Hardware Developer",
       contactTitle: "Contact",
       contactSub: "Get in touch"
     },
@@ -398,7 +414,7 @@ export const translations = {
       ctaSub: "Leave a message?"
     },
     career: {
-      role: "System Engineer & Architect",
+      role: "Embedded Systems & Hardware Developer",
       summary: "Specialized at the intersection of hardware and low-level software. Engineering resilient IT & electrical systems from bare-metal register interaction to automated Linux deployment and industrial network commissioning.",
       techStackTitle: "Technology Stack & Domains",
       credentialsTitle: "Certifications & Credentials",
@@ -413,7 +429,7 @@ export const translations = {
         infra: {
           name: "Systems & Infrastructure",
           desc: "Enterprise networks, virtualization, and container clustering.",
-          items: ["Linux (RHEL / Debian / Alpine)", "Docker & Container Swarm", "Proxmox VE Virtualization", "Cisco CCNA Networking", "Cloudflare Tunnels & WireGuard"]
+          items: ["Linux (RHEL / Debian / Alpine)", "Docker & Container Swarm", "Kubernetes (k8s) / CKA", "Proxmox VE Virtualization", "Cisco CCNA Networking", "Cloudflare Tunnels & WireGuard"]
         },
         hardware: {
           name: "Hardware & Electronics",
@@ -458,20 +474,36 @@ export const translations = {
           date: "Apr. 2026",
           verifyUrl: "https://www.credly.com",
           skills: ["Enterprise Systems Design", "High Availability Clusters", "Disaster Recovery", "Hybrid Infrastructure"]
+        },
+        {
+          id: "CSCO-CCNA",
+          title: "Cisco Certified Network Associate (CCNA)",
+          issuer: "Cisco",
+          date: "May 2026",
+          verifyUrl: "https://www.credly.com",
+          skills: ["Routing & Switching", "Network Security", "IP Services", "VLAN & Subnetting", "Automation & Programmability"]
+        },
+        {
+          id: "LF-CKA",
+          title: "Certified Kubernetes Administrator (CKA)",
+          issuer: "Cloud Native Computing Foundation (CNCF) & Linux Foundation",
+          date: "May 2026",
+          verifyUrl: "https://www.credly.com",
+          skills: ["Cluster Architecture & Installation", "Workloads & Scheduling", "Services & Networking", "Cluster Maintenance & Troubleshooting", "K8s Storage"]
         }
       ],
       timeline: [
         {
           year: "2025–2027",
           type: "Current · Dual Career",
-          title: "IT Systems Electronics Technician — R2P GmbH",
+          title: "IT Systems Electronics Technician | R2P GmbH",
           desc: "Accelerated apprenticeship due to advanced pre-qualifications. Installation, commissioning, and maintenance of video and network-based security systems. Hardware-level diagnostic troubleshooting and enterprise IT support.",
           tags: ["Enterprise Network", "Hardware Diagnostics", "CCNA Systems", "Flensburg"]
         },
         {
           year: "2024–2025",
           type: "Infrastructure Focus",
-          title: "IT Specialist in System Integration — R2P GmbH",
+          title: "IT Specialist in System Integration | R2P GmbH",
           desc: "Setup, repair, and provisioning of IT workstations. Linux-based system engineering: Bash automated workflows, deployment pipelines, and customized bootable USB deployment images.",
           tags: ["Linux", "Bash Scripting", "Automated Deployment"]
         },
@@ -492,21 +524,21 @@ export const translations = {
         {
           year: "2022–2025",
           type: "Academic Foundation",
-          title: "Information Technology Assistant — RBZ-Eckener",
+          title: "Information Technology Assistant | RBZ-Eckener",
           desc: "3-year vocational state diploma coupled with university entrance qualification. Grounded education in network tech, digital electronics, and communications. Programming in Kotlin, Java, and Docker.",
           tags: ["Network Tech", "Digital & E-Tech", "Docker", "Java / Kotlin"]
         },
         {
           year: "2023",
           type: "Industrial Internship",
-          title: "Industrial Electronics Technician — M. Jürgensen",
+          title: "Industrial Electronics Technician | M. Jürgensen",
           desc: "Soldering and precision electronic repairs of machine components. Thermal kiln diagnostic project and practical introduction to Programmable Logic Controllers (PLC/SPS).",
           tags: ["Soldering / Repair", "PLC Basics", "Industrial Electronics"]
         },
         {
           year: "2021",
           type: "Systems Internship",
-          title: "Facility Systems Technician — ETS GmbH",
+          title: "Facility Systems Technician | ETS GmbH",
           desc: "Planning, layout, and physical wiring of industrial control cabinets. First practical exposure to control technology and industrial measurement loops.",
           tags: ["Control Cabinets", "PLC", "Instrumentation"]
         }
@@ -598,4 +630,113 @@ export const translations = {
     }
   }
 };
+
+/**
+ * Safely resolves a dot-notation key from the translations dictionary.
+ * Falls back deterministically to English, and finally to the key's last segment.
+ *
+ * @param {string} lang - 'de' | 'en'
+ * @param {string} keyPath - e.g. 'home.worksTitle'
+ * @param {string} [fallback] - optional custom fallback value
+ * @returns {any}
+ */
+export function translate(lang, keyPath, fallback) {
+  if (!keyPath || typeof keyPath !== 'string') return fallback || '';
+
+  const activeLang = lang === 'en' ? 'en' : 'de';
+  const primaryDict = translations[activeLang] || translations.de;
+  const fallbackDict = translations.en || translations.de;
+
+  const resolvePath = (obj, path) => {
+    return path.split('.').reduce((acc, part) => (acc && acc[part] !== undefined ? acc[part] : undefined), obj);
+  };
+
+  const primaryValue = resolvePath(primaryDict, keyPath);
+  if (primaryValue !== undefined && primaryValue !== null) {
+    return primaryValue;
+  }
+
+  const fallbackValue = resolvePath(fallbackDict, keyPath);
+  if (fallbackValue !== undefined && fallbackValue !== null) {
+    return fallbackValue;
+  }
+
+  if (fallback !== undefined) {
+    return fallback;
+  }
+
+  const segments = keyPath.split('.');
+  return segments[segments.length - 1] || keyPath;
+}
+
+/**
+ * Creates a defensive translator instance that supports both:
+ * 1. Callable function syntax: t('career.role')
+ * 2. Nested property access: t.career.role
+ * 
+ * Missing keys safely fall back to English, then to the key name.
+ * Prevents React child crash and undefined property errors.
+ *
+ * @param {string} lang - 'de' | 'en'
+ * @returns {Function & Record<string, any>}
+ */
+export function createTranslator(lang) {
+  const activeLang = lang === 'en' ? 'en' : 'de';
+  const primaryDict = translations[activeLang] || translations.de;
+  const fallbackDict = translations.en || translations.de;
+
+  const translateFn = function (keyPath, fallback) {
+    return translate(activeLang, keyPath, fallback);
+  };
+
+  function createSafeProxy(target, primary, fallback, path = []) {
+    return new Proxy(target, {
+      get(obj, prop) {
+        if (typeof prop === 'symbol') return obj[prop];
+        if (prop === 'then') return undefined;
+
+        const primaryVal = primary && prop in primary ? primary[prop] : undefined;
+        const fallbackVal = fallback && prop in fallback ? fallback[prop] : undefined;
+        const val = primaryVal !== undefined ? primaryVal : fallbackVal;
+
+        if (val !== undefined && val !== null) {
+          if (typeof val === 'object' && !Array.isArray(val)) {
+            const nextFallback = (fallback && fallback[prop]) || {};
+            return createSafeProxy(val, val, nextFallback, [...path, prop]);
+          }
+          return val;
+        }
+
+        const keyName = String(prop);
+        if (path.length >= 1) {
+          return keyName;
+        }
+        return createSafeProxy({}, {}, {}, [...path, prop]);
+      },
+      ownKeys(obj) {
+        const keys = new Set([
+          ...Object.keys(primary || {}),
+          ...Object.keys(fallback || {})
+        ]);
+        return Array.from(keys);
+      },
+      getOwnPropertyDescriptor(obj, prop) {
+        return {
+          enumerable: true,
+          configurable: true,
+          writable: false,
+          value: this.get(obj, prop)
+        };
+      },
+      apply(targetFn, thisArg, argList) {
+        return translateFn(...argList);
+      }
+    });
+  }
+
+  return createSafeProxy(translateFn, primaryDict, fallbackDict);
+}
+
+export default translations;
+
 
