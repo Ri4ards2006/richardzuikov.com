@@ -43,6 +43,25 @@ export const translations = {
       specs: "Technische Spezifikationen",
       overview: "Übersicht"
     },
+    landing: {
+      "sectionNav": "Sektionen",
+      "nav": {
+        "about": "Über mich",
+        "direction": "Richtung",
+        "work": "Projekte",
+        "stack": "Stack",
+        "career": "Werdegang",
+        "contact": "Kontakt"
+      },
+      "viewWork": "Projekte ansehen",
+      "downloadCv": "Lebenslauf herunterladen",
+      "aboutPhotoAlt": "Lötstation und Messplatz an der Werkbank",
+      "todoStudies": "TODO: Studienpläne ergänzen (Studiengang, Hochschule, Zeitraum).",
+      "todoNextGoals": "TODO: Ziele nach dem Abschluss 2027 ergänzen.",
+      "allProjects": "Alle Projekte",
+      "copyEmail": "E-Mail kopieren",
+      "checkpoint": "CHECKPOINT ERREICHT"
+    },
     home: {
       title: "Richard Zuikov",
       subtitle: "Low-Level Architekt · Embedded Systems & Hardware Developer",
@@ -356,6 +375,25 @@ export const translations = {
       domain: "Domain",
       specs: "Technical Specifications",
       overview: "Overview"
+    },
+    landing: {
+      "sectionNav": "Sections",
+      "nav": {
+        "about": "About",
+        "direction": "Direction",
+        "work": "Work",
+        "stack": "Stack",
+        "career": "Career",
+        "contact": "Contact"
+      },
+      "viewWork": "View work",
+      "downloadCv": "Download CV",
+      "aboutPhotoAlt": "Soldering station and measurement gear on the workbench",
+      "todoStudies": "TODO: add study plans (programme, university, timeframe).",
+      "todoNextGoals": "TODO: add goals after graduating in 2027.",
+      "allProjects": "All projects",
+      "copyEmail": "Copy email",
+      "checkpoint": "CHECKPOINT REACHED"
     },
     home: {
       title: "Richard Zuikov",
