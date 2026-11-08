@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useId, useRef, useState } from "react";
+import { useDocumentTitle } from '../hooks/use-document-title';
 import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowLeft, ExternalLink, Cpu, X } from "lucide-react";
@@ -22,6 +23,7 @@ import homeLabImg from "../assets/Home_Lab.jpeg";
 import workbenchImg from "../assets/Home_Soldering_Station.jpeg";
 
 export default function Lab() {
+  useDocumentTitle("Lab — Richard Zuikov");
   const { t } = useLanguage();
   const [active, setActive] = useState(null);
   const [hoveredCard, setHoveredCard] = useState(null);

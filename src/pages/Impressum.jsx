@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { useDocumentTitle } from '../hooks/use-document-title';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Shield, Scale, Mail, MapPin, Copy, Check } from 'lucide-react';
@@ -68,6 +69,7 @@ function ProtectedAddress() {
 }
 
 export default function Impressum() {
+  useDocumentTitle("Impressum & Datenschutz — Richard Zuikov");
   const { language } = useLanguage();
   const [activeTab, setActiveTab] = useState('all'); // 'all' | 'impressum' | 'privacy'
 
