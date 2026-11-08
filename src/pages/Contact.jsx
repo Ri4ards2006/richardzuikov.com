@@ -1,10 +1,12 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { useDocumentTitle } from '../hooks/use-document-title';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Mail, Copy, Check } from 'lucide-react';
 import { useLanguage } from '../hooks/use-language';
 
 export default function Contact() {
+  useDocumentTitle("Contact — Richard Zuikov");
   const { t, language } = useLanguage();
   const [copied, setCopied] = useState(false);
   const [emailString, setEmailString] = useState('');

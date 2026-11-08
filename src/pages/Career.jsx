@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react';
+import { useDocumentTitle } from '../hooks/use-document-title';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ChevronDown, Award, ShieldCheck, FileCode, ExternalLink, Cpu, Server, CircuitBoard, Layers } from 'lucide-react';
@@ -7,6 +8,7 @@ import { useLanguage } from '../hooks/use-language';
 import CertificateModal from '../components/ui/CertificateModal';
 
 export default function Career() {
+  useDocumentTitle("Career — Richard Zuikov");
   const { t } = useLanguage();
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [selectedCert, setSelectedCert] = useState(null);
