@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -9,29 +8,10 @@ import Lab from './pages/Lab';
 import Contact from './pages/Contact';
 import Impressum from './pages/Impressum';
 import NotFound from './pages/NotFound';
-import IntroScreen from './components/IntroScreen';
 
 function App() {
-  const [showIntro, setShowIntro] = useState(false);
-
-  useEffect(() => {
-    // Check if the user has already seen the intro in this browser session
-    const seen = sessionStorage.getItem('seen-intro');
-    if (!seen) {
-      setShowIntro(true);
-    }
-  }, []);
-
-  const handleIntroComplete = () => {
-    setShowIntro(false);
-    sessionStorage.setItem('seen-intro', 'true');
-  };
-
   return (
     <>
-      <AnimatePresence mode="wait">
-        {showIntro && <IntroScreen onComplete={handleIntroComplete} />}
-      </AnimatePresence>
       <Router>
         <Layout>
           <Routes>
