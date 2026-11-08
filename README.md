@@ -1,46 +1,56 @@
-# Richard Zuikov Portfolio (v2.026)
+# richardzuikov.com
 
-Das persönliche System- und Softwarearchitektur-Portfolio von Richard Zuikov.
+Personal portfolio website of Richard Zuikov. A single-page app, German/English, light/dark theme.
 
-## 🚀 Recent Patches & Tweaks (rettung branch)
+## Pages
 
-Hier sind die wichtigsten Änderungen, Optimierungen und neuen Features, die in diesem Patch eingepflegt wurden:
+| Route | Content |
+|---|---|
+| `/` | Home |
+| `/about` | About |
+| `/career` | Career timeline and credentials |
+| `/lab` | Projects |
+| `/contact` | Contact |
+| `/impressum` | Legal notice / privacy (also served at `/datenschutz` and `/legal`) |
 
-### 1. Pure White Theme Inversion ☀️
-* **Code-Editor-Style**: Der Hintergrund im Light-Mode wurde von Beige/Sand auf ein klares, reines Weiß (`#ffffff` / `bg-white`) umgestellt.
-* **Farb-Invertierung**: Sämtliche Texte, Icons, Borders und Tabellen wurden kontraststark invertiert (dunkle Schrift auf weißem Grund), damit das Portfolio in beiden Modi optimal lesbar ist.
-* **Layout-Bereinigungen**: Ungültige CSS-Hilfsklassen (wie `bg-zinc-55`, `text-zinc-650` etc.) wurden durch standardkonforme Tailwind-Klassen ersetzt, wodurch der Build sauber durchläuft.
+`/works`, `/portfolio` and `/dev` redirect to `/lab`.
 
-### 2. Header & Menu Overlay Rework 🧭
-* **Zentralisierte Controls**: Die Buttons für Sprachwechsel (`[DE] / [EN]`), Theme-Toggle und Schließen wurden oben rechts im Menü-Overlay in einer einheitlichen Reihe runder Icons zusammengefasst.
-* **Vertical MENU Label**: Auf der linken Seite befindet sich nun der markante, um 90 Grad gedrehte „MENU“-Schriftzug mit der Basis nach links.
-* **Clean Layout**: Die biografische Kurzbeschreibung wurde im unteren Footer-Bereich des Menüs platziert, Trennlinien wurden entfernt und Abstände stabilisiert.
+## Stack
 
-### 3. Dynamic 3D Marquee on Home 🖼️
-* Das schwebende 3D-Bilderraster im Hintergrund der Startseite lädt nun einen dynamischen Mix aus deinen echten Fotos (Feuerwehr, Reisen, Sport) statt einer einzigen, sich wiederholenden Grafik.
+From `package.json`:
 
-### 4. About-Page Erweiterung: Travels & Activities 🗺️
-* **Life Beyond the Console**: Auf der Sektion „Über mich“ wurde eine neue Galerie-Sektion für deine privaten Aktivitäten integriert.
-* **Aesthetic Grid**: Ein polaroidartiges Raster zeigt Impressionen deiner Auslandsreisen (Südkorea, China, Dänemark, Usbekistan), deines Feuerwehr-Ehrenamts und deines Ausgleichs im Gym.
-* **Micro-Animations**: Die Bilder blenden sich beim Hovern fließend von Schwarz-Weiß in Farbe ein und vergrößern sich dezent.
+- React 18, React Router 6
+- Vite 5 (`@vitejs/plugin-react`)
+- Tailwind CSS 3 + Sass (`src/css/style.scss`)
+- framer-motion (animations), lucide-react and @tabler/icons-react (icons)
+- clsx + tailwind-merge (`cn()` in `src/lib/utils.js`)
 
----
+## Development
 
-## 🛠️ Tech-Stack
-* **Frontend**: React + Vite
-* **Styling**: Tailwind CSS & SCSS
-* **Animationen**: Framer Motion
-* **Routing**: React Router DOM
-
-## 📦 Lokale Entwicklung & Build
-
-**Dev-Server starten:**
-```bash
-npm run dev
+```sh
+npm i
+npm run dev      # http://localhost:5173
 ```
 
-**Produktions-Build generieren:**
-```bash
-npm run build
+Other scripts: `npm run build` (output in `dist/`), `npm run preview`.
+
+## Deployment
+
+Deployed on Vercel from this repository. Vercel runs `npm run build` and serves `dist/`.
+`.npmrc` sets `legacy-peer-deps=true`, which the Vercel install relies on.
+
+## Structure
+
 ```
-*(Generiert die optimierten Assets im `dist/`-Verzeichnis)*
+public/            static files (CV PDF)
+src/
+  main.jsx         entry point
+  App.jsx          router and routes
+  pages/           one file per route
+  components/      layout, header, menu, footer, intro screen, terminal
+  components/ui/   carousel, certificate modal
+  hooks/           language, theme, outside-click
+  lib/             translations (DE/EN), cn() helper
+  css/             global styles
+  assets/          images
+```
