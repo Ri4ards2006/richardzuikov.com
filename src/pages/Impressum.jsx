@@ -191,7 +191,7 @@ export default function Impressum() {
   const content = t[language] || t.de;
 
   return (
-    <main className="relative min-h-screen bg-white text-zinc-900 dark:bg-[#09090b] dark:text-[#f4f4f5] selection:bg-[#FFB000]/30 font-sans antialiased transition-colors duration-300">
+    <div className="relative min-h-screen bg-white text-zinc-900 dark:bg-[#09090b] dark:text-[#f4f4f5] selection:bg-[#FFB000]/30 font-sans antialiased transition-colors duration-300">
       
       {/* ─── TOP NAVIGATION ─── */}
       <div className="pt-12 px-6 sm:px-12 md:px-24 max-w-5xl mx-auto flex items-center justify-between">
@@ -369,24 +369,10 @@ export default function Impressum() {
         )}
 
         {/* ─── MINIMAL PAGE FOOTER ─── */}
-        <footer className="pt-12 border-t border-zinc-200 dark:border-zinc-800/80 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] font-mono text-zinc-500">
-          <div>
-            © {new Date().getFullYear()} RICHARD ZUIKOV · FLENSBURG, GERMANY
-          </div>
-          <div className="flex gap-4 items-center">
-            <Link to="/contact" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
-              {language === 'de' ? 'KONTAKT' : 'CONTACT'}
-            </Link>
-            <span>·</span>
-            <a href="https://github.com/Ri4ards2006" target="_blank" rel="noreferrer" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
-              GITHUB
-            </a>
-          </div>
-        </footer>
 
       </div>
 
-    </main>
+    </div>
   );
 }
 

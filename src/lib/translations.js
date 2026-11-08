@@ -43,6 +43,25 @@ export const translations = {
       specs: "Technische Spezifikationen",
       overview: "Übersicht"
     },
+    landing: {
+      "sectionNav": "Sektionen",
+      "nav": {
+        "about": "Über mich",
+        "direction": "Richtung",
+        "work": "Projekte",
+        "stack": "Stack",
+        "career": "Werdegang",
+        "contact": "Kontakt"
+      },
+      "viewWork": "Projekte ansehen",
+      "downloadCv": "Lebenslauf herunterladen",
+      "aboutPhotoAlt": "Lötstation und Messplatz an der Werkbank",
+      "todoStudies": "TODO: Studienpläne ergänzen (Studiengang, Hochschule, Zeitraum).",
+      "todoNextGoals": "TODO: Ziele nach dem Abschluss 2027 ergänzen.",
+      "allProjects": "Alle Projekte",
+      "copyEmail": "E-Mail kopieren",
+      "checkpoint": "CHECKPOINT ERREICHT"
+    },
     home: {
       title: "Richard Zuikov",
       subtitle: "Low-Level Architekt · Embedded Systems & Hardware Developer",
@@ -134,7 +153,7 @@ export const translations = {
           title: "AZ-900: Microsoft Azure Fundamentals",
           issuer: "Microsoft",
           date: "Mai 2026",
-          verifyUrl: "https://learn.microsoft.com/en-us/users/richardzuikov/credentials",
+          verifyUrl: null,
           skills: ["Cloud Architecture", "Azure Security & Identity", "Network Virtualization", "SLA Governance"]
         },
         {
@@ -142,7 +161,7 @@ export const translations = {
           title: "Linux & Private Cloud Admin on IBM Power Systems",
           issuer: "Red Hat & IBM",
           date: "Mai 2026",
-          verifyUrl: "https://www.credly.com",
+          verifyUrl: null,
           skills: ["RHEL Administration", "IBM PowerVM Virtualization", "Storage Area Networks", "Kernel Tuning"]
         },
         {
@@ -158,7 +177,7 @@ export const translations = {
           title: "IBM Systems and Solutions Architect",
           issuer: "IBM",
           date: "Apr. 2026",
-          verifyUrl: "https://www.credly.com",
+          verifyUrl: null,
           skills: ["Enterprise Systems Design", "High Availability Clusters", "Disaster Recovery", "Hybrid Infrastructure"]
         },
         {
@@ -166,7 +185,7 @@ export const translations = {
           title: "Cisco Certified Network Associate (CCNA)",
           issuer: "Cisco",
           date: "Mai 2026",
-          verifyUrl: "https://www.credly.com",
+          verifyUrl: null,
           skills: ["Routing & Switching", "IP Services & Security", "Network Fundamentals", "VLAN & Subnetting", "Automation & Programmability"]
         },
         {
@@ -174,7 +193,7 @@ export const translations = {
           title: "Certified Kubernetes Administrator (CKA)",
           issuer: "Cloud Native Computing Foundation (CNCF) & Linux Foundation",
           date: "Mai 2026",
-          verifyUrl: "https://www.credly.com",
+          verifyUrl: null,
           skills: ["Cluster Architecture & Installation", "Workloads & Scheduling", "Services & Networking", "Cluster Maintenance & Troubleshooting", "K8s Storage"]
         }
       ],
@@ -357,6 +376,25 @@ export const translations = {
       specs: "Technical Specifications",
       overview: "Overview"
     },
+    landing: {
+      "sectionNav": "Sections",
+      "nav": {
+        "about": "About",
+        "direction": "Direction",
+        "work": "Work",
+        "stack": "Stack",
+        "career": "Career",
+        "contact": "Contact"
+      },
+      "viewWork": "View work",
+      "downloadCv": "Download CV",
+      "aboutPhotoAlt": "Soldering station and measurement gear on the workbench",
+      "todoStudies": "TODO: add study plans (programme, university, timeframe).",
+      "todoNextGoals": "TODO: add goals after graduating in 2027.",
+      "allProjects": "All projects",
+      "copyEmail": "Copy email",
+      "checkpoint": "CHECKPOINT REACHED"
+    },
     home: {
       title: "Richard Zuikov",
       subtitle: "Low-Level Architect · Embedded Systems & Hardware Developer",
@@ -448,7 +486,7 @@ export const translations = {
           title: "AZ-900: Microsoft Azure Fundamentals",
           issuer: "Microsoft",
           date: "May 2026",
-          verifyUrl: "https://learn.microsoft.com/en-us/users/richardzuikov/credentials",
+          verifyUrl: null,
           skills: ["Cloud Architecture", "Azure Security & Identity", "Network Virtualization", "SLA Governance"]
         },
         {
@@ -456,7 +494,7 @@ export const translations = {
           title: "Linux & Private Cloud Admin on IBM Power Systems",
           issuer: "Red Hat & IBM",
           date: "May 2026",
-          verifyUrl: "https://www.credly.com",
+          verifyUrl: null,
           skills: ["RHEL Administration", "IBM PowerVM Virtualization", "Storage Area Networks", "Kernel Tuning"]
         },
         {
@@ -472,7 +510,7 @@ export const translations = {
           title: "IBM Systems and Solutions Architect",
           issuer: "IBM",
           date: "Apr. 2026",
-          verifyUrl: "https://www.credly.com",
+          verifyUrl: null,
           skills: ["Enterprise Systems Design", "High Availability Clusters", "Disaster Recovery", "Hybrid Infrastructure"]
         },
         {
@@ -480,7 +518,7 @@ export const translations = {
           title: "Cisco Certified Network Associate (CCNA)",
           issuer: "Cisco",
           date: "May 2026",
-          verifyUrl: "https://www.credly.com",
+          verifyUrl: null,
           skills: ["Routing & Switching", "Network Security", "IP Services", "VLAN & Subnetting", "Automation & Programmability"]
         },
         {
@@ -488,7 +526,7 @@ export const translations = {
           title: "Certified Kubernetes Administrator (CKA)",
           issuer: "Cloud Native Computing Foundation (CNCF) & Linux Foundation",
           date: "May 2026",
-          verifyUrl: "https://www.credly.com",
+          verifyUrl: null,
           skills: ["Cluster Architecture & Installation", "Workloads & Scheduling", "Services & Networking", "Cluster Maintenance & Troubleshooting", "K8s Storage"]
         }
       ],
