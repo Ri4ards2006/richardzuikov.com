@@ -1,30 +1,81 @@
-import React, { useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import MenuOverlay from './MenuOverlay';
+import React, { Suspense, lazy, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, Moon, Sun } from 'lucide-react';
+import { useLanguage } from '../hooks/use-language';
+import { useTheme } from '../hooks/use-theme';
+import { useScrollSpy } from '../hooks/use-scroll-spy';
+import { sections } from '../lib/sections';
+
+// Keeps framer-motion out of the initial bundle until the menu is first opened.
+const MenuOverlay = lazy(() => import('./MenuOverlay'));
+
+const sectionIds = [...sections.map((section) => section.id)];
+const iconButton = 'w-11 h-11 flex items-center justify-center rounded-full border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:border-zinc-500 transition-colors duration-200';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [menuLoaded, setMenuLoaded] = useState(false);
+  const menuButtonRef = useRef(null);
+  const { pathname } = useLocation();
+  const { language, toggleLanguage, t } = useLanguage();
+  const [theme, toggleTheme] = useTheme();
+  const active = useScrollSpy(sectionIds, pathname === '/');
+
+  const openMenu = () => {
+    setMenuLoaded(true);
+    setIsMenuOpen(true);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+    menuButtonRef.current?.focus();
+  };
 
   return (
-    <>
-      {/* Editorial Floating Menu Trigger */}
-      <button 
-        onClick={() => setIsMenuOpen(true)}
-        className="fixed top-8 right-8 sm:top-10 sm:right-10 z-[999] w-12 h-12 flex items-center justify-center rounded-full border border-zinc-200/80 dark:border-zinc-800/80 hover:border-zinc-400 dark:hover:border-zinc-600 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-md text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white transition-all duration-300 cursor-pointer shadow-sm"
-        aria-label="Open Navigation Menu"
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <circle cx="12" cy="12" r="1.5" />
-          <circle cx="6" cy="12" r="1.5" />
-          <circle cx="18" cy="12" r="1.5" />
-        </svg>
-      </button>
+    <header className="sticky top-0 z-40 bg-white/95 dark:bg-[#09090b]/95 border-b border-zinc-200 dark:border-zinc-800">
+      <div className="max-w-6xl mx-auto h-16 px-6 sm:px-12 flex items-center justify-between gap-6">
+        <Link to="/#top" aria-label="Richard Zuikov" className="font-mono text-sm font-bold tracking-widest text-zinc-950 dark:text-white">
+          RZ
+        </Link>
 
-      <AnimatePresence>
-        {isMenuOpen && (
-          <MenuOverlay onClose={() => setIsMenuOpen(false)} />
-        )}
-      </AnimatePresence>
-    </>
+        <nav aria-label={t.landing.sectionNav} className="hidden md:block">
+          <ul className="flex items-center gap-6">
+            {sections.map(({ id }) => (
+              <li key={id}>
+                <Link
+                  to={`/#${id}`}
+                  aria-current={active === id ? 'true' : undefined}
+                  className={`inline-block py-2 font-mono text-xs uppercase tracking-wider border-b-2 transition-colors duration-150 ${
+                    active === id
+                      ? 'border-[#FFB000] text-zinc-950 dark:text-white'
+                      : 'border-transparent text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white'
+                  }`}
+                >
+                  {t.landing.nav[id]}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="flex items-center gap-2">
+          <button type="button" onClick={toggleLanguage} title={t.nav.switchLang} aria-label={t.nav.switchLang} className={`${iconButton} hidden md:flex font-mono text-xs font-bold`}>
+            {language === 'de' ? 'EN' : 'DE'}
+          </button>
+          <button type="button" onClick={toggleTheme} title={t.nav.switchTheme} aria-label={t.nav.switchTheme} className={`${iconButton} hidden md:flex`}>
+            {theme === 'dark' ? <Sun aria-hidden="true" size={18} /> : <Moon aria-hidden="true" size={18} />}
+          </button>
+          <button ref={menuButtonRef} type="button" onClick={openMenu} aria-label={t.nav.openMenu} aria-expanded={isMenuOpen} className={`${iconButton} md:hidden`}>
+            <Menu aria-hidden="true" size={20} />
+          </button>
+        </div>
+      </div>
+
+      {menuLoaded && (
+        <Suspense fallback={null}>
+          <MenuOverlay open={isMenuOpen} onClose={closeMenu} />
+        </Suspense>
+      )}
+    </header>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 
 export function useTheme() {
   const [theme, setTheme] = useState(() => {
@@ -11,7 +11,7 @@ export function useTheme() {
     return 'dark';
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = window.document.documentElement;
     if (theme === 'dark') {
       root.classList.add('dark');
