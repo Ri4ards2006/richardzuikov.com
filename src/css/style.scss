@@ -14,3 +14,62 @@ body {
   background-color: transparent !important;
   min-height: 100vh;
 }
+html {
+  overflow-x: clip;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid #18181b;
+  outline-offset: 2px;
+}
+
+.dark :focus-visible {
+  outline-color: #ffb000;
+}
+
+.heading-skew {
+  display: inline-block;
+  transform: skewX(-4deg);
+  transform-origin: left bottom;
+}
+
+.section-diagonal {
+  --diagonal: clamp(1.5rem, 4vw, 4rem);
+  clip-path: polygon(0 var(--diagonal), 100% 0, 100% 100%, 0 100%);
+  margin-top: calc(var(--diagonal) * -1);
+  padding-top: var(--diagonal);
+}
+
+/* Only ever added by useReveal once an IntersectionObserver is confirmed available. */
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.reveal-in {
+  transition: opacity 400ms cubic-bezier(0.16, 1, 0.3, 1), transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media print {
+  .reveal-hidden {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes checkpoint {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.checkpoint-line {
+  animation: checkpoint 2000ms linear forwards;
+}
