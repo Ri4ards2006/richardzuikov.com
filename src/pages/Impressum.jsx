@@ -191,7 +191,7 @@ export default function Impressum() {
   const content = t[language] || t.de;
 
   return (
-    <main className="relative min-h-screen bg-white text-zinc-900 dark:bg-[#09090b] dark:text-[#f4f4f5] selection:bg-[#FFB000]/30 font-sans antialiased transition-colors duration-300">
+    <div className="relative min-h-screen bg-white text-zinc-900 dark:bg-[#09090b] dark:text-[#f4f4f5] selection:bg-[#FFB000]/30 font-sans antialiased transition-colors duration-300">
       
       {/* ─── TOP NAVIGATION ─── */}
       <div className="pt-12 px-6 sm:px-12 md:px-24 max-w-5xl mx-auto flex items-center justify-between">
@@ -386,7 +386,7 @@ export default function Impressum() {
 
       </div>
 
-    </main>
+    </div>
   );
 }
 

@@ -4,46 +4,15 @@ import { useLanguage } from '../hooks/use-language';
 
 export default function Footer() {
   const { t } = useLanguage();
+  const linkClass = 'inline-block py-3 hover:text-zinc-950 dark:hover:text-white transition-colors uppercase';
 
   return (
-    <footer className="w-full border-t border-zinc-200/80 dark:border-zinc-800/80 mt-24 transition-colors duration-300">
-      <div className="max-w-6xl mx-auto py-12 px-6 sm:px-12 md:px-24 flex flex-col sm:flex-row justify-between items-center gap-6 font-mono text-[11px] text-zinc-500 dark:text-zinc-500 tracking-wider">
-        <div className="flex items-center gap-2">
-          <span>© {new Date().getFullYear()} Richard Zuikov</span>
-          <span className="text-zinc-300 dark:text-zinc-800">·</span>
-          <span>Flensburg</span>
-        </div>
-        
-        <div className="flex flex-wrap items-center gap-5 sm:gap-6 text-[10px] sm:text-[11px]">
-          <a 
-            href="https://github.com/Ri4ards2006" 
-            target="_blank" 
-            rel="noreferrer" 
-            className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors uppercase"
-          >
-            GitHub
-          </a>
-          <span className="text-zinc-300 dark:text-zinc-800">·</span>
-          <Link 
-            to="/contact" 
-            className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors uppercase"
-          >
-            {t.nav.contact}
-          </Link>
-          <span className="text-zinc-300 dark:text-zinc-800">·</span>
-          <Link 
-            to="/impressum" 
-            className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors uppercase"
-          >
-            {t.nav.impressum}
-          </Link>
-          <span className="text-zinc-300 dark:text-zinc-800">·</span>
-          <Link 
-            to="/datenschutz" 
-            className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors uppercase"
-          >
-            {t.nav.datenschutz}
-          </Link>
+    <footer className="relative z-10 w-full border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#09090b]">
+      <div className="max-w-6xl mx-auto py-8 px-6 sm:px-12 flex flex-col sm:flex-row justify-between items-center gap-4 font-mono text-xs text-zinc-600 dark:text-zinc-400 tracking-wider">
+        <span>© {new Date().getFullYear()} Richard Zuikov · Flensburg</span>
+        <div className="flex flex-wrap items-center gap-5">
+          <Link to="/impressum" className={linkClass}>{t.nav.impressum}</Link>
+          <Link to="/datenschutz" className={linkClass}>{t.nav.datenschutz}</Link>
         </div>
       </div>
     </footer>
