@@ -63,7 +63,7 @@ function Panel({ onClose }) {
       className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-white dark:bg-[#09090b]"
     >
       <div className="flex justify-end gap-2 p-6">
-        <button type="button" onClick={toggleLanguage} title={t.nav.switchLang} aria-label={t.nav.switchLang} className={`${roundButton} font-mono text-xs font-bold`}>
+        <button type="button" onClick={toggleLanguage} title={t.nav.switchLang} aria-label={`${language === 'de' ? 'EN' : 'DE'} · ${t.nav.switchLang}`} className={`${roundButton} font-mono text-xs font-bold`}>
           {language === 'de' ? 'EN' : 'DE'}
         </button>
         <button type="button" onClick={toggleTheme} title={t.nav.switchTheme} aria-label={t.nav.switchTheme} className={roundButton}>

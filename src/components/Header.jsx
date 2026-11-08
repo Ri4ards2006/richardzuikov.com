@@ -34,7 +34,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 bg-white/95 dark:bg-[#09090b]/95 border-b border-zinc-200 dark:border-zinc-800">
       <div className="max-w-6xl mx-auto h-16 px-6 sm:px-12 flex items-center justify-between gap-6">
-        <Link to="/#top" aria-label="Richard Zuikov" className="font-mono text-sm font-bold tracking-widest text-zinc-950 dark:text-white">
+        <Link to="/#top" aria-label="RZ · Richard Zuikov" className="font-mono text-sm font-bold tracking-widest text-zinc-950 dark:text-white">
           RZ
         </Link>
 
@@ -59,7 +59,7 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <button type="button" onClick={toggleLanguage} title={t.nav.switchLang} aria-label={t.nav.switchLang} className={`${iconButton} hidden md:flex font-mono text-xs font-bold`}>
+          <button type="button" onClick={toggleLanguage} title={t.nav.switchLang} aria-label={`${language === 'de' ? 'EN' : 'DE'} · ${t.nav.switchLang}`} className={`${iconButton} hidden md:flex font-mono text-xs font-bold`}>
             {language === 'de' ? 'EN' : 'DE'}
           </button>
           <button type="button" onClick={toggleTheme} title={t.nav.switchTheme} aria-label={t.nav.switchTheme} className={`${iconButton} hidden md:flex`}>

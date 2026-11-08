@@ -158,10 +158,6 @@ export default function Lab() {
           </div>
 
         {/* Minimal Footer Info */}
-        <footer className="pt-12 border-t border-zinc-200 dark:border-zinc-800/80 flex flex-col sm:flex-row justify-between items-center gap-4 font-mono text-[10px] text-zinc-500">
-          <span>{(t?.telemetry?.overview || 'OVERVIEW').toUpperCase()} · FLENSBURG LAB NODE</span>
-          <span>© {new Date().getFullYear()} RICHARD ZUIKOV</span>
-        </footer>
       </div>
 
       {/* ─── EXPANDED PROJECT INSPECTOR MODAL ─── */}
