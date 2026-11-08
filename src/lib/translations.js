@@ -134,7 +134,7 @@ export const translations = {
           title: "AZ-900: Microsoft Azure Fundamentals",
           issuer: "Microsoft",
           date: "Mai 2026",
-          verifyUrl: "https://learn.microsoft.com/en-us/users/richardzuikov/credentials",
+          verifyUrl: null,
           skills: ["Cloud Architecture", "Azure Security & Identity", "Network Virtualization", "SLA Governance"]
         },
         {
@@ -142,7 +142,7 @@ export const translations = {
           title: "Linux & Private Cloud Admin on IBM Power Systems",
           issuer: "Red Hat & IBM",
           date: "Mai 2026",
-          verifyUrl: "https://www.credly.com",
+          verifyUrl: null,
           skills: ["RHEL Administration", "IBM PowerVM Virtualization", "Storage Area Networks", "Kernel Tuning"]
         },
         {
@@ -158,7 +158,7 @@ export const translations = {
           title: "IBM Systems and Solutions Architect",
           issuer: "IBM",
           date: "Apr. 2026",
-          verifyUrl: "https://www.credly.com",
+          verifyUrl: null,
           skills: ["Enterprise Systems Design", "High Availability Clusters", "Disaster Recovery", "Hybrid Infrastructure"]
         },
         {
@@ -166,7 +166,7 @@ export const translations = {
           title: "Cisco Certified Network Associate (CCNA)",
           issuer: "Cisco",
           date: "Mai 2026",
-          verifyUrl: "https://www.credly.com",
+          verifyUrl: null,
           skills: ["Routing & Switching", "IP Services & Security", "Network Fundamentals", "VLAN & Subnetting", "Automation & Programmability"]
         },
         {
@@ -174,7 +174,7 @@ export const translations = {
           title: "Certified Kubernetes Administrator (CKA)",
           issuer: "Cloud Native Computing Foundation (CNCF) & Linux Foundation",
           date: "Mai 2026",
-          verifyUrl: "https://www.credly.com",
+          verifyUrl: null,
           skills: ["Cluster Architecture & Installation", "Workloads & Scheduling", "Services & Networking", "Cluster Maintenance & Troubleshooting", "K8s Storage"]
         }
       ],
@@ -448,7 +448,7 @@ export const translations = {
           title: "AZ-900: Microsoft Azure Fundamentals",
           issuer: "Microsoft",
           date: "May 2026",
-          verifyUrl: "https://learn.microsoft.com/en-us/users/richardzuikov/credentials",
+          verifyUrl: null,
           skills: ["Cloud Architecture", "Azure Security & Identity", "Network Virtualization", "SLA Governance"]
         },
         {
@@ -456,7 +456,7 @@ export const translations = {
           title: "Linux & Private Cloud Admin on IBM Power Systems",
           issuer: "Red Hat & IBM",
           date: "May 2026",
-          verifyUrl: "https://www.credly.com",
+          verifyUrl: null,
           skills: ["RHEL Administration", "IBM PowerVM Virtualization", "Storage Area Networks", "Kernel Tuning"]
         },
         {
@@ -472,7 +472,7 @@ export const translations = {
           title: "IBM Systems and Solutions Architect",
           issuer: "IBM",
           date: "Apr. 2026",
-          verifyUrl: "https://www.credly.com",
+          verifyUrl: null,
           skills: ["Enterprise Systems Design", "High Availability Clusters", "Disaster Recovery", "Hybrid Infrastructure"]
         },
         {
@@ -480,7 +480,7 @@ export const translations = {
           title: "Cisco Certified Network Associate (CCNA)",
           issuer: "Cisco",
           date: "May 2026",
-          verifyUrl: "https://www.credly.com",
+          verifyUrl: null,
           skills: ["Routing & Switching", "Network Security", "IP Services", "VLAN & Subnetting", "Automation & Programmability"]
         },
         {
@@ -488,7 +488,7 @@ export const translations = {
           title: "Certified Kubernetes Administrator (CKA)",
           issuer: "Cloud Native Computing Foundation (CNCF) & Linux Foundation",
           date: "May 2026",
-          verifyUrl: "https://www.credly.com",
+          verifyUrl: null,
           skills: ["Cluster Architecture & Installation", "Workloads & Scheduling", "Services & Networking", "Cluster Maintenance & Troubleshooting", "K8s Storage"]
         }
       ],
