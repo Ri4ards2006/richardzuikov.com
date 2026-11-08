@@ -8,6 +8,7 @@ import Career from './pages/Career';
 import Lab from './pages/Lab';
 import Contact from './pages/Contact';
 import Impressum from './pages/Impressum';
+import NotFound from './pages/NotFound';
 import IntroScreen from './components/IntroScreen';
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
             <Route path="/impressum" element={<Impressum />} />
             <Route path="/datenschutz" element={<Impressum />} />
             <Route path="/legal" element={<Impressum />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
       </Router>
