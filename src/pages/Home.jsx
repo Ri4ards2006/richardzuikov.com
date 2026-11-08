@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { useDocumentTitle } from '../hooks/use-document-title';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTheme } from '../hooks/use-theme';
@@ -19,6 +20,7 @@ import imgSundown from "../assets/Mu_Sundown.jpg";
 const cn = (...classes) => classes.filter(Boolean).join(' ');
 
 export default function Home() {
+  useDocumentTitle("Richard Zuikov — Embedded Systems & Hardware Developer");
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [theme] = useTheme();

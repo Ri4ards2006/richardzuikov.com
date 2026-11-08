@@ -6,7 +6,7 @@ const Slide = ({
   index,
   current,
   handleSlideClick,
-  onButtonClick // <-- Neu: Reingereichter Klick-Handler
+  onButtonClick
 }) => {
   const slideRef = useRef(null);
   const xRef = useRef(0);
@@ -94,7 +94,7 @@ const Slide = ({
           <div className="flex justify-center">
             <button
               onClick={(e) => {
-                e.stopPropagation(); // <-- CRITICAL: Verhindert, dass der Slide-Klick ausgelöst wird!
+                e.stopPropagation();
                 if (onButtonClick) onButtonClick(slide);
               }}
               className="mt-6 px-4 py-2 w-fit mx-auto sm:text-sm text-black bg-white h-12 border border-transparent text-xs flex justify-center items-center rounded-2xl hover:shadow-lg transition duration-200 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1)] z-30 relative cursor-pointer">
@@ -151,7 +151,7 @@ export default function Carousel({ slides, onSlideButtonClick }) {
             index={index}
             current={current}
             handleSlideClick={handleSlideClick}
-            onButtonClick={onSlideButtonClick} // <-- Event wird nach oben gereicht
+            onButtonClick={onSlideButtonClick}
           />
         ))}
       </ul>

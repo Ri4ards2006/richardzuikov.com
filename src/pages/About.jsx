@@ -1,5 +1,6 @@
 "use client";
 import React, { useRef } from 'react';
+import { useDocumentTitle } from '../hooks/use-document-title';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
 import { Cpu, Terminal, Zap, BookOpen, GitBranch, ArrowLeft, Layers, Compass } from 'lucide-react';
@@ -23,6 +24,7 @@ import imgUzbekistan from "../assets/Me_Uzbekistan.jpg";
 import imgSundown from "../assets/Mu_Sundown.jpg";
 
 export default function About() {
+  useDocumentTitle("About — Richard Zuikov");
   const containerRef = useRef(null);
   const navigate = useNavigate();
   const { language, t } = useLanguage();
