@@ -91,9 +91,9 @@ Derived from DESIGN.md §6, §7 and §11. Status: `todo` / `doing` / `done` / `s
 | todo | Ring of noise-displaced stones |
 | doing | Charred PCB pile: one PCB board exists; fragments with emissive edges missing |
 | superseded | Soldering iron exists; LatheGeometry profile and TubeGeometry cable missing |
-| todo | Flames as crossed billboards with fbm shader (currently cones) |
-| doing | Instanced embers: 80 points; spec 120 |
-| done | PointLight `#ff6600` with sine + noise flicker |
+| done | Flames as crossed billboards with fbm shader (layered additive) |
+| done | Instanced embers (120 desktop, 60 mobile with sine drift) and thin smoke |
+| done | PointLight `#ff6600` with multi-frequency sine + noise flicker |
 | todo | Selective bloom on the fire, vignette |
 | done | Cinzel headline, list with `>` marker, hover to `--glow` |
 | superseded | Row labels: spec `SEND MAIL`, `COPY MAIL`, `CV (PDF)`, `GITHUB`, `LINKEDIN` |
@@ -239,8 +239,8 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | Varied stones |
 | done | claude-code | Charred PCB pile with glowing traces |
 | done | claude-code | A few logs |
-| todo | antigravity | Layered flame shader |
-| todo | antigravity | Sparks and thin smoke |
-| todo | antigravity | Flickering light on stones and floor |
+| done | antigravity | Layered flame shader |
+| done | antigravity | Sparks and thin smoke |
+| done | antigravity | Flickering light on stones and floor |
 | todo | antigravity | Contact list: SEND MAIL · CV (PDF) · GITHUB · LINKEDIN |
 | todo | antigravity | Remove "Copy email" from the list; small copy box next to the displayed email, checkmark for 2 s |
