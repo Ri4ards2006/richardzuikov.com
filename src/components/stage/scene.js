@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { createBonfire } from '../../three/bonfire';
 import { createFloatingShards } from './floating-shards';
 import { createInkWater } from './ink-water';
+import { createDescentProps } from './descent-props';
 import { disposeObject, hash, makeCanvas, pointsMaterial, seededPoints, smooth, texture } from '../../three/utils';
 
 const FOV = 40;
@@ -296,6 +297,8 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
 
   const floating = createFloatingShards(isSmall ? 30 : 38);
   scene.add(floating.mesh);
+  const props = createDescentProps();
+  scene.add(props.group);
   const pointer = new THREE.Vector2();
   let pointerSeen = false;
 
@@ -390,6 +393,10 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       const r = el.getBoundingClientRect();
       return { el, top: r.top + state.scroll, height: r.height };
     });
+    props.layout(a.panels.map((el) => {
+      const r = el.getBoundingClientRect();
+      return { left: r.left, width: r.width, top: r.top + state.scroll, height: r.height };
+    }), state.w, (x, y) => ({ x: (x - state.w / 2) * state.k, y: -(y - state.h / 2) * state.k }));
 
     const about = worldOf(a.aboutPortrait.getBoundingClientRect());
     profile.to.set(about.x, about.y, 0);
@@ -535,6 +542,8 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
         rad(card.tilt[2]) * (1 - card.lift),
       );
     });
+
+    props.update(time, state.camY);
 
     state.panels.forEach(({ el, top, height }) => {
       const depth = (top + height / 2 - state.scroll - state.h / 2) / state.h;
