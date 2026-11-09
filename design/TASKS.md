@@ -362,7 +362,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 ### Global menu
 | Status | Owner | Item |
 |---|---|---|
-| todo | claude-code | Only the overlay visible while open: stage menu, name, portrait hidden, page dimmed; screenshots 1440×900 and 390×844 |
+| done | claude-code | Only the overlay visible while open: stage menu, name, portrait hidden, page dimmed; screenshots 1440×900 and 390×844 |
 
 ### Floating elements
 | Status | Owner | Item |

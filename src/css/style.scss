@@ -1188,6 +1188,32 @@ html.dark .ground-message {
 
 /* ---------- Global menu: Persona-style pause menu (DESIGN.md §15) ---------- */
 
+/* While the overlay is open the page behind is near-black screentone; nothing else shows. */
+.gm-dim {
+  position: fixed;
+  z-index: 79;
+  inset: 0;
+  background:
+    radial-gradient(circle, rgb(var(--ash-700) / 0.35) 30%, transparent 34%) 0 0 / 4px 4px,
+    rgb(5 5 5 / 0.97);
+  animation: gm-dim 90ms linear both;
+}
+
+.gm-dim.is-closing {
+  animation: gm-dim 120ms linear 180ms reverse both;
+}
+
+@keyframes gm-dim {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+html.gm-open .stage-hero > *,
+html.gm-open .stage-canvas,
+html.gm-open .menu-dots {
+  visibility: hidden;
+}
+
 .gm {
   --gm-in: 300ms;
   position: fixed;
