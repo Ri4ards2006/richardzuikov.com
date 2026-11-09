@@ -5,7 +5,7 @@ const PAPER = 0xf4f4f0;
 const SMALL_SCREEN = 768;
 const SPIN = 0.22;
 const SIZE = 1.05;
-const SMALL_SIZE = 0.5;
+const SMALL_SIZE = 0.42;
 const CULL_DISTANCE = 9;
 
 const material = new THREE.ShaderMaterial({
@@ -83,7 +83,7 @@ export function createDescentProps() {
         if (small) {
           // No free side on a phone: the prop sits in the gutter above its panel.
           x = viewportWidth * 0.76;
-          y = rect.top - 46;
+          y = rect.top - 52;
         } else {
           const onRight = rect.left + rect.width / 2 > viewportWidth / 2;
           const free = onRight ? rect.left : viewportWidth - (rect.left + rect.width);
