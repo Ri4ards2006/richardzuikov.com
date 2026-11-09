@@ -382,4 +382,4 @@ Reviewer items already listed above are not repeated. The review was written bef
 ### Portrait
 | Status | Owner | Item |
 |---|---|---|
-| todo | claude-code | Pipeline: luminance → alpha for cream-on-black ink art; slots stage.png / about.png |
+| done | claude-code | Pipeline: luminance → alpha for cream-on-black ink art; slots stage.png / about.png |
