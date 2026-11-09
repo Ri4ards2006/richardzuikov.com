@@ -357,7 +357,7 @@ export default function Stage() {
       <section id="record" aria-labelledby="record-title" className="stage-works scroll-mt-16">
         <p className="font-mono text-xs tracking-widest text-ash-300">04 / {t.atlus.hud.career}</p>
         <h2 id="record-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight mt-2">{t.landing.nav.career}</h2>
-        <RecordBoard />
+        <RecordBoard onEnter={() => sceneRef.current?.travel()} />
         <Link to="/career" className="stage-more">{t.atlus.boards.fullRecord} →</Link>
       </section>
 
