@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { disposeObject, hash, smooth } from '../utils';
 import { buildFlames } from './flames';
+import { paint } from './geometry';
 import { buildIron } from './iron';
 import { buildLogs } from './logs';
 import { buildParticles } from './particles';
@@ -63,7 +64,20 @@ function buildBonfire(emberCount, q) {
 
   group.add(buildStones(q));
 
-  const ash = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 2), new THREE.MeshStandardMaterial({ color: 0x8a8a86, roughness: 1, flatShading: true }));
+  const ashGeo = paint(new THREE.IcosahedronGeometry(1, 2), (p, c) => {
+    const r = Math.hypot(p.x, p.z);
+    const heat = Math.max(0, 1 - r * 1.1) * THREE.MathUtils.smoothstep(p.y, -0.3, 0.5);
+    const soot = 0.28 + hash(p.x * 7 + p.z * 11) * 0.12;
+    c.setRGB(soot + heat * 0.8, soot + heat * 0.35, soot * (1 - heat * 0.4));
+  });
+  const ashMat = new THREE.MeshStandardMaterial({
+    roughness: 0.95,
+    flatShading: true,
+    vertexColors: true,
+    emissive: 0xff4800,
+    emissiveIntensity: 0.4,
+  });
+  const ash = new THREE.Mesh(ashGeo, ashMat);
   ash.scale.set(1.25, 0.34, 1.25);
   group.add(ash);
 
@@ -90,13 +104,13 @@ function buildBonfire(emberCount, q) {
   const particles = buildParticles(emberCount, q);
   group.add(particles.group);
 
-  return { group, light, flames, particles, textures, pcbMaterial, iron };
+  return { group, light, flames, particles, textures, pcbMaterial, ashMat, iron };
 }
 
 // getLayout() returns the world placement { x, y, scale, pixel } measured by the stage.
 export function createBonfire({ emberCount, getLayout }) {
   const q = bonfireQuality();
-  const { group, light, flames, particles, textures, pcbMaterial, iron } = buildBonfire(emberCount, q);
+  const { group, light, flames, particles, textures, pcbMaterial, ashMat, iron } = buildBonfire(emberCount, q);
   group.visible = false;
   let parent = null;
   let time = 0;
@@ -129,7 +143,8 @@ export function createBonfire({ emberCount, getLayout }) {
       const flicker = intensity / 56;
 
       light.intensity = intensity;
-      pcbMaterial.emissiveIntensity = 0.85 + flicker * 1.15;
+      pcbMaterial.emissiveIntensity = 0.95 + flicker * 1.25;
+      ashMat.emissiveIntensity = 0.35 + flicker * 0.45;
       light.position.x = (noise1(time * 5 + 9) - 0.5) * 0.25;
       light.position.z = 0.2 + (noise1(time * 4 + 3) - 0.5) * 0.15;
 
