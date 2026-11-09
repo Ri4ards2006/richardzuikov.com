@@ -1,0 +1,28 @@
+{
+  "ci": {
+    "collect": {
+      "startServerCommand": "npm run preview -- --port 4173 --strictPort",
+      "url": [
+        "http://localhost:4173/",
+        "http://localhost:4173/quick"
+      ],
+      "numberOfRuns": 1,
+      "settings": {
+        "preset": "desktop"
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.70 }],
+        "first-contentful-paint": ["warn", { "maxNumericValue": 2500 }],
+        "interactive": ["warn", { "maxNumericValue": 4000 }],
+        "max-potential-fid": ["warn", { "maxNumericValue": 200 }],
+        "cumulative-layout-shift": ["warn", { "maxNumericValue": 0.1 }]
+      }
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": ".lighthouseci"
+    }
+  }
+}
