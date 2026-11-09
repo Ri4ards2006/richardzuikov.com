@@ -101,9 +101,6 @@ html {
 }
 
 
-@keyframes fan-out {
-  from { transform: rotate(0deg) translateY(24px); opacity: 0; }
-}
 
 /* Headings only receive focus programmatically after a route change. */
 h1[tabindex='-1']:focus-visible {
