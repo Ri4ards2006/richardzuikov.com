@@ -4,7 +4,7 @@ import { useSectionEnter } from '../../hooks/use-section-enter';
 import { ROMAN } from '../../lib/atlus';
 
 const DETAIL_SENTENCES = 2;
-const ACTIVE_LINE = 0.45;
+const HEADER_PX = 64;
 
 const firstSentences = (text) => text.split(/(?<=\.)\s+/).slice(0, DETAIL_SENTENCES).join(' ');
 
@@ -26,24 +26,24 @@ export default function RecordBoard({ onEnter }) {
   const [active, setActive] = useState(0);
   const [open, setOpen] = useState(null);
   const barRefs = useRef([]);
+  const listRef = useRef(null);
   const boardRef = useSectionEnter(onEnter);
 
-  // The numeral follows the bar nearest the reading line while the page scrolls.
+  // The numeral follows the bar nearest a reading line placed where the first bar rests on landing.
+  // Layout offsets, because the bars are still transformed during their entrance.
   useEffect(() => {
     let frame = 0;
     const update = () => {
       frame = 0;
-      const line = window.innerHeight * ACTIVE_LINE;
+      const board = boardRef.current;
+      const anchor = board.closest('section') ?? board.parentElement;
+      const listTop = listRef.current.getBoundingClientRect().top;
+      const centre = (bar) => bar.offsetTop + bar.offsetHeight / 2;
+      const bars = barRefs.current.filter(Boolean);
+      const line = HEADER_PX + (listTop - anchor.getBoundingClientRect().top) + centre(bars[0]);
       let best = 0;
-      let bestDistance = Infinity;
-      barRefs.current.forEach((bar, index) => {
-        if (!bar) return;
-        const rect = bar.getBoundingClientRect();
-        const distance = Math.abs(rect.top + rect.height / 2 - line);
-        if (distance < bestDistance) {
-          bestDistance = distance;
-          best = index;
-        }
+      bars.forEach((bar, index) => {
+        if (Math.abs(listTop + centre(bar) - line) < Math.abs(listTop + centre(bars[best]) - line)) best = index;
       });
       setActive(best);
     };
@@ -67,13 +67,13 @@ export default function RecordBoard({ onEnter }) {
           <FlipDigit key={index} value={digit} />
         ))}
       </div>
-      <ol className="record-list">
+      <ol ref={listRef} className="record-list">
         {timeline.map((entry, index) => {
           const [role, org] = entry.title.split(' | ');
           const isOpen = open === index;
           return (
-            <li key={entry.title} ref={(node) => { barRefs.current[index] = node; }} className="record-item" style={{ '--i': index }}>
-              <button type="button" aria-expanded={isOpen} onClick={() => setOpen(isOpen ? null : index)} className={`record-bar ${index === active ? 'is-active' : ''} ${isOpen ? 'is-open' : ''}`}>
+            <li key={entry.title} ref={(node) => { barRefs.current[index] = node; }} className="record-item" style={{ '--i': index }} onMouseEnter={() => setActive(index)}>
+              <button type="button" onFocus={() => setActive(index)} aria-expanded={isOpen} onClick={() => setOpen(isOpen ? null : index)} className={`record-bar ${index === active ? 'is-active' : ''} ${isOpen ? 'is-open' : ''}`}>
                 <span aria-hidden="true" className="record-rank">{ROMAN[index] ?? index + 1}</span>
                 <span className="record-role">{role}</span>
                 <span className="record-meta">{org ?? entry.type} · {entry.year}</span>
