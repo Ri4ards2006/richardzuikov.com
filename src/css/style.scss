@@ -3114,3 +3114,131 @@ html.gm-open .menu-dots {
     animation: none;
   }
 }
+
+/* ---------- Detail screen: Career entries and Stack skills (DESIGN.md §16) ---------- */
+
+.dts {
+  position: fixed;
+  z-index: 70;
+  inset: 0;
+  /* Portalled to <body>, outside the forced-dark wrapper: set the ink colours here. */
+  color: rgb(var(--ash-100));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4.5rem 1.25rem 1.25rem;
+}
+
+.dts-dim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle, rgb(var(--ash-700) / 0.35) 30%, transparent 34%) 0 0 / 4px 4px,
+    rgb(5 5 5 / 0.94);
+  animation: gm-dim 120ms linear both;
+}
+
+.dts-panel {
+  position: relative;
+  width: min(62rem, 100%);
+  max-height: 100%;
+  overflow-y: auto;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  background: rgb(var(--ash-800));
+  border: 3px solid rgb(var(--ash-100));
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2.5rem), calc(100% - 2.5rem) 100%, 0 100%);
+}
+
+.dts-grid {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(1.25rem, 4vw, 3rem);
+  align-items: start;
+}
+
+.dts-rank {
+  min-width: 1.2em;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  font-size: clamp(5rem, 14vw, 11rem);
+  line-height: 0.9;
+  text-align: center;
+  color: rgb(var(--ash-900));
+  background: rgb(var(--ash-100));
+  padding: 0.1em 0.15em 0.15em;
+  transform: rotate(-4deg);
+}
+
+.dts-title {
+  margin-top: 0.25rem;
+  font-family: Anton, Impact, sans-serif;
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.dts-bullets {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.dts-bullets li {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr);
+  gap: 0.6rem;
+  align-items: baseline;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: rgb(var(--ash-100));
+}
+
+.dts-bullets .trace-star {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.dts-label {
+  margin: 1.75rem 0 0.6rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: rgb(var(--ash-300));
+}
+
+.dts-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.dts-keys {
+  margin-top: 0.75rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  color: rgb(var(--ash-300));
+  text-align: center;
+}
+
+@media (max-width: 639px) {
+  .dts-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dts-rank {
+    justify-self: start;
+    font-size: 4.5rem;
+  }
+
+  .dts-nav .inspect-btn {
+    flex: 1 1 40%;
+  }
+}
+
+.dts-nav .inspect-btn {
+  padding-inline: 1.25rem;
+}
