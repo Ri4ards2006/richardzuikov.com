@@ -432,6 +432,16 @@ html.dark .ground-message {
   color: rgb(var(--ash-200));
 }
 
+.stage-quick {
+  right: 1.25rem;
+  bottom: 0.625rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 .stage-cue {
   bottom: 1.25rem;
   left: 50%;

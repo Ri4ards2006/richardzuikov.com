@@ -173,6 +173,7 @@ export default function Stage() {
           <h1 id="stage-title" className="stage-name-block"><span>Richard</span> <span>Zuikov</span></h1>
           <p className="stage-role">{t.career.role}</p>
         </div>
+        <Link to={QUICK_PATH} className="stage-hud stage-quick">{t.landing.menuPlaceholder.quickRead} →</Link>
         <p aria-hidden="true" className="stage-hud stage-cue">↓ {t.atlus.stage.scroll}</p>
         <div className="relative z-10 flex flex-col justify-center">
           <nav aria-label={t.atlus.menuNav} className="has-message stage-menu">
@@ -201,9 +202,6 @@ export default function Stage() {
             </ul>
             <span aria-hidden="true" className="ground-message mt-3">{t.atlus.hints.menu}</span>
           </nav>
-          <Link to={QUICK_PATH} className="mt-6 inline-flex items-center min-h-11 self-start font-mono text-xs uppercase tracking-widest text-ash-200 underline underline-offset-4">
-            {t.landing.menuPlaceholder.quickRead}
-          </Link>
         </div>
         <div ref={portraitRef} className="stage-portrait">
           {!webgl && <img src={portraits.about.large} alt="" className="h-full w-full object-contain grayscale" />}
