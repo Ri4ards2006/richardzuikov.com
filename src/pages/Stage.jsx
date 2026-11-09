@@ -9,6 +9,7 @@ import { portraits } from '../data/portraits';
 import { featuredProjects } from '../data/featured-projects';
 import IntroOverlay from '../components/stage/IntroOverlay';
 import AboutSection from '../components/stage/AboutSection';
+import PanelIllustration from '../components/stage/PanelIllustration';
 import ContactList from '../three/bonfire/ContactList';
 import { grainTexture } from '../lib/noise-textures';
 
@@ -156,7 +157,15 @@ export default function Stage() {
       panel.classList.add('is-armed');
       observer.observe(panel);
     });
-    return () => observer.disconnect();
+    // The illustrations only run while their panel is on screen.
+    const live = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => entry.target.classList.toggle('is-live', entry.isIntersecting));
+    });
+    panelRefs.current.filter(Boolean).forEach((panel) => live.observe(panel));
+    return () => {
+      observer.disconnect();
+      live.disconnect();
+    };
   }, []);
 
   const handleTearEnd = () => {
@@ -245,7 +254,10 @@ export default function Stage() {
               ref={(node) => { panelRefs.current[index] = node; }}
               className={`manga-panel is-${PANEL_LAYERS[index % PANEL_LAYERS.length]} ${index % 2 ? 'is-right' : ''}`}
             >
-              <span aria-hidden="true" className="font-anton text-6xl leading-none text-ash-600">{String(index + 1).padStart(2, '0')}</span>
+              <div className="flex items-start justify-between gap-5">
+                <span aria-hidden="true" className="font-anton text-6xl leading-none text-ash-600">{String(index + 1).padStart(2, '0')}</span>
+                <PanelIllustration index={index} />
+              </div>
               <h3 className="font-anton uppercase text-3xl tracking-wide mt-2">{entry.title}</h3>
               <p className="mt-3 text-base leading-relaxed text-ash-200">{entry.desc}</p>
             </article>
