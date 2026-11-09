@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { createBonfire } from '../../three/bonfire';
+import { createFloatingShards } from './floating-shards';
 import { disposeObject, hash, makeCanvas, pointsMaterial, seededPoints, smooth, texture } from '../../three/utils';
 
 const FOV = 40;
@@ -240,6 +241,11 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
     return { project, index, face, map, mesh, group, tilt, lift: 0, base: new THREE.Vector3() };
   });
 
+  const floating = createFloatingShards(isSmall ? 40 : 56);
+  scene.add(floating.mesh);
+  const pointer = new THREE.Vector2();
+  let pointerSeen = false;
+
   const bonfire = createBonfire({ emberCount: isSmall ? 60 : 80, getLayout: () => state.fire });
   bonfire.mount(scene, camera);
 
@@ -311,6 +317,8 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
     camera.updateProjectionMatrix();
     const pixel = (state.h / 800) * pixelRatio;
     dust.material.uniforms.uPixel.value = pixel;
+
+    floating.layout(Math.tan(rad(FOV / 2)), state.w / state.h, CAM_Z);
 
     const a = anchors();
     const portrait = worldOf(a.portrait.getBoundingClientRect());
@@ -410,7 +418,9 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
     dust.material.uniforms.uTime.value = time;
 
     hero.visible = state.scroll < state.h * 1.4;
+    floating.mesh.visible = hero.visible;
     if (hero.visible) {
+      floating.update(dt, time, pointerSeen ? pointer.set(mouse.x, -mouse.y) : null);
       heroLayers.forEach(({ object, depth, base }) => {
         object.position.set(base.x + mouse.x * depth, base.y - mouse.y * depth * 0.6, base.z);
       });
@@ -456,6 +466,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
   const onPointerMove = (event) => {
     mouse.tx = (event.clientX / window.innerWidth - 0.5) * 2;
     mouse.ty = (event.clientY / window.innerHeight - 0.5) * 2;
+    if (event.pointerType === 'mouse') pointerSeen = true;
     state.lastInput = performance.now();
   };
   const onVisibility = () => {
