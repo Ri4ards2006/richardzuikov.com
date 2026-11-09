@@ -105,19 +105,23 @@ export const translations = {
       logEntries: [
         {
           title: "Register-Level Architektur",
-          desc: "Direkte Manipulation von Peripherie-Registern und Interrupt-Service-Routinen statt aufgeblähter Abstraktionsschichten."
+          desc: "Direkte Manipulation von Peripherie-Registern und Interrupt-Service-Routinen statt aufgeblähter Abstraktionsschichten.",
+          todo: "TODO: 2–3 Sätze von Richard zu „Register-Level Architektur“."
         },
         {
           title: "Hardware-Software Synchronisation",
-          desc: "Präzises Timing und Bus-Kommunikation (SPI/I2C/UART) zwischen Mikrocontrollern und Host-Systemen."
+          desc: "Präzises Timing und Bus-Kommunikation (SPI/I2C/UART) zwischen Mikrocontrollern und Host-Systemen.",
+          todo: "TODO: 2–3 Sätze von Richard zu „Hardware-Software Synchronisation“."
         },
         {
           title: "Warum C++ & Go?",
-          desc: "Die ideale Balance zwischen maximaler Hardwarekontrolle auf Register-Ebene und hochgradig nebenläufigen Netzwerk-Pipelines."
+          desc: "Die ideale Balance zwischen maximaler Hardwarekontrolle auf Register-Ebene und hochgradig nebenläufigen Netzwerk-Pipelines.",
+          todo: "TODO: 2–3 Sätze von Richard zu „Warum C++ & Go?“."
         },
         {
           title: "Lab- & Ausbildungspfad",
-          desc: "Gezielter Weg zum IT-Systemelektroniker bis 2027 mit Fokus auf industrielle Sicherheitssysteme und Netzwerkinfrastruktur."
+          desc: "Gezielter Weg zum IT-Systemelektroniker bis 2027 mit Fokus auf industrielle Sicherheitssysteme und Netzwerkinfrastruktur.",
+          todo: "TODO: 2–3 Sätze von Richard zu „Lab- & Ausbildungspfad“."
         }
       ],
       workbenchTitle: "Hardware Labor & Werkbank",
@@ -462,19 +466,23 @@ export const translations = {
       logEntries: [
         {
           title: "Register-Level Architecture",
-          desc: "Direct manipulation of hardware peripheral registers and interrupt handlers instead of bloated abstraction layers."
+          desc: "Direct manipulation of hardware peripheral registers and interrupt handlers instead of bloated abstraction layers.",
+          todo: "TODO: 2–3 sentences from Richard on “Register-Level Architecture”."
         },
         {
           title: "Hardware-Software Sync",
-          desc: "Deterministic timing and bus communication (SPI/I2C/UART) between microcontrollers and host architectures."
+          desc: "Deterministic timing and bus communication (SPI/I2C/UART) between microcontrollers and host architectures.",
+          todo: "TODO: 2–3 sentences from Richard on “Hardware-Software Sync”."
         },
         {
           title: "Why C++ & Go?",
-          desc: "The ideal equilibrium between bare-metal register control and highly concurrent network telemetry pipelines."
+          desc: "The ideal equilibrium between bare-metal register control and highly concurrent network telemetry pipelines.",
+          todo: "TODO: 2–3 sentences from Richard on “Why C++ & Go?”."
         },
         {
           title: "Lab & Development Path",
-          desc: "Targeted journey toward IT Systems Electronics certification by 2027 with focus on enterprise network arrays."
+          desc: "Targeted journey toward IT Systems Electronics certification by 2027 with focus on enterprise network arrays.",
+          todo: "TODO: 2–3 sentences from Richard on “Lab & Development Path”."
         }
       ],
       workbenchTitle: "Hardware Lab & Workbench",

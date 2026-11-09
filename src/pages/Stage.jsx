@@ -260,6 +260,8 @@ export default function Stage() {
               </div>
               <h3 className="font-anton uppercase text-3xl tracking-wide mt-2">{entry.title}</h3>
               <p className="mt-3 text-base leading-relaxed text-ash-200">{entry.desc}</p>
+              {/* TODO strings are placeholders for facts still to be supplied, so visitors never see them. */}
+              {import.meta.env.DEV && <p className="mt-3 font-mono text-xs text-ash-300">{entry.todo}</p>}
             </article>
           ))}
         </div>

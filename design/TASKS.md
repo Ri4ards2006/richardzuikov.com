@@ -202,7 +202,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | Panels at different depths with parallax |
 | done | claude-code | Panel entrance motion: slide + slight rotation + slam |
 | done | claude-code | Animated monochrome line illustration per panel: register bits flipping, SPI/I2C waveform, code typing |
-| todo | claude-code | Panel text 2–3 sentences as TODO keys |
+| done | claude-code | Panel text 2–3 sentences as TODO keys |
 
 ### Arcana
 | Status | Owner | Item |
