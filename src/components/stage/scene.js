@@ -142,7 +142,7 @@ const SOFT_PORTRAIT = `
     vec4 c=texture2D(uMap,vUv);
     if(c.a<.5)discard;
     float lum=dot(c.rgb,vec3(.299,.587,.114));
-    float tone=max(lum,uShade*(.08+.66*smoothstep(.1,.85,1.-vUv.x)));
+    float tone=mix(lum,.05+.72*smoothstep(.1,.85,1.-vUv.x),uShade);
     float v=clamp((tone-.5)*1.6+.5,0.,1.);
     vec2 fine=fract(mat2(.707,-.707,.707,.707)*gl_FragCoord.xy/3.5)-.5;
     v+=(1.-smoothstep(.14,.4,v))*(1.-smoothstep(.2,.3,length(fine)))*.34;
@@ -198,14 +198,14 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
        vHeat=smoothstep(fract(aSeed.z*5.1)*.7,fract(aSeed.z*5.1)*.7+.3,uEmber);
        vec4 mv=modelViewMatrix*vec4(p,1.);
        gl_Position=projectionMatrix*mv;
-       gl_PointSize=uPixel*(16.+aSeed.z*24.)*(1.+uStory*.35)/-mv.z;
+       gl_PointSize=uPixel*(16.+aSeed.z*24.)*(1.+uStory*.8+vHeat*.5)/-mv.z;
      }`,
     `uniform float uStory; varying float vShow,vHeat;
      void main(){
        float d=length(gl_PointCoord-.5);
        if(d>.5||vShow<.01)discard;
        vec3 ash=mix(vec3(.957,.957,.941),vec3(.56,.56,.54),uStory);
-       gl_FragColor=vec4(mix(ash,vec3(1.,.42,0.),vHeat),(1.-d*2.)*.7*vShow);
+       gl_FragColor=vec4(mix(ash,vec3(1.,.42,0.),vHeat),(1.-d*(2.-uStory*.8))*(.7+uStory*.3)*vShow);
      }`,
     { uTime: { value: 0 }, uRise: { value: 0 }, uStory: { value: 0 }, uEmber: { value: 0 }, uPixel: { value: 1 } },
   ));

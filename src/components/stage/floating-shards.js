@@ -38,7 +38,7 @@ export function createFloatingShards(count) {
     return {
       nx: hash(i + 510) * 2 - 1,
       ny: hash(i + 520) * 2 - 1,
-      z: -2.6 + hash(i + 530) * 3.6,
+      z: -3.2 + hash(i + 530) * 2.9,
       size: [(0.055 + hash(i + 540) * 0.16) * large, (0.04 + hash(i + 550) * 0.1) * large, 0.025 + hash(i + 560) * 0.06],
       thinAt: 0.02 + hash(i + 700) * 0.72,
       spin: [(hash(i + 570) - 0.5) * 0.7, (hash(i + 580) - 0.5) * 0.7],
