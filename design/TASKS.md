@@ -234,7 +234,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 ### Bonfire
 | Status | Owner | Item |
 |---|---|---|
-| todo | antigravity | Remove the cable entirely |
+| done | claude-code | Remove the cable entirely |
 | todo | antigravity | Recognisable soldering iron: conical chrome tip, thin shaft, heat-sink sleeve, ribbed rubber grip, stuck diagonally into the pile |
 | todo | antigravity | Varied stones |
 | todo | antigravity | Charred PCB pile with glowing traces |

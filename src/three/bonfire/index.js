@@ -72,9 +72,7 @@ function buildBonfire(emberCount) {
   grip.position.y = 1.7;
   const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.05, 1.5, 8), metal);
   shaft.position.y = 0.92;
-  const cable = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.024, 6, 18, Math.PI * 1.15), new THREE.MeshStandardMaterial({ color: 0x0c0c0c, roughness: 0.8 }));
-  cable.position.set(0.4, 2.82, 0);
-  iron.add(handle, grip, shaft, cable);
+  iron.add(handle, grip, shaft);
   iron.position.set(0, 0.04, 0.05);
   iron.rotation.set(0.1, 0.4, -0.13);
   group.add(iron);
