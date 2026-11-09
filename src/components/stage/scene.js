@@ -183,6 +183,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   const hero = new THREE.Group();
   scene.add(hero);
   const heroLayers = [];
+  let heroFigure = null;
   const rings = [1.55, 1.95, 2.3].map((radius, i) => {
     const pts = [];
     const segments = 96;
@@ -209,6 +210,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     map.needsUpdate = true;
     const aspect = img.width / img.height;
     const figure = new THREE.Mesh(new THREE.PlaneGeometry(3.1 * aspect, 3.1), createPortrait(map));
+    heroFigure = figure;
     hero.add(figure);
     heroLayers.push({ object: figure, depth: 0.42, base: new THREE.Vector3(0, -0.1, 0) });
   }).catch(() => {});
@@ -226,6 +228,14 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   }).catch(() => {});
 
   const profileHeight = () => Math.min(profile.box.h, profile.box.w / profile.aspect);
+
+  // p: 0 on the stage, 1 settled in About. The figure turns edge-on, then the profile turns in.
+  function placeProfile(mesh, p) {
+    mesh.position.lerpVectors(hero.position, profile.to, p);
+    mesh.position.z = Math.sin(p * Math.PI) * 1.4;
+    mesh.scale.setScalar(THREE.MathUtils.lerp(hero.scale.x * 3.1, profileHeight(), p));
+    mesh.rotation.y = rad(-90) * (1 - smooth(clamp01((p - 0.5) / 0.5)));
+  }
 
   // Inclined screentone panels behind the descent.
   const backPanels = Array.from({ length: 6 }, (_, i) => {
@@ -449,9 +459,11 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       rings.forEach((ring, i) => { ring.rotation.z = time * (i % 2 ? -0.05 : 0.07); });
     }
 
+    const aboutEnter = smooth(clamp01(state.scroll / Math.max(1, profile.top * 0.95)));
+    if (heroFigure) heroFigure.rotation.y = rad(90) * smooth(clamp01(aboutEnter / 0.5));
     if (profile.mesh) {
-      profile.mesh.position.copy(profile.to);
-      profile.mesh.scale.setScalar(profileHeight());
+      placeProfile(profile.mesh, aboutEnter);
+      profile.mesh.visible = aboutEnter > 0.5;
     }
 
     if (!dive.active && !state.loadingCard) {
