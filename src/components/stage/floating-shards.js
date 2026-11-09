@@ -30,11 +30,13 @@ export function createFloatingShards(count) {
   const tones = new Float32Array(count);
   const items = Array.from({ length: count }, (_, i) => {
     tones[i] = hash(i + 500);
+    // A few large shards give the field a foreground.
+    const large = hash(i + 600) > 0.82 ? 2.1 : 1;
     return {
       nx: hash(i + 510) * 2 - 1,
       ny: hash(i + 520) * 2 - 1,
       z: -2.6 + hash(i + 530) * 3.6,
-      size: [0.07 + hash(i + 540) * 0.2, 0.05 + hash(i + 550) * 0.13, 0.03 + hash(i + 560) * 0.08],
+      size: [(0.07 + hash(i + 540) * 0.2) * large, (0.05 + hash(i + 550) * 0.13) * large, 0.03 + hash(i + 560) * 0.08],
       spin: [(hash(i + 570) - 0.5) * 0.7, (hash(i + 580) - 0.5) * 0.7],
       phase: hash(i + 590) * Math.PI * 2,
       base: new THREE.Vector2(),

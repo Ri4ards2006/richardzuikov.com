@@ -481,7 +481,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       profile.ghosts.forEach((ghost, i) => {
         ghost.p += (aboutEnter - ghost.p) * (1 - Math.exp(-dt * ghost.follow));
         const opacity = clamp01(Math.abs(aboutEnter - ghost.p) * 7) * (0.42 - i * 0.06);
-        ghost.mesh.visible = opacity > 0.01 && ghost.p > 0.5;
+        ghost.mesh.visible = opacity > 0.01 && ghost.p > 0.64;
         if (!ghost.mesh.visible) return;
         placeProfile(ghost.mesh, ghost.p);
         ghost.material.uniforms.uOpacity.value = opacity;

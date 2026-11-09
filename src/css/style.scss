@@ -375,6 +375,7 @@ html.dark .ground-message {
 
 .stage-portrait {
   min-height: 24rem;
+  margin-top: 9rem;
   align-self: stretch;
   pointer-events: none;
 }
@@ -439,6 +440,8 @@ html.dark .ground-message {
   display: inline-flex;
   align-items: center;
   min-height: 2.75rem;
+  padding-inline: 0.75rem;
+  background: rgb(var(--ash-900));
   text-decoration: underline;
   text-underline-offset: 4px;
 }
@@ -447,6 +450,8 @@ html.dark .ground-message {
   bottom: 1.25rem;
   left: 50%;
   transform: translateX(-50%);
+  padding: 0.35rem 0.75rem;
+  background: rgb(var(--ash-900));
   white-space: nowrap;
 }
 
@@ -732,6 +737,7 @@ html.dark .ground-message {
   }
 
   .stage-portrait {
+    margin-top: 0;
     min-height: 16rem;
   }
 
