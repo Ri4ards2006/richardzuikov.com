@@ -19,6 +19,8 @@ const SCENE_TIMEOUT_MS = 4000;
 const SLAB_SIZES = [1, 0.84, 1.12, 0.92, 1.04];
 const SLAB_OFFSETS = [0, 1.1, 0.4, 1.6, 0.7];
 const SCROLL_TARGETS = { about: 'about', work: 'arcana', contact: 'bonfire' };
+// Depth layer per descent panel: near panels move against the scroll, far ones trail it.
+const PANEL_LAYERS = ['near', 'far', 'mid', 'near'];
 
 const delay = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
 
@@ -224,7 +226,7 @@ export default function Stage() {
             <article
               key={entry.title}
               ref={(node) => { panelRefs.current[index] = node; }}
-              className={`manga-panel ${index % 2 ? 'is-right' : ''}`}
+              className={`manga-panel is-${PANEL_LAYERS[index % PANEL_LAYERS.length]} ${index % 2 ? 'is-right' : ''}`}
             >
               <span aria-hidden="true" className="font-anton text-6xl leading-none text-ash-600">{String(index + 1).padStart(2, '0')}</span>
               <h3 className="font-anton uppercase text-3xl tracking-wide mt-2">{entry.title}</h3>

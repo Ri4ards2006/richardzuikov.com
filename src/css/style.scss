@@ -572,6 +572,7 @@ html.dark .ground-message {
 }
 
 .manga-panel {
+  position: relative;
   --tilt: 9deg;
   max-width: 34rem;
   padding: 1.75rem;
@@ -579,13 +580,35 @@ html.dark .ground-message {
   border: 3px solid rgb(var(--ash-100));
   box-shadow: 10px 10px 0 rgb(var(--ash-900));
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2rem), calc(100% - 2rem) 100%, 0 100%);
-  transform: perspective(1100px) rotateY(var(--tilt)) rotateX(calc(var(--depth, 0) * 9deg)) rotateZ(-1.2deg);
+  --roll: -1.2deg;
+  --layer-scale: 1;
+  --parallax: 0px;
+  transform: translateY(calc(var(--depth, 0) * var(--parallax))) perspective(1100px) rotateY(var(--tilt)) rotateX(calc(var(--depth, 0) * 9deg)) rotateZ(var(--roll)) scale(var(--layer-scale));
+}
+
+.manga-panel.is-near {
+  --layer-scale: 1.06;
+  --parallax: -130px;
+  z-index: 3;
+}
+
+.manga-panel.is-mid {
+  --layer-scale: 0.96;
+  --parallax: 40px;
+  z-index: 2;
+}
+
+.manga-panel.is-far {
+  --layer-scale: 0.84;
+  --parallax: 150px;
+  z-index: 1;
+  border-color: rgb(var(--ash-300));
 }
 
 .manga-panel.is-right {
   --tilt: -9deg;
+  --roll: 1.2deg;
   margin-inline-start: auto;
-  transform: perspective(1100px) rotateY(var(--tilt)) rotateX(calc(var(--depth, 0) * 9deg)) rotateZ(1.2deg);
 }
 
 .stage-works {
@@ -750,6 +773,21 @@ html.dark .ground-message {
   .manga-panel,
   .manga-panel.is-right {
     --tilt: 0deg;
+  }
+
+  .manga-panel.is-near {
+    --layer-scale: 1;
+    --parallax: -40px;
+  }
+
+  .manga-panel.is-mid {
+    --layer-scale: 0.98;
+    --parallax: 16px;
+  }
+
+  .manga-panel.is-far {
+    --layer-scale: 0.94;
+    --parallax: 48px;
   }
 
   .stage-abyss {
