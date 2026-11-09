@@ -17,6 +17,7 @@ module.exports = {
       colors: {
         ash: Object.fromEntries(steps.map((step) => [step, channel(`ash-${step}`)])),
         accent: { DEFAULT: channel('accent'), dim: channel('accent-dim') },
+        ember: { DEFAULT: channel('ember-gold'), hot: channel('ember-hot') },
       },
     },
   },

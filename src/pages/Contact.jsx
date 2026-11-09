@@ -33,7 +33,7 @@ export default function Contact() {
         </>
       )}
       {motion && (
-        <Checkpoint text={t.atlus.contact.kindled} storageKey="seen-kindled" textClassName="font-cinzel font-bold text-xl sm:text-3xl tracking-[0.25em] text-center text-accent bg-ash-900/90 px-8 py-4" />
+        <Checkpoint text={t.atlus.contact.kindled} storageKey="seen-kindled" textClassName="font-cinzel font-bold text-xl sm:text-3xl tracking-[0.25em] text-center text-ember bg-ash-900/90 px-8 py-4" />
       )}
 
       <div className="relative z-10 w-full max-w-3xl mx-auto px-5 sm:px-12 pt-8">
