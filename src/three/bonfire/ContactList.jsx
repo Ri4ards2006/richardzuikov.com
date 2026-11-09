@@ -1,34 +1,68 @@
 import React from 'react';
-import { Check, Copy, Download, Mail } from 'lucide-react';
+import { Check, Copy } from 'lucide-react';
 import { useLanguage } from '../../hooks/use-language';
 import { useContactEmail } from '../../hooks/use-contact-email';
 import { socialLinks } from '../../components/home/SocialLinks';
 
-const rowClass = 'abyss-row';
+const rowClass = 'abyss-row group font-mono uppercase tracking-widest text-sm';
 
 // Import this file directly: index.js pulls in three.js, which must stay out of the initial bundle.
 export default function ContactList() {
   const { t } = useLanguage();
   const { email, copied, copy } = useContactEmail();
 
+  const githubLink = socialLinks.find((s) => s.label.toLowerCase() === 'github')?.href || 'https://github.com/Ri4ards2006';
+  const linkedinLink = socialLinks.find((s) => s.label.toLowerCase() === 'linkedin')?.href || 'https://www.linkedin.com/in/richard-zuikov-526745343';
+
   return (
-    <ul className="mt-8 border-t border-ash-700 font-mono text-sm">
-      <li><a href={email ? `mailto:${email}` : undefined} className={rowClass}><Mail aria-hidden="true" className="w-4 h-4 shrink-0" /><span className="break-all">{email}</span></a></li>
-      <li>
-        <button type="button" onClick={copy} className={rowClass}>
-          {copied ? <Check aria-hidden="true" className="w-4 h-4" /> : <Copy aria-hidden="true" className="w-4 h-4" />}
-          <span role="status">{copied ? t.telemetry.copied : t.landing.copyEmail}</span>
+    <div className="mt-8">
+      {/* Displayed Email with small copy box next to it */}
+      <div className="flex items-center justify-between gap-3 p-3 bg-ash-800/90 border border-ash-700 font-mono text-xs">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="text-ash-400 select-none">EMAIL //</span>
+          <span className="text-ash-100 font-medium truncate select-all">{email}</span>
+        </div>
+        <button
+          type="button"
+          onClick={copy}
+          title={copied ? t.telemetry.copied : t.landing.copyEmail}
+          aria-label={copied ? t.telemetry.copied : t.landing.copyEmail}
+          className="shrink-0 p-1.5 border border-ash-600 hover:border-ash-300 bg-ash-900/60 hover:bg-ash-700 text-ash-200 transition-colors"
+        >
+          {copied ? (
+            <Check aria-hidden="true" className="w-3.5 h-3.5 text-ember-gold" />
+          ) : (
+            <Copy aria-hidden="true" className="w-3.5 h-3.5 text-ash-300" />
+          )}
+          <span className="sr-only" role="status">
+            {copied ? t.telemetry.copied : t.landing.copyEmail}
+          </span>
         </button>
-      </li>
-      <li><a href="/cv/CV_Richard_Zuikov.pdf" download className={rowClass}><Download aria-hidden="true" className="w-4 h-4" />{t.landing.downloadCv}</a></li>
-      {socialLinks.map(({ label, href, icon }) => (
-        <li key={label}>
-          <a href={href} target="_blank" rel="noreferrer" className={rowClass}>
-            <svg aria-hidden="true" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">{icon}</svg>
-            {label}
+      </div>
+
+      {/* Souls-style prompt action list: > SEND MAIL · > CV (PDF) · > GITHUB · > LINKEDIN */}
+      <ul className="mt-4 border-t border-ash-700">
+        <li>
+          <a href={email ? `mailto:${email}` : undefined} className={rowClass}>
+            <span>SEND MAIL</span>
           </a>
         </li>
-      ))}
-    </ul>
+        <li>
+          <a href="/cv/CV_Richard_Zuikov.pdf" download className={rowClass}>
+            <span>CV (PDF)</span>
+          </a>
+        </li>
+        <li>
+          <a href={githubLink} target="_blank" rel="noreferrer" className={rowClass}>
+            <span>GITHUB</span>
+          </a>
+        </li>
+        <li>
+          <a href={linkedinLink} target="_blank" rel="noreferrer" className={rowClass}>
+            <span>LINKEDIN</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   );
 }
