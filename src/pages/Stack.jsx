@@ -15,7 +15,8 @@ export default function Stack() {
   return (
     <Screen id="stack" number="03" title={t.landing.nav.stack} hud={t.atlus.hud.stack}>
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-8">
-        <ul className="space-y-2">
+        <div className="has-message">
+          <ul className="space-y-2">
           {domains.map(([key, item], index) => (
             <li key={key}>
               <button
@@ -33,6 +34,8 @@ export default function Stack() {
             </li>
           ))}
         </ul>
+          <span aria-hidden="true" className="ground-message mt-2">{t.atlus.hints.stack}</span>
+        </div>
 
         <section aria-label={domain.name} className="border border-ash-600 p-4 sm:p-6">
           <p className="flex flex-wrap justify-between gap-x-4 font-mono text-xs tracking-widest text-accent">

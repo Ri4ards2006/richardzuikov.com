@@ -264,3 +264,33 @@ h1[tabindex='-1']:focus-visible {
   from { transform: translateX(-8%); }
   to { transform: translateX(8%); }
 }
+
+/* Hover hints. Reserved space and absolute placement avoid any layout shift. */
+.ground-message {
+  display: block;
+  opacity: 0;
+  font-style: italic;
+  font-size: 0.8125rem;
+  color: rgb(var(--accent));
+  pointer-events: none;
+  transition: opacity 200ms;
+}
+
+.dark .ground-message,
+html.dark .ground-message {
+  text-shadow: 0 0 8px rgb(var(--accent) / 0.75), 0 0 20px rgb(var(--accent-dim) / 0.8);
+}
+
+.has-message:hover .ground-message,
+.has-message:focus-within .ground-message,
+.arcana:hover .ground-message,
+.arcana:focus-within .ground-message {
+  opacity: 1;
+}
+
+.arcana .ground-message {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0.5rem;
+  text-align: center;
+}

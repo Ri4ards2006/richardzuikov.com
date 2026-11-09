@@ -39,7 +39,7 @@ export default function MenuPlaceholder() {
       <div className="relative z-10 w-full max-w-6xl mx-auto px-5 sm:px-12 py-10 flex items-center justify-between gap-8">
         <div>
           <h1 className="font-anton uppercase text-5xl sm:text-7xl tracking-wide text-ash-100">Richard Zuikov</h1>
-          <nav aria-label={t.atlus.menuNav} className="mt-8">
+          <nav aria-label={t.atlus.menuNav} className="has-message mt-8">
             <ul onKeyDown={handleKeyDown} className="space-y-1">
               {menuItems.map((item) => (
                 <li key={item.id}>
@@ -58,6 +58,7 @@ export default function MenuPlaceholder() {
                 </li>
               ))}
             </ul>
+            <span aria-hidden="true" className="ground-message mt-2">{t.atlus.hints.menu}</span>
           </nav>
           <Link to={QUICK_PATH} className="mt-8 inline-flex items-center min-h-11 font-mono text-xs uppercase tracking-widest text-accent underline underline-offset-4">
             {t.landing.menuPlaceholder.quickRead}
