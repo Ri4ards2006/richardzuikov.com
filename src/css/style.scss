@@ -2457,15 +2457,6 @@ html.gm-open .menu-dots {
   --ink-t: rotate(-6deg);
 }
 
-.ink-stage-menu {
-  left: -4rem;
-  top: 50%;
-  width: clamp(16rem, 36vw, 34rem);
-  aspect-ratio: 1;
-  margin-top: clamp(-17rem, -18vw, -8rem);
-  opacity: 0.09;
-  z-index: 0;
-}
 
 .stage-menu {
   position: relative;
@@ -2853,4 +2844,24 @@ html.gm-open .menu-dots {
   .skill-prop {
     display: none;
   }
+}
+
+/* Ink behind a stage menu item only while it is hovered or focused (DESIGN.md §16). */
+.slab-ink {
+  /* Peeks out past the right end of the slab, behind the wedge. */
+  left: 62%;
+  top: 50%;
+  width: clamp(7rem, 13vw, 11rem);
+  aspect-ratio: 1;
+  margin-top: clamp(-5.5rem, -6.5vw, -3.5rem);
+  z-index: -1;
+  opacity: 0;
+  scale: 0.4;
+  transition: opacity 120ms linear, scale 160ms cubic-bezier(0.2, 0.9, 0.1, 1.2);
+}
+
+.stage-menu li:hover .slab-ink,
+.stage-menu.is-keyboard li.has-active .slab-ink {
+  opacity: 0.3;
+  scale: 1;
 }

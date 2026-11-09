@@ -253,6 +253,8 @@ export default function Stage() {
 
   const handleMenuKey = (event) => {
     if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+    // Arrow keys show the ink on the selected item, like hover does, until the pointer moves.
+    event.currentTarget.closest('.stage-menu')?.classList.add('is-keyboard');
     event.preventDefault();
     const index = menuItems.findIndex((item) => item.id === active);
     const step = event.key === 'ArrowDown' ? 1 : -1;
@@ -286,8 +288,7 @@ export default function Stage() {
         </div>
         <p aria-hidden="true" className="stage-hud stage-cue"><TraceStar small /> {t.atlus.stage.scroll}</p>
         <div className="relative z-10 flex flex-col justify-center">
-          <InkSplat variant={0} className="ink-stage-menu" />
-          <nav aria-label={t.atlus.menuNav} className="stage-menu">
+          <nav aria-label={t.atlus.menuNav} className="stage-menu" onPointerMove={(event) => event.currentTarget.classList.remove('is-keyboard')}>
             <ul onKeyDown={handleMenuKey}>
               {menuItems.map((item, index) => {
                 const target = scrollTargets[item.id];
@@ -301,6 +302,7 @@ export default function Stage() {
                 };
                 return (
                   <li key={item.id} className={active === item.id ? 'has-active' : undefined}>
+                    <InkSplat variant={index} className="slab-ink" />
                     <span aria-hidden="true" className="slab-number">{item.number}</span>
                     {target ? (
                       <a href={`#${target}`} onClick={(event) => scrollTo(event, target)} {...shared}>{t.landing.nav[item.id]}</a>
