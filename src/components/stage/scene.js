@@ -64,30 +64,45 @@ function voronoiCells(w, h, count) {
   }).filter((cell) => cell.poly.length > 2);
 }
 
-function drawHalftone(ctx, img, x, y, w, h, cell) {
-  const cols = Math.floor(w / cell);
-  const rows = Math.floor(h / cell);
-  const sample = makeCanvas(cols, rows);
-  const sctx = sample.getContext('2d', { willReadFrequently: true });
-  const scale = Math.max(cols / img.width, rows / img.height);
-  sctx.drawImage(img, (cols - img.width * scale) / 2, (rows - img.height * scale) / 2, img.width * scale, img.height * scale);
-  const { data } = sctx.getImageData(0, 0, cols, rows);
-  ctx.fillStyle = '#f4f4f0';
-  ctx.beginPath();
-  for (let r = 0; r < rows; r += 1) {
-    for (let c = 0; c < cols; c += 1) {
-      const i = (r * cols + c) * 4;
-      const lum = (0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]) / 255;
-      const radius = Math.sqrt(clamp01(lum * 1.35)) * cell * 0.72;
-      if (radius > 0.3) {
-        const px = x + (c + 0.5) * cell;
-        const py = y + (r + 0.5) * cell;
-        ctx.moveTo(px + radius, py);
-        ctx.arc(px, py, radius, 0, Math.PI * 2);
-      }
+// High-contrast grayscale with a 3 px screentone, fine enough to keep the object recognisable.
+const TONE = Array.from({ length: 9 }, (_, i) => Math.sin(((i % 3) + 0.5) * (Math.PI * 2 / 3)) * Math.sin((Math.floor(i / 3) + 0.5) * (Math.PI * 2 / 3)));
+
+function drawToned(ctx, img, x, y, w, h) {
+  const scale = Math.max(w / img.width, h / img.height);
+  ctx.drawImage(img, x + (w - img.width * scale) / 2, y + (h - img.height * scale) / 2, img.width * scale, img.height * scale);
+  const pixels = ctx.getImageData(x, y, w, h);
+  const { data } = pixels;
+  const lumAt = (i) => (0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]) / 255;
+
+  // Per-image levels: dark photos would otherwise sink into black under the contrast curve.
+  const histogram = new Uint32Array(256);
+  for (let i = 0; i < data.length; i += 4) histogram[Math.round(lumAt(i) * 255)] += 1;
+  const total = data.length / 4;
+  const percentile = (fraction) => {
+    let sum = 0;
+    for (let bin = 0; bin < 256; bin += 1) {
+      sum += histogram[bin];
+      if (sum >= total * fraction) return bin / 255;
     }
+    return 1;
+  };
+  const low = percentile(0.02);
+  const high = Math.max(low + 0.05, percentile(0.985));
+  const mean = histogram.reduce((sum, count, bin) => sum + count * clamp01((bin / 255 - low) / (high - low)), 0) / total;
+  const gamma = THREE.MathUtils.clamp(Math.log(0.42) / Math.log(Math.max(mean, 0.01)), 0.45, 1);
+
+  for (let i = 0; i < data.length; i += 4) {
+    const px = (i / 4) % w;
+    const py = Math.floor(i / 4 / w);
+    const lum = clamp01((lumAt(i) - low) / (high - low)) ** gamma;
+    const contrast = clamp01((lum - 0.5) * 1.7 + 0.52);
+    const toned = clamp01(contrast + TONE[(py % 3) * 3 + (px % 3)] * 0.11);
+    const value = Math.round(toned * 255);
+    data[i] = value;
+    data[i + 1] = value;
+    data[i + 2] = value;
   }
-  ctx.fill();
+  ctx.putImageData(pixels, x, y);
 }
 
 function drawCard(canvas, project, index, img) {
@@ -100,7 +115,7 @@ function drawCard(canvas, project, index, img) {
     ctx.beginPath();
     ctx.rect(30, 86, w - 60, h - 200);
     ctx.clip();
-    drawHalftone(ctx, img, 30, 86, w - 60, h - 200, 7);
+    drawToned(ctx, img, 30, 86, w - 60, h - 200);
     ctx.restore();
   }
   ctx.strokeStyle = '#f4f4f0';
