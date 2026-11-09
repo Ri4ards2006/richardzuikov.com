@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useLanguage } from '../../hooks/use-language';
-import { projectImages } from '../../data/project-images';
+import { projectImageLift, projectImages } from '../../data/project-images';
 
 const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 const DRAG_THRESHOLD_PX = 6;
@@ -166,7 +166,7 @@ export default function ProjectDeck() {
                   className="deck-face"
                 >
                   <span aria-hidden="true" className="deck-roman">{ROMAN[index] ?? index + 1}</span>
-                  <span className="deck-image">
+                  <span className="deck-image" style={projectImageLift[project.id] ? { '--image-lift': projectImageLift[project.id] } : undefined}>
                     <img src={projectImages[project.id]} alt="" loading="lazy" decoding="async" draggable="false" />
                   </span>
                   <span className="deck-title">{project.title}</span>

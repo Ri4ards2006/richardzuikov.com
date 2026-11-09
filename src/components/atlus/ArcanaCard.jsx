@@ -32,9 +32,9 @@ export default function ArcanaCard({ project, index, fan }) {
           aria-label={`${project.title}: ${t.atlus.flip}`}
           className="arcana-face flex flex-col"
         >
-          <span aria-hidden="true" className="block text-center font-mono text-sm tracking-widest text-ash-300 py-3">{ROMAN[index] ?? index + 1}</span>
+          <span aria-hidden="true" className="deck-roman mx-3 py-2">{ROMAN[index] ?? index + 1}</span>
           <span className="relative block flex-1 min-h-0 mx-3 overflow-hidden">
-            <img src={project.image} width={project.width} height={project.height} alt="" loading="lazy" decoding="async" className="arcana-image" />
+            <img src={project.image} width={project.width} height={project.height} alt="" loading="lazy" decoding="async" className="arcana-image" style={project.imageLift ? { '--image-lift': project.imageLift } : undefined} />
             <span aria-hidden="true" className="arcana-halftone" />
             <span aria-hidden="true" className="ground-message">{t.atlus.hints.card}</span>
           </span>

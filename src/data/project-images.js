@@ -13,3 +13,6 @@ export const projectImages = {
   '05': goCoreImg,
   '06': homeLabImg,
 };
+
+// CSS brightness for photos too dark for the shared grayscale filter; the canvas cards level themselves.
+export const projectImageLift = { '04': 2.3 };

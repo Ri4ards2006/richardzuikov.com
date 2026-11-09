@@ -26,6 +26,7 @@ export const featuredProjects = [
     image: weatherImg,
     width: 896,
     height: 1195,
+    imageLift: 2.3,
     tags: ['C++', 'ESP32', 'IoT', 'MQTT'],
     href: 'https://github.com/Ri4ards2006/Weather_Station2.0',
     de: {

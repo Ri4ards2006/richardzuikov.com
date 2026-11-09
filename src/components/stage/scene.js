@@ -124,9 +124,12 @@ function drawCard(canvas, project, index, img) {
   ctx.lineWidth = 1.5;
   ctx.strokeRect(19, 19, w - 38, h - 38);
   ctx.fillStyle = '#f4f4f0';
+  ctx.textAlign = 'left';
+  ctx.font = '700 34px Cinzel, serif';
+  const numeral = ROMAN[index] ?? String(index + 1);
+  ctx.fillText(numeral, 34, 70);
+  ctx.fillRect(34 + ctx.measureText(numeral).width + 16, 54, w - 68 - ctx.measureText(numeral).width - 16, 2);
   ctx.textAlign = 'center';
-  ctx.font = '26px ui-monospace, monospace';
-  ctx.fillText(ROMAN[index] ?? String(index + 1), w / 2, 62);
   ctx.font = '50px Anton, Impact, sans-serif';
   ctx.fillText(project.title.toUpperCase(), w / 2, h - 44, w - 70);
 }
@@ -255,7 +258,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     const group = new THREE.Group();
     group.add(mesh);
     scene.add(group);
-    document.fonts?.load('50px Anton').then(() => {
+    Promise.all([document.fonts?.load('50px Anton'), document.fonts?.load('700 34px Cinzel')]).then(() => {
       if (state.disposed) return;
       drawCard(face, project, index, null);
       map.needsUpdate = true;
