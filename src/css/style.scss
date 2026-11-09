@@ -880,6 +880,14 @@ html.dark .ground-message {
   filter: grayscale(1) contrast(1.2) brightness(0.7);
 }
 
+.deck.is-dragging {
+  cursor: grabbing;
+}
+
+.deck.is-dragging .deck-card {
+  transition: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .deck-card {
     transition: none;
