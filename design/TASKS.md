@@ -177,23 +177,23 @@ Reviewer items already listed above are not repeated. The review was written bef
 ### Stage
 | Status | Owner | Item |
 |---|---|---|
-| todo | claude-code | Remove the "STATUS: AVAILABLE…" chip |
-| todo | claude-code | Remove the diagonal white line across the portrait |
-| todo | claude-code | Name as big angled Anton block "RICHARD / ZUIKOV" top-right, small role line underneath |
-| todo | claude-code | Remove the name/role line above the menu |
-| todo | claude-code | Menu slabs ~1.5× larger, up to ~120 px desktop; keep wedge, inversion, echo text; no overflow at 390 px (review 9.1) |
-| todo | claude-code | QUICK READ out from under the menu: global menu + small HUD link bottom-right |
-| todo | claude-code | 40–60 floating 3D shards: flat-shaded greys, slow rotation, cursor push, spring back |
-| todo | claude-code | Replace the halftone ellipse band with hard ink-water (Card 03) |
+| done | claude-code | Remove the "STATUS: AVAILABLE…" chip |
+| done | claude-code | Remove the diagonal white line across the portrait |
+| done | claude-code | Name as big angled Anton block "RICHARD / ZUIKOV" top-right, small role line underneath |
+| done | claude-code | Remove the name/role line above the menu |
+| done | claude-code | Menu slabs ~1.5× larger, up to ~120 px desktop; keep wedge, inversion, echo text; no overflow at 390 px (review 9.1) |
+| doing | claude-code | QUICK READ out from under the menu: global menu + small HUD link bottom-right |
+| done | claude-code | 40–60 floating 3D shards: flat-shaded greys, slow rotation, cursor push, spring back |
+| done | claude-code | Replace the halftone ellipse band with hard ink-water (Card 03) |
 
 ### About
 | Status | Owner | Item |
 |---|---|---|
-| todo | claude-code | New section directly after the stage, before "From Register to Network"; text from translations, missing facts as TODO keys |
-| todo | claude-code | Side-profile portrait with placeholder silhouette until the real photo exists |
-| todo | claude-code | Stage → About: portrait turns ~90° on Y and moves forward/larger into the layout |
-| todo | claude-code | Monochrome afterimage trail: 5–6 delayed ghost copies fading out |
-| todo | claude-code | Leaving About: figure dissolves into halftone dots |
+| done | claude-code | New section directly after the stage, before "From Register to Network"; text from translations, missing facts as TODO keys |
+| done | claude-code | Side-profile portrait with placeholder silhouette until the real photo exists |
+| done | claude-code | Stage → About: portrait turns ~90° on Y and moves forward/larger into the layout |
+| done | claude-code | Monochrome afterimage trail: 5–6 delayed ghost copies fading out |
+| done | claude-code | Leaving About: figure dissolves into halftone dots |
 
 ### Descent
 | Status | Owner | Item |

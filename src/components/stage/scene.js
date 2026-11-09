@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { createBonfire } from '../../three/bonfire';
+import { createFloatingShards } from './floating-shards';
+import { createInkWater } from './ink-water';
 import { disposeObject, hash, makeCanvas, pointsMaterial, seededPoints, smooth, texture } from '../../three/utils';
 
 const FOV = 40;
@@ -14,6 +16,8 @@ const SLOW_FRAME_MS = 24;
 const IDLE_FRAME_MS = 1000 / 30;
 const ACTIVE_WINDOW_MS = 500;
 const SMALL_SCREEN = 768;
+// Follow rates of the delayed copies, nearest first.
+const GHOST_FOLLOW = [15, 11, 8, 6, 4.5, 3.4];
 const TILTS = [[-3, 4, -2], [2, -3, 3], [-4, -4, 1.5], [3, 2, -3]];
 const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
 
@@ -131,26 +135,28 @@ function screentone() {
   return map;
 }
 
-function createPortrait(map) {
+function createPortrait(map, { ghost = false } = {}) {
   return new THREE.ShaderMaterial({
     transparent: true,
-    uniforms: { uMap: { value: map } },
+    depthWrite: !ghost,
+    uniforms: { uMap: { value: map }, uOpacity: { value: 1 }, uDissolve: { value: 0 } },
     vertexShader: 'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
     fragmentShader: `
-      varying vec2 vUv; uniform sampler2D uMap;
+      varying vec2 vUv; uniform sampler2D uMap; uniform float uOpacity,uDissolve;
       void main(){
         vec4 c=texture2D(uMap,vUv);
         if(c.a<.5)discard;
         float lum=dot(c.rgb,vec3(.299,.587,.114));
         float tone=max(lum,.1+.62*smoothstep(.32,.95,vUv.x));
-        vec2 cell=fract(mat2(.707,-.707,.707,.707)*gl_FragCoord.xy/5.)-.5;
-        float on=1.-smoothstep(.0,.08,length(cell)-sqrt(tone)*.62);
-        gl_FragColor=vec4(mix(vec3(.02),vec3(.957,.957,.941),on),1.);
+        vec2 cell=fract(mat2(.707,-.707,.707,.707)*gl_FragCoord.xy/(5.+uDissolve*11.))-.5;
+        float on=1.-smoothstep(.0,.08,length(cell)-sqrt(tone)*.62*(1.-uDissolve*uDissolve));
+        if(uDissolve>0.&&on<.5)discard;
+        gl_FragColor=vec4(mix(vec3(.02),vec3(.957,.957,.941),on),uOpacity);
       }`,
   });
 }
 
-export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd }) {
+export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc, onDiveEnd }) {
   const isSmall = window.innerWidth < SMALL_SCREEN;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: !isSmall, powerPreference: 'high-performance' });
   renderer.setClearColor(INK);
@@ -181,6 +187,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
   const hero = new THREE.Group();
   scene.add(hero);
   const heroLayers = [];
+  let heroFigure = null;
   const rings = [1.55, 1.95, 2.3].map((radius, i) => {
     const pts = [];
     const segments = 96;
@@ -198,10 +205,8 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
   });
 
   const toneMap = screentone();
-  const disc = new THREE.Mesh(new THREE.CircleGeometry(1.5, 48), new THREE.MeshBasicMaterial({ map: toneMap }));
-  disc.position.z = -0.6;
-  hero.add(disc);
-  heroLayers.push({ object: disc, depth: 0.2, base: new THREE.Vector3(0, 0, -0.6) });
+  const water = createInkWater();
+  scene.add(water.mesh);
 
   loadImage(portraitSrc).then((img) => {
     if (state.disposed) return;
@@ -209,15 +214,40 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
     map.needsUpdate = true;
     const aspect = img.width / img.height;
     const figure = new THREE.Mesh(new THREE.PlaneGeometry(3.1 * aspect, 3.1), createPortrait(map));
+    heroFigure = figure;
     hero.add(figure);
     heroLayers.push({ object: figure, depth: 0.42, base: new THREE.Vector3(0, -0.1, 0) });
   }).catch(() => {});
 
-  // Ink slash in front of the portrait.
-  const slash = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 0.045), new THREE.MeshBasicMaterial({ color: PAPER }));
-  slash.rotation.z = rad(-24);
-  hero.add(slash);
-  heroLayers.push({ object: slash, depth: 0.75, base: new THREE.Vector3(0, -0.9, 0.7) });
+  // Side-profile figure of the About section.
+  const profile = { ghosts: [], mesh: null, map: null, geometry: null, aspect: 1, box: { w: 1, h: 1 }, to: new THREE.Vector3(), top: 0, height: 1 };
+  loadImage(profileSrc).then((img) => {
+    if (state.disposed) return;
+    profile.map = new THREE.Texture(img);
+    profile.map.needsUpdate = true;
+    profile.aspect = img.width / img.height;
+    profile.geometry = new THREE.PlaneGeometry(profile.aspect, 1);
+    profile.mesh = new THREE.Mesh(profile.geometry, createPortrait(profile.map));
+    scene.add(profile.mesh);
+    profile.ghosts = GHOST_FOLLOW.map((follow) => {
+      const material = createPortrait(profile.map, { ghost: true });
+      const mesh = new THREE.Mesh(profile.geometry, material);
+      mesh.visible = false;
+      mesh.renderOrder = -1;
+      scene.add(mesh);
+      return { mesh, material, follow, p: 0 };
+    });
+  }).catch(() => {});
+
+  const profileHeight = () => Math.min(profile.box.h, profile.box.w / profile.aspect);
+
+  // p: 0 on the stage, 1 settled in About. The figure turns edge-on, then the profile turns in.
+  function placeProfile(mesh, p) {
+    mesh.position.lerpVectors(hero.position, profile.to, p);
+    mesh.position.z = Math.sin(p * Math.PI) * 1.4;
+    mesh.scale.setScalar(THREE.MathUtils.lerp(hero.scale.x * 3.1, profileHeight(), p));
+    mesh.rotation.y = rad(-90) * (1 - smooth(clamp01((p - 0.5) / 0.5)));
+  }
 
   // Inclined screentone panels behind the descent.
   const backPanels = Array.from({ length: 6 }, (_, i) => {
@@ -245,6 +275,11 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
     });
     return { project, index, face, map, mesh, group, tilt, lift: 0, base: new THREE.Vector3() };
   });
+
+  const floating = createFloatingShards(isSmall ? 40 : 56);
+  scene.add(floating.mesh);
+  const pointer = new THREE.Vector2();
+  let pointerSeen = false;
 
   const bonfire = createBonfire({ emberCount: isSmall ? 60 : 80, getLayout: () => state.fire });
   bonfire.mount(scene, camera);
@@ -318,6 +353,8 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
     const pixel = (state.h / 800) * pixelRatio;
     dust.material.uniforms.uPixel.value = pixel;
 
+    floating.layout(Math.tan(rad(FOV / 2)), state.w / state.h, CAM_Z);
+
     const a = anchors();
     const portrait = worldOf(a.portrait.getBoundingClientRect());
     hero.position.set(portrait.x, portrait.y, 0);
@@ -341,6 +378,13 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
       panel.position.set((i % 2 ? 2.2 : -2.2) * (state.w / state.h) * 0.7, -(top + height / 2 - state.h / 2) * state.k, -3 - (i % 3) * 0.7);
     });
     backPanels.forEach((panel, i) => { panel.visible = i < state.panels.length; });
+
+    const about = worldOf(a.aboutPortrait.getBoundingClientRect());
+    profile.to.set(about.x, about.y, 0);
+    profile.box = about;
+    const aboutRect = a.about.getBoundingClientRect();
+    profile.top = aboutRect.top + state.scroll;
+    profile.height = aboutRect.height;
 
     const fire = worldOf(a.fire.getBoundingClientRect());
     const fireScale = Math.min(fire.h / 4.2, fire.w / 3.4);
@@ -416,11 +460,32 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
     dust.material.uniforms.uTime.value = time;
 
     hero.visible = state.scroll < state.h * 1.4;
+    floating.mesh.visible = hero.visible;
+    water.mesh.visible = hero.visible;
     if (hero.visible) {
+      water.update(time, clamp01(state.scroll / (state.h * 0.55)) * 1.2);
+      floating.update(dt, time, pointerSeen ? pointer.set(mouse.x, -mouse.y) : null);
       heroLayers.forEach(({ object, depth, base }) => {
         object.position.set(base.x + mouse.x * depth, base.y - mouse.y * depth * 0.6, base.z);
       });
       rings.forEach((ring, i) => { ring.rotation.z = time * (i % 2 ? -0.05 : 0.07); });
+    }
+
+    const aboutEnter = smooth(clamp01(state.scroll / Math.max(1, profile.top * 0.95)));
+    if (heroFigure) heroFigure.rotation.y = rad(90) * smooth(clamp01(aboutEnter / 0.5));
+    if (profile.mesh) {
+      placeProfile(profile.mesh, aboutEnter);
+      const dissolve = clamp01((state.scroll - (profile.top + profile.height * 0.42)) / (profile.height * 0.5));
+      profile.mesh.material.uniforms.uDissolve.value = dissolve;
+      profile.mesh.visible = aboutEnter > 0.5 && dissolve < 1;
+      profile.ghosts.forEach((ghost, i) => {
+        ghost.p += (aboutEnter - ghost.p) * (1 - Math.exp(-dt * ghost.follow));
+        const opacity = clamp01(Math.abs(aboutEnter - ghost.p) * 7) * (0.42 - i * 0.06);
+        ghost.mesh.visible = opacity > 0.01 && ghost.p > 0.64;
+        if (!ghost.mesh.visible) return;
+        placeProfile(ghost.mesh, ghost.p);
+        ghost.material.uniforms.uOpacity.value = opacity;
+      });
     }
 
     if (!dive.active && !state.loadingCard) {
@@ -462,6 +527,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
   const onPointerMove = (event) => {
     mouse.tx = (event.clientX / window.innerWidth - 0.5) * 2;
     mouse.ty = (event.clientY / window.innerHeight - 0.5) * 2;
+    if (event.pointerType === 'mouse') pointerSeen = true;
     state.lastInput = performance.now();
   };
   const onVisibility = () => {
@@ -523,6 +589,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
       window.removeEventListener('pointermove', onPointerMove);
       document.removeEventListener('visibilitychange', onVisibility);
       bonfire.dispose();
+      profile.map?.dispose();
       disposeObject(scene);
       renderer.dispose();
     },

@@ -8,6 +8,7 @@ import { QUICK_PATH } from '../lib/sections';
 import { portraits } from '../data/portraits';
 import { featuredProjects } from '../data/featured-projects';
 import IntroOverlay from '../components/stage/IntroOverlay';
+import AboutSection from '../components/stage/AboutSection';
 import ContactList from '../three/bonfire/ContactList';
 import { grainTexture } from '../lib/noise-textures';
 
@@ -17,7 +18,7 @@ const SCENE_TIMEOUT_MS = 4000;
 // Each slab has its own size and offset (design bible, Card 03).
 const SLAB_SIZES = [1, 0.84, 1.12, 0.92, 1.04];
 const SLAB_OFFSETS = [0, 1.1, 0.4, 1.6, 0.7];
-const SCROLL_TARGETS = { work: 'arcana', contact: 'bonfire' };
+const SCROLL_TARGETS = { about: 'about', work: 'arcana', contact: 'bonfire' };
 
 const delay = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
 
@@ -49,6 +50,8 @@ export default function Stage() {
   const canvasRef = useRef(null);
   const stageRef = useRef(null);
   const portraitRef = useRef(null);
+  const aboutRef = useRef(null);
+  const aboutPortraitRef = useRef(null);
   const fireRef = useRef(null);
   const abyssRef = useRef(null);
   const slotRefs = useRef([]);
@@ -70,9 +73,12 @@ export default function Stage() {
         canvas: canvasRef.current,
         projects: featuredProjects,
         portraitSrc: portraits.about.large,
+        profileSrc: portraits.profile.large,
         onDiveEnd: () => setPhase('done'),
         anchors: () => ({
           portrait: portraitRef.current,
+          about: aboutRef.current,
+          aboutPortrait: aboutPortraitRef.current,
           fire: fireRef.current,
           abyss: abyssRef.current,
           slots: slotRefs.current.filter(Boolean),
@@ -169,11 +175,14 @@ export default function Stage() {
       )}
 
       <section aria-labelledby="stage-title" className={`stage-hero ${phase === 'done' ? 'is-settled' : ''}`}>
-        <p className="stage-hud stage-chip">STATUS: {t.telemetry.status} · Flensburg</p>
+        <div className="stage-name">
+          <h1 id="stage-title" className="stage-name-block"><span>Richard</span> <span>Zuikov</span></h1>
+          <p className="stage-role">{t.career.role}</p>
+        </div>
+        <Link to={QUICK_PATH} className="stage-hud stage-quick">{t.landing.menuPlaceholder.quickRead} →</Link>
         <p aria-hidden="true" className="stage-hud stage-cue">↓ {t.atlus.stage.scroll}</p>
         <div className="relative z-10 flex flex-col justify-center">
-          <h1 id="stage-title" className="font-mono text-xs tracking-[0.3em] text-ash-300 uppercase">Richard Zuikov · {t.career.role}</h1>
-          <nav aria-label={t.atlus.menuNav} className="has-message stage-menu mt-5">
+          <nav aria-label={t.atlus.menuNav} className="has-message stage-menu">
             <ul onKeyDown={handleMenuKey}>
               {menuItems.map((item, index) => {
                 const target = SCROLL_TARGETS[item.id];
@@ -199,14 +208,13 @@ export default function Stage() {
             </ul>
             <span aria-hidden="true" className="ground-message mt-3">{t.atlus.hints.menu}</span>
           </nav>
-          <Link to={QUICK_PATH} className="mt-6 inline-flex items-center min-h-11 self-start font-mono text-xs uppercase tracking-widest text-ash-200 underline underline-offset-4">
-            {t.landing.menuPlaceholder.quickRead}
-          </Link>
         </div>
         <div ref={portraitRef} className="stage-portrait">
           {!webgl && <img src={portraits.about.large} alt="" className="h-full w-full object-contain grayscale" />}
         </div>
       </section>
+
+      <AboutSection ref={aboutRef} portraitRef={aboutPortraitRef} webgl={webgl} />
 
       <section aria-labelledby="descent-title" className="stage-descent">
         <p className="font-mono text-xs tracking-widest text-ash-300">{t.atlus.stage.descent}</p>
