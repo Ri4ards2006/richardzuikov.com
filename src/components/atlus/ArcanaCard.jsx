@@ -36,7 +36,6 @@ export default function ArcanaCard({ project, index, fan }) {
           <span className="relative block flex-1 min-h-0 mx-3 overflow-hidden">
             <img src={project.image} width={project.width} height={project.height} alt="" loading="lazy" decoding="async" className="arcana-image" style={project.imageLift ? { '--image-lift': project.imageLift } : undefined} />
             <span aria-hidden="true" className="arcana-halftone" />
-            <span aria-hidden="true" className="ground-message">{t.atlus.hints.card}</span>
           </span>
           <span className="block text-center font-anton uppercase text-2xl tracking-wide text-ash-100 py-3 px-2">{project.title}</span>
         </button>

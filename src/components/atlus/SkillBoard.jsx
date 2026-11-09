@@ -20,7 +20,7 @@ export default function SkillBoard({ onCategory }) {
   return (
     <>
     <div ref={boardRef} className="skill-board">
-      <div className="has-message">
+      <div>
         <ul className="skill-slabs">
           {domains.map(([key, item], index) => (
             <li key={key} style={{ '--i': index }}>
@@ -31,7 +31,6 @@ export default function SkillBoard({ onCategory }) {
             </li>
           ))}
         </ul>
-        <span aria-hidden="true" className="ground-message mt-2">{t.atlus.hints.stack}</span>
         {/* Anchor for the WebGL prop of the selected category. */}
         {onCategory && <div aria-hidden="true" className="skill-prop" />}
       </div>

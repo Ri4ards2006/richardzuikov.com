@@ -368,7 +368,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 | Status | Owner | Item |
 |---|---|---|
 | done | claude-code | Props only in gutters, never over text or headings, hidden on narrow screens |
-| todo | claude-code | Floating hints removed; HUD bottom-right "↑↓ SELECT · ⏎ OPEN · ESC BACK" |
+| done | claude-code | Floating hints removed; HUD bottom-right "↑↓ SELECT · ⏎ OPEN · ESC BACK" |
 | todo | claude-code | Ink behind stage menu items only on hover / active |
 
 ### Dedicated screens

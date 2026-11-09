@@ -280,11 +280,14 @@ export default function Stage() {
           <h1 id="stage-title" className="stage-name-block"><span>Richard</span> <span>Zuikov</span></h1>
           <p className="stage-role">{t.career.role}</p>
         </div>
-        <Link to={QUICK_PATH} className="stage-hud stage-quick">{t.landing.menuPlaceholder.quickRead} →</Link>
+        <div className="stage-hud stage-hud-br">
+          <p aria-hidden="true" className="stage-controls">{t.atlus.hints.controls}</p>
+          <Link to={QUICK_PATH} className="stage-quick">{t.landing.menuPlaceholder.quickRead} →</Link>
+        </div>
         <p aria-hidden="true" className="stage-hud stage-cue"><TraceStar small /> {t.atlus.stage.scroll}</p>
         <div className="relative z-10 flex flex-col justify-center">
           <InkSplat variant={0} className="ink-stage-menu" />
-          <nav aria-label={t.atlus.menuNav} className="has-message stage-menu">
+          <nav aria-label={t.atlus.menuNav} className="stage-menu">
             <ul onKeyDown={handleMenuKey}>
               {menuItems.map((item, index) => {
                 const target = scrollTargets[item.id];
@@ -308,7 +311,6 @@ export default function Stage() {
                 );
               })}
             </ul>
-            <span aria-hidden="true" className="ground-message mt-3">{t.atlus.hints.menu}</span>
           </nav>
         </div>
         <div ref={portraitRef} className="stage-portrait">
