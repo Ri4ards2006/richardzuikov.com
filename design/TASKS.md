@@ -110,7 +110,7 @@ Derived from DESIGN.md §6, §7 and §11. Status: `todo` / `doing` / `done`. Own
 | doing | `border-radius: 0` on `/` (done for the stage; `rounded` remains on deep pages) |
 | todo | Port stack to `@react-three/fiber`, drei, postprocessing, gsap, lenis, d3-delaunay, or rule against it |
 | doing | Palette names: tokens match values, not the `--ink-*` / `--bone` names |
-| done | No hue outside the warm zone in code, except unrouted `/contact` components |
+| done | No hue outside the warm zone in code, except unrouted `/contact` components (last Impressum remnant fixed from review 8.1) |
 | todo | Warm colours fade in from scroll 55 % |
 | done | Mobile < 768 px: DPR 1, 12 fragments |
 | todo | Mobile: portrait 2 layers, simplified bonfire |
@@ -137,3 +137,20 @@ Derived from DESIGN.md §6, §7 and §11. Status: `todo` / `doing` / `done`. Own
 | todo | Rule on `/contact`: redirect (current) or full screen (§6) |
 | todo | Provide `design/storyboard/card-01…05.png` and `design/refs/` for the §10 comparison |
 | todo | Portrait photos in `src/assets/portraits/raw/` |
+
+## Added from REVIEW.md (2026-11-09)
+
+Reviewer items already listed above are not repeated. The review was written before the two §10 rounds, so 3.1, 3.2 (numbers), 3.4, 7.2 (marker), 8.3 and 9.2 are already fixed; 3.5 (rings) and 7.5 (footer) do exist in the build.
+
+| Status | Item | Review |
+|---|---|---|
+| done | Remove the last `#FFB000` in `Impressum.jsx` | 8.1 |
+| done | Slab entrance within 220 ms with the §5 curve | 4.2 |
+| done | Manga panels use 3 px borders | 4.3 |
+| todo | Row labels and icons: prompt-style text list instead of Lucide icons | 7.2 |
+| todo | Skip control as a slab with a key cue | 1.5 |
+| todo | Rack link as a slanted chip | 5.5 |
+| todo | Sharp binary halftone on panels instead of the soft gradient | 4.5 |
+| todo | Touch or gyro input in place of mouse parallax on mobile | 9.3 |
+| todo | Preloader bar relative to viewport width | 9.5 |
+| todo | Rename tokens to `--bone`, `--paper`, `--ember`, `--flame`, `--glow` | 8.4 |
