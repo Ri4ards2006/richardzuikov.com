@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "portraits": "bash scripts/portraits.sh"
   },
   "dependencies": {
     "@fontsource/anton": "^5.3.0",
