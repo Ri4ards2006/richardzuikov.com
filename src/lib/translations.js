@@ -110,9 +110,9 @@ export const translations = {
           todo: "TODO: 2–3 Sätze von Richard zu „Register-Level Architektur“."
         },
         {
-          title: "Hardware-Software Synchronisation",
-          desc: "Präzises Timing und Bus-Kommunikation (SPI/I2C/UART) zwischen Mikrocontrollern und Host-Systemen.",
-          todo: "TODO: 2–3 Sätze von Richard zu „Hardware-Software Synchronisation“."
+          title: "Hardware & PCB",
+          desc: "Eigene 2-Layer-Platinen entstehen in KiCad, von Layout und Routing bis zur fertigen Baugruppe. Bring-up und Fehlersuche laufen am Oszilloskop, bis jedes Signal dort ankommt, wo es hin soll.",
+          todo: "ENTWURF: von Richard zu prüfen (Hardware & PCB)."
         },
         {
           title: "Warum C++ & Go?",
@@ -477,9 +477,9 @@ export const translations = {
           todo: "TODO: 2–3 sentences from Richard on “Register-Level Architecture”."
         },
         {
-          title: "Hardware-Software Sync",
-          desc: "Deterministic timing and bus communication (SPI/I2C/UART) between microcontrollers and host architectures.",
-          todo: "TODO: 2–3 sentences from Richard on “Hardware-Software Sync”."
+          title: "Hardware & PCB",
+          desc: "I design my own 2-layer boards in KiCad, from layout and routing to the assembled board. Bring-up and debugging happen on the oscilloscope, until every signal arrives where it should.",
+          todo: "DRAFT: for Richard's review (Hardware & PCB)."
         },
         {
           title: "Why C++ & Go?",
