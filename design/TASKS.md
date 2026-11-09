@@ -255,28 +255,28 @@ Reviewer items already listed above are not repeated. The review was written bef
 ### Nav
 | Status | Owner | Item |
 |---|---|---|
-| todo | claude-code | CONTACT (stage and global menu) lands at the very end of the rail; every menu target lands on its resting state |
-| todo | claude-code | Global `…` button on every screen opening the full-screen Atlus menu overlay |
-| todo | claude-code | Footer labels follow the language |
+| done | claude-code | CONTACT (stage and global menu) lands at the very end of the rail; every menu target lands on its resting state |
+| done | claude-code | Global `…` button on every screen opening the full-screen Atlus menu overlay |
+| done | claude-code | Footer labels follow the language |
 
 ### Stage & portraits
 | Status | Owner | Item |
 |---|---|---|
-| todo | claude-code | Two portrait slots: `stage` front-facing, `about` side profile; pipeline names and placeholders |
-| todo | claude-code | Softer About treatment: high-contrast grayscale, fine screentone only in the shadows |
-| todo | claude-code | Shards ≈30–40 with depth fade, continuing into the descent and turning into rising ash and embers |
-| todo | claude-code | 2–3 slow-rotating low-poly monochrome 3D props tied to descent panels |
+| done | claude-code | Two portrait slots: `stage` front-facing, `about` side profile; pipeline names and placeholders |
+| done | claude-code | Softer About treatment: high-contrast grayscale, fine screentone only in the shadows |
+| done | claude-code | Shards ≈30–40 with depth fade, continuing into the descent and turning into rising ash and embers |
+| done | claude-code | 2–3 slow-rotating low-poly monochrome 3D props tied to descent panels |
 
 ### Descent
 | Status | Owner | Item |
 |---|---|---|
-| todo | claude-code | Five panels in the new order |
-| todo | claude-code | Panel 02 becomes Hardware & PCB (text draft listed in WORKLOG) |
-| todo | claude-code | Panel 04 Cluster & Infrastructure with node-graph illustration (text draft listed in WORKLOG) |
+| done | claude-code | Five panels in the new order |
+| done | claude-code | Panel 02 becomes Hardware & PCB (text draft listed in WORKLOG) |
+| done | claude-code | Panel 04 Cluster & Infrastructure with node-graph illustration (text draft listed in WORKLOG) |
 
 ### Arcana
 | Status | Owner | Item |
 |---|---|---|
-| todo | claude-code | Roman numerals centred at the top of the card |
-| todo | claude-code | Inspect animation for featured and deck cards: zoom, overshoot, flip, dim; back with title, lines, tags, VIEW SOURCE and DETAILS; Esc, outside click and back return it |
-| todo | claude-code | Colour photo only in the zoomed inspect view |
+| done | claude-code | Roman numerals centred at the top of the card |
+| done | claude-code | Inspect animation for featured and deck cards: zoom, overshoot, flip, dim; back with title, lines, tags, VIEW SOURCE and DETAILS; Esc, outside click and back return it |
+| done | claude-code | Colour photo only in the zoomed inspect view |

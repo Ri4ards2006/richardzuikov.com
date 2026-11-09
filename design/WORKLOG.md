@@ -82,3 +82,39 @@ Append-only. Format: date · agent · done · next · files touched.
 
 **Files touched**
 `design/{ASSETS,TASKS,WORKLOG}.md`, `public/sitemap.xml`, `src/App.jsx`, `src/css/style.scss`, `src/lib/translations.js`, `src/pages/{Stage,Stack,Work}.jsx`, `src/components/{MenuOverlay.jsx,atlus/ArcanaCard.jsx,home/WorkSection.jsx}`, `src/components/stage/{scene.js,PanelIllustration.jsx,ProjectDeck.jsx}`, `src/data/{featured-projects,project-images,stack-uses}.js` (removed `src/data/stack-levels.js`)
+
+## 2026-11-09 · Claude Code (Opus 5.5) · changelog v3: Nav, Stage, Descent, Arcana
+
+**Done**
+- Tagged `5e6b952` as `checkpoint-atlus-v2`, added DESIGN.md §14, adjusted §6 / §7, added the v3 tasks. Worked on `feat/atlus-v3` in its own worktree; `src/three/bonfire/` is untouched.
+- Nav: CONTACT and `/#bonfire` land at the very end of the rail; the About figure is fully turned exactly at its landing position. Global `…` button on every screen with the full-screen Atlus overlay. Footer labels follow the language.
+- Stage: `stage` (front) and `about` (profile) portrait slots with placeholders; softer About treatment; 30 / 38 shards with depth fade that thin out through the descent into rising ash and embers; chip, capacitor and server blade beside panels 01, 02 and 04.
+- Descent: five panels; panel 02 rewritten; panel 04 with node-graph illustration.
+- Arcana: numerals centred; inspect view for featured and deck cards; colour photo only in the inspect view.
+
+**Drafts for Richard's review**
+- 02 Hardware & PCB, DE: "Eigene 2-Layer-Platinen entstehen in KiCad, von Layout und Routing bis zur fertigen Baugruppe. Bring-up und Fehlersuche laufen am Oszilloskop, bis jedes Signal dort ankommt, wo es hin soll."
+- 02 Hardware & PCB, EN: "I design my own 2-layer boards in KiCad, from layout and routing to the assembled board. Bring-up and debugging happen on the oscilloscope, until every signal arrives where it should."
+- 04 Cluster & Infrastructure, DE: "Im Home-Lab läuft ein Cluster aus Proxmox VE und K3s, deployt per GitOps mit ArgoCD. Von außen erreichbar ist er über WireGuard und Cloudflare-Tunnel."
+- 04 Cluster & Infrastructure, EN: "My home lab runs a cluster on Proxmox VE and K3s, deployed through GitOps with ArgoCD. It is reached from outside through WireGuard and Cloudflare tunnels."
+
+**Review (§10), two rounds per group, against the written §14 only** (`design/storyboard/` and `design/refs/` do not exist here)
+- Nav 1: mobile landing cut off the headline and mail row; arrow keys did nothing until a slab had focus; side panel text small. Fixed. Nav 2: Escape in the menu also left deep pages. Fixed.
+- Stage 1: props too large; shards could pass in front of the portraits; ash too faint before the fire. Fixed. Stage 2: placeholder shading had a hard seam and no shadow screentone. Fixed.
+- Descent 1: heartbeat too flat; phone capacitor touched its panel. Fixed. Descent 2: no further defect found.
+- Arcana 1: empty middle on the card back; dim appeared without a transition; the featured slot collapsed to zero width after becoming a button. Fixed. Arcana 2: the wheel reached the page through short copy. Fixed.
+
+**Next**
+- Remaining v2 tasks: Global and Record. Richard's review of the two drafts.
+
+**Notes**
+- The repo has no test runner. Behaviour was checked with Playwright scripts outside the repo; the nav test failed before the fix and passes after it.
+- DETAILS has no page to open, so it swaps the back of the card to the full specs. The Rack Configurator shows its live link in place of VIEW SOURCE, because its repo entry is only the profile link.
+- `/quick` reads the same panel texts, so the two drafts appear there too.
+- Theme is in the overlay as specified, but Atlus screens stay forced dark, so it only shows on `/quick` and the legal page.
+- On phones the bonfire shrank from 22 rem to 14 rem so the headline, contact list and fire fit on one landed screen.
+- `Weather_Station.png` has a small generator star in its corner, visible in the colour view.
+
+**Files touched**
+`design/{DESIGN,TASKS,WORKLOG}.md`, `scripts/portraits.sh`, `src/assets/portraits/{front-silhouette.svg,raw/README.md}`, `src/css/style.scss`, `src/data/portraits.js`, `src/lib/{atlus,translations}.js`, `src/pages/Stage.jsx`, `src/components/{Footer,Header,MenuOverlay}.jsx`, `src/components/stage/{AboutSection.jsx,CardInspect.jsx,PanelIllustration.jsx,ProjectDeck.jsx,descent-props.js,floating-shards.js,scene.js}`
+
