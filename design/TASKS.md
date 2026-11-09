@@ -280,3 +280,19 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | Roman numerals centred at the top of the card |
 | done | claude-code | Inspect animation for featured and deck cards: zoom, overshoot, flip, dim; back with title, lines, tags, VIEW SOURCE and DETAILS; Esc, outside click and back return it |
 | done | claude-code | Colour photo only in the zoomed inspect view |
+
+## Changelog v3b (Skill and Record)
+
+### Skill (on `/` and `/stack`)
+| Status | Owner | Item |
+|---|---|---|
+| todo | claude-code | Section enter: category slabs slam in staggered; panel arrives with a diagonal slash wipe |
+| todo | claude-code | Category click: slash-wipe of the panel, rows reveal staggered, animated mini vignette above the list (four vignettes) |
+| todo | claude-code | Certificates as KEY ITEM cards in the Arcana frame family; Arcana inspect animation; verify link only for the exact credential |
+
+### Record (on `/` and `/career`)
+| Status | Owner | Item |
+|---|---|---|
+| todo | claude-code | Timeline is jobs and education only; entry 02 becomes "IT System Administration (Minijob) · R2P GmbH · 2024–2025"; remove the two project entries |
+| todo | claude-code | Big Anton year numerals flip on scroll; slanted bars with roman rank; click expands with slash wipe and 2–3 detail lines (TODO keys) |
+| todo | claude-code | Section enter: camera travels into the section, speedlines, panels sliding in from depth |
