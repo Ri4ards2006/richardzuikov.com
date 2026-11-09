@@ -79,7 +79,8 @@ export default function CardInspect({ card, sourceEl, onClosed }) {
     };
     // Only the copy may scroll, so the card can never drift from the slot it returns to.
     const onWheel = (event) => {
-      if (!event.target.closest('.inspect-copy')) event.preventDefault();
+      const copy = event.target.closest('.inspect-copy');
+      if (!copy || copy.scrollHeight <= copy.clientHeight) event.preventDefault();
     };
     const root = rootRef.current;
     window.addEventListener('keydown', onKeyDown, true);
