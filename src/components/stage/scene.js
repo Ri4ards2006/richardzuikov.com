@@ -139,17 +139,18 @@ function createPortrait(map, { ghost = false } = {}) {
   return new THREE.ShaderMaterial({
     transparent: true,
     depthWrite: !ghost,
-    uniforms: { uMap: { value: map }, uOpacity: { value: 1 } },
+    uniforms: { uMap: { value: map }, uOpacity: { value: 1 }, uDissolve: { value: 0 } },
     vertexShader: 'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
     fragmentShader: `
-      varying vec2 vUv; uniform sampler2D uMap; uniform float uOpacity;
+      varying vec2 vUv; uniform sampler2D uMap; uniform float uOpacity,uDissolve;
       void main(){
         vec4 c=texture2D(uMap,vUv);
         if(c.a<.5)discard;
         float lum=dot(c.rgb,vec3(.299,.587,.114));
         float tone=max(lum,.1+.62*smoothstep(.32,.95,vUv.x));
-        vec2 cell=fract(mat2(.707,-.707,.707,.707)*gl_FragCoord.xy/5.)-.5;
-        float on=1.-smoothstep(.0,.08,length(cell)-sqrt(tone)*.62);
+        vec2 cell=fract(mat2(.707,-.707,.707,.707)*gl_FragCoord.xy/(5.+uDissolve*11.))-.5;
+        float on=1.-smoothstep(.0,.08,length(cell)-sqrt(tone)*.62*(1.-uDissolve*uDissolve));
+        if(uDissolve>0.&&on<.5)discard;
         gl_FragColor=vec4(mix(vec3(.02),vec3(.957,.957,.941),on),uOpacity);
       }`,
   });
@@ -474,7 +475,9 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     if (heroFigure) heroFigure.rotation.y = rad(90) * smooth(clamp01(aboutEnter / 0.5));
     if (profile.mesh) {
       placeProfile(profile.mesh, aboutEnter);
-      profile.mesh.visible = aboutEnter > 0.5;
+      const dissolve = clamp01((state.scroll - (profile.top + profile.height * 0.42)) / (profile.height * 0.5));
+      profile.mesh.material.uniforms.uDissolve.value = dissolve;
+      profile.mesh.visible = aboutEnter > 0.5 && dissolve < 1;
       profile.ghosts.forEach((ghost, i) => {
         ghost.p += (aboutEnter - ghost.p) * (1 - Math.exp(-dt * ghost.follow));
         const opacity = clamp01(Math.abs(aboutEnter - ghost.p) * 7) * (0.42 - i * 0.06);

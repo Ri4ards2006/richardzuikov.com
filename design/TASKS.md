@@ -193,7 +193,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | Side-profile portrait with placeholder silhouette until the real photo exists |
 | done | claude-code | Stage → About: portrait turns ~90° on Y and moves forward/larger into the layout |
 | done | claude-code | Monochrome afterimage trail: 5–6 delayed ghost copies fading out |
-| todo | claude-code | Leaving About: figure dissolves into halftone dots |
+| done | claude-code | Leaving About: figure dissolves into halftone dots |
 
 ### Descent
 | Status | Owner | Item |
