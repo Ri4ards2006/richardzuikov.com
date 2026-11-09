@@ -175,8 +175,7 @@ export default function Stage() {
         </div>
         <p aria-hidden="true" className="stage-hud stage-cue">↓ {t.atlus.stage.scroll}</p>
         <div className="relative z-10 flex flex-col justify-center">
-          <p className="font-mono text-xs tracking-[0.3em] text-ash-300 uppercase">Richard Zuikov · {t.career.role}</p>
-          <nav aria-label={t.atlus.menuNav} className="has-message stage-menu mt-5">
+          <nav aria-label={t.atlus.menuNav} className="has-message stage-menu">
             <ul onKeyDown={handleMenuKey}>
               {menuItems.map((item, index) => {
                 const target = SCROLL_TARGETS[item.id];
