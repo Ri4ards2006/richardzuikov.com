@@ -10,7 +10,8 @@ export function useScreen(id, title) {
   const navigate = useNavigate();
   const { state } = useLocation();
   const headingRef = useRef(null);
-  const fromMenu = Boolean(state?.fromMenu);
+  // Opened from the menu or a home OPEN SCREEN slab: back is a history step (scroll position kept).
+  const fromMenu = Boolean(state?.fromMenu || state?.fromHome);
 
   useEffect(() => {
     setActiveMenuId(id);

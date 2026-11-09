@@ -17,7 +17,7 @@ function AppRoutes() {
 
   return (
     <>
-      {transition?.type === 'wipe' && <div key={transition.key} aria-hidden="true" className="wipe-panel" onAnimationEnd={clearTransition} />}
+      {transition?.type === 'wipe' && <div key={transition.key} aria-hidden="true" className="wipe-panel" onAnimationEnd={clearTransition}><span /><span /><span /></div>}
       <Suspense fallback={<div className="min-h-screen" />}>
         <Routes location={displayed}>
           <Route path="/" element={<Stage />} />

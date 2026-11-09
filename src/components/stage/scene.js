@@ -403,6 +403,9 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   }
 
   function measure() {
+    // Leaving the route unmounts the DOM before the effect cleanup disposes the stage; a resize
+    // callback in between finds the anchors gone.
+    if (state.disposed || !canvas.isConnected) return;
     state.w = canvas.clientWidth || window.innerWidth;
     state.h = canvas.clientHeight || window.innerHeight;
     state.k = (2 * Math.tan(rad(FOV / 2)) * CAM_Z) / state.h;
