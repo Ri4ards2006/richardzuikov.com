@@ -394,14 +394,6 @@ html.dark .ground-message {
   color: rgb(var(--ash-200));
 }
 
-.stage-chip {
-  top: 1rem;
-  left: 1.25rem;
-  padding: 0.35rem 1.1rem 0.35rem 0.6rem;
-  background: rgb(var(--ash-800));
-  clip-path: polygon(0 0, 100% 0, calc(100% - 0.6rem) 100%, 0 100%);
-}
-
 .stage-cue {
   bottom: 1.25rem;
   left: 50%;

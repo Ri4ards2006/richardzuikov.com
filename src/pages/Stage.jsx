@@ -169,7 +169,6 @@ export default function Stage() {
       )}
 
       <section aria-labelledby="stage-title" className={`stage-hero ${phase === 'done' ? 'is-settled' : ''}`}>
-        <p className="stage-hud stage-chip">STATUS: {t.telemetry.status} · Flensburg</p>
         <p aria-hidden="true" className="stage-hud stage-cue">↓ {t.atlus.stage.scroll}</p>
         <div className="relative z-10 flex flex-col justify-center">
           <h1 id="stage-title" className="font-mono text-xs tracking-[0.3em] text-ash-300 uppercase">Richard Zuikov · {t.career.role}</h1>
