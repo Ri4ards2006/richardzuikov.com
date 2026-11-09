@@ -9,6 +9,9 @@ const DIVE_MS = 1300;
 const MAX_DPR = 1.5;
 const MIN_DPR = 0.75;
 const SLOW_FRAME_MS = 24;
+const IDLE_FRAME_MS = 1000 / 30;
+const ACTIVE_WINDOW_MS = 500;
+const SMALL_SCREEN = 768;
 const TILTS = [[-3, 4, -2], [2, -3, 3], [-4, -4, 1.5], [3, 2, -3]];
 const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
 
@@ -303,17 +306,17 @@ function createBonfire(emberCount) {
 }
 
 export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd }) {
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+  const isSmall = window.innerWidth < SMALL_SCREEN;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: !isSmall, powerPreference: 'high-performance' });
   renderer.setClearColor(INK);
-  const isSmall = window.innerWidth < 720;
-  let pixelRatio = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+  let pixelRatio = isSmall ? 1 : Math.min(window.devicePixelRatio || 1, MAX_DPR);
   renderer.setPixelRatio(pixelRatio);
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 80);
   camera.position.z = CAM_Z;
 
-  const state = { w: 1, h: 1, k: 0.01, scroll: window.scrollY, camY: 0, frame: 0, last: 0, time: 0, slow: 0, count: 0, spent: 0, hover: -1, abyssTop: 1e9, fireY: 0, panels: [] };
+  const state = { lastInput: 0, w: 1, h: 1, k: 0.01, scroll: window.scrollY, camY: 0, frame: 0, last: 0, time: 0, slow: 0, count: 0, spent: 0, hover: -1, abyssTop: 1e9, fireY: 0, panels: [] };
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
 
   const dust = seededPoints(isSmall ? 70 : 180, pointsMaterial(
@@ -410,7 +413,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
     const viewW = viewH * (state.w / state.h) * 1.1;
     const root = new THREE.Group();
     root.position.z = 7;
-    const items = voronoiCells(viewW, viewH, isSmall ? 22 : 38).map(({ seed, poly }) => {
+    const items = voronoiCells(viewW, viewH, isSmall ? 12 : 38).map(({ seed, poly }) => {
       const cx = poly.reduce((s, p) => s + p[0], 0) / poly.length;
       const cy = poly.reduce((s, p) => s + p[1], 0) / poly.length;
       const shape = new THREE.Shape(poly.map(([x, y]) => new THREE.Vector2(x - cx, y - cy)));
@@ -505,8 +508,21 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
     state.maxScroll = Math.max(1, document.documentElement.scrollHeight - state.h);
   }
 
+  async function loadCardImage(card) {
+    const img = await loadImage(card.project.image);
+    const bitmap = await createImageBitmap(img, { resizeWidth: 512, resizeQuality: 'medium' });
+    await new Promise((resolve) => { requestAnimationFrame(resolve); });
+    if (state.disposed) return;
+    drawCard(card.face, card.project, card.index, bitmap);
+    card.map.needsUpdate = true;
+    bitmap.close();
+  }
+
   function tick(now) {
     state.frame = requestAnimationFrame(tick);
+    const interacting = dive.active || now - state.lastInput < ACTIVE_WINDOW_MS;
+    const minFrame = isSmall || !interacting ? IDLE_FRAME_MS : 0;
+    if (now - state.last < minFrame - 1) return;
     const dtMs = Math.min(now - state.last, 100);
     state.last = now;
     const dt = dtMs / 1000;
@@ -516,7 +532,8 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
     state.spent += dtMs;
     state.count += 1;
     if (state.count === 90) {
-      if (state.spent / state.count > SLOW_FRAME_MS && pixelRatio > MIN_DPR) {
+      const limit = minFrame ? IDLE_FRAME_MS * 1.5 : SLOW_FRAME_MS;
+      if (state.spent / state.count > limit && pixelRatio > MIN_DPR) {
         pixelRatio = Math.max(MIN_DPR, pixelRatio - 0.25);
         renderer.setPixelRatio(pixelRatio);
         measure();
@@ -525,6 +542,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
       state.spent = 0;
     }
 
+    if (window.scrollY !== state.scroll) state.lastInput = now;
     state.scroll = window.scrollY;
     const follow = 1 - Math.exp(-dt * 18);
     state.camY += (-state.scroll * state.k - state.camY) * follow;
@@ -562,6 +580,15 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
         object.position.set(base.x + mouse.x * depth, base.y - mouse.y * depth * 0.6, base.z);
       });
       rings.forEach((ring, i) => { ring.rotation.z = time * (i % 2 ? -0.05 : 0.07); });
+    }
+
+    if (!dive.active && !state.loadingCard) {
+      const next = cards.find((card) => !card.loaded && Math.abs(card.base.y - state.camY) < state.h * state.k * 2.5);
+      if (next) {
+        next.loaded = true;
+        state.loadingCard = true;
+        loadCardImage(next).catch(() => {}).finally(() => { state.loadingCard = false; });
+      }
     }
 
     cards.forEach((card) => {
@@ -603,6 +630,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
   const onPointerMove = (event) => {
     mouse.tx = (event.clientX / window.innerWidth - 0.5) * 2;
     mouse.ty = (event.clientY / window.innerHeight - 0.5) * 2;
+    state.lastInput = performance.now();
   };
   const onVisibility = () => {
     if (document.hidden) {
@@ -626,11 +654,23 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
       state.last = performance.now();
       state.frame = requestAnimationFrame(tick);
     },
+    // Compiles every program off the render path so no later frame stalls on a shader.
+    async prepare({ intro }) {
+      if (intro) shards = buildShards();
+      const fireVisible = bonfire.group.visible;
+      bonfire.group.visible = true;
+      try {
+        await renderer.compileAsync(scene, camera);
+      } catch {
+        // Falls back to compiling on first use.
+      }
+      bonfire.group.visible = fireVisible;
+      if (shards) shards.root.visible = false;
+    },
     prepareDive() {
-      shards = buildShards();
-      camera.position.z = 16;
-      camera.rotation.set(0, 0, rad(12));
-      renderer.render(scene, camera);
+      if (shards) shards.root.visible = true;
+      dive.active = true;
+      dive.start = Infinity;
     },
     playDive() {
       dive.active = true;
@@ -644,15 +684,6 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
     },
     setHover(index) {
       state.hover = index;
-    },
-    loadCards() {
-      cards.forEach((card) => {
-        loadImage(card.project.image).then((img) => {
-          if (state.disposed) return;
-          drawCard(card.face, card.project, card.index, img);
-          card.map.needsUpdate = true;
-        }).catch(() => {});
-      });
     },
     dispose() {
       state.disposed = true;

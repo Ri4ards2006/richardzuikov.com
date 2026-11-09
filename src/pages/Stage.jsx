@@ -86,9 +86,10 @@ export default function Stage() {
         }),
       });
       sceneRef.current = stage;
-      stage.start();
-      stage.loadCards();
-      return stage;
+      return stage.prepare({ intro: playIntro }).then(() => {
+        if (!cancelled) stage.start();
+        return stage;
+      });
     }).catch(() => null);
 
     if (playIntro) {
