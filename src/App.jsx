@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Layout from './components/Layout';
 import MenuPlaceholder from './pages/MenuPlaceholder';
 import Quick from './pages/Quick';
+import Work from './pages/Work';
 import { useWipeLocation } from './hooks/use-wipe-location';
 
 const Lab = lazy(() => import('./pages/Lab'));
@@ -19,6 +20,7 @@ function AppRoutes() {
         <Routes location={displayed}>
           <Route path="/" element={<MenuPlaceholder />} />
           <Route path="/quick" element={<Quick />} />
+          <Route path="/work" element={<Work />} />
           <Route path="/about" element={<Navigate to="/quick#about" replace />} />
           <Route path="/career" element={<Navigate to="/quick#career" replace />} />
           <Route path="/contact" element={<Navigate to="/quick#contact" replace />} />
