@@ -1,34 +1,13 @@
 import * as THREE from 'three';
-import { disposeObject, hash, makeCanvas, pointsMaterial, seededPoints, smooth, texture } from '../utils';
+import { disposeObject, hash, pointsMaterial, seededPoints, smooth } from '../utils';
 import { buildIron } from './iron';
+import { buildPcbPile } from './pcb';
 import { bonfireQuality } from './quality';
 import { buildStones } from './stones';
 
 function noise1(t) {
   const i = Math.floor(t);
   return THREE.MathUtils.lerp(hash(i), hash(i + 1), smooth(t - i));
-}
-
-function pcbTexture() {
-  const canvas = makeCanvas(256, 360);
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#1c1c1b';
-  ctx.fillRect(0, 0, 256, 360);
-  ctx.strokeStyle = '#b5b5b1';
-  ctx.lineWidth = 3;
-  for (let i = 0; i < 18; i += 1) {
-    let x = 20 + hash(i) * 216;
-    let y = hash(i + 40) * 40;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    while (y < 360) {
-      y += 30 + hash(y + i) * 50;
-      x += (hash(x + i) - 0.5) * 60;
-      ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-  }
-  return texture(canvas);
 }
 
 function buildBonfire(emberCount, q) {
@@ -73,10 +52,9 @@ function buildBonfire(emberCount, q) {
   group.add(iron);
   textures.push(matcap);
 
-  const pcb = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.86, 0.035), new THREE.MeshStandardMaterial({ map: pcbTexture(), roughness: 0.55, metalness: 0.2 }));
-  pcb.position.set(-0.86, 0.48, 0.55);
-  pcb.rotation.set(-0.3, 0.5, 0.28);
-  group.add(pcb);
+  const { pile, glow, material: pcbMaterial } = buildPcbPile(q);
+  group.add(pile);
+  textures.push(glow);
 
   const flames = [0xff6a00, 0xff8218, 0xff9a2e, 0xff6a00, 0xff9a2e].map((color, i) => {
     const flame = new THREE.Mesh(
@@ -115,13 +93,13 @@ function buildBonfire(emberCount, q) {
   ));
   group.add(embers);
 
-  return { group, light, flames, emberUniforms, textures };
+  return { group, light, flames, emberUniforms, textures, pcbMaterial };
 }
 
 // getLayout() returns the world placement { x, y, scale, pixel } measured by the stage.
 export function createBonfire({ emberCount, getLayout }) {
   const q = bonfireQuality();
-  const { group, light, flames, emberUniforms, textures } = buildBonfire(emberCount, q);
+  const { group, light, flames, emberUniforms, textures, pcbMaterial } = buildBonfire(emberCount, q);
   group.visible = false;
   let parent = null;
   let time = 0;
@@ -144,6 +122,7 @@ export function createBonfire({ emberCount, getLayout }) {
       if (!group.visible) return;
       const flicker = 0.68 + noise1(time * 7) * 0.42 + Math.sin(time * 19) * 0.05 + Math.sin(time * 3.1) * 0.05;
       light.intensity = 60 * flicker;
+      pcbMaterial.emissiveIntensity = 0.9 + flicker * 0.9;
       light.position.x = (noise1(time * 5 + 9) - 0.5) * 0.3;
       emberUniforms.uTime.value = time;
       flames.forEach((flame, i) => {
