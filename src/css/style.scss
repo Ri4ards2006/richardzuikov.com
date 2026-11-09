@@ -442,6 +442,7 @@ html.dark .ground-message {
 .stage-slab {
   display: inline-block;
   min-height: 2.75rem;
+  max-width: calc(100vw - 4.25rem);
   padding: 0.15rem 3rem 0.15rem 1rem;
   font-family: Anton, Impact, sans-serif;
   line-height: 1.15;
@@ -452,7 +453,7 @@ html.dark .ground-message {
   transform-origin: left center;
   transform: rotateY(-18deg) rotateZ(calc(-6deg - var(--i) * 0.9deg));
   margin-inline-start: calc(var(--offset) * 1rem);
-  font-size: calc(clamp(2.5rem, 6.4vw, 4.5rem) * var(--size));
+  font-size: calc(clamp(3.1rem, 8vw, 5.75rem) * var(--size));
   opacity: 0;
   translate: -3.5rem 0;
 }

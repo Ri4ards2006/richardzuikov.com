@@ -181,7 +181,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | Remove the diagonal white line across the portrait |
 | done | claude-code | Name as big angled Anton block "RICHARD / ZUIKOV" top-right, small role line underneath |
 | done | claude-code | Remove the name/role line above the menu |
-| todo | claude-code | Menu slabs ~1.5× larger, up to ~120 px desktop; keep wedge, inversion, echo text; no overflow at 390 px (review 9.1) |
+| done | claude-code | Menu slabs ~1.5× larger, up to ~120 px desktop; keep wedge, inversion, echo text; no overflow at 390 px (review 9.1) |
 | todo | claude-code | QUICK READ out from under the menu: global menu + small HUD link bottom-right |
 | todo | claude-code | 40–60 floating 3D shards: flat-shaded greys, slow rotation, cursor push, spring back |
 | todo | claude-code | Replace the halftone ellipse band with hard ink-water (Card 03) |
