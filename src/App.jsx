@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
-import MenuPlaceholder from './pages/MenuPlaceholder';
+import Stage from './pages/Stage';
 import Quick from './pages/Quick';
 import NotFound from './pages/NotFound';
 import Contact from './pages/Contact';
@@ -24,7 +24,7 @@ function AppRoutes() {
       {transition?.type === 'fog' && <FogGate key={transition.key} onDone={clearTransition} />}
       <Suspense fallback={null}>
         <Routes location={displayed}>
-          <Route path="/" element={<MenuPlaceholder />} />
+          <Route path="/" element={<Stage />} />
           <Route path="/quick" element={<Quick />} />
           <Route path="/about" element={<About />} />
           <Route path="/career" element={<Career />} />
