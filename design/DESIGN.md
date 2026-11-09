@@ -110,11 +110,12 @@ Home `/` = one page: one fixed WebGL canvas behind, HTML sections on top.
 | 00 | `intro` | – | Card 01–02 | preload → tear → shatter → dive |
 | 01 | `stage` | – | Card 03 | menu stage, front-facing portrait, HUD |
 | 02 | `about` | ABOUT | ABOUT | who I am, what I do, what I'm into; side-profile portrait (see §13) |
-| 03 | `descent` | – | FROM REGISTER TO NETWORK | 5 panels at different depths with line illustrations and 3D props (see §14) |
+| 03 | `descent` | – | FROM PIN TO PACKET | 5 panels at different depths with line illustrations and one 3D prop each (see §15) |
+| 03b | `now` | – | NOW / IN PROGRESS | 3 slanted quest-log panels: TRICH-1, home-lab cluster, apprenticeship (see §15) |
 | 04 | `heading` | ABOUT | HEADING | where I'm heading (2027 goal, focus areas) |
 | 05 | `arcana` | WORK | ARCANA | 3 featured cards + browsable deck of all projects; both open the inspect view (see §14) |
 | 06 | `skill` | STACK | SKILL | condensed list with "used for / where" tags, no ratings + vignettes; "FULL INDEX →" `/stack` |
-| 07 | `record` | CAREER | RECORD | year numerals, role bars, KEY ITEMS (certificates); "FULL RECORD →" `/career` |
+| 07 | `record` | CAREER | RECORD | camera yaws 90°, pinned horizontal timeline ride (see §15); "FULL RECORD →" `/career` |
 | 08 | `bonfire` | CONTACT | BONFIRE | Card 05 |
 
 - Menu click / Enter → camera flies to the section (Lenis `scrollTo` driving the camera rail) and lands on its resting state. CONTACT goes to the very end of the rail.
@@ -312,3 +313,41 @@ Owner decisions of 2026-11-09. §6 and §7 are updated to match; open work is in
 - Roman numerals centred at the top of the card again.
 - Featured cards behave like deck cards: no direct link on click. Inspect animation for both: the card lifts, zooms toward the viewer into the centre (≈600 ms, slight overshoot), flips, the background dims. The back shows title, 2–3 lines, tags and two big buttons "VIEW SOURCE ↗" and "DETAILS". Esc, a click outside or "back" returns it to its place.
 - Colour: cards stay grayscale on the table; only the zoomed inspect view shows the original colour photo. This is the one exception to §2 outside the warm zone.
+
+---
+
+## §15 Changelog v4
+
+Owner decisions of 2026-11-09. §6 and §7 are updated to match; open work is in TASKS.md. Restore point: tag `checkpoint-atlus-v3`.
+Bonfire: only the one addition below; everything else in `src/three/bonfire/` stays untouched.
+
+**Global menu** (redesign; the v3 layout was confusing)
+- Persona-style pause menu: the 5 items large, skewed and staggered in the centre-left, in the stage menu's language (slab, wedge, inversion; hover = wedge + echo text).
+- The giant vertical "MENU" is a low-contrast background element at the left edge behind the items, not a separate block.
+- No settings box. HUD chips in the corners: top-right close; bottom-left DE/EN and theme as slanted chips; bottom-right GitHub / LinkedIn / Mail chips; Quick Read as a slanted chip under the menu items; Impressum / Datenschutz as a tiny mono line at the very bottom.
+- Open/close with a diagonal shard wipe (≤ 350 ms). Esc closes, focus is trapped.
+
+**Stage**
+- Name block top-right: larger and fluid (`clamp`, ~1.4× on desktop), never clipped between 1280 and 1920 px, same angle.
+- "SCROLL DOWN" cue smaller; it fades out after the first scroll.
+
+**Descent**
+- Headline "FROM REGISTER TO NETWORK" → "FROM PIN TO PACKET".
+- One low-poly monochrome 3D prop per panel, slow rotation, never in front of text: 01 QFP chip (kept) · 02 small populated PCB (a few ICs, traces, header pins) replaces the capacitor · 03 small monitor with scrolling code lines · 04 server blade / rack unit with blinking LEDs · 05 dome security camera whose lens follows the cursor.
+- Panel 05 "Lab & Development Path" rewritten in plain words around the IT Systems Electronics apprenticeship (installations, networks, security/camera systems, field work). Draft for Richard's review.
+
+**Now** (new section `now`, between descent and Selected Works)
+- "NOW / IN PROGRESS": 3 slanted panels — TRICH-1 (own CPU on FPGA), home-lab cluster, apprenticeship (2025–2027). Each has a quest-log progress bar and one animated line illustration. Text from data files; missing facts are TODO keys.
+
+**Camera turn + Record**
+- Before RECORD the camera yaws 90°: the section is pinned and vertical scroll drives a horizontal ride along the timeline (years flip like a calendar, roles slide past as slanted bars, a click expands one). After the last entry the camera yaws back and the descent continues to the bonfire.
+- Phones (< 768 px) and reduced motion: the normal vertical layout.
+
+**Skill**
+- One low-poly 3D prop per category beside the panel (chip / rack unit / oscilloscope / browser frame); it swaps with a quick spin when the category changes. Certificates stay KEY ITEM cards (done in v3b).
+
+**Arcana**
+- Finer cards: thinner frame lines, finer screentone, crisper title type.
+
+**Bonfire**
+- One small ruined house / chapel silhouette in the distance behind the fire (low-poly, fog-faded). Nothing else changes.
