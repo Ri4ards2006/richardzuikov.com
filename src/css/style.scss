@@ -346,9 +346,10 @@ html.dark .ground-message {
 
 .stage-name-block {
   font-family: Anton, Impact, sans-serif;
-  font-size: clamp(3.25rem, 7.4vw, 7rem);
+  /* ~1.4× the v3 size on desktop; 7.4vw → 10.4vw keeps it fluid from 1280 to 1920 px. */
+  font-size: clamp(3.25rem, 10.4vw, 10rem);
   font-weight: 400;
-  line-height: 0.98;
+  line-height: 0.94;
   letter-spacing: 0.01em;
   text-transform: uppercase;
   color: rgb(var(--ash-100));
@@ -374,8 +375,9 @@ html.dark .ground-message {
 }
 
 .stage-portrait {
-  min-height: 24rem;
-  margin-top: 9rem;
+  min-height: 18rem;
+  /* Starts below the larger name block, so the HUD rings never run into the role line. */
+  margin-top: clamp(9rem, 19vw, 19rem);
   align-self: stretch;
   pointer-events: none;
 }
