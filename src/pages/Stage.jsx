@@ -79,6 +79,7 @@ export default function Stage() {
         projects: featuredProjects,
         portraitSrc: portraits.stage.large,
         profileSrc: portraits.about.large,
+        profilePlaceholder: portraits.about.isPlaceholder,
         onDiveEnd: () => setPhase('done'),
         anchors: () => ({
           portrait: portraitRef.current,

@@ -134,13 +134,31 @@ function drawCard(canvas, project, index, img) {
   ctx.fillText(project.title.toUpperCase(), w / 2, h - 44, w - 70);
 }
 
-function createPortrait(map, { ghost = false } = {}) {
+// About portrait: high-contrast grayscale, fine screentone only in the shadows, so features stay readable.
+const SOFT_PORTRAIT = `
+  varying vec2 vUv; uniform sampler2D uMap; uniform float uOpacity,uDissolve,uShade;
+  void main(){
+    vec4 c=texture2D(uMap,vUv);
+    if(c.a<.5)discard;
+    float lum=dot(c.rgb,vec3(.299,.587,.114));
+    float tone=max(lum,uShade*(.08+.66*smoothstep(.1,.85,1.-vUv.x)));
+    float v=clamp((tone-.5)*1.6+.5,0.,1.);
+    vec2 fine=fract(mat2(.707,-.707,.707,.707)*gl_FragCoord.xy/3.5)-.5;
+    v+=(1.-smoothstep(.14,.4,v))*(1.-smoothstep(.2,.3,length(fine)))*.34;
+    if(uDissolve>0.){
+      vec2 cell=fract(mat2(.707,-.707,.707,.707)*gl_FragCoord.xy/(5.+uDissolve*11.))-.5;
+      if(length(cell)>(1.-uDissolve)*.9)discard;
+    }
+    gl_FragColor=vec4(mix(vec3(.02),vec3(.957,.957,.941),v),uOpacity);
+  }`;
+
+function createPortrait(map, { ghost = false, soft = false, placeholder = false } = {}) {
   return new THREE.ShaderMaterial({
     transparent: true,
     depthWrite: !ghost,
-    uniforms: { uMap: { value: map }, uOpacity: { value: 1 }, uDissolve: { value: 0 } },
+    uniforms: { uMap: { value: map }, uOpacity: { value: 1 }, uDissolve: { value: 0 }, uShade: { value: placeholder ? 1 : 0 } },
     vertexShader: 'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
-    fragmentShader: `
+    fragmentShader: soft ? SOFT_PORTRAIT : `
       varying vec2 vUv; uniform sampler2D uMap; uniform float uOpacity,uDissolve;
       void main(){
         vec4 c=texture2D(uMap,vUv);
@@ -155,7 +173,7 @@ function createPortrait(map, { ghost = false } = {}) {
   });
 }
 
-export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc, onDiveEnd }) {
+export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc, profilePlaceholder, onDiveEnd }) {
   const isSmall = window.innerWidth < SMALL_SCREEN;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: !isSmall, powerPreference: 'high-performance' });
   renderer.setClearColor(INK);
@@ -225,10 +243,10 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     profile.map.needsUpdate = true;
     profile.aspect = img.width / img.height;
     profile.geometry = new THREE.PlaneGeometry(profile.aspect, 1);
-    profile.mesh = new THREE.Mesh(profile.geometry, createPortrait(profile.map));
+    profile.mesh = new THREE.Mesh(profile.geometry, createPortrait(profile.map, { soft: true, placeholder: profilePlaceholder }));
     scene.add(profile.mesh);
     profile.ghosts = GHOST_FOLLOW.map((follow) => {
-      const material = createPortrait(profile.map, { ghost: true });
+      const material = createPortrait(profile.map, { ghost: true, soft: true, placeholder: profilePlaceholder });
       const mesh = new THREE.Mesh(profile.geometry, material);
       mesh.visible = false;
       mesh.renderOrder = -1;
