@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDocumentTitle } from '../../hooks/use-document-title';
 import { useLanguage } from '../../hooks/use-language';
 import { setActiveMenuId } from '../../lib/atlus';
+import PropViewer from './PropViewer';
 
 // Shared sub-screen behaviour: title, focus, menu memory, Esc and back.
 export function useScreen(id, title) {
@@ -37,22 +38,59 @@ export function useScreen(id, title) {
   return { headingRef, handleBack };
 }
 
-export default function Screen({ id, number, title, hud, children }) {
+// Persona sub-screen (DESIGN.md §16): big title slab, one 3D prop beside it, then the page's
+// sub-menu and detail panel. Idle motion: drifting screentone, the prop's sway.
+export default function Screen({ id, number, title, hud, prop, children }) {
   const { t } = useLanguage();
   const { headingRef, handleBack } = useScreen(id, title);
 
   return (
-    <div className="relative min-h-[calc(100vh-4rem)] overflow-x-clip bg-ash-900 text-ash-100">
-      <div className="max-w-6xl mx-auto px-5 sm:px-12 py-8 md:py-12">
-        <Link to="/" onClick={handleBack} className="inline-flex items-center min-h-11 font-mono text-xs tracking-widest text-ash-300 hover:text-accent transition-colors duration-150">
-          {t.atlus.back}
-        </Link>
-        <p className="mt-6 font-mono text-xs tracking-widest text-accent">{number} / {hud}</p>
-        <h1 ref={headingRef} tabIndex={-1} className="heading-skew outline-none font-anton uppercase text-6xl sm:text-8xl tracking-wide leading-tight mt-5 mb-10">
-          {title}
-        </h1>
+    <div className="scr">
+      <div aria-hidden="true" className="scr-tone" />
+      <div className="scr-inner">
+        <Link to="/" onClick={handleBack} className="scr-back">{t.atlus.back} · ESC</Link>
+        <header className="scr-head">
+          <div>
+            <p className="font-mono text-xs tracking-widest text-ash-300">{number} / {hud}</p>
+            <h1 ref={headingRef} tabIndex={-1} className="scr-title"><span>{title}</span></h1>
+          </div>
+          {prop && <PropViewer name={prop} className="scr-prop" />}
+        </header>
         {children}
       </div>
     </div>
+  );
+}
+
+// Sub-menu of a screen: one slab per category or entry; ↑ / ↓ move and select.
+export function SubMenu({ label, items, active, onSelect }) {
+  const refs = useRef([]);
+  const onKeyDown = (event, index) => {
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+    event.preventDefault();
+    const next = (index + (event.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length;
+    onSelect(next);
+    refs.current[next]?.focus();
+  };
+  return (
+    <nav aria-label={label} className="scr-tabs">
+      <ul>
+        {items.map((item, index) => (
+          <li key={item.id} style={{ '--i': index }}>
+            <button
+              ref={(node) => { refs.current[index] = node; }}
+              type="button"
+              aria-pressed={index === active}
+              onClick={() => onSelect(index)}
+              onKeyDown={(event) => onKeyDown(event, index)}
+              className={`scr-tab ${index === active ? 'is-active' : ''}`}
+            >
+              <span aria-hidden="true" className="scr-tab-number">{item.number ?? String(index + 1).padStart(2, '0')}</span>
+              <span className="scr-tab-label">{item.label}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }

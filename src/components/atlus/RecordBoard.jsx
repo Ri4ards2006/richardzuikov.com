@@ -45,7 +45,7 @@ function FlipDigit({ value }) {
 
 // ride: on the home page the section pins and vertical scroll drives a horizontal ride along the timeline.
 // onRide({ yaw, out, shift }) reports the camera state: yaw −1…1 (in / out turn), shift in px.
-export default function RecordBoard({ onEnter, ride: rideRequested = false, onRide }) {
+export default function RecordBoard({ onEnter, ride: rideRequested = false, onRide, onActive }) {
   const ride = useRideEnabled(rideRequested);
   const onRideRef = useRef(onRide);
   onRideRef.current = onRide;
@@ -56,6 +56,9 @@ export default function RecordBoard({ onEnter, ride: rideRequested = false, onRi
   const barRefs = useRef([]);
   const listRef = useRef(null);
   const boardRef = useSectionEnter(onEnter);
+  const onActiveRef = useRef(onActive);
+  onActiveRef.current = onActive;
+  useEffect(() => { onActiveRef.current?.(active); }, [active]);
 
   const scrollToEntry = (index) => {
     const section = boardRef.current.closest('section');

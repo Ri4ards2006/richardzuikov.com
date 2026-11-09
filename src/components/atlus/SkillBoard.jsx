@@ -8,7 +8,7 @@ import KeyItems from './KeyItems';
 const pad = (value) => String(value).padStart(2, '0');
 
 // onCategory(index): the home page spins its 3D prop for the category; /stack has none.
-export default function SkillBoard({ onCategory }) {
+export default function SkillBoard({ onCategory, showProp = true }) {
   const { t } = useLanguage();
   const domains = Object.entries(t.career.domains);
   const [selected, setSelected] = useState(domains[0][0]);
@@ -32,7 +32,7 @@ export default function SkillBoard({ onCategory }) {
           ))}
         </ul>
         {/* Anchor for the WebGL prop of the selected category. */}
-        {onCategory && <div aria-hidden="true" className="skill-prop" />}
+        {onCategory && showProp && <div aria-hidden="true" className="skill-prop" />}
       </div>
 
       {/* The key replays the slash wipe and the row reveal on every category change. */}

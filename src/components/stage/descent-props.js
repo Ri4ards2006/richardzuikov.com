@@ -44,7 +44,7 @@ export function chip() {
 }
 
 // A small populated board: a few ICs, raised traces with 45° bends and a pin header.
-function pcb() {
+export function pcb() {
   const parts = [box(1.3, 0.05, 0.9)];
   parts.push(box(0.36, 0.08, 0.24, -0.3, 0.065, -0.12), box(0.22, 0.07, 0.22, 0.34, 0.06, 0.12), box(0.14, 0.06, 0.3, 0.02, 0.055, 0.24));
   const trace = (length, x, z, angle) => new THREE.BoxGeometry(length, 0.012, 0.024).rotateY(angle).translate(x, 0.031, z);
@@ -84,7 +84,7 @@ function codeTexture() {
 }
 
 // A small monitor on a stand; the screen scrolls code.
-function monitor() {
+export function monitor() {
   const parts = [box(1.2, 0.78, 0.08, 0, 0.25, 0), box(0.12, 0.36, 0.08, 0, -0.3, -0.06), box(0.62, 0.04, 0.36, 0, -0.48, -0.04)];
   const map = codeTexture();
   const screen = new THREE.Mesh(new THREE.PlaneGeometry(1.06, 0.64).translate(0, 0.25, 0.041), new THREE.MeshBasicMaterial({ map }));
@@ -118,7 +118,7 @@ export function rackUnit() {
 }
 
 // A ceiling dome camera, seen from below: mount, smoked dome, lens with a paper bezel that follows the cursor.
-function domeCamera() {
+export function domeCamera() {
   const parts = [new THREE.CylinderGeometry(0.42, 0.44, 0.08, 12).translate(0, 0.04, 0), new THREE.CylinderGeometry(0.4, 0.4, 0.05, 12).translate(0, -0.02, 0)];
   const shell = new THREE.Mesh(
     new THREE.SphereGeometry(0.36, 16, 8, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2).translate(0, -0.04, 0),
