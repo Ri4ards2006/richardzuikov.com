@@ -208,7 +208,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 | Status | Owner | Item |
 |---|---|---|
 | done | claude-code | Card images: high-contrast grayscale with very fine screentone instead of coarse halftone; object recognisable |
-| todo | claude-code | Browsable deck of all projects (Lab data) below the 3 featured cards: smaller cards in a fan/carousel |
+| done | claude-code | Browsable deck of all projects (Lab data) below the 3 featured cards: smaller cards in a fan/carousel |
 | todo | claude-code | Deck input: drag, wheel, arrow keys |
 | todo | claude-code | Selected deck card lifts and flips to specs + repo link |
 | todo | claude-code | Rack Configurator as one card in the deck |

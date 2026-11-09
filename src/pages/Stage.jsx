@@ -10,6 +10,7 @@ import { featuredProjects } from '../data/featured-projects';
 import IntroOverlay from '../components/stage/IntroOverlay';
 import AboutSection from '../components/stage/AboutSection';
 import PanelIllustration from '../components/stage/PanelIllustration';
+import ProjectDeck from '../components/stage/ProjectDeck';
 import ContactList from '../three/bonfire/ContactList';
 import { grainTexture } from '../lib/noise-textures';
 
@@ -289,6 +290,7 @@ export default function Stage() {
             </li>
           ))}
         </ul>
+        <ProjectDeck />
         <div className="mt-14 flex flex-wrap gap-x-10 gap-y-3 font-mono text-xs tracking-widest">
           <Link to="/lab" className="inline-flex items-center min-h-11 text-ash-100 underline underline-offset-4">{t.atlus.allProjects}</Link>
           <a href="https://rack.richardzuikov.com" target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 text-ash-300 underline underline-offset-4">{t.atlus.stage.rack} ↗</a>
