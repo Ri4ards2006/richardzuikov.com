@@ -16,6 +16,8 @@ const SLOW_FRAME_MS = 24;
 const IDLE_FRAME_MS = 1000 / 30;
 const ACTIVE_WINDOW_MS = 500;
 const SMALL_SCREEN = 768;
+// Follow rates of the delayed copies, nearest first.
+const GHOST_FOLLOW = [15, 11, 8, 6, 4.5, 3.4];
 const TILTS = [[-3, 4, -2], [2, -3, 3], [-4, -4, 1.5], [3, 2, -3]];
 const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
 
@@ -133,13 +135,14 @@ function screentone() {
   return map;
 }
 
-function createPortrait(map) {
+function createPortrait(map, { ghost = false } = {}) {
   return new THREE.ShaderMaterial({
     transparent: true,
-    uniforms: { uMap: { value: map } },
+    depthWrite: !ghost,
+    uniforms: { uMap: { value: map }, uOpacity: { value: 1 } },
     vertexShader: 'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
     fragmentShader: `
-      varying vec2 vUv; uniform sampler2D uMap;
+      varying vec2 vUv; uniform sampler2D uMap; uniform float uOpacity;
       void main(){
         vec4 c=texture2D(uMap,vUv);
         if(c.a<.5)discard;
@@ -147,7 +150,7 @@ function createPortrait(map) {
         float tone=max(lum,.1+.62*smoothstep(.32,.95,vUv.x));
         vec2 cell=fract(mat2(.707,-.707,.707,.707)*gl_FragCoord.xy/5.)-.5;
         float on=1.-smoothstep(.0,.08,length(cell)-sqrt(tone)*.62);
-        gl_FragColor=vec4(mix(vec3(.02),vec3(.957,.957,.941),on),1.);
+        gl_FragColor=vec4(mix(vec3(.02),vec3(.957,.957,.941),on),uOpacity);
       }`,
   });
 }
@@ -216,7 +219,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   }).catch(() => {});
 
   // Side-profile figure of the About section.
-  const profile = { mesh: null, map: null, geometry: null, aspect: 1, box: { w: 1, h: 1 }, to: new THREE.Vector3(), top: 0, height: 1 };
+  const profile = { ghosts: [], mesh: null, map: null, geometry: null, aspect: 1, box: { w: 1, h: 1 }, to: new THREE.Vector3(), top: 0, height: 1 };
   loadImage(profileSrc).then((img) => {
     if (state.disposed) return;
     profile.map = new THREE.Texture(img);
@@ -225,6 +228,14 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     profile.geometry = new THREE.PlaneGeometry(profile.aspect, 1);
     profile.mesh = new THREE.Mesh(profile.geometry, createPortrait(profile.map));
     scene.add(profile.mesh);
+    profile.ghosts = GHOST_FOLLOW.map((follow) => {
+      const material = createPortrait(profile.map, { ghost: true });
+      const mesh = new THREE.Mesh(profile.geometry, material);
+      mesh.visible = false;
+      mesh.renderOrder = -1;
+      scene.add(mesh);
+      return { mesh, material, follow, p: 0 };
+    });
   }).catch(() => {});
 
   const profileHeight = () => Math.min(profile.box.h, profile.box.w / profile.aspect);
@@ -464,6 +475,14 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     if (profile.mesh) {
       placeProfile(profile.mesh, aboutEnter);
       profile.mesh.visible = aboutEnter > 0.5;
+      profile.ghosts.forEach((ghost, i) => {
+        ghost.p += (aboutEnter - ghost.p) * (1 - Math.exp(-dt * ghost.follow));
+        const opacity = clamp01(Math.abs(aboutEnter - ghost.p) * 7) * (0.42 - i * 0.06);
+        ghost.mesh.visible = opacity > 0.01 && ghost.p > 0.5;
+        if (!ghost.mesh.visible) return;
+        placeProfile(ghost.mesh, ghost.p);
+        ghost.material.uniforms.uOpacity.value = opacity;
+      });
     }
 
     if (!dive.active && !state.loadingCard) {

@@ -192,7 +192,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | New section directly after the stage, before "From Register to Network"; text from translations, missing facts as TODO keys |
 | done | claude-code | Side-profile portrait with placeholder silhouette until the real photo exists |
 | done | claude-code | Stage → About: portrait turns ~90° on Y and moves forward/larger into the layout |
-| todo | claude-code | Monochrome afterimage trail: 5–6 delayed ghost copies fading out |
+| done | claude-code | Monochrome afterimage trail: 5–6 delayed ghost copies fading out |
 | todo | claude-code | Leaving About: figure dissolves into halftone dots |
 
 ### Descent
