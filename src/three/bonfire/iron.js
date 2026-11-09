@@ -2,14 +2,16 @@ import * as THREE from 'three';
 import { makeCanvas, texture } from '../utils';
 import { paint } from './geometry';
 
-const LENGTH = 3.05;
+// Professional electronics soldering iron (DESIGN.md §7 Card 05 & §13)
+// Features: fine conical tip, slim barrel, 6-sided hex retaining nut, flanged finger-guard disc,
+// thick ribbed ergonomic grip, and flexible strain-relief stub (no cable).
 
 function chromeMatcap() {
   const size = 128;
   const canvas = makeCanvas(size, size);
   const ctx = canvas.getContext('2d');
   const fill = ctx.createLinearGradient(0, 0, 0, size);
-  [[0, '#1b1b1d'], [0.32, '#efeae2'], [0.44, '#55534f'], [0.62, '#141312'], [0.82, '#c9722c'], [1, '#ffd9a0']]
+  [[0, '#1c1c1f'], [0.28, '#faf7f2'], [0.42, '#706e6a'], [0.6, '#181716'], [0.8, '#d47c32'], [1, '#ffe0a8']]
     .forEach(([stop, color]) => fill.addColorStop(stop, color));
   ctx.fillStyle = fill;
   ctx.fillRect(0, 0, size, size);
@@ -22,44 +24,106 @@ function lathe(points, radial) {
 
 function ribbed(from, to, pitch, outer, inner) {
   const points = [];
-  for (let y = from, i = 0; y < to; y += pitch, i += 1) points.push([i % 2 ? inner : outer, y]);
+  for (let y = from, i = 0; y < to; y += pitch, i += 1) {
+    points.push([i % 2 ? inner : outer, y]);
+  }
   return points;
 }
 
-// Built along +Y with the tip at the origin. Lathe profiles need y rising so normals face out.
 export function buildIron(q) {
-  const steel = [
-    // conical tip
-    [0.001, 0], [0.018, 0.03], [0.06, 0.42], [0.042, 0.45],
-    // thin shaft
-    [0.03, 0.47], [0.03, 1.42],
-    // heat-sink sleeve
-    [0.09, 1.45], ...ribbed(1.47, 2.03, 0.05, 0.102, 0.074), [0.098, 2.05],
-    // collar
-    [0.122, 2.06], [0.122, 2.13],
-  ];
-  const rubber = [
-    [0.1, 2.13], [0.112, 2.2],
-    ...ribbed(2.22, 2.9, 0.046, 0.138, 0.114),
-    [0.126, 2.92], [0.116, 3.0], [0.08, 3.04], [0.001, LENGTH],
+  const radial = q.radial || 20;
+
+  // 1. Metal Tip & Barrel profile
+  // Lathe coordinates [radius, y] starting at tip apex y=0
+  const tipProfile = [
+    [0.002, 0.0],
+    [0.010, 0.02],
+    [0.026, 0.18],  // fine conical needle tip
+    [0.028, 0.22],
+    [0.024, 0.23],  // tip collar step
+    [0.028, 0.25],  // stainless heating barrel
+    [0.028, 0.62],
+    [0.032, 0.63],
   ];
 
-  const metalGeometry = paint(lathe(steel, q.radial), (p, c) => {
-    // The tip takes on heat colour where it enters the fire.
-    const heat = 1 - THREE.MathUtils.smoothstep(p.y, 0, 0.75);
-    c.setRGB(1, 1 - heat * 0.32, 1 - heat * 0.62);
+  const metalGeo = paint(lathe(tipProfile, radial), (p, c) => {
+    // Thermal blue/amber annealing gradient where tip enters 350°C heat
+    const heat = 1 - THREE.MathUtils.smoothstep(p.y, 0, 0.35);
+    c.setRGB(1, 1 - heat * 0.35, 1 - heat * 0.72);
   });
-  const metalMaterial = new THREE.MeshMatcapMaterial({ matcap: chromeMatcap(), vertexColors: true });
-  const metal = new THREE.Mesh(metalGeometry, metalMaterial);
+  const metalMat = new THREE.MeshMatcapMaterial({ matcap: chromeMatcap(), vertexColors: true });
+  const metalMesh = new THREE.Mesh(metalGeo, metalMat);
 
-  const grip = new THREE.Mesh(
-    lathe(rubber, q.radial),
-    new THREE.MeshStandardMaterial({ color: 0x2b2a29, roughness: 0.62 }),
-  );
+  // 2. Hex retaining nut at base of metal barrel
+  const hexNutGeo = new THREE.CylinderGeometry(0.048, 0.048, 0.065, 6);
+  hexNutGeo.translate(0, 0.665, 0);
+  const hexNutMat = new THREE.MeshStandardMaterial({
+    color: 0xcccccc,
+    metalness: 0.9,
+    roughness: 0.28,
+  });
+  const hexNutMesh = new THREE.Mesh(hexNutGeo, hexNutMat);
+
+  // 3. Iconic Finger-Guard Disc (protective flanged rim between barrel and grip)
+  const guardProfile = [
+    [0.042, 0.69],
+    [0.132, 0.71],
+    [0.148, 0.735], // outer flange rim
+    [0.148, 0.765],
+    [0.096, 0.79], // step to grip
+  ];
+  const guardGeo = lathe(guardProfile, radial);
+  const guardMat = new THREE.MeshStandardMaterial({
+    color: 0x1f1f1e,
+    roughness: 0.8,
+    metalness: 0.1,
+  });
+  const guardMesh = new THREE.Mesh(guardGeo, guardMat);
+
+  // 4. Thick Ribbed Ergonomic Grip
+  // Ribbed rubber sleeve with tactile finger grooves
+  const gripProfile = [
+    [0.096, 0.79],
+    [0.110, 0.81],
+    ...ribbed(0.83, 1.42, 0.044, 0.118, 0.096),
+    [0.106, 1.44],
+    [0.096, 1.50],
+    [0.088, 1.54],
+  ];
+  const gripGeo = lathe(gripProfile, radial);
+  const gripMat = new THREE.MeshStandardMaterial({
+    color: 0x242423,
+    roughness: 0.88,
+    metalness: 0.05,
+  });
+  const gripMesh = new THREE.Mesh(gripGeo, gripMat);
+
+  // 5. Short Molded Strain-Relief Stub at the end (strictly NO cable)
+  const bootProfile = [
+    [0.088, 1.54],
+    [0.082, 1.57],
+    [0.068, 1.62],
+    [0.062, 1.66],
+    [0.052, 1.71],
+    [0.046, 1.76],
+    [0.002, 1.77], // closed clean socket cap
+  ];
+  const bootGeo = lathe(bootProfile, radial);
+  const bootMat = new THREE.MeshStandardMaterial({
+    color: 0x181817,
+    roughness: 0.95,
+  });
+  const bootMesh = new THREE.Mesh(bootGeo, bootMat);
 
   const iron = new THREE.Group();
-  iron.add(metal, grip);
-  iron.position.set(0.1, 0.22, 0.62);
-  iron.rotation.set(0.06, 0, -0.52);
-  return { iron, matcap: metalMaterial.matcap };
+  iron.add(metalMesh, hexNutMesh, guardMesh, gripMesh, bootMesh);
+
+  // Scale down relative to the bonfire pile for realistic tool proportions
+  iron.scale.setScalar(0.72);
+
+  // Stuck in at ~20° from vertical (0.35 rad) into the ember/PCB mound
+  iron.position.set(0.18, 0.08, 0.32);
+  iron.rotation.set(0.06, 0.10, -0.35);
+
+  return { iron, matcap: metalMat.matcap };
 }

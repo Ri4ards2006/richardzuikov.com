@@ -65,6 +65,27 @@ function buildAtlas(size) {
         ctx.fillRect(x - r, y - r, r * 2, r * 2);
       });
     }
+
+    // Glowing hot ember nodes (incandescent solder joints and substrate cracks)
+    for (let e = 0; e < 10; e += 1) {
+      const ex = cx + hash(i * 17 + e * 5) * cell;
+      const ey = cy + hash(i * 29 + e * 7) * cell;
+      const er = cell * (0.025 + hash(i * 3 + e * 11) * 0.04);
+      const emberGrad = glowCtx.createRadialGradient(ex, ey, 0, ex, ey, er * 2.2);
+      emberGrad.addColorStop(0, '#ffffff');
+      emberGrad.addColorStop(0.35, 'rgba(255, 200, 100, 0.95)');
+      emberGrad.addColorStop(0.7, 'rgba(255, 80, 0, 0.6)');
+      emberGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      glowCtx.fillStyle = emberGrad;
+      glowCtx.beginPath();
+      glowCtx.arc(ex, ey, er * 2.2, 0, Math.PI * 2);
+      glowCtx.fill();
+
+      baseCtx.fillStyle = '#ff7a18';
+      baseCtx.beginPath();
+      baseCtx.arc(ex, ey, er * 0.65, 0, Math.PI * 2);
+      baseCtx.fill();
+    }
     baseCtx.fillStyle = '#8a7446';
     glowCtx.fillStyle = '#fff';
   }

@@ -17,27 +17,30 @@ export function buildParticles(emberCount, q) {
 
     void main() {
       // Loop life over time with random velocity offset per particle
-      float speed = 0.12 + aSeed.x * 0.16;
+      float speed = 0.14 + aSeed.x * 0.18;
       float life = fract(aSeed.z + uTime * speed);
       vLife = life;
       vSeed = aSeed.y;
 
       // Upward motion with sine drift and slight helical swirl
-      float swirl = uTime * 1.2 + aSeed.z * 6.28;
-      float radius = (0.25 + life * 0.7) * (0.6 + aSeed.x * 0.6);
+      float swirl = uTime * 1.4 + aSeed.z * 6.28;
+      // Occasional energetic spark burst
+      float pop = smoothstep(0.72, 1.0, aSeed.x) * sin(life * 3.1415) * 0.32;
+      float radius = (0.24 + life * 0.72 + pop) * (0.6 + aSeed.x * 0.6);
       vec3 p = vec3(
         sin(swirl) * radius + (aSeed.x - 0.5) * 0.45,
-        0.35 + life * 5.2,
+        0.30 + life * 5.4,
         cos(swirl) * radius + (aSeed.y - 0.5) * 0.45
       );
 
       vec4 mv = modelViewMatrix * vec4(p, 1.0);
       gl_Position = projectionMatrix * mv;
-      gl_PointSize = uPixel * (24.0 + aSeed.y * 36.0) / -mv.z;
+      gl_PointSize = uPixel * (22.0 + aSeed.y * 38.0) / -mv.z;
     }
   `;
 
   const emberFragmentShader = `
+    uniform float uTime;
     varying float vLife;
     varying float vSeed;
 
@@ -45,17 +48,22 @@ export function buildParticles(emberCount, q) {
       float d = length(gl_PointCoord - 0.5);
       if (d > 0.5) discard;
 
-      // Color transition: hot gold -> flame orange -> cooling ash flake -> fade
-      vec3 cHot = vec3(1.0, 0.85, 0.35);
-      vec3 cMid = vec3(1.0, 0.42, 0.0);
-      vec3 cAsh = vec3(0.38, 0.38, 0.36);
+      // High-frequency erratic sparkle and flickering intensity
+      float sparkle = 0.62 + 0.38 * sin(uTime * 38.0 + vSeed * 73.1);
+      float pop = smoothstep(0.85, 1.0, sin(uTime * 14.0 + vSeed * 47.9)) * 0.5;
+      float flicker = sparkle + pop;
 
-      vec3 c = mix(cHot, cMid, smoothstep(0.0, 0.35, vLife));
-      c = mix(c, cAsh, smoothstep(0.45, 0.9, vLife));
+      // Color transition: incandescent gold -> rich flame orange -> cooling charcoal flake -> fade
+      vec3 cHot = vec3(1.0, 0.90, 0.45);
+      vec3 cMid = vec3(1.0, 0.46, 0.04);
+      vec3 cAsh = vec3(0.42, 0.36, 0.32);
+
+      vec3 c = mix(cHot, cMid, smoothstep(0.0, 0.32, vLife));
+      c = mix(c, cAsh, smoothstep(0.45, 0.90, vLife));
 
       float softEdge = 1.0 - smoothstep(0.12, 0.5, d);
       float lifeFade = (1.0 - vLife) * min(1.0, vLife * 9.0);
-      gl_FragColor = vec4(c, softEdge * lifeFade * 0.95);
+      gl_FragColor = vec4(c * flicker, softEdge * lifeFade * flicker * 0.96);
     }
   `;
 
@@ -89,7 +97,6 @@ export function buildParticles(emberCount, q) {
 
       vec4 mv = modelViewMatrix * vec4(p, 1.0);
       gl_Position = projectionMatrix * mv;
-      // Smoke expands with age
       gl_PointSize = uPixel * (35.0 + life * 95.0) / -mv.z;
     }
   `;
@@ -101,13 +108,12 @@ export function buildParticles(emberCount, q) {
       float d = length(gl_PointCoord - 0.5);
       if (d > 0.5) discard;
 
-      // Soft gaussian-like falloff for smoke puff
-      float soft = smoothstep(0.5, 0.0, d);
-      // Faint ash charcoal tint
-      vec3 cSmoke = vec3(0.16, 0.16, 0.15);
-      // Fades in above flame and dissolves smoothly into darkness
-      float alpha = soft * smoothstep(0.0, 0.25, vLife) * (1.0 - smoothstep(0.6, 1.0, vLife)) * 0.18;
-      gl_FragColor = vec4(cSmoke, alpha);
+      // Soft gaussian-like smoke puff with slow dissolve
+      float softEdge = 1.0 - smoothstep(0.0, 0.5, d);
+      float lifeFade = sin(vLife * 3.1415) * 0.12;
+
+      vec3 smokeCol = vec3(0.18, 0.16, 0.15);
+      gl_FragColor = vec4(smokeCol, softEdge * lifeFade);
     }
   `;
 
@@ -119,6 +125,8 @@ export function buildParticles(emberCount, q) {
 
   return {
     group,
+    embers,
+    smoke,
     update(time, pixel) {
       emberUniforms.uTime.value = time;
       emberUniforms.uPixel.value = pixel;
