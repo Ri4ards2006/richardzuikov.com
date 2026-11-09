@@ -430,7 +430,7 @@ html.dark .ground-message {
 .stage-hero.is-settled .stage-slab {
   opacity: 1;
   translate: 0 0;
-  transition: opacity 260ms ease-out calc(var(--i) * 45ms), translate 320ms cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i) * 45ms), color 90ms, background-color 90ms;
+  transition: opacity 180ms ease-out calc(var(--i) * 45ms), translate 220ms cubic-bezier(0.2, 0.9, 0.1, 1) calc(var(--i) * 45ms), color 90ms, background-color 90ms;
 }
 
 .stage-slab.is-active {
@@ -452,7 +452,7 @@ html.dark .ground-message {
   max-width: 34rem;
   padding: 1.75rem;
   background: radial-gradient(circle, rgb(var(--ash-700) / 0.65) 1.1px, transparent 1.4px) 0 0 / 7px 7px, rgb(var(--ash-800) / 0.94);
-  border: 2px solid rgb(var(--ash-100));
+  border: 3px solid rgb(var(--ash-100));
   box-shadow: 10px 10px 0 rgb(var(--ash-900));
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2rem), calc(100% - 2rem) 100%, 0 100%);
   transform: perspective(1100px) rotateY(var(--tilt)) rotateX(calc(var(--depth, 0) * 9deg)) rotateZ(-1.2deg);

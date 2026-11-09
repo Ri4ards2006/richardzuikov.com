@@ -31,7 +31,7 @@ function ProtectedEmail() {
       {emailString ? (
         <a
           href={`mailto:${emailString}`}
-          className="text-zinc-900 dark:text-zinc-100 hover:underline font-mono text-sm transition-colors duration-200 underline decoration-zinc-300 dark:decoration-zinc-700 underline-offset-4 hover:decoration-[#FFB000]"
+          className="text-zinc-900 dark:text-zinc-100 hover:underline font-mono text-sm transition-colors duration-200 underline decoration-zinc-300 dark:decoration-zinc-700 underline-offset-4"
         >
           {emailString}
         </a>
