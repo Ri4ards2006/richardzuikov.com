@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - 'feat/**'
+  pull_request:
+    branches:
+      - main
+      - 'feat/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build & Bundle Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Generate bundle size summary
+        if: always()
+        run: |
+          node -e '
+          const fs = require("fs");
+          const path = require("path");
+          const zlib = require("zlib");
+
+          const distDir = path.join(process.cwd(), "dist", "assets");
+          if (!fs.existsSync(distDir)) {
+            console.log("No dist/assets directory found");
+            process.exit(0);
+          }
+
+          const files = fs.readdirSync(distDir);
+          let summary = "### 📦 Production Bundle Sizes\n\n";
+          summary += "| Asset | Type | Raw Size | Gzip Size |\n";
+          summary += "| :--- | :--- | :--- | :--- |\n";
+
+          let totalRaw = 0;
+          let totalGzip = 0;
+
+          files.sort((a, b) => fs.statSync(path.join(distDir, b)).size - fs.statSync(path.join(distDir, a)).size);
+
+          for (const f of files) {
+            const fullPath = path.join(distDir, f);
+            const stat = fs.statSync(fullPath);
+            const content = fs.readFileSync(fullPath);
+            const gzipped = zlib.gzipSync(content);
+            const ext = path.extname(f).replace(".", "").toUpperCase() || "FILE";
+            const rawKb = (stat.size / 1024).toFixed(2);
+            const gzKb = (gzipped.length / 1024).toFixed(2);
+            totalRaw += stat.size;
+            totalGzip += gzipped.length;
+            summary += `| \`${f}\` | ${ext} | ${rawKb} KB | ${gzKb} KB |\n`;
+          }
+
+          summary += `| **TOTAL** | - | **${(totalRaw / 1024).toFixed(2)} KB** | **${(totalGzip / 1024).toFixed(2)} KB** |\n`;
+
+          if (process.env.GITHUB_STEP_SUMMARY) {
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);
+          } else {
+            console.log(summary);
+          }
+          '
