@@ -44,6 +44,9 @@ export const translations = {
       overview: "Übersicht"
     },
     atlus: {
+      "contact": {"headline":"RASTE HIER, WANDERER","kindled":"VERBINDUNG ENTFACHT"},
+      "notFound": {"title":"SIGNAL VERLOREN","subtitle":"unter dieser adresse antwortet niemand","button":"ZURÜCK ZUM MENÜ"},
+      "hints": {"menu":"versuch ↑ ↓","card":"dreh sie um","stack":"wähl eine aus"},
       "back": "← ZURÜCK",
       "menuNav": "Hauptmenü",
       "allProjects": "ALLE PROJEKTE →",
@@ -396,6 +399,9 @@ export const translations = {
       overview: "Overview"
     },
     atlus: {
+      "contact": {"headline":"REST HERE, TRAVELLER","kindled":"CONNECTION KINDLED"},
+      "notFound": {"title":"SIGNAL LOST","subtitle":"nothing answers at this address","button":"RETURN TO MENU"},
+      "hints": {"menu":"try ↑ ↓","card":"flip it","stack":"pick one"},
       "back": "← BACK",
       "menuNav": "Main menu",
       "allProjects": "ALL PROJECTS →",

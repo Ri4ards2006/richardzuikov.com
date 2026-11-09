@@ -4,12 +4,17 @@ export const menuItems = [
   { id: 'work', number: '02', path: '/work', screen: true },
   { id: 'stack', number: '03', path: '/stack', screen: true },
   { id: 'career', number: '04', path: '/career', screen: true },
-  { id: 'contact', number: '05', path: '/contact', screen: false },
+  { id: 'contact', number: '05', path: '/contact', screen: true },
 ];
+
+export const CONTACT_PATH = '/contact';
 
 const atlusPaths = new Set(['/', ...menuItems.filter((item) => item.screen).map((item) => item.path)]);
 
 export const isAtlusPath = (pathname) => atlusPaths.has(pathname);
+
+// Atlus screens are always dark, except the contact screen, which follows the theme.
+export const isForcedDark = (pathname, theme) => isAtlusPath(pathname) && (pathname !== CONTACT_PATH || theme === 'dark');
 
 const STORAGE_KEY = 'atlus-active-item';
 let activeMenuId = null;

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Check, Copy, Download, Mail } from 'lucide-react';
 import { useLanguage } from '../../hooks/use-language';
 import { useTheme } from '../../hooks/use-theme';
 import { useReducedMotion } from '../../hooks/use-reduced-motion';
+import { useContactEmail } from '../../hooks/use-contact-email';
 import Section from './Section';
 import SocialLinks from './SocialLinks';
 import EmberCanvas from './EmberCanvas';
@@ -14,23 +15,7 @@ export default function ContactSection({ number }) {
   const { t } = useLanguage();
   const [theme] = useTheme();
   const reducedMotion = useReducedMotion();
-  const [email, setEmail] = useState('');
-  const [copied, setCopied] = useState(false);
-
-  // Assembled at runtime so the address is not in the static markup.
-  useEffect(() => {
-    setEmail(`contact@${'richardzuikov.com'}`);
-  }, []);
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(email);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setCopied(false);
-    }
-  };
+  const { email, copied, copy } = useContactEmail();
 
   const showEffects = theme === 'dark' && !reducedMotion && canAnimate();
   const background = showEffects ? (
@@ -49,7 +34,7 @@ export default function ContactSection({ number }) {
             <Mail aria-hidden="true" className="w-4 h-4 shrink-0" />
             {email}
           </a>
-          <button type="button" onClick={handleCopy} className="inline-flex items-center gap-2 min-h-11 px-5 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 text-sm text-zinc-800 dark:text-zinc-200 hover:border-zinc-500 transition-colors duration-200">
+          <button type="button" onClick={copy} className="inline-flex items-center gap-2 min-h-11 px-5 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 text-sm text-zinc-800 dark:text-zinc-200 hover:border-zinc-500 transition-colors duration-200">
             {copied ? <Check aria-hidden="true" className="w-4 h-4" /> : <Copy aria-hidden="true" className="w-4 h-4" />}
             <span role="status">{copied ? t.telemetry.copied : t.landing.copyEmail}</span>
           </button>

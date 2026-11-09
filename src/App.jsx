@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Layout from './components/Layout';
 import MenuPlaceholder from './pages/MenuPlaceholder';
 import Quick from './pages/Quick';
+import Contact from './pages/Contact';
 import About from './pages/About';
 import Career from './pages/Career';
 import Stack from './pages/Stack';
@@ -27,7 +28,7 @@ function AppRoutes() {
           <Route path="/career" element={<Career />} />
           <Route path="/stack" element={<Stack />} />
           <Route path="/work" element={<Work />} />
-          <Route path="/contact" element={<Navigate to="/quick#contact" replace />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/lab" element={<Lab />} />
           <Route path="/works" element={<Navigate to="/lab" replace />} />
           <Route path="/portfolio" element={<Navigate to="/lab" replace />} />

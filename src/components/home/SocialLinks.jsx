@@ -1,6 +1,6 @@
 import React from 'react';
 
-const links = [
+export const socialLinks = [
   {
     label: 'GitHub',
     href: 'https://github.com/Ri4ards2006',
@@ -22,7 +22,7 @@ const links = [
 export default function SocialLinks() {
   return (
     <ul className="flex items-center gap-2">
-      {links.map(({ label, href, icon }) => (
+      {socialLinks.map(({ label, href, icon }) => (
         <li key={label}>
           <a
             href={href}

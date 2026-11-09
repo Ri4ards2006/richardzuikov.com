@@ -4,9 +4,9 @@ import { useDocumentTitle } from '../../hooks/use-document-title';
 import { useLanguage } from '../../hooks/use-language';
 import { setActiveMenuId } from '../../lib/atlus';
 
-export default function Screen({ id, number, title, hud, children }) {
+// Shared sub-screen behaviour: title, focus, menu memory, Esc and back.
+export function useScreen(id, title) {
   useDocumentTitle(`${title} — Richard Zuikov`);
-  const { t } = useLanguage();
   const navigate = useNavigate();
   const { state } = useLocation();
   const headingRef = useRef(null);
@@ -32,6 +32,13 @@ export default function Screen({ id, number, title, hud, children }) {
     event.preventDefault();
     navigate(-1);
   };
+
+  return { headingRef, handleBack };
+}
+
+export default function Screen({ id, number, title, hud, children }) {
+  const { t } = useLanguage();
+  const { headingRef, handleBack } = useScreen(id, title);
 
   return (
     <div className="relative min-h-[calc(100vh-4rem)] overflow-x-clip bg-ash-900 text-ash-100">

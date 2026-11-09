@@ -6,7 +6,7 @@ const FRAME_MS = 33; // ~30 fps
 
 const random = (min, max) => min + Math.random() * (max - min);
 
-export default function EmberCanvas() {
+export default function EmberCanvas({ glow = true }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -80,7 +80,7 @@ export default function EmberCanvas() {
 
   return (
     <>
-      <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-2/3 pointer-events-none bg-[radial-gradient(ellipse_70%_100%_at_50%_100%,rgba(255,176,0,0.2),transparent_70%)]" />
+      {glow && <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-2/3 pointer-events-none bg-[radial-gradient(ellipse_70%_100%_at_50%_100%,rgba(255,176,0,0.2),transparent_70%)]" />}
       <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-0 w-full h-full pointer-events-none" />
     </>
   );
