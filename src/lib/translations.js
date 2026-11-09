@@ -55,9 +55,7 @@ export const translations = {
       "deck": {"label":"ALLE PROJEKTE","hint":"ZIEHEN · SCROLLEN · ← →"},
       "flip": "Karte umdrehen",
       "flipBack": "Zurückdrehen",
-      "rank": "RANG",
       "skills": "TECHNISCHE SKILLS",
-      "unrated": "nicht bewertet",
       "certificates": "ZERTIFIKATE",
       "timeline": "WERDEGANG",
       "hud": {
@@ -417,9 +415,7 @@ export const translations = {
       "deck": {"label":"ALL PROJECTS","hint":"DRAG · SCROLL · ← →"},
       "flip": "Flip card",
       "flipBack": "Flip back",
-      "rank": "RANK",
       "skills": "TECHNICAL SKILLS",
-      "unrated": "not rated",
       "certificates": "CERTIFICATES",
       "timeline": "TIMELINE",
       "hud": {

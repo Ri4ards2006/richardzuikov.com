@@ -219,7 +219,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 ### Skill
 | Status | Owner | Item |
 |---|---|---|
-| todo | claude-code | Remove the "not rated" column and every rating |
+| done | claude-code | Remove the "not rated" column and every rating |
 | todo | claude-code | Short "used for / where" tags per item |
 
 ### Record
