@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { makeCanvas, texture } from '../utils';
-import { merge, paint } from './geometry';
+import { paint } from './geometry';
 
 const LENGTH = 3.05;
 
@@ -50,7 +50,7 @@ export function buildIron(q) {
     c.setRGB(1, 1 - heat * 0.32, 1 - heat * 0.62);
   });
   const metalMaterial = new THREE.MeshMatcapMaterial({ matcap: chromeMatcap(), vertexColors: true });
-  const metal = new THREE.Mesh(merge([metalGeometry]), metalMaterial);
+  const metal = new THREE.Mesh(metalGeometry, metalMaterial);
 
   const grip = new THREE.Mesh(
     lathe(rubber, q.radial),

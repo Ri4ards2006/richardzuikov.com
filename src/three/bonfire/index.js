@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { disposeObject, hash, makeCanvas, pointsMaterial, seededPoints, smooth, texture } from '../utils';
 import { buildIron } from './iron';
 import { bonfireQuality } from './quality';
+import { buildStones } from './stones';
 
 function noise1(t) {
   const i = Math.floor(t);
@@ -52,6 +53,8 @@ function buildBonfire(emberCount, q) {
     }
   }
   group.add(slabs);
+
+  group.add(buildStones(q));
 
   const ash = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 2), new THREE.MeshStandardMaterial({ color: 0x8a8a86, roughness: 1, flatShading: true }));
   ash.scale.set(1.25, 0.34, 1.25);
