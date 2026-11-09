@@ -309,9 +309,9 @@ Reviewer items already listed above are not repeated. The review was written bef
 ### Global menu
 | Status | Owner | Item |
 |---|---|---|
-| todo | claude-code | Pause menu: 5 large skewed staggered slabs centre-left, wedge + echo text; "MENU" as low-contrast background at the left edge |
-| todo | claude-code | Settings box removed; HUD chips in the corners, Quick Read chip under the items, legal mono line at the bottom |
-| todo | claude-code | Diagonal shard wipe open/close ≤ 350 ms; Esc closes; focus trap |
+| done | claude-code | Pause menu: 5 large skewed staggered slabs centre-left, wedge + echo text; "MENU" as low-contrast background at the left edge |
+| done | claude-code | Settings box removed; HUD chips in the corners, Quick Read chip under the items, legal mono line at the bottom |
+| done | claude-code | Diagonal shard wipe open/close ≤ 350 ms; Esc closes; focus trap |
 
 ### Stage
 | Status | Owner | Item |

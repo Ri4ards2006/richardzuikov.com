@@ -19,7 +19,8 @@ export const translations = {
       openMenu: "Menü öffnen",
       closeMenu: "Menü schließen",
       switchLang: "Wechsle zu Englisch",
-      switchTheme: "Theme wechseln"
+      switchTheme: "Theme wechseln",
+      theme: "Theme"
     },
     telemetry: {
       location: "Flensburg, Deutschland",
@@ -382,7 +383,8 @@ export const translations = {
       openMenu: "Open Menu",
       closeMenu: "Close Menu",
       switchLang: "Switch to German",
-      switchTheme: "Switch Theme"
+      switchTheme: "Switch Theme",
+      theme: "Theme"
     },
     telemetry: {
       location: "Flensburg, Germany",
