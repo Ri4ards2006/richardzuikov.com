@@ -296,3 +296,58 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | Timeline is jobs and education only; entry 02 becomes "IT System Administration (Minijob) · R2P GmbH · 2024–2025"; remove the two project entries |
 | done | claude-code | Big Anton year numerals flip on scroll; slanted bars with roman rank; click expands with slash wipe and 2–3 detail lines (TODO keys) |
 | done | claude-code | Section enter: camera travels into the section, speedlines, panels sliding in from depth |
+
+## Changelog v4 (DESIGN.md §15)
+
+### Merges (phase 1)
+| Status | Owner | Item |
+|---|---|---|
+| done | claude-code | Career data: R2P internship (Sep 2024), helpdesk minijob (Dec 2024 – Aug 2025), apprenticeship (2025–2027); merge PR #12 |
+| done | claude-code | Merge PR #11; svgo; TraceStar, card frame, key-item icons, ink splatters integrated; no P1 in REVIEW-bonfire-v3.md |
+| done | claude-code | Tag `checkpoint-atlus-v3` as restore point |
+
+### Global menu
+| Status | Owner | Item |
+|---|---|---|
+| done | claude-code | Pause menu: 5 large skewed staggered slabs centre-left, wedge + echo text; "MENU" as low-contrast background at the left edge |
+| done | claude-code | Settings box removed; HUD chips in the corners, Quick Read chip under the items, legal mono line at the bottom |
+| done | claude-code | Diagonal shard wipe open/close ≤ 350 ms; Esc closes; focus trap |
+
+### Stage
+| Status | Owner | Item |
+|---|---|---|
+| done | claude-code | Name block larger and fluid, never clipped at 1280–1920 px |
+| done | claude-code | Scroll cue smaller, fades out after the first scroll |
+
+### Descent
+| Status | Owner | Item |
+|---|---|---|
+| done | claude-code | Headline "FROM PIN TO PACKET" |
+| done | claude-code | Props: PCB (02), monitor with scrolling code (03), rack unit with LEDs (04), dome camera following the cursor (05) |
+| done | claude-code | Panel 05 text around the apprenticeship (draft for review) |
+
+### Now
+| Status | Owner | Item |
+|---|---|---|
+| done | claude-code | Section "NOW / IN PROGRESS" with 3 slanted panels, quest-log progress bars, animated line illustrations, data file + TODO keys |
+
+### Camera turn + Record
+| Status | Owner | Item |
+|---|---|---|
+| done | claude-code | Pinned horizontal timeline ride with 90° yaw in and out; vertical layout on phones and reduced motion |
+
+### Skill
+| Status | Owner | Item |
+|---|---|---|
+| done | claude-code | 3D prop per category with a quick spin on change |
+| done | claude-code | Certificates as KEY ITEM cards (v3b) |
+
+### Arcana
+| Status | Owner | Item |
+|---|---|---|
+| done | claude-code | Thinner frame lines, finer screentone, crisper title type |
+
+### Bonfire
+| Status | Owner | Item |
+|---|---|---|
+| done | claude-code | Small ruined chapel silhouette in the distance, fog-faded |

@@ -5,7 +5,7 @@ import { useTheme } from '../hooks/use-theme';
 import { useLanguage } from '../hooks/use-language';
 import { useContactEmail } from '../hooks/use-contact-email';
 import { useReducedMotion } from '../hooks/use-reduced-motion';
-import { landOnSection, menuItems, scrollTargets } from '../lib/atlus';
+import { getActiveMenuId, landOnSection, menuItems, scrollTargets } from '../lib/atlus';
 import { QUICK_PATH } from '../lib/sections';
 import { socialLinks } from './home/SocialLinks';
 
@@ -20,10 +20,12 @@ function Panel({ closing, onClose, onExited }) {
   const reducedMotion = useReducedMotion();
   const panelRef = useRef(null);
   const slabRefs = useRef([]);
+  // Opens on the item last chosen, like the stage menu.
+  const [active, setActive] = useState(() => Math.max(0, menuItems.findIndex((item) => item.id === getActiveMenuId())));
 
   useEffect(() => {
-    // The first slab takes focus so the arrow keys work at once, like the stage menu.
-    slabRefs.current[0]?.focus();
+    // The active slab takes focus so the arrow keys work at once, like the stage menu.
+    slabRefs.current[active]?.focus();
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     const onKeyDown = (event) => {
@@ -50,6 +52,7 @@ function Panel({ closing, onClose, onExited }) {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', onKeyDown, true);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onClose]);
 
   useEffect(() => {
@@ -78,6 +81,8 @@ function Panel({ closing, onClose, onExited }) {
     navigate(path);
   };
 
+  const activeItem = menuItems[active] ?? menuItems[0];
+
   return (
     <div
       ref={panelRef}
@@ -85,53 +90,66 @@ function Panel({ closing, onClose, onExited }) {
       aria-modal="true"
       aria-label={t.nav.menu}
       className={`gm ${closing ? 'is-closing' : ''}`}
-      onAnimationEnd={() => { if (closing) onExited(); }}
+      onAnimationEnd={(event) => { if (closing && event.animationName === 'gm-out') onExited(); }}
     >
+      <div aria-hidden="true" className="gm-shards">
+        <span /><span /><span />
+      </div>
+      <div aria-hidden="true" className="gm-letters">
+        {LETTERS.map((letter) => <span key={letter}>{letter}</span>)}
+      </div>
+      <p aria-hidden="true" key={activeItem.id} className="gm-echo">{activeItem.number} {t.landing.nav[activeItem.id]}</p>
+
       <button type="button" onClick={onClose} aria-label={t.nav.closeMenu} className="gm-close">
         <X aria-hidden="true" size={20} />
       </button>
 
-      <div aria-hidden="true" className="gm-letters">
-        {LETTERS.map((letter) => <span key={letter}>{letter}</span>)}
+      <div className="gm-main">
+        <nav aria-label={t.atlus.menuNav}>
+          <ul className="gm-list">
+            {menuItems.map((item, index) => {
+              const target = scrollTargets[item.id];
+              return (
+                <li key={item.id} style={{ '--i': index, '--o': index % 2 }} className={index === active ? 'is-active' : undefined}>
+                  <span aria-hidden="true" className="gm-number">{item.number} /</span>
+                  <Link
+                    ref={(node) => { slabRefs.current[index] = node; }}
+                    to={target ? `/#${target}` : item.path}
+                    onClick={(event) => handleSection(event, item)}
+                    onKeyDown={(event) => handleSlabKey(event, index)}
+                    onMouseEnter={() => setActive(index)}
+                    onFocus={() => setActive(index)}
+                    className="gm-slab"
+                  >
+                    {t.landing.nav[item.id]}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+        <Link to={QUICK_PATH} onClick={onClose} className="gm-chip gm-quick">{t.landing.menuPlaceholder.quickRead} →</Link>
       </div>
 
-      <nav aria-label={t.atlus.menuNav}>
-        <ul className="gm-list">
-          {menuItems.map((item, index) => {
-            const target = scrollTargets[item.id];
-            return (
-              <li key={item.id} style={{ '--i': index }}>
-                <span aria-hidden="true" className="gm-number">{item.number} /</span>
-                <Link
-                  ref={(node) => { slabRefs.current[index] = node; }}
-                  to={target ? `/#${target}` : item.path}
-                  onClick={(event) => handleSection(event, item)}
-                  onKeyDown={(event) => handleSlabKey(event, index)}
-                  className="gm-slab"
-                >
-                  {t.landing.nav[item.id]}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-
-      <div className="gm-side">
-        <div className="gm-group">
-          <Link to={QUICK_PATH} onClick={onClose}>{t.landing.menuPlaceholder.quickRead} →</Link>
-          <button type="button" onClick={toggleLanguage} aria-label={t.nav.switchLang} className="gm-lang">
-            <span>{language === 'de' ? <b>DE</b> : 'DE'} / {language === 'en' ? <b>EN</b> : 'EN'}</span>
-          </button>
-          <button type="button" onClick={toggleTheme}>{t.nav.switchTheme} · {theme === 'dark' ? '☾' : '☼'}</button>
-        </div>
-        <div className="gm-group">
-          {socialLinks.map(({ label, href }) => <a key={label} href={href} target="_blank" rel="noreferrer">{label} ↗</a>)}
-          <a href={email ? `mailto:${email}` : undefined}>Mail ↗</a>
-          <button type="button" onClick={() => goLegal('/impressum')}>{t.nav.impressum}</button>
-          <button type="button" onClick={() => goLegal('/datenschutz')}>{t.nav.datenschutz}</button>
-        </div>
+      <div className="gm-corner is-left">
+        <button type="button" onClick={toggleLanguage} aria-label={t.nav.switchLang} className="gm-chip gm-lang">
+          <span>{language === 'de' ? <b>DE</b> : 'DE'} / {language === 'en' ? <b>EN</b> : 'EN'}</span>
+        </button>
+        <button type="button" onClick={toggleTheme} aria-label={t.nav.switchTheme} className="gm-chip">
+          <span aria-hidden="true">{theme === 'dark' ? '☾' : '☼'}</span> {t.nav.theme}
+        </button>
       </div>
+
+      <div className="gm-corner is-right">
+        {socialLinks.map(({ label, href }) => <a key={label} href={href} target="_blank" rel="noreferrer" className="gm-chip">{label} ↗</a>)}
+        <a href={email ? `mailto:${email}` : undefined} className="gm-chip">Mail ↗</a>
+      </div>
+
+      <p className="gm-legal">
+        <button type="button" onClick={() => goLegal('/impressum')}>{t.nav.impressum}</button>
+        <span aria-hidden="true"> · </span>
+        <button type="button" onClick={() => goLegal('/datenschutz')}>{t.nav.datenschutz}</button>
+      </p>
     </div>
   );
 }

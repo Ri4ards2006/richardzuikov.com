@@ -3,6 +3,7 @@ import { createBonfire } from '../../three/bonfire';
 import { createFloatingShards } from './floating-shards';
 import { createInkWater } from './ink-water';
 import { createDescentProps } from './descent-props';
+import { createSkillProp } from './skill-props';
 import { disposeObject, hash, makeCanvas, pointsMaterial, seededPoints, smooth, texture } from '../../three/utils';
 import cardFrameSvg from '../../assets/svg/card-frame.svg?raw';
 
@@ -15,6 +16,15 @@ const DIVE_MS = 1300;
 const MAX_DPR = 1.5;
 const MIN_DPR = 0.75;
 const SLOW_FRAME_MS = 24;
+// Record ride: a full 90° yaw would face empty space, so the WebGL camera whips (max 28°) while the
+// DOM board makes the full turn; the camera also drifts sideways at a quarter of the timeline speed.
+// Arcana cards (v4: finer): texture 1.5× the v3 size for crisper type, frame strokes at 1.15× their
+// 400-unit width on a 768 px texture, i.e. thinner on screen than v3's 1.4× on 512 px.
+const CARD_W = 768;
+const CARD_H = 1317;
+const FRAME_STROKE = 1.15;
+const RIDE_WHIP = 28 * Math.PI / 180;
+const RIDE_DRIFT = 0.25;
 const IDLE_FRAME_MS = 1000 / 30;
 const ACTIVE_WINDOW_MS = 500;
 const SMALL_SCREEN = 768;
@@ -101,7 +111,8 @@ function drawToned(ctx, img, x, y, w, h) {
     const py = Math.floor(i / 4 / w);
     const lum = clamp01((lumAt(i) - low) / (high - low)) ** gamma;
     const contrast = clamp01((lum - 0.5) * 1.7 + 0.52);
-    const toned = clamp01(contrast + TONE[(py % 3) * 3 + (px % 3)] * 0.11);
+    // Finer screentone (v4): lower amplitude on a texture 1.5× denser than before.
+    const toned = clamp01(contrast + TONE[(py % 3) * 3 + (px % 3)] * 0.075);
     const value = Math.round(toned * 255);
     data[i] = value;
     data[i + 1] = value;
@@ -118,8 +129,8 @@ function cardFrameImage(w, h) {
   const svg = cardFrameSvg
     .replace('<svg ', `<svg width="${w}" height="${h}" preserveAspectRatio="none" `)
     .replace(/currentColor/g, '#f4f4f0')
-    .replace(/stroke-width="([\d.]+)"/g, (m, v) => `stroke-width="${(+v * 1.4).toFixed(2)}"`)
-    .replace('stroke="currentColor"', 'stroke="#f4f4f0" stroke-width="1.4"');
+    .replace(/stroke-width="([\d.]+)"/g, (m, v) => `stroke-width="${(+v * FRAME_STROKE).toFixed(2)}"`)
+    .replace('stroke="currentColor"', `stroke="#f4f4f0" stroke-width="${FRAME_STROKE}"`);
   frameImage = new Image(w, h);
   frameImage.src = `data:image/svg+xml,${encodeURIComponent(svg)}`;
   return frameImage;
@@ -149,10 +160,13 @@ function drawCard(canvas, project, index, img) {
   ctx.fillStyle = '#f4f4f0';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.font = '700 30px Cinzel, serif';
-  ctx.fillText(ROMAN[index] ?? String(index + 1), w / 2, h * 0.12 + 2);
-  ctx.font = '46px Anton, Impact, sans-serif';
-  ctx.fillText(project.title.toUpperCase(), w / 2, h * 0.925, w * 0.7);
+  const u = w / 512;
+  ctx.font = `700 ${30 * u}px Cinzel, serif`;
+  ctx.fillText(ROMAN[index] ?? String(index + 1), w / 2, h * 0.12 + 2 * u);
+  ctx.font = `${42 * u}px Anton, Impact, sans-serif`;
+  ctx.letterSpacing = `${1.5 * u}px`;
+  ctx.fillText(project.title.toUpperCase(), w / 2, h * 0.925, w * 0.62);
+  ctx.letterSpacing = '0px';
   ctx.textBaseline = 'alphabetic';
 }
 
@@ -206,7 +220,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 80);
   camera.position.z = CAM_Z;
 
-  const state = { lastInput: 0, w: 1, h: 1, k: 0.01, scroll: window.scrollY, camY: 0, frame: 0, last: 0, time: 0, rise: 0, story: 0, slow: 0, count: 0, spent: 0, hover: -1, hiddenCard: -1, abyssTop: 1e9, panels: [], fireProgress: 0, fire: { x: 0, y: 0, scale: 1, pixel: 1 } };
+  const state = { lastInput: 0, w: 1, h: 1, k: 0.01, scroll: window.scrollY, camY: 0, frame: 0, last: 0, time: 0, rise: 0, story: 0, slow: 0, count: 0, spent: 0, hover: -1, hiddenCard: -1, ride: { yaw: 0, yawNow: 0, x: 0, xNow: 0 }, abyssTop: 1e9, panels: [], fireProgress: 0, fire: { x: 0, y: 0, scale: 1, pixel: 1 } };
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
 
   // Screentone dust on the stage, rising ash through the descent, embers at the bonfire.
@@ -299,16 +313,17 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
 
   // Tarot cards positioned over measured DOM slots.
   const cards = projects.map((project, index) => {
-    const face = makeCanvas(512, 878);
+    const face = makeCanvas(CARD_W, CARD_H);
     drawCard(face, project, index, null);
     const map = texture(face);
+    map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
     const side = new THREE.MeshBasicMaterial({ color: CHARCOAL });
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), [side, side, side, side, new THREE.MeshBasicMaterial({ map }), side]);
     const tilt = TILTS[index % TILTS.length];
     const group = new THREE.Group();
     group.add(mesh);
     scene.add(group);
-    Promise.all([document.fonts?.load('46px Anton'), document.fonts?.load('700 30px Cinzel'), cardFrameImage(512, 878).decode().catch(() => {})]).then(() => {
+    Promise.all([document.fonts?.load('46px Anton'), document.fonts?.load('700 30px Cinzel'), cardFrameImage(CARD_W, CARD_H).decode().catch(() => {})]).then(() => {
       if (state.disposed) return;
       drawCard(face, project, index, null);
       map.needsUpdate = true;
@@ -319,6 +334,9 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   const floating = createFloatingShards(isSmall ? 30 : 38);
   scene.add(floating.mesh);
   const props = createDescentProps();
+  const skillProp = createSkillProp();
+  scene.add(skillProp.group);
+  const propAim = new THREE.Vector3();
   scene.add(props.group);
   const pointer = new THREE.Vector2();
   let pointerSeen = false;
@@ -419,6 +437,9 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       return { left: r.left, width: r.width, top: r.top + state.scroll, height: r.height };
     }), state.w, (x, y) => ({ x: (x - state.w / 2) * state.k, y: -(y - state.h / 2) * state.k }));
 
+    const skillRect = a.skillProp?.getBoundingClientRect();
+    skillProp.layout(skillRect && { left: skillRect.left, width: skillRect.width, top: skillRect.top + state.scroll, height: skillRect.height }, (x, y) => ({ x: (x - state.w / 2) * state.k, y: -(y - state.h / 2) * state.k }));
+
     const about = worldOf(a.aboutPortrait.getBoundingClientRect());
     profile.to.set(about.x, about.y, 0);
     profile.box = about;
@@ -437,7 +458,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
 
   async function loadCardImage(card) {
     const img = await loadImage(card.project.image);
-    const bitmap = await createImageBitmap(img, { resizeWidth: 512, resizeQuality: 'medium' });
+    const bitmap = await createImageBitmap(img, { resizeWidth: CARD_W, resizeQuality: 'medium' });
     await new Promise((resolve) => { requestAnimationFrame(resolve); });
     if (state.disposed) return;
     drawCard(card.face, card.project, card.index, bitmap);
@@ -500,7 +521,12 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       if (p >= 1) endDive();
     } else {
       camera.position.z = CAM_Z - abyss * 2.4 - travel * TRAVEL_DOLLY;
-      camera.rotation.set(abyss * rad(7), 0, 0);
+      // Record ride: the camera whips through its turn and drifts sideways with the timeline.
+      const ride = state.ride;
+      ride.yawNow += (ride.yaw - ride.yawNow) * follow;
+      ride.xNow += (ride.x - ride.xNow) * follow;
+      camera.position.x = ride.xNow;
+      camera.rotation.set(abyss * rad(7), ride.yawNow, 0);
     }
 
     dust.position.y = state.camY;
@@ -569,7 +595,9 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       );
     });
 
-    props.update(time, state.camY);
+    skillProp.update(time, now, state.camY);
+    // The cursor as a world point in front of the props, for the dome camera's lens.
+    props.update(time, state.camY, pointerSeen ? propAim.set(mouse.x * state.w * 0.5 * state.k, state.camY - mouse.y * state.h * 0.5 * state.k, 3) : null);
 
     state.panels.forEach(({ el, top, height }) => {
       const depth = (top + height / 2 - state.scroll - state.h / 2) / state.h;
@@ -640,6 +668,16 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     },
     travel() {
       state.travelStart = performance.now();
+    },
+    setSkillCategory(index) {
+      skillProp.select(index);
+      state.lastInput = performance.now();
+    },
+    // yaw −1…1 from the Record ride (in / out turn), shift: px along the timeline, out: 0…1 of the turn back.
+    setRide({ yaw, shift, out }) {
+      state.ride.yaw = Math.sin(yaw * Math.PI) * RIDE_WHIP;
+      state.ride.x = shift * state.k * RIDE_DRIFT * (1 - out);
+      state.lastInput = performance.now();
     },
     setHidden(index) {
       state.hiddenCard = index;

@@ -11,6 +11,7 @@ import IntroOverlay from '../components/stage/IntroOverlay';
 import AboutSection from '../components/stage/AboutSection';
 import PanelIllustration from '../components/stage/PanelIllustration';
 import ProjectDeck from '../components/stage/ProjectDeck';
+import NowSection from '../components/stage/NowSection';
 import CardInspect from '../components/stage/CardInspect';
 import SkillBoard from '../components/atlus/SkillBoard';
 import RecordBoard from '../components/atlus/RecordBoard';
@@ -94,6 +95,7 @@ export default function Stage() {
           abyss: abyssRef.current,
           slots: slotRefs.current.filter(Boolean),
           panels: panelRefs.current.filter(Boolean),
+          skillProp: stageRef.current?.querySelector('.skill-prop'),
         }),
       });
       sceneRef.current = stage;
@@ -128,6 +130,18 @@ export default function Stage() {
       sceneRef.current = null;
     };
   }, [webgl]);
+
+  // The scroll cue fades out after the first scroll and stays gone.
+  useEffect(() => {
+    const onScroll = () => {
+      if (window.scrollY < 8) return;
+      stageRef.current?.classList.add('is-scrolled');
+      window.removeEventListener('scroll', onScroll);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   useEffect(() => {
     if (phase !== 'boot' && phase !== 'tear' && phase !== 'dive') return undefined;
@@ -325,6 +339,8 @@ export default function Stage() {
         </div>
       </section>
 
+      <NowSection />
+
       <section id="arcana" aria-labelledby="works-title" className="stage-works scroll-mt-16">
         <ImpactInk variant={3} />
         <h2 id="works-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight">{t.atlus.stage.works}</h2>
@@ -355,16 +371,20 @@ export default function Stage() {
         <ImpactInk variant={4} />
         <p className="font-mono text-xs tracking-widest text-ash-300">03 / {t.atlus.hud.stack}</p>
         <h2 id="skill-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight mt-2">{t.landing.nav.stack}</h2>
-        <SkillBoard />
+        <SkillBoard onCategory={webgl ? (index) => sceneRef.current?.setSkillCategory(index) : undefined} />
         <Link to="/stack" className="stage-more">{t.atlus.boards.fullIndex} →</Link>
       </section>
 
       <section id="record" aria-labelledby="record-title" className="stage-works scroll-mt-16">
-        <ImpactInk variant={2} />
-        <p className="font-mono text-xs tracking-widest text-ash-300">04 / {t.atlus.hud.career}</p>
-        <h2 id="record-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight mt-2">{t.landing.nav.career}</h2>
-        <RecordBoard onEnter={() => sceneRef.current?.travel()} />
-        <Link to="/career" className="stage-more">{t.atlus.boards.fullRecord} →</Link>
+        <div className="record-pin">
+          <div className="record-yaw">
+            <ImpactInk variant={2} />
+            <p className="font-mono text-xs tracking-widest text-ash-300">04 / {t.atlus.hud.career}</p>
+            <h2 id="record-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight mt-2">{t.landing.nav.career}</h2>
+            <RecordBoard ride onEnter={() => sceneRef.current?.travel()} onRide={(camera) => sceneRef.current?.setRide(camera)} />
+            <Link to="/career" className="stage-more">{t.atlus.boards.fullRecord} →</Link>
+          </div>
+        </div>
       </section>
 
       <section id="bonfire" ref={abyssRef} aria-labelledby="abyss-title" className="stage-abyss scroll-mt-16">

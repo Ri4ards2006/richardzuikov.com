@@ -19,7 +19,8 @@ export const translations = {
       openMenu: "Menü öffnen",
       closeMenu: "Menü schließen",
       switchLang: "Wechsle zu Englisch",
-      switchTheme: "Theme wechseln"
+      switchTheme: "Theme wechseln",
+      theme: "Theme"
     },
     telemetry: {
       location: "Flensburg, Deutschland",
@@ -45,7 +46,8 @@ export const translations = {
     },
     atlus: {
       "about": {"title":"WER BIN ICH","who":"WER","what":"WAS ICH MACHE","into":"WOFÜR ICH MICH BEGEISTERE","todoInto":"TODO: ergänzen, wofür Richard sich begeistert."},
-      "stage": {"loading":"SYSTEM WIRD GELADEN","skip":"Beliebige Taste zum Überspringen","descent":"ABSTIEG / SYSTEME","descentTitle":"VOM REGISTER ZUM NETZ","works":"AUSGEWÄHLTE ARBEITEN","rack":"19\" Rack Configurator","abyssLabel":"TIEFE / 100 %","scroll":"Nach unten scrollen","portrait":"Porträt"},
+      "now": {"label":"JETZT /","title":"In Arbeit"},
+      "stage": {"loading":"SYSTEM WIRD GELADEN","skip":"Beliebige Taste zum Überspringen","descent":"ABSTIEG / SYSTEME","descentTitle":"VOM PIN ZUM PAKET","works":"AUSGEWÄHLTE ARBEITEN","rack":"19\" Rack Configurator","abyssLabel":"TIEFE / 100 %","scroll":"Nach unten scrollen","portrait":"Porträt"},
       "contact": {"headline":"RASTE HIER, WANDERER","kindled":"VERBINDUNG ENTFACHT"},
       "notFound": {"title":"SIGNAL VERLOREN","subtitle":"unter dieser adresse antwortet niemand","button":"ZURÜCK ZUM MENÜ"},
       "hints": {"menu":"versuch ↑ ↓","card":"dreh sie um","stack":"wähl eine aus"},
@@ -129,8 +131,8 @@ export const translations = {
         },
         {
           title: "Lab- & Ausbildungspfad",
-          desc: "Gezielter Weg zum IT-Systemelektroniker bis 2027 mit Fokus auf industrielle Sicherheitssysteme und Netzwerkinfrastruktur.",
-          todo: "TODO: 2–3 Sätze von Richard zu „Lab- & Ausbildungspfad“."
+          desc: "Seit 2025 mache ich bei R2P die Ausbildung zum IT-Systemelektroniker, Abschluss 2027. Ein großer Teil ist Außendienst beim Kunden: Ich installiere Netzwerke, baue Sicherheits- und Kamerasysteme auf und nehme sie in Betrieb.",
+          todo: "ENTWURF: von Richard zu prüfen (Lab- & Ausbildungspfad)."
         }
       ],
       workbenchTitle: "Hardware Labor & Werkbank",
@@ -382,7 +384,8 @@ export const translations = {
       openMenu: "Open Menu",
       closeMenu: "Close Menu",
       switchLang: "Switch to German",
-      switchTheme: "Switch Theme"
+      switchTheme: "Switch Theme",
+      theme: "Theme"
     },
     telemetry: {
       location: "Flensburg, Germany",
@@ -408,7 +411,8 @@ export const translations = {
     },
     atlus: {
       "about": {"title":"WHO AM I","who":"WHO","what":"WHAT I DO","into":"WHAT I'M INTO","todoInto":"TODO: add what Richard is into."},
-      "stage": {"loading":"LOADING SYSTEM","skip":"Press any key to skip","descent":"DESCENT / SYSTEMS","descentTitle":"FROM REGISTER TO NETWORK","works":"SELECTED WORKS","rack":"19\" Rack Configurator","abyssLabel":"DEPTH / 100 %","scroll":"Scroll down","portrait":"Portrait"},
+      "now": {"label":"NOW /","title":"In Progress"},
+      "stage": {"loading":"LOADING SYSTEM","skip":"Press any key to skip","descent":"DESCENT / SYSTEMS","descentTitle":"FROM PIN TO PACKET","works":"SELECTED WORKS","rack":"19\" Rack Configurator","abyssLabel":"DEPTH / 100 %","scroll":"Scroll down","portrait":"Portrait"},
       "contact": {"headline":"REST HERE, TRAVELLER","kindled":"CONNECTION KINDLED"},
       "notFound": {"title":"SIGNAL LOST","subtitle":"nothing answers at this address","button":"RETURN TO MENU"},
       "hints": {"menu":"try ↑ ↓","card":"flip it","stack":"pick one"},
@@ -492,8 +496,8 @@ export const translations = {
         },
         {
           title: "Lab & Development Path",
-          desc: "Targeted journey toward IT Systems Electronics certification by 2027 with focus on enterprise network arrays.",
-          todo: "TODO: 2–3 sentences from Richard on “Lab & Development Path”."
+          desc: "Since 2025 I have been training as an IT Systems Electronics Technician at R2P, finishing in 2027. Much of it is field work at customer sites: I install networks, set up security and camera systems and put them into operation.",
+          todo: "DRAFT: for Richard's review (Lab & Development Path)."
         }
       ],
       workbenchTitle: "Hardware Lab & Workbench",

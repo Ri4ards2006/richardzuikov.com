@@ -20,7 +20,15 @@ export function landOnSection(id, behavior = 'smooth') {
     window.scrollTo({ top: document.documentElement.scrollHeight, behavior });
     return;
   }
-  document.getElementById(id)?.scrollIntoView({ behavior });
+  const element = document.getElementById(id);
+  // A pinned section (the Record ride) rests a little after its top: past the camera turn.
+  const offset = Number(element?.dataset.landOffset ?? 0);
+  if (element && offset) {
+    const margin = parseFloat(getComputedStyle(element).scrollMarginTop) || 0;
+    window.scrollTo({ top: element.getBoundingClientRect().top + window.scrollY - margin + offset, behavior });
+    return;
+  }
+  element?.scrollIntoView({ behavior });
 }
 
 const atlusPaths = new Set(['/', ...menuItems.filter((item) => item.screen).map((item) => item.path)]);

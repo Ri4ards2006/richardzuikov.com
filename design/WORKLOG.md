@@ -146,3 +146,54 @@ https://richardzuikov-com-git-feat-atlus-v3b-ri4ards2006s-projects.vercel.app/ (
 **Files touched**
 `design/{TASKS,WORKLOG}.md`, `src/css/style.scss`, `src/hooks/use-section-enter.js`, `src/lib/{atlus,translations}.js`, `src/pages/{Stage,Stack,Career}.jsx`, `src/components/atlus/{SkillBoard,SkillVignette,KeyItems,RecordBoard}.jsx`, `src/components/stage/{CardInspect.jsx,scene.js}`
 
+
+## 2026-11-09 · Claude Code (Opus 5.5) · phase 1 merges and changelog v4
+
+**Phase 1 (on `feat/atlus-menu`)**
+- PR #12: career data fixed on `feat/atlus-v3b` (`355741e`): R2P is now three entries — Sep 2024 internship, Dec 2024 – Aug 2025 IT helpdesk & system administration (Minijob) with the given details, 2025–2027 apprenticeship IT-Systemelektroniker; DE and EN. "GO-CORE-LAB Framework" and "Embedded Systems & Signal Analysis" were already gone. The year flip now takes the first four-digit year of a period. Merged after green checks.
+- PR #11 merged. SVGs optimised with `npx svgo@3.3.2` into `src/assets/svg` (26.8 → 16.2 KB; svgo not added as a dependency). TraceStar on the scroll cue, the new card frame on arcana (rasterised into the 3D card texture), deck, key item and inspect cards, the new line icons on the key items, ink splatters on stage, about and as impact moments on the arcana / skill / record headings (`d06dc43`).
+- `REVIEW-bonfire-v3.md` has no P1 finding (one P3, the rest Pass), so there was nothing to fix there; the P3 was left alone because the bonfire is off limits apart from the chapel.
+- Tag `checkpoint-atlus-v3` on `d06dc43`.
+
+**Phase 2 (on `feat/atlus-v4`)**: DESIGN.md §15, tasks in TASKS.md, one commit per task except where noted.
+- Global menu: pause menu with large skewed staggered slabs, wedge, inversion and echo text, MENU as a background element; corner HUD chips, Quick Read chip, legal mono line; diagonal wipe with three paper shards (open 340 ms, close 300 ms), Esc, focus trap. The three menu tasks share one commit because they are one component.
+- Stage: name block 10.4vw (capped at 10rem), in view and clear of the menu at 1024, 1280, 1440 and 1920 px; portrait anchor moved below it. Scroll cue 9 px with TraceStar, fades after the first scroll and stays gone.
+- Descent: "FROM PIN TO PACKET" / "VOM PIN ZUM PAKET". Props: chip, PCB, monitor with scrolling code, rack unit with blinking LEDs, dome camera whose lens follows the cursor (slow pan without a mouse). Panel 05 rewritten (draft below).
+- Now: new section between descent and Selected Works, data in `src/data/now.js`.
+- Record: pinned horizontal ride on desktop (≥ 768 px, no reduced motion): yaw in, 1 px of scroll per px of track, flipping year, yaw out. Menu and deep-link landing rest after the yaw-in; keyboard focus scrolls the focused role onto the reading line. Phones and reduced motion keep the vertical list.
+- Skill: WebGL prop per category below the slabs (chip, rack unit, oscilloscope with a running trace, browser frame), spin swap; none on `/stack` and below 1024 px.
+- Arcana: 768 px card texture with anisotropic filtering, thinner frame strokes, lower screentone amplitude, narrower titles; deck and inspect frames lighter, screentone 1.5 px.
+- Bonfire: small ruined chapel behind the fire, merged into the ruins mesh with the same fog fade. Nothing else touched.
+
+**Review (§10), two rounds per group, against the written §15** (`design/storyboard/` and `design/refs/` still do not exist here)
+- Menu 1: echo text too faint, numbers far from their slabs, the menu always opened on 01. Fixed. Menu 2: echo too dominant at 1280×720 and running behind the chips. Fixed.
+- Stage 1: name ran into the portrait rings and role line. Fixed. Stage 2: at 1920 px the name came within 21 px of the menu. Capped at 10rem.
+- Descent 1: dome read as a wire cage and the lens was invisible. Fixed (smoked dome, paper lens bezel). Descent 2: the dome was seen from above. Tilted to be seen from below.
+- Now 1: no side gutter, panel 03 ran off screen. Fixed. Now 2: label and title said the same; panels stretched with empty bottoms. Fixed.
+- Record 1: bars slid under the year, too small, inactive bars too faint. Fixed. Record 2: active bar clipped at the left edge. Fixed.
+- Skill 1: oscilloscope and browser turned their backs to the viewer. Sway instead of full rotation. Skill 2: browser front unreadable. Edges on every block.
+- Arcana 1: frame still heavy, long title touched the corner traces. Fixed. Arcana 2: no further defect found.
+- Bonfire 1: chapel too close and hidden behind the flame. Moved to z −7.6 between fire and tower. Bonfire 2: no further defect found.
+- Final run: menu, stage, ride, reduced motion and deep pages pass (Playwright scripts outside the repo; the repo has no test runner). One menu and one stage run timed out at a host load average of 61 and passed on rerun.
+
+**Decisions**
+- Camera turn: the DOM board makes the full 90° yaw; the WebGL camera only whips up to 28° and drifts sideways, because a literal 90° turn in the scene faces empty space.
+- NOW progress: TRICH-1 and cluster steps are unknown, so their quest bars scan instead of showing a made-up value; the apprenticeship bar follows the calendar year (2026 = step 2 of 3).
+- TRICH-1 facts come from the project reference (balanced ternary, compiler / ISA / VM in Go, Verilog core on a Tang Nano 9K).
+
+**Drafts for Richard's review**
+- 05 Lab- & Ausbildungspfad, DE: "Seit 2025 mache ich bei R2P die Ausbildung zum IT-Systemelektroniker, Abschluss 2027. Ein großer Teil ist Außendienst beim Kunden: Ich installiere Netzwerke, baue Sicherheits- und Kamerasysteme auf und nehme sie in Betrieb."
+- 05 Lab & Development Path, EN: "Since 2025 I have been training as an IT Systems Electronics Technician at R2P, finishing in 2027. Much of it is field work at customer sites: I install networks, set up security and camera systems and put them into operation."
+- NOW texts in `src/data/now.js` (TRICH-1, cluster, apprenticeship).
+
+**Open questions for Richard**
+- TRICH-1 and cluster: which steps are done (quest bars)? Exact start and exam month of the apprenticeship?
+- Internship (Sep 2024): any detail line? It currently has none.
+- Are the panel 05 and NOW drafts right?
+- Should the ride also run on tablets in portrait (768–1023 px)? It does now.
+
+**Preview**
+https://richardzuikov-com-git-feat-atlus-v4-ri4ards2006s-projects.vercel.app/ (behind the Vercel login)
+
+**Files touched**
+`design/{ASSETS,DESIGN,TASKS,WORKLOG}.md`, `src/assets/svg/**`, `src/data/now.js`, `src/lib/{atlus,translations}.js`, `src/pages/Stage.jsx`, `src/css/style.scss`, `src/components/MenuOverlay.jsx`, `src/components/atlus/{glyphs,KeyItems,RecordBoard,SkillBoard}.jsx`, `src/components/stage/{AboutSection,CardInspect,NowSection,ProjectDeck}.jsx`, `src/components/stage/{scene,descent-props,skill-props}.js`, `src/three/bonfire/ruins.js`
