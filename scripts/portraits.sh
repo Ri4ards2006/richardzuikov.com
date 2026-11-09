@@ -6,7 +6,7 @@ shopt -s nullglob
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT="$ROOT/src/assets/portraits"
 RAW="$OUT/raw"
-IDS=(about work stack career contact)
+IDS=(stage about work stack career contact)
 
 for tool in rembg magick; do
   if ! command -v "$tool" >/dev/null; then

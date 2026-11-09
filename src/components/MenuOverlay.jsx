@@ -1,30 +1,35 @@
-import React, { useEffect, useRef } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { Moon, Sun, X } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { X } from 'lucide-react';
 import { useTheme } from '../hooks/use-theme';
 import { useLanguage } from '../hooks/use-language';
+import { useContactEmail } from '../hooks/use-contact-email';
 import { useReducedMotion } from '../hooks/use-reduced-motion';
-import { QUICK_PATH, sections } from '../lib/sections';
+import { landOnSection, menuItems, scrollTargets } from '../lib/atlus';
+import { QUICK_PATH } from '../lib/sections';
+import { socialLinks } from './home/SocialLinks';
 
-const CLOSED = 'polygon(0% 0%, 0% 0%, -20% 100%, -20% 100%)';
-const OPEN = 'polygon(0% 0%, 120% 0%, 100% 100%, -20% 100%)';
-const roundButton = 'w-11 h-11 flex items-center justify-center rounded-full border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white transition-colors duration-200';
+const LETTERS = ['M', 'E', 'N', 'U'];
 
-function Panel({ onClose }) {
+function Panel({ closing, onClose, onExited }) {
   const [theme, toggleTheme] = useTheme();
   const { language, toggleLanguage, t } = useLanguage();
+  const { email } = useContactEmail();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
   const reducedMotion = useReducedMotion();
   const panelRef = useRef(null);
-  const closeRef = useRef(null);
+  const slabRefs = useRef([]);
 
   useEffect(() => {
-    closeRef.current?.focus();
+    // The first slab takes focus so the arrow keys work at once, like the stage menu.
+    slabRefs.current[0]?.focus();
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-
     const onKeyDown = (event) => {
       if (event.key === 'Escape') {
+        // Deep pages also use Escape to go back; while the menu is open it only closes the menu.
+        event.stopImmediatePropagation();
         onClose();
         return;
       }
@@ -40,58 +45,104 @@ function Panel({ onClose }) {
         first.focus();
       }
     };
-    document.addEventListener('keydown', onKeyDown);
-
+    window.addEventListener('keydown', onKeyDown, true);
     return () => {
       document.body.style.overflow = previousOverflow;
-      document.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keydown', onKeyDown, true);
     };
   }, [onClose]);
 
-  const linkClass = 'block py-1 text-3xl font-light tracking-wide text-zinc-800 dark:text-zinc-200 hover:text-zinc-950 dark:hover:text-white transition-colors duration-150';
+  useEffect(() => {
+    if (closing && reducedMotion) onExited();
+  }, [closing, reducedMotion, onExited]);
+
+  const handleSection = (event, item) => {
+    const target = scrollTargets[item.id];
+    // On the home page the camera flies there; anywhere else the link's own navigation applies.
+    if (target && pathname === '/') {
+      event.preventDefault();
+      landOnSection(target);
+    }
+    onClose();
+  };
+
+  const handleSlabKey = (event, index) => {
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+    event.preventDefault();
+    const step = event.key === 'ArrowDown' ? 1 : -1;
+    slabRefs.current[(index + step + menuItems.length) % menuItems.length]?.focus();
+  };
+
+  const goLegal = (path) => {
+    onClose();
+    navigate(path);
+  };
 
   return (
-    <motion.div
+    <div
       ref={panelRef}
       role="dialog"
       aria-modal="true"
       aria-label={t.nav.menu}
-      initial={{ clipPath: CLOSED }}
-      animate={{ clipPath: OPEN }}
-      exit={{ clipPath: CLOSED }}
-      transition={{ duration: reducedMotion ? 0 : 0.22, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-white dark:bg-[#09090b]"
+      className={`gm ${closing ? 'is-closing' : ''}`}
+      onAnimationEnd={() => { if (closing) onExited(); }}
     >
-      <div className="flex justify-end gap-2 p-6">
-        <button type="button" onClick={toggleLanguage} title={t.nav.switchLang} aria-label={`${language === 'de' ? 'EN' : 'DE'} · ${t.nav.switchLang}`} className={`${roundButton} font-mono text-xs font-bold`}>
-          {language === 'de' ? 'EN' : 'DE'}
-        </button>
-        <button type="button" onClick={toggleTheme} title={t.nav.switchTheme} aria-label={t.nav.switchTheme} className={roundButton}>
-          {theme === 'dark' ? <Sun aria-hidden="true" size={18} /> : <Moon aria-hidden="true" size={18} />}
-        </button>
-        <button ref={closeRef} type="button" onClick={onClose} aria-label={t.nav.closeMenu} className={roundButton}>
-          <X aria-hidden="true" size={20} />
-        </button>
+      <button type="button" onClick={onClose} aria-label={t.nav.closeMenu} className="gm-close">
+        <X aria-hidden="true" size={20} />
+      </button>
+
+      <div aria-hidden="true" className="gm-letters">
+        {LETTERS.map((letter) => <span key={letter}>{letter}</span>)}
       </div>
 
-      <nav aria-label={t.landing.sectionNav} className="flex-1 flex items-center px-8">
-        <ul className="space-y-3">
-          {sections.map(({ id, number }) => (
-            <li key={id} className="flex items-baseline gap-4">
-              <span aria-hidden="true" className="font-mono text-xs text-zinc-600 dark:text-zinc-400">{number}</span>
-              <Link to={`${QUICK_PATH}#${id}`} onClick={onClose} className={linkClass}>{t.landing.nav[id]}</Link>
-            </li>
-          ))}
-          <li className="flex items-baseline gap-4">
-            <span aria-hidden="true" className="font-mono text-xs text-zinc-600 dark:text-zinc-400">→</span>
-            <Link to="/#arcana" onClick={onClose} className={linkClass}>{t.nav.lab}</Link>
-          </li>
+      <nav aria-label={t.atlus.menuNav}>
+        <ul className="gm-list">
+          {menuItems.map((item, index) => {
+            const target = scrollTargets[item.id];
+            return (
+              <li key={item.id} style={{ '--i': index }}>
+                <span aria-hidden="true" className="gm-number">{item.number} /</span>
+                <Link
+                  ref={(node) => { slabRefs.current[index] = node; }}
+                  to={target ? `/#${target}` : item.path}
+                  onClick={(event) => handleSection(event, item)}
+                  onKeyDown={(event) => handleSlabKey(event, index)}
+                  className="gm-slab"
+                >
+                  {t.landing.nav[item.id]}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
-    </motion.div>
+
+      <div className="gm-side">
+        <div className="gm-group">
+          <Link to={QUICK_PATH} onClick={onClose}>{t.landing.menuPlaceholder.quickRead} →</Link>
+          <button type="button" onClick={toggleLanguage} aria-label={t.nav.switchLang} className="gm-lang">
+            <span>{language === 'de' ? <b>DE</b> : 'DE'} / {language === 'en' ? <b>EN</b> : 'EN'}</span>
+          </button>
+          <button type="button" onClick={toggleTheme}>{t.nav.switchTheme} · {theme === 'dark' ? '☾' : '☼'}</button>
+        </div>
+        <div className="gm-group">
+          {socialLinks.map(({ label, href }) => <a key={label} href={href} target="_blank" rel="noreferrer">{label} ↗</a>)}
+          <a href={email ? `mailto:${email}` : undefined}>Mail ↗</a>
+          <button type="button" onClick={() => goLegal('/impressum')}>{t.nav.impressum}</button>
+          <button type="button" onClick={() => goLegal('/datenschutz')}>{t.nav.datenschutz}</button>
+        </div>
+      </div>
+    </div>
   );
 }
 
 export default function MenuOverlay({ open, onClose }) {
-  return <AnimatePresence>{open && <Panel onClose={onClose} />}</AnimatePresence>;
+  const [mounted, setMounted] = useState(open);
+
+  useEffect(() => {
+    if (open) setMounted(true);
+  }, [open]);
+
+  if (!mounted && !open) return null;
+  return <Panel closing={!open} onClose={onClose} onExited={() => setMounted(false)} />;
 }

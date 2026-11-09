@@ -53,6 +53,7 @@ export const translations = {
       "menuNav": "Hauptmenü",
       "allProjects": "ALLE PROJEKTE →",
       "deck": {"label":"ALLE PROJEKTE","hint":"ZIEHEN · SCROLLEN · ← →"},
+      "inspect": {"source":"VIEW SOURCE","details":"DETAILS","back":"ZURÜCK"},
       "usedIn": "Eingesetzt in",
       "todoStackUse": "TODO: Wofür / wo eingesetzt ergänzen.",
       "flip": "Karte umdrehen",
@@ -110,14 +111,19 @@ export const translations = {
           todo: "TODO: 2–3 Sätze von Richard zu „Register-Level Architektur“."
         },
         {
-          title: "Hardware-Software Synchronisation",
-          desc: "Präzises Timing und Bus-Kommunikation (SPI/I2C/UART) zwischen Mikrocontrollern und Host-Systemen.",
-          todo: "TODO: 2–3 Sätze von Richard zu „Hardware-Software Synchronisation“."
+          title: "Hardware & PCB",
+          desc: "Eigene 2-Layer-Platinen entstehen in KiCad, von Layout und Routing bis zur fertigen Baugruppe. Bring-up und Fehlersuche laufen am Oszilloskop, bis jedes Signal dort ankommt, wo es hin soll.",
+          todo: "ENTWURF: von Richard zu prüfen (Hardware & PCB)."
         },
         {
           title: "Warum C++ & Go?",
           desc: "Die ideale Balance zwischen maximaler Hardwarekontrolle auf Register-Ebene und hochgradig nebenläufigen Netzwerk-Pipelines.",
           todo: "TODO: 2–3 Sätze von Richard zu „Warum C++ & Go?“."
+        },
+        {
+          title: "Cluster & Infrastruktur",
+          desc: "Im Home-Lab läuft ein Cluster aus Proxmox VE und K3s, deployt per GitOps mit ArgoCD. Von außen erreichbar ist er über WireGuard und Cloudflare-Tunnel.",
+          todo: "ENTWURF: von Richard zu prüfen (Cluster & Infrastruktur)."
         },
         {
           title: "Lab- & Ausbildungspfad",
@@ -372,8 +378,8 @@ export const translations = {
       lab: "Lab & Systems",
       contact: "Contact",
       portfolio: "Portfolio",
-      impressum: "Legal Notice",
-      datenschutz: "Privacy Policy",
+      impressum: "Legal notice",
+      datenschutz: "Privacy policy",
       legal: "Legal & Privacy",
       back: "Back",
       backHome: "Back · Home",
@@ -415,6 +421,7 @@ export const translations = {
       "menuNav": "Main menu",
       "allProjects": "ALL PROJECTS →",
       "deck": {"label":"ALL PROJECTS","hint":"DRAG · SCROLL · ← →"},
+      "inspect": {"source":"VIEW SOURCE","details":"DETAILS","back":"BACK"},
       "usedIn": "Used in",
       "todoStackUse": "TODO: add what this was used for and where.",
       "flip": "Flip card",
@@ -472,14 +479,19 @@ export const translations = {
           todo: "TODO: 2–3 sentences from Richard on “Register-Level Architecture”."
         },
         {
-          title: "Hardware-Software Sync",
-          desc: "Deterministic timing and bus communication (SPI/I2C/UART) between microcontrollers and host architectures.",
-          todo: "TODO: 2–3 sentences from Richard on “Hardware-Software Sync”."
+          title: "Hardware & PCB",
+          desc: "I design my own 2-layer boards in KiCad, from layout and routing to the assembled board. Bring-up and debugging happen on the oscilloscope, until every signal arrives where it should.",
+          todo: "DRAFT: for Richard's review (Hardware & PCB)."
         },
         {
           title: "Why C++ & Go?",
           desc: "The ideal equilibrium between bare-metal register control and highly concurrent network telemetry pipelines.",
           todo: "TODO: 2–3 sentences from Richard on “Why C++ & Go?”."
+        },
+        {
+          title: "Cluster & Infrastructure",
+          desc: "My home lab runs a cluster on Proxmox VE and K3s, deployed through GitOps with ArgoCD. It is reached from outside through WireGuard and Cloudflare tunnels.",
+          todo: "DRAFT: for Richard's review (Cluster & Infrastructure)."
         },
         {
           title: "Lab & Development Path",

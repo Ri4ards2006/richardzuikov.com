@@ -52,7 +52,7 @@ const AboutSection = forwardRef(function AboutSection({ portraitRef, webgl }, re
         </div>
       </div>
       <div ref={portraitRef} className="about-portrait">
-        {!webgl && <img src={portraits.profile.large} alt="" className="h-full w-full object-contain grayscale" />}
+        {!webgl && <img src={portraits.about.large} alt="" className="h-full w-full object-contain grayscale" />}
       </div>
     </section>
   );

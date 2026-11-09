@@ -1,28 +1,25 @@
 import React, { Suspense, lazy, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, Moon, Sun } from 'lucide-react';
 import { useLanguage } from '../hooks/use-language';
 import { useTheme } from '../hooks/use-theme';
 import { useScrollSpy } from '../hooks/use-scroll-spy';
 import { QUICK_PATH, sections } from '../lib/sections';
-import { CONTACT_PATH, isAtlusPath, isForcedDark } from '../lib/atlus';
+import { isAtlusPath, isForcedDark } from '../lib/atlus';
 
-// Keeps framer-motion out of the initial bundle until the menu is first opened.
+// The overlay is only fetched once the menu is first opened.
 const MenuOverlay = lazy(() => import('./MenuOverlay'));
 
 const sectionIds = [...sections.map((section) => section.id)];
-const iconButton = 'w-11 h-11 flex items-center justify-center rounded-full border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:border-zinc-500 transition-colors duration-200';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [menuLoaded, setMenuLoaded] = useState(false);
   const menuButtonRef = useRef(null);
   const { pathname } = useLocation();
-  const { language, toggleLanguage, t } = useLanguage();
-  const [theme, toggleTheme] = useTheme();
+  const { t } = useLanguage();
+  const [theme] = useTheme();
   const active = useScrollSpy(sectionIds, pathname === QUICK_PATH);
   const atlus = isAtlusPath(pathname);
-  const isContact = pathname === CONTACT_PATH;
 
   const openMenu = () => {
     setMenuLoaded(true);
@@ -64,29 +61,20 @@ export default function Header() {
             </nav>
           )}
 
-          <div className="flex items-center gap-2">
-            <button type="button" onClick={toggleLanguage} title={t.nav.switchLang} aria-label={`${language === 'de' ? 'EN' : 'DE'} · ${t.nav.switchLang}`} className={`${iconButton} ${atlus ? 'flex' : 'hidden md:flex'} font-mono text-xs font-bold`}>
-              {language === 'de' ? 'EN' : 'DE'}
-            </button>
-            {(!atlus || isContact) && (
-              <>
-                <button type="button" onClick={toggleTheme} title={t.nav.switchTheme} aria-label={t.nav.switchTheme} className={`${iconButton} ${isContact ? 'flex' : 'hidden md:flex'}`}>
-                  {theme === 'dark' ? <Sun aria-hidden="true" size={18} /> : <Moon aria-hidden="true" size={18} />}
-                </button>
-                <button ref={menuButtonRef} type="button" onClick={openMenu} aria-label={t.nav.openMenu} aria-expanded={isMenuOpen} className={`${iconButton} ${isContact ? 'hidden' : 'md:hidden'}`}>
-                  <Menu aria-hidden="true" size={20} />
-                </button>
-              </>
-            )}
-          </div>
+          <span aria-hidden="true" className="w-11" />
         </div>
-
-        {menuLoaded && (
-          <Suspense fallback={null}>
-            <MenuOverlay open={isMenuOpen} onClose={closeMenu} />
-          </Suspense>
-        )}
       </header>
+
+      <button ref={menuButtonRef} type="button" onClick={openMenu} aria-label={t.nav.openMenu} aria-expanded={isMenuOpen} className="menu-dots">
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+      </button>
+      {menuLoaded && (
+        <Suspense fallback={null}>
+          <MenuOverlay open={isMenuOpen} onClose={closeMenu} />
+        </Suspense>
+      )}
     </div>
   );
 }

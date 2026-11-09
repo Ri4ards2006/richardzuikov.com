@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { createBonfire } from '../../three/bonfire';
 import { createFloatingShards } from './floating-shards';
 import { createInkWater } from './ink-water';
+import { createDescentProps } from './descent-props';
 import { disposeObject, hash, makeCanvas, pointsMaterial, seededPoints, smooth, texture } from '../../three/utils';
 
 const FOV = 40;
@@ -124,23 +125,43 @@ function drawCard(canvas, project, index, img) {
   ctx.lineWidth = 1.5;
   ctx.strokeRect(19, 19, w - 38, h - 38);
   ctx.fillStyle = '#f4f4f0';
-  ctx.textAlign = 'left';
+  ctx.textAlign = 'center';
   ctx.font = '700 34px Cinzel, serif';
   const numeral = ROMAN[index] ?? String(index + 1);
-  ctx.fillText(numeral, 34, 70);
-  ctx.fillRect(34 + ctx.measureText(numeral).width + 16, 54, w - 68 - ctx.measureText(numeral).width - 16, 2);
+  ctx.fillText(numeral, w / 2, 70);
+  const rule = w / 2 - ctx.measureText(numeral).width / 2 - 16 - 34;
+  ctx.fillRect(34, 56, rule, 2);
+  ctx.fillRect(w - 34 - rule, 56, rule, 2);
   ctx.textAlign = 'center';
   ctx.font = '50px Anton, Impact, sans-serif';
   ctx.fillText(project.title.toUpperCase(), w / 2, h - 44, w - 70);
 }
 
-function createPortrait(map, { ghost = false } = {}) {
+// About portrait: high-contrast grayscale, fine screentone only in the shadows, so features stay readable.
+const SOFT_PORTRAIT = `
+  varying vec2 vUv; uniform sampler2D uMap; uniform float uOpacity,uDissolve,uShade;
+  void main(){
+    vec4 c=texture2D(uMap,vUv);
+    if(c.a<.5)discard;
+    float lum=dot(c.rgb,vec3(.299,.587,.114));
+    float tone=mix(lum,.05+.72*smoothstep(.1,.85,1.-vUv.x),uShade);
+    float v=clamp((tone-.5)*1.6+.5,0.,1.);
+    vec2 fine=fract(mat2(.707,-.707,.707,.707)*gl_FragCoord.xy/3.5)-.5;
+    v+=(1.-smoothstep(.14,.4,v))*(1.-smoothstep(.2,.3,length(fine)))*.34;
+    if(uDissolve>0.){
+      vec2 cell=fract(mat2(.707,-.707,.707,.707)*gl_FragCoord.xy/(5.+uDissolve*11.))-.5;
+      if(length(cell)>(1.-uDissolve)*.9)discard;
+    }
+    gl_FragColor=vec4(mix(vec3(.02),vec3(.957,.957,.941),v),uOpacity);
+  }`;
+
+function createPortrait(map, { ghost = false, soft = false, placeholder = false } = {}) {
   return new THREE.ShaderMaterial({
     transparent: true,
     depthWrite: !ghost,
-    uniforms: { uMap: { value: map }, uOpacity: { value: 1 }, uDissolve: { value: 0 } },
+    uniforms: { uMap: { value: map }, uOpacity: { value: 1 }, uDissolve: { value: 0 }, uShade: { value: placeholder ? 1 : 0 } },
     vertexShader: 'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
-    fragmentShader: `
+    fragmentShader: soft ? SOFT_PORTRAIT : `
       varying vec2 vUv; uniform sampler2D uMap; uniform float uOpacity,uDissolve;
       void main(){
         vec4 c=texture2D(uMap,vUv);
@@ -155,7 +176,7 @@ function createPortrait(map, { ghost = false } = {}) {
   });
 }
 
-export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc, onDiveEnd }) {
+export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc, profilePlaceholder, onDiveEnd }) {
   const isSmall = window.innerWidth < SMALL_SCREEN;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: !isSmall, powerPreference: 'high-performance' });
   renderer.setClearColor(INK);
@@ -166,19 +187,29 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 80);
   camera.position.z = CAM_Z;
 
-  const state = { lastInput: 0, w: 1, h: 1, k: 0.01, scroll: window.scrollY, camY: 0, frame: 0, last: 0, time: 0, slow: 0, count: 0, spent: 0, hover: -1, abyssTop: 1e9, panels: [], fireProgress: 0, fire: { x: 0, y: 0, scale: 1, pixel: 1 } };
+  const state = { lastInput: 0, w: 1, h: 1, k: 0.01, scroll: window.scrollY, camY: 0, frame: 0, last: 0, time: 0, rise: 0, story: 0, slow: 0, count: 0, spent: 0, hover: -1, hiddenCard: -1, abyssTop: 1e9, panels: [], fireProgress: 0, fire: { x: 0, y: 0, scale: 1, pixel: 1 } };
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
 
-  const dust = seededPoints(isSmall ? 70 : 180, pointsMaterial(
-    `attribute vec3 aSeed; uniform float uTime,uPixel;
+  // Screentone dust on the stage, rising ash through the descent, embers at the bonfire.
+  const dust = seededPoints(isSmall ? 90 : 220, pointsMaterial(
+    `attribute vec3 aSeed; uniform float uTime,uRise,uStory,uEmber,uPixel; varying float vShow,vHeat;
      void main(){
-       vec3 p=vec3((aSeed.x-.5)*20.,mod(aSeed.y*16.+uTime*.18,16.)-8.,(aSeed.z-.5)*10.);
+       float y=mod(aSeed.y*16.+uRise,16.)-8.;
+       vec3 p=vec3((aSeed.x-.5)*20.+sin(uTime*.6+aSeed.y*40.)*.35*uStory,y,(aSeed.z-.5)*10.);
+       vShow=smoothstep(-.03,.03,.4+uStory*.7-fract(aSeed.x*7.3));
+       vHeat=smoothstep(fract(aSeed.z*5.1)*.7,fract(aSeed.z*5.1)*.7+.3,uEmber);
        vec4 mv=modelViewMatrix*vec4(p,1.);
        gl_Position=projectionMatrix*mv;
-       gl_PointSize=uPixel*(16.+aSeed.z*24.)/-mv.z;
+       gl_PointSize=uPixel*(16.+aSeed.z*24.)*(1.+uStory*.8+vHeat*.5)/-mv.z;
      }`,
-    'void main(){float d=length(gl_PointCoord-.5);if(d>.5)discard;gl_FragColor=vec4(.957,.957,.941,(1.-d*2.)*.7);}',
-    { uTime: { value: 0 }, uPixel: { value: 1 } },
+    `uniform float uStory; varying float vShow,vHeat;
+     void main(){
+       float d=length(gl_PointCoord-.5);
+       if(d>.5||vShow<.01)discard;
+       vec3 ash=mix(vec3(.957,.957,.941),vec3(.56,.56,.54),uStory);
+       gl_FragColor=vec4(mix(ash,vec3(1.,.42,0.),vHeat),(1.-d*(2.-uStory*.8))*(.7+uStory*.3)*vShow);
+     }`,
+    { uTime: { value: 0 }, uRise: { value: 0 }, uStory: { value: 0 }, uEmber: { value: 0 }, uPixel: { value: 1 } },
   ));
   scene.add(dust);
 
@@ -218,17 +249,17 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   }).catch(() => {});
 
   // Side-profile figure of the About section.
-  const profile = { ghosts: [], mesh: null, map: null, geometry: null, aspect: 1, box: { w: 1, h: 1 }, to: new THREE.Vector3(), top: 0, height: 1 };
+  const profile = { ghosts: [], mesh: null, map: null, geometry: null, aspect: 1, box: { w: 1, h: 1 }, to: new THREE.Vector3(), top: 0, settle: 1, height: 1 };
   loadImage(profileSrc).then((img) => {
     if (state.disposed) return;
     profile.map = new THREE.Texture(img);
     profile.map.needsUpdate = true;
     profile.aspect = img.width / img.height;
     profile.geometry = new THREE.PlaneGeometry(profile.aspect, 1);
-    profile.mesh = new THREE.Mesh(profile.geometry, createPortrait(profile.map));
+    profile.mesh = new THREE.Mesh(profile.geometry, createPortrait(profile.map, { soft: true, placeholder: profilePlaceholder }));
     scene.add(profile.mesh);
     profile.ghosts = GHOST_FOLLOW.map((follow) => {
-      const material = createPortrait(profile.map, { ghost: true });
+      const material = createPortrait(profile.map, { ghost: true, soft: true, placeholder: profilePlaceholder });
       const mesh = new THREE.Mesh(profile.geometry, material);
       mesh.visible = false;
       mesh.renderOrder = -1;
@@ -266,8 +297,10 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     return { project, index, face, map, mesh, group, tilt, lift: 0, base: new THREE.Vector3() };
   });
 
-  const floating = createFloatingShards(isSmall ? 40 : 56);
+  const floating = createFloatingShards(isSmall ? 30 : 38);
   scene.add(floating.mesh);
+  const props = createDescentProps();
+  scene.add(props.group);
   const pointer = new THREE.Vector2();
   let pointerSeen = false;
 
@@ -362,12 +395,18 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       const r = el.getBoundingClientRect();
       return { el, top: r.top + state.scroll, height: r.height };
     });
+    props.layout(a.panels.map((el) => {
+      const r = el.getBoundingClientRect();
+      return { left: r.left, width: r.width, top: r.top + state.scroll, height: r.height };
+    }), state.w, (x, y) => ({ x: (x - state.w / 2) * state.k, y: -(y - state.h / 2) * state.k }));
 
     const about = worldOf(a.aboutPortrait.getBoundingClientRect());
     profile.to.set(about.x, about.y, 0);
     profile.box = about;
     const aboutRect = a.about.getBoundingClientRect();
     profile.top = aboutRect.top + state.scroll;
+    // The scroll position a menu jump lands on, so the figure is fully turned exactly there.
+    profile.settle = Math.max(1, profile.top - parseFloat(getComputedStyle(a.about).scrollMarginTop || 0));
     profile.height = aboutRect.height;
 
     const fire = worldOf(a.fire.getBoundingClientRect());
@@ -441,21 +480,31 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     }
 
     dust.position.y = state.camY;
+    // The rest of the story runs on scroll: shards thin out and the ash thickens and heats up.
+    const ashEnd = Math.max(1, state.abyssTop - state.h);
+    const story = clamp01((state.scroll - state.h * 0.3) / Math.max(1, ashEnd - state.h * 0.3));
+    const emberStart = state.abyssTop - state.h * 0.8;
+    const ember = smooth(clamp01((state.scroll - emberStart) / Math.max(1, state.maxScroll - emberStart)));
+    state.rise += dt * (0.18 + story * 0.42);
+    Object.assign(dust.material.uniforms.uStory, { value: story });
+    dust.material.uniforms.uEmber.value = ember;
+    dust.material.uniforms.uRise.value = state.rise;
     dust.material.uniforms.uTime.value = time;
 
     hero.visible = state.scroll < state.h * 1.4;
-    floating.mesh.visible = hero.visible;
+    floating.mesh.position.y = state.camY;
+    floating.mesh.visible = story < 1;
+    if (floating.mesh.visible) floating.update(dt, time, pointerSeen ? pointer.set(mouse.x, -mouse.y) : null, story);
     water.mesh.visible = hero.visible;
     if (hero.visible) {
       water.update(time, clamp01(state.scroll / (state.h * 0.55)) * 1.2);
-      floating.update(dt, time, pointerSeen ? pointer.set(mouse.x, -mouse.y) : null);
       heroLayers.forEach(({ object, depth, base }) => {
         object.position.set(base.x + mouse.x * depth, base.y - mouse.y * depth * 0.6, base.z);
       });
       rings.forEach((ring, i) => { ring.rotation.z = time * (i % 2 ? -0.05 : 0.07); });
     }
 
-    const aboutEnter = smooth(clamp01(state.scroll / Math.max(1, profile.top * 0.95)));
+    const aboutEnter = smooth(clamp01(state.scroll / profile.settle));
     if (heroFigure) heroFigure.rotation.y = rad(90) * smooth(clamp01(aboutEnter / 0.5));
     if (profile.mesh) {
       placeProfile(profile.mesh, aboutEnter);
@@ -482,7 +531,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     }
 
     cards.forEach((card) => {
-      const visible = Math.abs(card.base.y - state.camY) < 12;
+      const visible = Math.abs(card.base.y - state.camY) < 12 && card.index !== state.hiddenCard;
       card.group.visible = visible;
       if (!visible) return;
       const hovered = state.hover === card.index ? 1 : 0;
@@ -495,6 +544,8 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
         rad(card.tilt[2]) * (1 - card.lift),
       );
     });
+
+    props.update(time, state.camY);
 
     state.panels.forEach(({ el, top, height }) => {
       const depth = (top + height / 2 - state.scroll - state.h / 2) / state.h;
@@ -562,6 +613,9 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
         dive.active = true;
         endDive();
       }
+    },
+    setHidden(index) {
+      state.hiddenCard = index;
     },
     setHover(index) {
       state.hover = index;

@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useDocumentTitle } from '../hooks/use-document-title';
 import { useLanguage } from '../hooks/use-language';
 import { useReducedMotion } from '../hooks/use-reduced-motion';
-import { getActiveMenuId, menuItems, setActiveMenuId } from '../lib/atlus';
+import { ROMAN, getActiveMenuId, landOnSection, menuItems, scrollTargets, setActiveMenuId } from '../lib/atlus';
 import { QUICK_PATH } from '../lib/sections';
 import { portraits } from '../data/portraits';
 import { featuredProjects } from '../data/featured-projects';
@@ -11,6 +11,7 @@ import IntroOverlay from '../components/stage/IntroOverlay';
 import AboutSection from '../components/stage/AboutSection';
 import PanelIllustration from '../components/stage/PanelIllustration';
 import ProjectDeck from '../components/stage/ProjectDeck';
+import CardInspect from '../components/stage/CardInspect';
 import ContactList from '../three/bonfire/ContactList';
 import { grainTexture } from '../lib/noise-textures';
 
@@ -20,9 +21,10 @@ const SCENE_TIMEOUT_MS = 4000;
 // Each slab has its own size and offset (design bible, Card 03).
 const SLAB_SIZES = [1, 0.84, 1.12, 0.92, 1.04];
 const SLAB_OFFSETS = [0, 1.1, 0.4, 1.6, 0.7];
-const SCROLL_TARGETS = { about: 'about', work: 'arcana', contact: 'bonfire' };
 // Depth layer per descent panel: near panels move against the scroll, far ones trail it.
-const PANEL_LAYERS = ['near', 'far', 'mid', 'near'];
+const PANEL_LAYERS = ['near', 'far', 'mid', 'near', 'far'];
+const LAND_PIN_MS = 1500;
+const LAND_RELEASE_EVENTS = ['wheel', 'touchstart', 'keydown', 'pointerdown'];
 
 const delay = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
 
@@ -50,6 +52,7 @@ export default function Stage() {
   const [webgl, setWebgl] = useState(() => !reducedMotion && 'WebGL2RenderingContext' in window);
   const [phase, setPhase] = useState(() => (webgl && !introSeen() && !hash ? 'boot' : 'done'));
   const [active, setActive] = useState(getActiveMenuId);
+  const [inspected, setInspected] = useState(null);
 
   const canvasRef = useRef(null);
   const stageRef = useRef(null);
@@ -76,8 +79,9 @@ export default function Stage() {
       const stage = createStage({
         canvas: canvasRef.current,
         projects: featuredProjects,
-        portraitSrc: portraits.about.large,
-        profileSrc: portraits.profile.large,
+        portraitSrc: portraits.stage.large,
+        profileSrc: portraits.about.large,
+        profilePlaceholder: portraits.about.isPlaceholder,
         onDiveEnd: () => setPhase('done'),
         anchors: () => ({
           portrait: portraitRef.current,
@@ -137,8 +141,30 @@ export default function Stage() {
   }, [phase]);
 
   useEffect(() => {
-    if (hash) document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'instant' });
+    if (!hash) return undefined;
+    const id = hash.slice(1);
+    landOnSection(id, 'instant');
+    // Fonts and images still change the page height after a deep link, until the visitor takes over.
+    const observer = new ResizeObserver(() => landOnSection(id, 'instant'));
+    observer.observe(document.documentElement);
+    const release = () => {
+      observer.disconnect();
+      clearTimeout(timer);
+      LAND_RELEASE_EVENTS.forEach((type) => window.removeEventListener(type, release));
+    };
+    const timer = setTimeout(release, LAND_PIN_MS);
+    LAND_RELEASE_EVENTS.forEach((type) => window.addEventListener(type, release, { passive: true }));
+    return release;
   }, [hash]);
+
+  // A hash change on this page never reaches the router's displayed location.
+  useEffect(() => {
+    const onHashChange = () => {
+      if (window.location.hash) landOnSection(window.location.hash.slice(1), 'instant');
+    };
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
 
   useEffect(() => {
     if (phase === 'done' && !window.location.hash) linkRefs.current[getActiveMenuId()]?.focus({ preventScroll: true });
@@ -169,6 +195,32 @@ export default function Stage() {
     };
   }, []);
 
+  // The card on the table disappears while its copy is zoomed, and comes back when it has returned.
+  const openInspect = (card, sourceEl, sceneIndex = -1) => {
+    sourceEl.style.visibility = 'hidden';
+    sceneRef.current?.setHidden(sceneIndex);
+    setInspected({ card, sourceEl });
+  };
+
+  const closeInspect = () => {
+    const { sourceEl } = inspected;
+    sourceEl.style.visibility = '';
+    sceneRef.current?.setHidden(-1);
+    setInspected(null);
+    sourceEl.focus({ preventScroll: true });
+  };
+
+  const inspectFeatured = (project, index, element) => openInspect({
+    numeral: ROMAN[index],
+    title: project.title,
+    image: project.image,
+    imageLift: project.imageLift,
+    lines: project[language].summary,
+    details: project[language].specs,
+    tags: project.tags,
+    link: { href: project.href, label: t.atlus.inspect.source },
+  }, element, index);
+
   const handleTearEnd = () => {
     if (phaseRef.current !== 'tear') return;
     sceneRef.current?.playDive();
@@ -192,7 +244,7 @@ export default function Stage() {
 
   const scrollTo = (event, id) => {
     event.preventDefault();
-    document.getElementById(id)?.scrollIntoView();
+    landOnSection(id);
   };
 
   return (
@@ -214,7 +266,7 @@ export default function Stage() {
           <nav aria-label={t.atlus.menuNav} className="has-message stage-menu">
             <ul onKeyDown={handleMenuKey}>
               {menuItems.map((item, index) => {
-                const target = SCROLL_TARGETS[item.id];
+                const target = scrollTargets[item.id];
                 const shared = {
                   ref: (node) => { linkRefs.current[item.id] = node; },
                   'aria-current': active === item.id ? 'true' : undefined,
@@ -239,7 +291,7 @@ export default function Stage() {
           </nav>
         </div>
         <div ref={portraitRef} className="stage-portrait">
-          {!webgl && <img src={portraits.about.large} alt="" className="h-full w-full object-contain grayscale" />}
+          {!webgl && <img src={portraits.stage.large} alt="" className="h-full w-full object-contain grayscale" />}
         </div>
       </section>
 
@@ -273,11 +325,11 @@ export default function Stage() {
         <ul className="stage-tarot">
           {featuredProjects.map((project, index) => (
             <li key={project.title}>
-              <a
+              <button
                 ref={(node) => { slotRefs.current[index] = node; }}
-                href={project.href}
-                target="_blank"
-                rel="noreferrer"
+                type="button"
+                onClick={(event) => inspectFeatured(project, index, event.currentTarget)}
+                aria-label={`${project.title}: ${t.atlus.flip}`}
                 className="tarot-slot"
                 onMouseEnter={() => sceneRef.current?.setHover(index)}
                 onMouseLeave={() => sceneRef.current?.setHover(-1)}
@@ -285,12 +337,12 @@ export default function Stage() {
                 onBlur={() => sceneRef.current?.setHover(-1)}
               >
                 {webgl ? <span className="sr-only">{project.title}</span> : <img src={project.image} alt={project.title} loading="lazy" className="h-full w-full object-cover grayscale" />}
-              </a>
+              </button>
               <p className="mt-9 text-center font-mono text-xs leading-relaxed text-ash-300">{project[language].summary}</p>
             </li>
           ))}
         </ul>
-        <ProjectDeck />
+        <ProjectDeck onInspect={openInspect} />
       </section>
 
       <section id="bonfire" ref={abyssRef} aria-labelledby="abyss-title" className="stage-abyss scroll-mt-16">
@@ -302,6 +354,7 @@ export default function Stage() {
           <ContactList />
         </div>
       </section>
+      {inspected && <CardInspect card={inspected.card} sourceEl={inspected.sourceEl} onClosed={closeInspect} />}
     </div>
   );
 }

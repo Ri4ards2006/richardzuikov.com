@@ -667,6 +667,16 @@ html.dark .ground-message {
   opacity: 0.3;
 }
 
+.ill-node {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+.ill-pod {
+  fill: currentColor;
+}
+
 .ill-trace-pulse {
   stroke-dasharray: 18 82;
 }
@@ -706,6 +716,17 @@ html.dark .ground-message {
 
   .ill-trace-pulse {
     animation: trace-run 2.6s linear infinite;
+  }
+
+  .ill-pod {
+    animation: pod-schedule 7s cubic-bezier(0.2, 0.9, 0.1, 1) var(--delay) infinite backwards;
+  }
+
+  @keyframes pod-schedule {
+    0% { transform: translate(var(--from-x), var(--from-y)); opacity: 0; }
+    2% { opacity: 1; }
+    12%, 88% { transform: translate(0, 0); opacity: 1; }
+    92%, 100% { transform: translate(0, 0); opacity: 0; }
   }
 
   .ill-line {
@@ -839,10 +860,6 @@ html.dark .ground-message {
   transition: transform 220ms cubic-bezier(0.2, 0.9, 0.1, 1);
 }
 
-.deck-inner.is-flipped {
-  transform: scale(1.06) rotateY(180deg);
-}
-
 .deck-face {
   position: absolute;
   inset: 0;
@@ -850,44 +867,12 @@ html.dark .ground-message {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden;
   padding: 0.5rem;
   background: rgb(var(--ash-900));
   border: 3px double rgb(var(--ash-100));
   color: rgb(var(--ash-100));
   text-align: center;
   cursor: pointer;
-}
-
-.deck-back {
-  gap: 0.5rem;
-  padding: 0.75rem;
-  text-align: left;
-  cursor: default;
-  transform: rotateY(180deg);
-}
-
-.deck-copy {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  font-size: 0.6875rem;
-  line-height: 1.45;
-  color: rgb(var(--ash-200));
-}
-
-.deck-actions {
-  flex: none;
-  display: flex;
-  flex-direction: column;
-}
-
-.deck-action {
-  min-height: 2.75rem;
-  display: inline-flex;
-  align-items: center;
-  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
-  font-size: 0.6875rem;
 }
 
 .deck-roman {
@@ -902,6 +887,7 @@ html.dark .ground-message {
   color: rgb(var(--ash-100));
 }
 
+.deck-roman::before,
 .deck-roman::after {
   content: '';
   flex: 1 1 auto;
@@ -973,6 +959,7 @@ html.dark .ground-message {
 
 .tarot-slot {
   display: block;
+  width: 100%;
   aspect-ratio: 7 / 12;
 }
 
@@ -1139,13 +1126,409 @@ html.dark .ground-message {
 
   .stage-abyss {
     min-height: 0;
-    padding-block: 6rem 26rem;
+    padding-block: 5rem 14rem;
   }
 
   .stage-fire {
     left: 5%;
     right: 5%;
     width: 90%;
-    height: 22rem;
+    height: 14rem;
   }
+}
+
+/* Global menu: the button is on every screen, the overlay is the Atlus pause menu. */
+.menu-dots {
+  position: fixed;
+  z-index: 60;
+  top: 0.625rem;
+  right: 1.25rem;
+  width: 3.25rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  background: rgb(var(--ash-100));
+  color: rgb(var(--ash-900));
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+  transition: transform 120ms cubic-bezier(0.2, 0.9, 0.1, 1);
+}
+
+.menu-dots span {
+  width: 0.375rem;
+  height: 0.375rem;
+  background: currentColor;
+}
+
+.menu-dots:hover {
+  transform: translateY(1px) scale(1.08);
+}
+
+.menu-dots:focus-visible {
+  outline: none;
+  background: rgb(var(--ash-900));
+  color: rgb(var(--ash-100));
+}
+
+.gm {
+  position: fixed;
+  z-index: 80;
+  inset: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(14rem, 20rem);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  padding: clamp(1rem, 4vh, 3rem) clamp(1.25rem, 5vw, 5rem);
+  overflow-y: auto;
+  color: rgb(var(--ash-100));
+  background:
+    radial-gradient(circle, rgb(var(--ash-600) / 0.5) 32%, transparent 36%) 0 0 / 5px 5px,
+    rgb(var(--ash-900));
+  animation: gm-in 220ms cubic-bezier(0.2, 0.9, 0.1, 1) both;
+}
+
+.gm.is-closing {
+  animation: gm-out 160ms linear both;
+}
+
+@keyframes gm-in {
+  from { clip-path: polygon(0 0, 0 0, -20% 100%, -20% 100%); }
+  to { clip-path: polygon(0 0, 120% 0, 100% 100%, -20% 100%); }
+}
+
+@keyframes gm-out {
+  from { clip-path: polygon(0 0, 120% 0, 100% 100%, -20% 100%); }
+  to { clip-path: polygon(0 0, 0 0, -20% 100%, -20% 100%); }
+}
+
+.gm-letters {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: Anton, Impact, sans-serif;
+  font-size: clamp(3.5rem, 15vh, 9rem);
+  line-height: 1;
+  color: rgb(var(--ash-100));
+  transform: rotate(-5deg);
+  user-select: none;
+}
+
+.gm-list {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.gm-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin-inline-start: calc(var(--i) * 0.9rem);
+}
+
+.gm-number {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 0.75rem;
+  color: rgb(var(--ash-300));
+}
+
+.gm-slab {
+  position: relative;
+  display: inline-block;
+  padding: 0.125rem 2.25rem 0.125rem 1rem;
+  font-family: Anton, Impact, sans-serif;
+  font-size: clamp(2.25rem, 8.5vh, 5rem);
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background: rgb(var(--ash-800));
+  clip-path: polygon(0 0, 100% 0, calc(100% - 1.25rem) 100%, 0.5rem 100%);
+  transition: background-color 120ms linear, color 120ms linear, transform 120ms cubic-bezier(0.2, 0.9, 0.1, 1);
+}
+
+.gm-slab:hover,
+.gm-slab:focus-visible {
+  outline: none;
+  background: rgb(var(--ash-100));
+  color: rgb(var(--ash-900));
+  transform: translateX(0.75rem) rotate(-1.5deg);
+}
+
+.gm-side {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgb(var(--ash-900));
+  padding: 1.25rem;
+  border: 3px solid rgb(var(--ash-100));
+}
+
+.gm-side a,
+.gm-side button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 2.75rem;
+  text-align: left;
+  text-transform: inherit;
+  letter-spacing: inherit;
+}
+
+.gm-side a:hover,
+.gm-side button:hover,
+.gm-side a:focus-visible,
+.gm-side button:focus-visible {
+  outline: none;
+  background: rgb(var(--ash-100));
+  color: rgb(var(--ash-900));
+}
+
+.gm-group + .gm-group {
+  padding-top: 0.75rem;
+  border-top: 1px solid rgb(var(--ash-600));
+}
+
+.gm-lang b {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.gm-lang span {
+  white-space: pre;
+}
+
+.gm-close {
+  position: fixed;
+  z-index: 1;
+  top: 0.625rem;
+  right: 1.25rem;
+  width: 3.25rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(var(--ash-100));
+  color: rgb(var(--ash-900));
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+}
+
+@media (max-width: 767px) {
+  .gm {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: 1.25rem;
+    padding-top: 4rem;
+  }
+
+  .gm-letters {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 0.25rem;
+    font-size: 2.5rem;
+  }
+
+  .gm-slab {
+    font-size: 2.25rem;
+  }
+
+  .gm-list li {
+    margin-inline-start: calc(var(--i) * 0.4rem);
+  }
+
+  .gm-side {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.25rem 1rem;
+    padding: 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .gm-group + .gm-group {
+    padding-top: 0;
+    border-top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gm,
+  .gm.is-closing {
+    animation: none;
+  }
+}
+
+/* Inspect view shared by the featured cards and the deck. */
+.inspect {
+  position: fixed;
+  z-index: 70;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  color: rgb(var(--ash-100));
+  touch-action: none;
+}
+
+.inspect-dim {
+  position: absolute;
+  inset: 0;
+  background: rgb(var(--ash-900) / 0.88);
+  opacity: 0;
+  transition: opacity 280ms linear;
+}
+
+.inspect.is-open .inspect-dim {
+  opacity: 1;
+}
+
+.inspect-card {
+  position: relative;
+  width: min(27rem, 100%);
+  height: min(44rem, calc(100dvh - 2rem));
+  perspective: 1600px;
+  transform-origin: center;
+}
+
+.inspect-inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.inspect-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem;
+  background: rgb(var(--ash-900));
+  border: 3px double rgb(var(--ash-100));
+  backface-visibility: hidden;
+}
+
+.inspect-front-title {
+  text-align: center;
+  font-size: 2rem;
+}
+
+.inspect-back {
+  transform: rotateY(180deg);
+  gap: 0.5rem;
+}
+
+.inspect-photo {
+  flex: 1 1 34%;
+  min-height: 7rem;
+  display: flex;
+}
+
+.inspect-copy {
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  touch-action: pan-y;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: rgb(var(--ash-200));
+}
+
+.inspect-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-top: 0.75rem;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 0.75rem;
+}
+
+.inspect-tags li {
+  padding: 0.125rem 0.5rem;
+  border: 1px solid rgb(var(--ash-600));
+}
+
+.inspect-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+}
+
+.inspect-actions {
+  flex: none;
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 0.5rem;
+}
+
+.inspect-btn {
+  min-height: 3.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 0.5rem;
+  font-family: Anton, Impact, sans-serif;
+  font-size: 1.125rem;
+  letter-spacing: 0.04em;
+  text-align: center;
+  border: 3px solid rgb(var(--ash-100));
+  transition: background-color 120ms linear, color 120ms linear;
+}
+
+.inspect-btn.is-primary,
+.inspect-btn:hover,
+.inspect-btn:focus-visible {
+  outline: none;
+  background: rgb(var(--ash-100));
+  color: rgb(var(--ash-900));
+}
+
+.inspect-btn.is-primary:hover,
+.inspect-btn.is-primary:focus-visible {
+  background: rgb(var(--ash-300));
+}
+
+.inspect-back-link {
+  flex: none;
+  min-height: 2.75rem;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: rgb(var(--ash-300));
+}
+
+.inspect-back-link:hover,
+.inspect-back-link:focus-visible {
+  outline: none;
+  color: rgb(var(--ash-100));
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inspect-dim {
+    transition: none;
+  }
+}
+
+/* The original colour photo exists only here; the table stays grayscale. */
+.inspect .deck-image img {
+  transition: filter 360ms linear 120ms;
+}
+
+.inspect.is-open .deck-image img {
+  filter: brightness(var(--image-lift, 1));
+}
+
+.inspect .deck-image::after {
+  transition: opacity 360ms linear 120ms;
+}
+
+.inspect.is-open .deck-image::after {
+  opacity: 0;
 }

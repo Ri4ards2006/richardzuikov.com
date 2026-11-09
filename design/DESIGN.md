@@ -108,20 +108,20 @@ Home `/` = one page: one fixed WebGL canvas behind, HTML sections on top.
 | # | id | Menu item | Screen | Content |
 |---|---|---|---|---|
 | 00 | `intro` | – | Card 01–02 | preload → tear → shatter → dive |
-| 01 | `stage` | – | Card 03 | menu stage, portrait, HUD |
+| 01 | `stage` | – | Card 03 | menu stage, front-facing portrait, HUD |
 | 02 | `about` | ABOUT | ABOUT | who I am, what I do, what I'm into; side-profile portrait (see §13) |
-| 03 | `descent` | – | FROM REGISTER TO NETWORK | panels at different depths with line illustrations |
+| 03 | `descent` | – | FROM REGISTER TO NETWORK | 5 panels at different depths with line illustrations and 3D props (see §14) |
 | 04 | `heading` | ABOUT | HEADING | where I'm heading (2027 goal, focus areas) |
-| 05 | `arcana` | WORK | ARCANA | 3 featured cards + browsable deck of all projects |
+| 05 | `arcana` | WORK | ARCANA | 3 featured cards + browsable deck of all projects; both open the inspect view (see §14) |
 | 06 | `skill` | STACK | SKILL | condensed list with "used for / where" tags, no ratings + vignettes; "FULL INDEX →" `/stack` |
 | 07 | `record` | CAREER | RECORD | year numerals, role bars, KEY ITEMS (certificates); "FULL RECORD →" `/career` |
 | 08 | `bonfire` | CONTACT | BONFIRE | Card 05 |
 
-- Menu click / Enter → camera flies to the section (Lenis `scrollTo` driving the camera rail).
+- Menu click / Enter → camera flies to the section (Lenis `scrollTo` driving the camera rail) and lands on its resting state. CONTACT goes to the very end of the rail.
 - Deep pages `/about /work /stack /career /contact` stay as full screens in the same vocabulary. `/lab` redirects to `/#arcana`.
-- **Global nav:** a fixed top-right `…` button, always visible, opens the full-screen Atlus-style MENU overlay
+- **Global nav:** a fixed top-right `…` button, always visible on home and deep pages, opens the full-screen Atlus-style MENU overlay
   (Richard's original overlay with the vertical "MENU" letters — restyled monochrome, slab items, shard transition).
-  It holds the sections, Quick Read, DE/EN, theme and GitHub / LinkedIn / Mail.
+  It holds the sections, Quick Read, DE/EN, theme, GitHub / LinkedIn / Mail, Impressum and Datenschutz.
 - **HUD (stage only):** bottom-right control hints + small `QUICK READ →` link; bottom-centre `SCROLL TO DESCEND` with TraceStar.
   No status chip. The top-right corner belongs to the `…` button and the name block.
 - **Numbering:** sections, menu items and panels use one format, mono `01 /`.
@@ -148,20 +148,21 @@ Home `/` = one page: one fixed WebGL canvas behind, HTML sections on top.
 - **Name:** big angled Anton block "RICHARD / ZUIKOV" top-right (Persona style), small role line underneath. No name or role line above the menu.
 - **Left:** 5 slabs as a real HTML `<nav>` with CSS 3D (`perspective: 900px`, `rotateY(-18deg)`, `rotateZ(-6…-10deg)`), up to ~120 px on desktop, each its own size and offset, mono numbers `01 /`–`05 /` beside them.
 - **Hover / focus / arrow keys:** paper wedge shoots out behind the item (120 ms), item inverts, 2° camera nudge, speedlines + tiny debris at the slab edge, large echo text ("03 STACK").
-- **Right:** Richard's ink portrait in 3 layers — (1) splatter + HUD rings, (2) figure, (3) foreground brush strokes. Parallax opposite to the mouse (0.5 / 1.5 / 3 %), boil on strokes, breathing scale 1 → 1.012. No diagonal line across the portrait.
+- **Right:** Richard's front-facing ink portrait in 3 layers — (1) splatter + HUD rings, (2) figure, (3) foreground brush strokes. Parallax opposite to the mouse (0.5 / 1.5 / 3 %), boil on strokes, breathing scale 1 → 1.012. No diagonal line across the portrait.
   Ink treatment in a shader: threshold to 2–3 tones + halftone in mid-tones + darkened edges.
 - **Background:** **hard ink water** instead of the halftone ellipse band: caustics posterized to 3 tones + screentone + floating screentone dust.
-- **Floating shards:** 40–60 flat-shaded grey 3D shards, slow rotation, pushed away by the cursor and springing back.
+- **Floating shards:** 30–40 flat-shaded grey 3D shards with depth fade, slow rotation, pushed away by the cursor and springing back. They continue into the descent (see Card 04).
 - First wheel/scroll on the stage starts the descent. Arrow keys navigate the menu.
 
 ### Card 04 — Descent (scroll)
 - Fixed canvas, camera rail y 0 → −60. HTML content sits in **slanted manga panels** (3 px paper borders, gutters, angled cuts) that pass at different depths (parallax). Speedlines on fast scroll.
-- **about:** directly after the stage. Who I am, what I do, what I'm into, from translation keys. Side-profile portrait: Stage → About it turns ~90° on Y toward the viewer and moves forward/larger, leaving 5–6 delayed monochrome ghost copies that fade out. Leaving About it dissolves into halftone dots. Side-profile placeholder silhouette until the real photo exists.
-- **descent ("From Register to Network"):** no dot-grid or KiCad-paper background anywhere. Panels at different depths with parallax and entrance motion (slide + slight rotation + slam), each with a small animated monochrome line illustration (register bits flipping, SPI/I2C waveform, code typing). 2–3 sentences each.
+- **about:** directly after the stage. Who I am, what I do, what I'm into, from translation keys. Side-profile portrait with a softer treatment than the stage (high-contrast grayscale, fine screentone only in the shadows). Stage → About it turns ~90° on Y toward the viewer and moves forward/larger, leaving 5–6 delayed monochrome ghost copies that fade out. Leaving About it dissolves into halftone dots. Side-profile placeholder silhouette until the real photo exists.
+- **descent ("From Register to Network"):** no dot-grid or KiCad-paper background anywhere. Five panels: 01 Register-Level Architecture · 02 Hardware & PCB · 03 Why C++ & Go · 04 Cluster & Infrastructure · 05 Lab & Development Path. Different depths with parallax and entrance motion (slide + slight rotation + slam), each with a small animated monochrome line illustration (register bits flipping, SCK/MOSI waveform, code typing, node graph with pods and heartbeat, trace pulse). 2–3 sentences each. 2–3 slow-rotating low-poly monochrome 3D props sit beside their panels, never in front of text.
 - **heading:** panel with ransom-note headline "WHERE I'M HEADING", short text.
-- **arcana:** game-card style with roman numerals, no occult symbols, no slogan headlines. Entering the section deals the 3 cards onto a table (fly in, slam, small bounce, dust puff). Scroll progress rotates the fan. Hover = 3D tilt + silver sheen sweep. Click flips (front: high-contrast grayscale image with very fine screentone, object recognisable, roman numeral, title; back: specs, tags, repo link). Frame drawn as SVG, no image. Below: a browsable deck of all projects (data from Lab) as smaller cards in a fan/carousel (drag, wheel, arrow keys); the selected card lifts and flips to specs + repo link. Rack Configurator is one card in the deck.
+- **arcana:** game-card style with roman numerals, no occult symbols, no slogan headlines. Entering the section deals the 3 cards onto a table (fly in, slam, small bounce, dust puff). Scroll progress rotates the fan. Hover = 3D tilt + silver sheen sweep. Click opens the inspect view (see §14). Front: high-contrast grayscale image with very fine screentone, object recognisable, roman numeral centred at the top, title. Frame drawn as SVG, no image. Below: a browsable deck of all projects (data from Lab) as smaller cards in a fan/carousel (drag, wheel, arrow keys); a click on the selected card opens the same inspect view. Rack Configurator is one card in the deck.
 - **skill:** no ratings; each item shows short "used for / where" tags. List tilted in 3D; active item = asymmetric paper slab. Right panel: animated monochrome mini vignette per category — Low-level: source → asm → hex scrolling; Systems: rack with blinking LEDs; Hardware: oscilloscope trace; Web: browser wireframe assembling itself. The empty space below is filled by a detail panel for the selected item.
 - **record:** years as big Anton numerals that **flip like a calendar** while scrolling; each role slides in as a slanted bar with a roman rank. **KEY ITEMS:** certificates as a Souls-style inventory grid (square tiles, generic line icons — no brand logos). Selected tile → right panel: title (Cinzel), issuer, date, one dry flavor-text line (editable), verify link only when it points at that exact credential.
+- One continuous particle story: stage shards continue into the descent, thin out and turn into rising ash, which becomes embers at the bonfire.
 - 55 – 80 %: panels fade, darkness grows, ash particles shift colour into embers.
 
 ### Card 05 — Bonfire (80 – 100 %)
@@ -283,3 +284,31 @@ Owner decisions of 2026-11-09. §6 and §7 are updated to match; open work is in
 - No cable. Recognisable soldering iron: conical chrome tip, thin shaft, heat-sink sleeve, ribbed rubber grip, stuck diagonally into the pile.
 - More detailed campfire: varied stones, charred PCB pile with glowing traces, a few logs, layered flame shader, sparks, thin smoke, flickering light on stones and floor. Reference: `design/refs/lovable/bonfire.png`.
 - Contact list: SEND MAIL · CV (PDF) · GITHUB · LINKEDIN. "Copy email" leaves the list and becomes a small copy box next to the displayed email, checkmark for 2 s.
+
+---
+
+## §14 Changelog v3
+
+Owner decisions of 2026-11-09. §6 and §7 are updated to match; open work is in TASKS.md. Restore point: tag `checkpoint-atlus-v2`. Bonfire work happens in another agent's PR; `src/three/bonfire/` is off limits here.
+
+**Nav**
+- CONTACT (stage menu and global menu) scrolls to the very end of the rail: bonfire fully landed, not the mid-zoom. Every menu target lands on its section's resting state.
+- Global `…` button top-right on every screen (home + deep pages) opens the full-screen Atlus menu overlay: sections, Quick Read, DE/EN, theme, GitHub / LinkedIn / Mail, Impressum, Datenschutz.
+- Footer labels follow the language: DE "Impressum · Datenschutz", EN "Legal notice · Privacy policy".
+
+**Stage & portraits**
+- Two portrait slots: stage = front-facing, looking into the camera; about = side profile. Pipeline names: `src/assets/portraits/raw/stage.*` and `about.*`. Placeholders stay until photos exist.
+- Treatment: stage keeps the strong ink/halftone. About gets a softer one: high-contrast grayscale with fine screentone only in the shadows, so facial features stay readable.
+- Shards: ≈30–40 on the stage, slightly smaller, depth fade. They do not stop abruptly: they continue into the descent, thin out and gradually turn into the rising ash that later becomes embers. One continuous particle story from stage to bonfire.
+- 2–3 slow-rotating low-poly monochrome 3D props along the descent, each tied to a panel. Subtle, never in front of text.
+
+**Descent**
+- The existing animated illustrations stay exactly as they are (PORTB bits, SCK/MOSI waveform, code typing).
+- Five panels: 01 Register-Level Architecture · 02 Hardware & PCB · 03 Why C++ & Go · 04 Cluster & Infrastructure (new) · 05 Lab & Development Path.
+- 02 keeps the SCK/MOSI waveform; its text moves from bus names to hardware/PCB design: KiCad 2-layer boards, layout and routing, bring-up and debugging with the oscilloscope. Draft for Richard's review in WORKLOG.
+- 04: home-lab cluster with Proxmox VE, K3s, GitOps with ArgoCD, WireGuard / Cloudflare tunnels. Illustration in the same style: small node graph where pods get scheduled onto nodes, with a heartbeat pulse. Draft for Richard's review in WORKLOG.
+
+**Arcana**
+- Roman numerals centred at the top of the card again.
+- Featured cards behave like deck cards: no direct link on click. Inspect animation for both: the card lifts, zooms toward the viewer into the centre (≈600 ms, slight overshoot), flips, the background dims. The back shows title, 2–3 lines, tags and two big buttons "VIEW SOURCE ↗" and "DETAILS". Esc, a click outside or "back" returns it to its place.
+- Colour: cards stay grayscale on the table; only the zoomed inspect view shows the original colour photo. This is the one exception to §2 outside the warm zone.

@@ -69,7 +69,41 @@ function Trace() {
   );
 }
 
-const ILLUSTRATIONS = [Bits, Wave, Code, Trace];
+// Pods leave the control plane, land on a worker node and a heartbeat runs underneath.
+const NODE_YS = [4, 20, 36];
+const PODS = [[0, 0], [1, 1], [2, 0], [0, 1], [1, 0], [2, 1]];
+const POD_X = (slot) => 138 + slot * 18;
+const HEARTBEAT = 'M0 58 H70 L78 58 L85 46 L93 64 L99 58 H200';
+
+function Nodes() {
+  return (
+    <svg className="ill-trace ill-nodes" viewBox="0 0 200 66" role="presentation">
+      <rect className="ill-node" x="2" y="16" width="34" height="20" />
+      <text x="7" y="30">K3S</text>
+      {NODE_YS.map((y) => (
+        <g key={y}>
+          <path className="ill-trace-base" d={`M36 26 L120 ${y + 6}`} />
+          <rect className="ill-node" x="120" y={y} width="62" height="12" />
+        </g>
+      ))}
+      {PODS.map(([node, slot], index) => (
+        <rect
+          key={`${node}-${slot}`}
+          className="ill-pod"
+          x={POD_X(slot) - 4}
+          y={NODE_YS[node] + 2}
+          width="8"
+          height="8"
+          style={{ '--from-x': `${36 - POD_X(slot)}px`, '--from-y': `${22 - NODE_YS[node]}px`, '--delay': `${index * 1}s` }}
+        />
+      ))}
+      <path className="ill-trace-base" d={HEARTBEAT} />
+      <path className="ill-trace-pulse" d={HEARTBEAT} pathLength="100" />
+    </svg>
+  );
+}
+
+const ILLUSTRATIONS = [Bits, Wave, Code, Nodes, Trace];
 
 export default function PanelIllustration({ index }) {
   const Illustration = ILLUSTRATIONS[index % ILLUSTRATIONS.length];
