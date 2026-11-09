@@ -4,7 +4,7 @@ export const menuItems = [
   { id: 'work', number: '02', path: '/work', screen: true },
   { id: 'stack', number: '03', path: '/stack', screen: true },
   { id: 'career', number: '04', path: '/career', screen: true },
-  { id: 'contact', number: '05', path: '/contact', screen: true },
+  { id: 'contact', number: '05', path: '/contact', screen: false },
 ];
 
 export const CONTACT_PATH = '/contact';

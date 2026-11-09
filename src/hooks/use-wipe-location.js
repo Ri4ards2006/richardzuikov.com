@@ -5,11 +5,9 @@ import { prefersReducedMotion } from './use-reduced-motion';
 
 const MIDPOINT_MS = { wipe: 175, fog: 300 };
 
-const isDarkTheme = () => document.documentElement.classList.contains('dark');
-
 function pickTransition(from, to) {
   if (from === to || prefersReducedMotion()) return null;
-  if (to === CONTACT_PATH) return isDarkTheme() ? 'fog' : null;
+  if (from === CONTACT_PATH || to === CONTACT_PATH) return null;
   return isAtlusPath(from) && isAtlusPath(to) ? 'wipe' : null;
 }
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Check, Copy, Download, Mail } from 'lucide-react';
 import { useDocumentTitle } from '../hooks/use-document-title';
 import { useLanguage } from '../hooks/use-language';
@@ -15,7 +15,7 @@ import IntroOverlay from '../components/stage/IntroOverlay';
 const INTRO_KEY = 'seen-stage-intro';
 const BOOT_MS = 800;
 const SCENE_TIMEOUT_MS = 4000;
-const SCROLL_TARGETS = { work: 'works', contact: 'abyss' };
+const SCROLL_TARGETS = { work: 'arcana', contact: 'bonfire' };
 
 const delay = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
 
@@ -47,9 +47,10 @@ export default function Stage() {
   useDocumentTitle('Richard Zuikov — Embedded Systems & Hardware Developer');
   const { language, t } = useLanguage();
   const reducedMotion = useReducedMotion();
+  const { hash } = useLocation();
   const { email, copied, copy } = useContactEmail();
   const [webgl] = useState(() => !reducedMotion && hasWebGL());
-  const [phase, setPhase] = useState(() => (webgl && !introSeen() ? 'boot' : 'done'));
+  const [phase, setPhase] = useState(() => (webgl && !introSeen() && !hash ? 'boot' : 'done'));
   const [active, setActive] = useState(getActiveMenuId);
 
   const canvasRef = useRef(null);
@@ -125,7 +126,11 @@ export default function Stage() {
   }, [phase]);
 
   useEffect(() => {
-    if (phase === 'done') linkRefs.current[getActiveMenuId()]?.focus({ preventScroll: true });
+    if (hash) document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'instant' });
+  }, [hash]);
+
+  useEffect(() => {
+    if (phase === 'done' && !window.location.hash) linkRefs.current[getActiveMenuId()]?.focus({ preventScroll: true });
   }, [phase]);
 
   const handleTearEnd = () => {
@@ -218,7 +223,7 @@ export default function Stage() {
         </div>
       </section>
 
-      <section id="works" aria-labelledby="works-title" className="stage-works scroll-mt-16">
+      <section id="arcana" aria-labelledby="works-title" className="stage-works scroll-mt-16">
         <h2 id="works-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight">{t.atlus.stage.works}</h2>
         <ul className="stage-tarot">
           {featuredProjects.map((project, index) => (
@@ -246,7 +251,7 @@ export default function Stage() {
         </div>
       </section>
 
-      <section id="abyss" ref={abyssRef} aria-labelledby="abyss-title" className="stage-abyss scroll-mt-16">
+      <section id="bonfire" ref={abyssRef} aria-labelledby="abyss-title" className="stage-abyss scroll-mt-16">
         {!webgl && <div aria-hidden="true" className="ember-glow" />}
         <div ref={fireRef} className="stage-fire" />
         <div className="relative z-10 max-w-md">

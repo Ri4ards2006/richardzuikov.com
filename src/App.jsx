@@ -4,7 +4,6 @@ import Layout from './components/Layout';
 import Stage from './pages/Stage';
 import Quick from './pages/Quick';
 import NotFound from './pages/NotFound';
-import Contact from './pages/Contact';
 import About from './pages/About';
 import Career from './pages/Career';
 import Stack from './pages/Stack';
@@ -30,7 +29,7 @@ function AppRoutes() {
           <Route path="/career" element={<Career />} />
           <Route path="/stack" element={<Stack />} />
           <Route path="/work" element={<Work />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/contact" element={<Navigate to="/#bonfire" replace />} />
           <Route path="/lab" element={<Lab />} />
           <Route path="/works" element={<Navigate to="/lab" replace />} />
           <Route path="/portfolio" element={<Navigate to="/lab" replace />} />
