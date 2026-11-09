@@ -319,6 +319,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   const floating = createFloatingShards(isSmall ? 30 : 38);
   scene.add(floating.mesh);
   const props = createDescentProps();
+  const propAim = new THREE.Vector3();
   scene.add(props.group);
   const pointer = new THREE.Vector2();
   let pointerSeen = false;
@@ -569,7 +570,8 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       );
     });
 
-    props.update(time, state.camY);
+    // The cursor as a world point in front of the props, for the dome camera's lens.
+    props.update(time, state.camY, pointerSeen ? propAim.set(mouse.x * state.w * 0.5 * state.k, state.camY - mouse.y * state.h * 0.5 * state.k, 3) : null);
 
     state.panels.forEach(({ el, top, height }) => {
       const depth = (top + height / 2 - state.scroll - state.h / 2) / state.h;
