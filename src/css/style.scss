@@ -227,3 +227,40 @@ h1[tabindex='-1']:focus-visible {
   border-color: rgb(0 0 0 / 0.7);
   text-decoration: none;
 }
+
+.fog-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  overflow: hidden;
+  pointer-events: none;
+  background: rgb(var(--ash-600));
+  animation: fog-walk 600ms ease-in-out forwards;
+}
+
+.fog-gate span {
+  position: absolute;
+  inset: -30%;
+  background-size: cover;
+  animation: fog-drift 600ms linear forwards;
+}
+
+.fog-gate span:nth-child(2) {
+  animation-direction: reverse;
+  opacity: 0.8;
+}
+
+.fog-gate span:nth-child(3) {
+  opacity: 0.6;
+}
+
+@keyframes fog-walk {
+  0% { opacity: 0; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.4); }
+  100% { opacity: 0; transform: scale(2.1); }
+}
+
+@keyframes fog-drift {
+  from { transform: translateX(-8%); }
+  to { transform: translateX(8%); }
+}

@@ -1,31 +1,36 @@
 import { useLayoutEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { isAtlusPath } from '../lib/atlus';
+import { CONTACT_PATH, isAtlusPath } from '../lib/atlus';
 import { prefersReducedMotion } from './use-reduced-motion';
 
-const WIPE_MIDPOINT_MS = 175;
+const MIDPOINT_MS = { wipe: 175, fog: 300 };
 
-// Delays the rendered route until the wipe panel covers the screen. Driven by the
+const isDarkTheme = () => document.documentElement.classList.contains('dark');
+
+function pickTransition(from, to) {
+  if (from === to || prefersReducedMotion()) return null;
+  if (to === CONTACT_PATH) return isDarkTheme() ? 'fog' : null;
+  return isAtlusPath(from) && isAtlusPath(to) ? 'wipe' : null;
+}
+
+// Delays the rendered route until the transition covers the screen. Driven by the
 // location itself, so links, Esc and browser back all share one transition.
 export function useWipeLocation() {
   const location = useLocation();
   const [displayed, setDisplayed] = useState(location);
-  const [wipeKey, setWipeKey] = useState(0);
+  const [transition, setTransition] = useState(null);
 
   useLayoutEffect(() => {
     if (location.key === displayed.key) return undefined;
-    const wipes = location.pathname !== displayed.pathname
-      && isAtlusPath(location.pathname)
-      && isAtlusPath(displayed.pathname)
-      && !prefersReducedMotion();
-    if (!wipes) {
+    const type = pickTransition(displayed.pathname, location.pathname);
+    if (!type) {
       setDisplayed(location);
       return undefined;
     }
-    setWipeKey((key) => key + 1);
-    const timer = setTimeout(() => setDisplayed(location), WIPE_MIDPOINT_MS);
+    setTransition({ type, key: location.key });
+    const timer = setTimeout(() => setDisplayed(location), MIDPOINT_MS[type]);
     return () => clearTimeout(timer);
   }, [location, displayed.key, displayed.pathname]);
 
-  return { displayed, wipeKey, clearWipe: () => setWipeKey(0) };
+  return { displayed, transition, clearTransition: () => setTransition(null) };
 }

@@ -9,17 +9,19 @@ import Career from './pages/Career';
 import Stack from './pages/Stack';
 import Work from './pages/Work';
 import { useWipeLocation } from './hooks/use-wipe-location';
+import FogGate from './components/atlus/FogGate';
 
 const Lab = lazy(() => import('./pages/Lab'));
 const Impressum = lazy(() => import('./pages/Impressum'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 function AppRoutes() {
-  const { displayed, wipeKey, clearWipe } = useWipeLocation();
+  const { displayed, transition, clearTransition } = useWipeLocation();
 
   return (
     <>
-      {wipeKey > 0 && <div key={wipeKey} aria-hidden="true" className="wipe-panel" onAnimationEnd={clearWipe} />}
+      {transition?.type === 'wipe' && <div key={transition.key} aria-hidden="true" className="wipe-panel" onAnimationEnd={clearTransition} />}
+      {transition?.type === 'fog' && <FogGate key={transition.key} onDone={clearTransition} />}
       <Suspense fallback={null}>
         <Routes location={displayed}>
           <Route path="/" element={<MenuPlaceholder />} />
