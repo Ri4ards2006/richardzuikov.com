@@ -5,6 +5,7 @@ import { useLanguage } from '../hooks/use-language';
 import { useTheme } from '../hooks/use-theme';
 import { useScrollSpy } from '../hooks/use-scroll-spy';
 import { QUICK_PATH, sections } from '../lib/sections';
+import { isAtlusPath } from '../lib/atlus';
 
 // Keeps framer-motion out of the initial bundle until the menu is first opened.
 const MenuOverlay = lazy(() => import('./MenuOverlay'));
@@ -20,6 +21,7 @@ export default function Header() {
   const { language, toggleLanguage, t } = useLanguage();
   const [theme, toggleTheme] = useTheme();
   const active = useScrollSpy(sectionIds, pathname === QUICK_PATH);
+  const atlus = isAtlusPath(pathname);
 
   const openMenu = () => {
     setMenuLoaded(true);
@@ -32,50 +34,58 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 dark:bg-[#09090b]/95 border-b border-zinc-200 dark:border-zinc-800">
-      <div className="max-w-6xl mx-auto h-16 px-6 sm:px-12 flex items-center justify-between gap-6">
-        <Link to="/" aria-label="RZ · Richard Zuikov" className="font-mono text-sm font-bold tracking-widest text-zinc-950 dark:text-white">
-          RZ
-        </Link>
+    <div className={atlus ? 'dark contents' : 'contents'}>
+      <header className="sticky top-0 z-40 bg-white/95 dark:bg-[#09090b]/95 border-b border-zinc-200 dark:border-zinc-800">
+        <div className="max-w-6xl mx-auto h-16 px-6 sm:px-12 flex items-center justify-between gap-6">
+          <Link to="/" aria-label="RZ · Richard Zuikov" className="font-mono text-sm font-bold tracking-widest text-zinc-950 dark:text-white">
+            RZ
+          </Link>
 
-        <nav aria-label={t.landing.sectionNav} className="hidden md:block">
-          <ul className="flex items-center gap-6">
-            {sections.map(({ id }) => (
-              <li key={id}>
-                <Link
-                  to={`${QUICK_PATH}#${id}`}
-                  aria-current={active === id ? 'true' : undefined}
-                  className={`inline-block py-2 font-mono text-xs uppercase tracking-wider border-b-2 transition-colors duration-150 ${
-                    active === id
-                      ? 'border-[#FFB000] text-zinc-950 dark:text-white'
-                      : 'border-transparent text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white'
-                  }`}
-                >
-                  {t.landing.nav[id]}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+          {!atlus && (
+            <nav aria-label={t.landing.sectionNav} className="hidden md:block">
+              <ul className="flex items-center gap-6">
+                {sections.map(({ id }) => (
+                  <li key={id}>
+                    <Link
+                      to={`${QUICK_PATH}#${id}`}
+                      aria-current={active === id ? 'true' : undefined}
+                      className={`inline-block py-2 font-mono text-xs uppercase tracking-wider border-b-2 transition-colors duration-150 ${
+                        active === id
+                          ? 'border-[#FFB000] text-zinc-950 dark:text-white'
+                          : 'border-transparent text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white'
+                      }`}
+                    >
+                      {t.landing.nav[id]}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
 
-        <div className="flex items-center gap-2">
-          <button type="button" onClick={toggleLanguage} title={t.nav.switchLang} aria-label={`${language === 'de' ? 'EN' : 'DE'} · ${t.nav.switchLang}`} className={`${iconButton} hidden md:flex font-mono text-xs font-bold`}>
-            {language === 'de' ? 'EN' : 'DE'}
-          </button>
-          <button type="button" onClick={toggleTheme} title={t.nav.switchTheme} aria-label={t.nav.switchTheme} className={`${iconButton} hidden md:flex`}>
-            {theme === 'dark' ? <Sun aria-hidden="true" size={18} /> : <Moon aria-hidden="true" size={18} />}
-          </button>
-          <button ref={menuButtonRef} type="button" onClick={openMenu} aria-label={t.nav.openMenu} aria-expanded={isMenuOpen} className={`${iconButton} md:hidden`}>
-            <Menu aria-hidden="true" size={20} />
-          </button>
+          <div className="flex items-center gap-2">
+            <button type="button" onClick={toggleLanguage} title={t.nav.switchLang} aria-label={`${language === 'de' ? 'EN' : 'DE'} · ${t.nav.switchLang}`} className={`${iconButton} ${atlus ? 'flex' : 'hidden md:flex'} font-mono text-xs font-bold`}>
+              {language === 'de' ? 'EN' : 'DE'}
+            </button>
+            {!atlus && (
+              <>
+                <button type="button" onClick={toggleTheme} title={t.nav.switchTheme} aria-label={t.nav.switchTheme} className={`${iconButton} hidden md:flex`}>
+                  {theme === 'dark' ? <Sun aria-hidden="true" size={18} /> : <Moon aria-hidden="true" size={18} />}
+                </button>
+                <button ref={menuButtonRef} type="button" onClick={openMenu} aria-label={t.nav.openMenu} aria-expanded={isMenuOpen} className={`${iconButton} md:hidden`}>
+                  <Menu aria-hidden="true" size={20} />
+                </button>
+              </>
+            )}
+          </div>
         </div>
-      </div>
 
-      {menuLoaded && (
-        <Suspense fallback={null}>
-          <MenuOverlay open={isMenuOpen} onClose={closeMenu} />
-        </Suspense>
-      )}
-    </header>
+        {menuLoaded && (
+          <Suspense fallback={null}>
+            <MenuOverlay open={isMenuOpen} onClose={closeMenu} />
+          </Suspense>
+        )}
+      </header>
+    </div>
   );
 }

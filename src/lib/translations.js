@@ -43,6 +43,24 @@ export const translations = {
       specs: "Technische Spezifikationen",
       overview: "Übersicht"
     },
+    atlus: {
+      "back": "← ZURÜCK",
+      "menuNav": "Hauptmenü",
+      "allProjects": "ALLE PROJEKTE →",
+      "flip": "Karte umdrehen",
+      "flipBack": "Zurückdrehen",
+      "rank": "RANG",
+      "skills": "TECHNISCHE SKILLS",
+      "unrated": "nicht bewertet",
+      "certificates": "ZERTIFIKATE",
+      "timeline": "WERDEGANG",
+      "hud": {
+        "about": "PROFIL",
+        "work": "ARKANA",
+        "stack": "SKILL-INDEX",
+        "career": "LAUFBAHN"
+      }
+    },
     landing: {
       "menuPlaceholder": {"label":"Menü im Aufbau","quickRead":"Zur Kurzfassung"},
       "sectionNav": "Sektionen",
@@ -376,6 +394,24 @@ export const translations = {
       domain: "Domain",
       specs: "Technical Specifications",
       overview: "Overview"
+    },
+    atlus: {
+      "back": "← BACK",
+      "menuNav": "Main menu",
+      "allProjects": "ALL PROJECTS →",
+      "flip": "Flip card",
+      "flipBack": "Flip back",
+      "rank": "RANK",
+      "skills": "TECHNICAL SKILLS",
+      "unrated": "not rated",
+      "certificates": "CERTIFICATES",
+      "timeline": "TIMELINE",
+      "hud": {
+        "about": "PROFILE",
+        "work": "ARCANA",
+        "stack": "SKILL INDEX",
+        "career": "RECORD"
+      }
     },
     landing: {
       "menuPlaceholder": {"label":"Menu under construction","quickRead":"Open Quick Read"},
