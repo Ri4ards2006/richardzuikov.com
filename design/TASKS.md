@@ -334,7 +334,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 ### Camera turn + Record
 | Status | Owner | Item |
 |---|---|---|
-| todo | claude-code | Pinned horizontal timeline ride with 90° yaw in and out; vertical layout on phones and reduced motion |
+| done | claude-code | Pinned horizontal timeline ride with 90° yaw in and out; vertical layout on phones and reduced motion |
 
 ### Skill
 | Status | Owner | Item |

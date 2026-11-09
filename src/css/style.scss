@@ -2704,3 +2704,110 @@ html.dark .ground-message {
     opacity: 1;
   }
 }
+
+/* ---------- Record ride: camera turn + horizontal timeline (DESIGN.md §15) ---------- */
+/* Only with .record-ride, which RecordBoard sets on desktop without reduced motion. */
+
+.record-ride {
+  padding-block: 0;
+}
+
+.record-ride .record-pin {
+  position: sticky;
+  top: 4rem;
+  height: calc(100vh - 4rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  perspective: 1400px;
+}
+
+.record-ride .record-yaw {
+  position: relative;
+  transform: rotateY(var(--yaw, 0deg)) translateZ(calc(var(--yaw-abs, 0) * -1px));
+  transform-origin: 50% 50%;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.record-ride .record-board {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+}
+
+.record-ride .record-year {
+  position: relative;
+  top: auto;
+  z-index: 3;
+}
+
+.record-ride .record-track {
+  overflow: hidden;
+  padding: 1.5rem 0 1rem 2.5rem;
+  margin-block: -1.5rem -1rem;
+  margin-inline-start: -1.75rem;
+  min-height: 20rem;
+  -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent);
+  mask-image: linear-gradient(90deg, #000 85%, transparent);
+}
+
+.record-ride .record-list {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1.5rem;
+  width: max-content;
+  min-height: 16rem;
+  transform: translateX(calc(var(--shift, 0px) * -1));
+}
+
+.record-ride .record-item {
+  flex: none;
+  width: min(30rem, 38vw);
+  transform: skewX(-6deg);
+}
+
+.record-ride .record-bar {
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  min-height: 9rem;
+  align-content: center;
+  padding-block: 1.25rem;
+}
+
+.record-ride .record-role {
+  font-size: clamp(1.375rem, 2vw, 1.875rem);
+}
+
+.record-ride .record-rank {
+  font-size: 2rem;
+}
+
+.record-ride .record-meta {
+  grid-column: 2;
+}
+
+.record-ride .record-bar:not(.is-active) {
+  opacity: 0.72;
+}
+
+.record-ride .record-bar.is-active {
+  transform: translateY(-0.5rem);
+}
+
+/* Horizontal speedlines while the timeline rides. */
+.record-ride .record-pin::after {
+  content: '';
+  position: absolute;
+  inset: 20% 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(90deg, rgb(var(--ash-100) / 0.14) 0 90px, transparent 90px 260px);
+  background-position: calc(var(--shift, 0px) * -2) 0;
+  -webkit-mask-image: repeating-linear-gradient(180deg, transparent 0 23px, #000 23px 24px), linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: repeating-linear-gradient(180deg, transparent 0 23px, #000 23px 24px), linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent);
+  mask-composite: intersect;
+}
+
+.record-ride .stage-more {
+  margin-top: 1.5rem;
+}

@@ -15,6 +15,10 @@ const DIVE_MS = 1300;
 const MAX_DPR = 1.5;
 const MIN_DPR = 0.75;
 const SLOW_FRAME_MS = 24;
+// Record ride: a full 90° yaw would face empty space, so the WebGL camera whips (max 28°) while the
+// DOM board makes the full turn; the camera also drifts sideways at a quarter of the timeline speed.
+const RIDE_WHIP = 28 * Math.PI / 180;
+const RIDE_DRIFT = 0.25;
 const IDLE_FRAME_MS = 1000 / 30;
 const ACTIVE_WINDOW_MS = 500;
 const SMALL_SCREEN = 768;
@@ -206,7 +210,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 80);
   camera.position.z = CAM_Z;
 
-  const state = { lastInput: 0, w: 1, h: 1, k: 0.01, scroll: window.scrollY, camY: 0, frame: 0, last: 0, time: 0, rise: 0, story: 0, slow: 0, count: 0, spent: 0, hover: -1, hiddenCard: -1, abyssTop: 1e9, panels: [], fireProgress: 0, fire: { x: 0, y: 0, scale: 1, pixel: 1 } };
+  const state = { lastInput: 0, w: 1, h: 1, k: 0.01, scroll: window.scrollY, camY: 0, frame: 0, last: 0, time: 0, rise: 0, story: 0, slow: 0, count: 0, spent: 0, hover: -1, hiddenCard: -1, ride: { yaw: 0, yawNow: 0, x: 0, xNow: 0 }, abyssTop: 1e9, panels: [], fireProgress: 0, fire: { x: 0, y: 0, scale: 1, pixel: 1 } };
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
 
   // Screentone dust on the stage, rising ash through the descent, embers at the bonfire.
@@ -501,7 +505,12 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       if (p >= 1) endDive();
     } else {
       camera.position.z = CAM_Z - abyss * 2.4 - travel * TRAVEL_DOLLY;
-      camera.rotation.set(abyss * rad(7), 0, 0);
+      // Record ride: the camera whips through its turn and drifts sideways with the timeline.
+      const ride = state.ride;
+      ride.yawNow += (ride.yaw - ride.yawNow) * follow;
+      ride.xNow += (ride.x - ride.xNow) * follow;
+      camera.position.x = ride.xNow;
+      camera.rotation.set(abyss * rad(7), ride.yawNow, 0);
     }
 
     dust.position.y = state.camY;
@@ -642,6 +651,12 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     },
     travel() {
       state.travelStart = performance.now();
+    },
+    // yaw −1…1 from the Record ride (in / out turn), shift: px along the timeline, out: 0…1 of the turn back.
+    setRide({ yaw, shift, out }) {
+      state.ride.yaw = Math.sin(yaw * Math.PI) * RIDE_WHIP;
+      state.ride.x = shift * state.k * RIDE_DRIFT * (1 - out);
+      state.lastInput = performance.now();
     },
     setHidden(index) {
       state.hiddenCard = index;
