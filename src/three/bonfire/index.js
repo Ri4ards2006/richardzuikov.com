@@ -7,6 +7,7 @@ import { buildLogs } from './logs';
 import { buildParticles } from './particles';
 import { buildPcbPile } from './pcb';
 import { bonfireQuality } from './quality';
+import { buildRuins } from './ruins';
 import { buildStones } from './stones';
 
 function noise1(t) {
@@ -61,6 +62,9 @@ function buildBonfire(emberCount, q) {
     }
   }
   group.add(slabs);
+
+  const ruins = buildRuins(q);
+  group.add(ruins.mesh);
 
   group.add(buildStones(q));
 
