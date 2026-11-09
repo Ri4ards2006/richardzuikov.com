@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { createBonfire } from '../../three/bonfire';
 import { createFloatingShards } from './floating-shards';
+import { createInkWater } from './ink-water';
 import { disposeObject, hash, makeCanvas, pointsMaterial, seededPoints, smooth, texture } from '../../three/utils';
 
 const FOV = 40;
@@ -199,10 +200,8 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
   });
 
   const toneMap = screentone();
-  const disc = new THREE.Mesh(new THREE.CircleGeometry(1.5, 48), new THREE.MeshBasicMaterial({ map: toneMap }));
-  disc.position.z = -0.6;
-  hero.add(disc);
-  heroLayers.push({ object: disc, depth: 0.2, base: new THREE.Vector3(0, 0, -0.6) });
+  const water = createInkWater();
+  scene.add(water.mesh);
 
   loadImage(portraitSrc).then((img) => {
     if (state.disposed) return;
@@ -419,7 +418,9 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
 
     hero.visible = state.scroll < state.h * 1.4;
     floating.mesh.visible = hero.visible;
+    water.mesh.visible = hero.visible;
     if (hero.visible) {
+      water.setTime(time);
       floating.update(dt, time, pointerSeen ? pointer.set(mouse.x, -mouse.y) : null);
       heroLayers.forEach(({ object, depth, base }) => {
         object.position.set(base.x + mouse.x * depth, base.y - mouse.y * depth * 0.6, base.z);

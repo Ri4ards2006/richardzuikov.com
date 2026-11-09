@@ -184,7 +184,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | Menu slabs ~1.5× larger, up to ~120 px desktop; keep wedge, inversion, echo text; no overflow at 390 px (review 9.1) |
 | doing | claude-code | QUICK READ out from under the menu: global menu + small HUD link bottom-right |
 | done | claude-code | 40–60 floating 3D shards: flat-shaded greys, slow rotation, cursor push, spring back |
-| todo | claude-code | Replace the halftone ellipse band with hard ink-water (Card 03) |
+| done | claude-code | Replace the halftone ellipse band with hard ink-water (Card 03) |
 
 ### About
 | Status | Owner | Item |
