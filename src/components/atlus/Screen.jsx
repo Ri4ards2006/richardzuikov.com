@@ -40,7 +40,7 @@ export default function Screen({ id, number, title, hud, children }) {
           {t.atlus.back}
         </Link>
         <p className="mt-6 font-mono text-xs tracking-widest text-accent">{number} / {hud}</p>
-        <h1 ref={headingRef} tabIndex={-1} className="heading-skew outline-none font-anton uppercase text-6xl sm:text-8xl tracking-wide mt-2 mb-10">
+        <h1 ref={headingRef} tabIndex={-1} className="heading-skew outline-none font-anton uppercase text-6xl sm:text-8xl tracking-wide leading-tight mt-5 mb-10">
           {title}
         </h1>
         {children}
