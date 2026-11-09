@@ -350,4 +350,4 @@ Reviewer items already listed above are not repeated. The review was written bef
 ### Bonfire
 | Status | Owner | Item |
 |---|---|---|
-| todo | claude-code | Small ruined chapel silhouette in the distance, fog-faded |
+| done | claude-code | Small ruined chapel silhouette in the distance, fog-faded |

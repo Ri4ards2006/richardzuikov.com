@@ -132,8 +132,43 @@ function bottomLeftStoneWall(q) {
   return merge(blocks);
 }
 
+// Small ruined chapel far behind the fire (DESIGN.md §15): nave with a half-collapsed gable roof,
+// a bell gable over the front, a door gap. Low-poly; the depth fade below dissolves it into the fog.
+function ruinedChapel(x, z, seed) {
+  const parts = [];
+  const w = 1.3;
+  const d = 1.7;
+  const h = 1.05;
+  const t = 0.16;
+  const base = -0.2;
+  // Side walls, back wall, front wall split around a door gap.
+  parts.push(new THREE.BoxGeometry(t, h, d).translate(x - w / 2, base + h / 2, z));
+  parts.push(new THREE.BoxGeometry(t, h * 0.72, d * 0.7).translate(x + w / 2, base + h * 0.36, z - d * 0.15));
+  parts.push(new THREE.BoxGeometry(w, h, t).translate(x, base + h / 2, z - d / 2));
+  parts.push(new THREE.BoxGeometry(w * 0.34, h, t).translate(x - w * 0.33, base + h / 2, z + d / 2));
+  parts.push(new THREE.BoxGeometry(w * 0.34, h * 0.8, t).translate(x + w * 0.33, base + h * 0.4, z + d / 2));
+  // Front gable triangle with the bell gable on top.
+  const triangle = new THREE.Shape([new THREE.Vector2(-w / 2, 0), new THREE.Vector2(w / 2, 0), new THREE.Vector2(0, 0.62)]);
+  parts.push(new THREE.ExtrudeGeometry(triangle, { depth: t, bevelEnabled: false }).translate(x, base + h, z + d / 2 - t / 2));
+  parts.push(new THREE.BoxGeometry(0.26, 0.42, t).translate(x, base + h + 0.75, z + d / 2));
+  parts.push(new THREE.BoxGeometry(0.34, 0.06, t * 1.3).translate(x, base + h + 0.98, z + d / 2));
+  // One roof slope still standing (left), the right one broken off halfway.
+  const slope = Math.atan2(0.62, w / 2);
+  const run = Math.hypot(w / 2, 0.62);
+  parts.push(new THREE.BoxGeometry(run, 0.06, d).rotateZ(slope).translate(x - w / 4, base + h + 0.31, z));
+  parts.push(new THREE.BoxGeometry(run, 0.06, d * 0.45).rotateZ(-slope).translate(x + w / 4, base + h + 0.31, z + d * 0.27));
+  // Fallen stones at the foot of the broken side.
+  for (let i = 0; i < 3; i += 1) {
+    parts.push(new THREE.BoxGeometry(0.22, 0.14, 0.2).rotateY(hash(seed + i) * Math.PI).translate(x + w / 2 + 0.2 + hash(seed + i * 3) * 0.3, base + 0.07, z + 0.2 - i * 0.35));
+  }
+  return merge(parts);
+}
+
 export function buildRuins(q) {
   const parts = [];
+
+  // --- 0. Ruined chapel in the distance, behind the fire ---
+  parts.push(ruinedChapel(1.25, -7.6, 401));
 
   // --- 1. Distant Medieval Ruins behind fire on the RIGHT (x > 0.8, z < -3.5) ---
   // Broken Watchtower silhouette on the far right
