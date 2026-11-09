@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Layout from './components/Layout';
 import MenuPlaceholder from './pages/MenuPlaceholder';
 import Quick from './pages/Quick';
+import NotFound from './pages/NotFound';
 import Contact from './pages/Contact';
 import About from './pages/About';
 import Career from './pages/Career';
@@ -13,7 +14,6 @@ import FogGate from './components/atlus/FogGate';
 
 const Lab = lazy(() => import('./pages/Lab'));
 const Impressum = lazy(() => import('./pages/Impressum'));
-const NotFound = lazy(() => import('./pages/NotFound'));
 
 function AppRoutes() {
   const { displayed, transition, clearTransition } = useWipeLocation();
