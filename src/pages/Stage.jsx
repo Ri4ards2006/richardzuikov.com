@@ -291,9 +291,6 @@ export default function Stage() {
           ))}
         </ul>
         <ProjectDeck />
-        <div className="mt-14 flex flex-wrap gap-x-10 gap-y-3 font-mono text-xs tracking-widest">
-          <Link to="/lab" className="inline-flex items-center min-h-11 text-ash-100 underline underline-offset-4">{t.atlus.allProjects}</Link>
-        </div>
       </section>
 
       <section id="bonfire" ref={abyssRef} aria-labelledby="abyss-title" className="stage-abyss scroll-mt-16">

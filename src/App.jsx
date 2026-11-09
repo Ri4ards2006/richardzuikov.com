@@ -10,7 +10,6 @@ const About = lazy(() => import('./pages/About'));
 const Work = lazy(() => import('./pages/Work'));
 const Stack = lazy(() => import('./pages/Stack'));
 const Career = lazy(() => import('./pages/Career'));
-const Lab = lazy(() => import('./pages/Lab'));
 const Impressum = lazy(() => import('./pages/Impressum'));
 
 function AppRoutes() {
@@ -28,10 +27,10 @@ function AppRoutes() {
           <Route path="/stack" element={<Stack />} />
           <Route path="/work" element={<Work />} />
           <Route path="/contact" element={<Navigate to="/#bonfire" replace />} />
-          <Route path="/lab" element={<Lab />} />
-          <Route path="/works" element={<Navigate to="/lab" replace />} />
-          <Route path="/portfolio" element={<Navigate to="/lab" replace />} />
-          <Route path="/dev" element={<Navigate to="/lab" replace />} />
+          <Route path="/lab" element={<Navigate to="/#arcana" replace />} />
+          <Route path="/works" element={<Navigate to="/#arcana" replace />} />
+          <Route path="/portfolio" element={<Navigate to="/#arcana" replace />} />
+          <Route path="/dev" element={<Navigate to="/#arcana" replace />} />
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/datenschutz" element={<Impressum />} />
           <Route path="/legal" element={<Impressum />} />

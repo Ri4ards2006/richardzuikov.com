@@ -84,7 +84,7 @@ function Panel({ onClose }) {
           ))}
           <li className="flex items-baseline gap-4">
             <span aria-hidden="true" className="font-mono text-xs text-zinc-600 dark:text-zinc-400">→</span>
-            <Link to="/lab" onClick={onClose} className={linkClass}>{t.nav.lab}</Link>
+            <Link to="/#arcana" onClick={onClose} className={linkClass}>{t.nav.lab}</Link>
           </li>
         </ul>
       </nav>

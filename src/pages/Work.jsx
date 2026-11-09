@@ -18,7 +18,7 @@ export default function Work() {
           <ArcanaCard key={project.title} project={project} index={index} fan={(index - middle) * FAN_STEP} />
         ))}
       </div>
-      <Link to="/lab" className="mt-10 inline-flex items-center min-h-11 font-anton uppercase text-2xl tracking-wide text-accent underline underline-offset-4">
+      <Link to="/#arcana" className="mt-10 inline-flex items-center min-h-11 font-anton uppercase text-2xl tracking-wide text-accent underline underline-offset-4">
         {t.atlus.allProjects}
       </Link>
     </Screen>

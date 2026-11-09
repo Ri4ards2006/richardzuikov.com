@@ -44,7 +44,7 @@ export default function WorkSection({ number }) {
           );
         })}
       </div>
-      <Link to="/lab" className="mt-10 inline-flex items-center gap-2 min-h-11 text-base font-medium text-zinc-900 dark:text-white underline underline-offset-4">
+      <Link to="/#arcana" className="mt-10 inline-flex items-center gap-2 min-h-11 text-base font-medium text-zinc-900 dark:text-white underline underline-offset-4">
         {t.landing.allProjects}
         <ArrowRight aria-hidden="true" className="w-4 h-4" />
       </Link>
