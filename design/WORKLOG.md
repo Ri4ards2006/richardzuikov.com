@@ -240,7 +240,7 @@ https://richardzuikov-com-git-feat-atlus-v4-ri4ards2006s-projects.vercel.app/ (b
 - Earlier questions still open: TRICH-1 / cluster progress, apprenticeship months, panel 05 and NOW drafts.
 
 **Preview**
-https://richardzuikov-com-git-feat-atlus-v5-ri4ards2006s-projects.vercel.app/ (behind the Vercel login)
+https://richardzuikov-com-git-feat-atlus-v5-ri4ards2006s-projects.vercel.app/ (behind the Vercel login). Not built yet: all four Vercel projects answered "Deployment rate limited — retry in 24 hours" on PR #16, so the Vercel checks are red for that reason only. The GitHub checks (build, Playwright E2E, Lighthouse, Gitleaks, dependency / EXIF audit) are green. Re-run the Vercel deployment after the limit resets; do not merge before it is green.
 
 **Files touched**
 `design/{DESIGN,TASKS,WORKLOG}.md`, `design/screenshots/v5/*`, `scripts/portraits.sh`, `src/App.jsx`, `src/css/style.scss`, `src/lib/translations.js`, `src/data/stack-details.js`, `src/assets/portraits/raw/README.md`, `src/pages/{Stage,About,Work,Stack,Career}.jsx`, `src/components/MenuOverlay.jsx`, `src/components/atlus/{Screen,OpenScreen,PropViewer,DetailScreen,CareerDetail,StackDetail,SkillBoard,RecordBoard}.jsx` (deleted `ArcanaCard.jsx`), `src/components/stage/{AboutSection,ProjectDeck}.jsx`, `src/components/stage/{scene,descent-props,skill-props,prop-viewer}.js`
