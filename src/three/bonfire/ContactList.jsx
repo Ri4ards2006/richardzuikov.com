@@ -44,25 +44,21 @@ export default function ContactList() {
       <ul className="mt-4 border-t border-ash-700">
         <li>
           <a href={email ? `mailto:${email}` : undefined} className={rowClass}>
-            <span aria-hidden="true" className="text-ash-500 group-hover:text-ember-hot transition-colors select-none">&gt;</span>
             <span>SEND MAIL</span>
           </a>
         </li>
         <li>
           <a href="/cv/CV_Richard_Zuikov.pdf" download className={rowClass}>
-            <span aria-hidden="true" className="text-ash-500 group-hover:text-ember-hot transition-colors select-none">&gt;</span>
             <span>CV (PDF)</span>
           </a>
         </li>
         <li>
           <a href={githubLink} target="_blank" rel="noreferrer" className={rowClass}>
-            <span aria-hidden="true" className="text-ash-500 group-hover:text-ember-hot transition-colors select-none">&gt;</span>
             <span>GITHUB</span>
           </a>
         </li>
         <li>
           <a href={linkedinLink} target="_blank" rel="noreferrer" className={rowClass}>
-            <span aria-hidden="true" className="text-ash-500 group-hover:text-ember-hot transition-colors select-none">&gt;</span>
             <span>LINKEDIN</span>
           </a>
         </li>

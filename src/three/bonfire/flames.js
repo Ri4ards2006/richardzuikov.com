@@ -51,29 +51,31 @@ const flameFragmentShader = `
     // Upward flow with horizontal turbulent flutter
     float t = uTime * uSpeed;
     float flutter = sin(uv.y * 7.0 - t * 4.0) * 0.08 * uv.y;
-    vec2 p = vec2((uv.x - 0.5 + flutter) * 2.6, uv.y * 1.9 - t * 2.2);
+    vec2 p = vec2((uv.x - 0.5 + flutter) * 2.5, uv.y * 1.85 - t * 2.1);
 
-    float n = fbm(p);
+    // Domain-warped FBM for organic licking flame tongues
+    vec2 warp = vec2(fbm(p + vec2(1.7, 9.2) + 0.15 * t), fbm(p + vec2(8.3, 2.8) + 0.12 * t));
+    float n = fbm(p + 0.6 * warp);
 
-    // Teardrop flame silhouette envelope
-    float widthMask = 1.0 - smoothstep(0.0, 0.52, abs(uv.x - 0.5) * (1.0 + uv.y * 1.1));
-    float heightMask = smoothstep(0.02, 0.18, uv.y) * (1.0 - smoothstep(0.45, 1.0, uv.y));
+    // Teardrop flame silhouette envelope with tapered tip
+    float widthMask = 1.0 - smoothstep(0.0, 0.48, abs(uv.x - 0.5) * (1.0 + uv.y * 1.25));
+    float heightMask = smoothstep(0.01, 0.15, uv.y) * (1.0 - smoothstep(0.52, 1.0, uv.y));
     float mask = widthMask * heightMask;
 
-    float intensity = n * mask * 2.1;
-    if (intensity < 0.04) discard;
+    float intensity = n * mask * 2.2;
+    if (intensity < 0.035) discard;
 
     // Thermal color grading: incandescent core -> fire gold -> ember hot -> smoke rim
-    vec3 cCore  = vec3(1.0, 0.96, 0.78);
+    vec3 cCore  = vec3(1.0, 0.96, 0.82);
     vec3 cGold  = vec3(1.0, 0.62, 0.04);
     vec3 cEmber = vec3(1.0, 0.28, 0.0);
     vec3 cDark  = vec3(0.55, 0.08, 0.0);
 
-    vec3 col = mix(cDark, cEmber, smoothstep(0.08, 0.32, intensity));
+    vec3 col = mix(cDark, cEmber, smoothstep(0.07, 0.32, intensity));
     col = mix(col, cGold, smoothstep(0.32, 0.72, intensity));
     col = mix(col, cCore, smoothstep(0.72, 1.25, intensity) * uCore);
 
-    float alpha = smoothstep(0.04, 0.35, intensity) * 0.95;
+    float alpha = smoothstep(0.035, 0.35, intensity) * 0.95;
     gl_FragColor = vec4(col * alpha, alpha);
   }
 `;
