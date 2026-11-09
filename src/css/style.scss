@@ -923,6 +923,7 @@ html.dark .ground-message {
   color: rgb(var(--ash-100));
 }
 
+.deck-roman::before,
 .deck-roman::after {
   content: '';
   flex: 1 1 auto;

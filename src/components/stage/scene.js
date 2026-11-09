@@ -125,11 +125,13 @@ function drawCard(canvas, project, index, img) {
   ctx.lineWidth = 1.5;
   ctx.strokeRect(19, 19, w - 38, h - 38);
   ctx.fillStyle = '#f4f4f0';
-  ctx.textAlign = 'left';
+  ctx.textAlign = 'center';
   ctx.font = '700 34px Cinzel, serif';
   const numeral = ROMAN[index] ?? String(index + 1);
-  ctx.fillText(numeral, 34, 70);
-  ctx.fillRect(34 + ctx.measureText(numeral).width + 16, 54, w - 68 - ctx.measureText(numeral).width - 16, 2);
+  ctx.fillText(numeral, w / 2, 70);
+  const rule = w / 2 - ctx.measureText(numeral).width / 2 - 16 - 34;
+  ctx.fillRect(34, 56, rule, 2);
+  ctx.fillRect(w - 34 - rule, 56, rule, 2);
   ctx.textAlign = 'center';
   ctx.font = '50px Anton, Impact, sans-serif';
   ctx.fillText(project.title.toUpperCase(), w / 2, h - 44, w - 70);
