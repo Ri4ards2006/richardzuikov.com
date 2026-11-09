@@ -96,6 +96,8 @@ export default function Stage() {
           slots: slotRefs.current.filter(Boolean),
           panels: panelRefs.current.filter(Boolean),
           skillProp: stageRef.current?.querySelector('.skill-prop'),
+          // Text the descent props must keep clear of.
+          obstacles: [...(stageRef.current?.querySelectorAll('.manga-panel, .stage-descent h2, .stage-descent > p, .stage-now h2, .now-panel') ?? [])],
         }),
       });
       sceneRef.current = stage;

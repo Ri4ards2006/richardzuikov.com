@@ -2,10 +2,13 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 const PAPER = 0xf4f4f0;
-const SMALL_SCREEN = 768;
+// Below this width there is no gutter beside the panels, so the props are hidden.
+const GUTTER_SCREEN = 1024;
+// Half the screen footprint of a prop while it rotates, in world units at SIZE 1; plus a clear margin in px.
+const PROP_RADIUS = 0.82;
+const GUTTER_MARGIN = 24;
 const SPIN = 0.22;
 const SIZE = 1.05;
-const SMALL_SIZE = 0.42;
 const CULL_DISTANCE = 9;
 // Without a mouse the dome camera pans slowly on its own.
 const fallbackAim = new THREE.Vector3();
@@ -169,28 +172,28 @@ export function createDescentProps() {
   return {
     group,
     // rects: viewport-size page rects of the panels. toWorld maps a page point to world units.
-    layout(rects, viewportWidth, toWorld) {
-      const small = viewportWidth < SMALL_SCREEN;
+    // rects: page rects of the panels; obstacles: page rects of every text block and heading.
+    // A prop only shows in the free gutter beside its panel and never over text (DESIGN.md §16).
+    layout(rects, viewportWidth, toWorld, k, obstacles = []) {
+      const narrow = viewportWidth < GUTTER_SCREEN;
       items.forEach((item) => {
         const rect = rects[item.panel];
-        item.root.visible = Boolean(rect);
-        if (!rect) return;
-        let x;
-        let y;
-        if (small) {
-          // No free side on a phone: the prop sits in the gutter above its panel.
-          x = viewportWidth * 0.76;
-          y = rect.top - 52;
-        } else {
-          const onRight = rect.left + rect.width / 2 > viewportWidth / 2;
-          const free = onRight ? rect.left : viewportWidth - (rect.left + rect.width);
-          const offset = Math.min(300, free / 2);
-          x = onRight ? rect.left - offset : rect.left + rect.width + offset;
-          y = rect.top + rect.height / 2;
-        }
+        item.root.visible = false;
+        if (!rect || narrow) return;
+        const radius = (PROP_RADIUS * SIZE * item.scale) / k;
+        const onRight = rect.left + rect.width / 2 > viewportWidth / 2;
+        const gutterStart = onRight ? 0 : rect.left + rect.width;
+        const gutterEnd = onRight ? rect.left : viewportWidth;
+        if (gutterEnd - gutterStart < radius * 2 + GUTTER_MARGIN * 2) return;
+        const x = (gutterStart + gutterEnd) / 2;
+        const y = rect.top + rect.height / 2;
+        const box = { left: x - radius - GUTTER_MARGIN, right: x + radius + GUTTER_MARGIN, top: y - radius - GUTTER_MARGIN, bottom: y + radius + GUTTER_MARGIN };
+        const hit = obstacles.some((o) => o.left < box.right && o.left + o.width > box.left && o.top < box.bottom && o.top + o.height > box.top);
+        if (hit) return;
         const world = toWorld(x, y);
         item.root.position.set(world.x, world.y, -0.4);
-        item.root.scale.setScalar((small ? SMALL_SIZE : SIZE) * item.scale);
+        item.root.scale.setScalar(SIZE * item.scale);
+        item.root.visible = true;
       });
     },
     // aimAt: world point the dome camera's lens looks at (the cursor), or null.
