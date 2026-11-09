@@ -137,7 +137,7 @@ Derived from DESIGN.md §6, §7 and §11. Status: `todo` / `doing` / `done` / `s
 | todo | Rule on `/contact`: redirect (current) or full screen (§6) |
 | todo | Provide `design/storyboard/card-01…05.png` and `design/refs/` for the §10 comparison |
 | todo | Portrait photos in `src/assets/portraits/raw/` |
-| todo | Replacement for "IT Specialist in System Integration" (`src/lib/translations.js`): title, company, period. The decision still held the unfilled template `<<TITEL, FIRMA, ZEITRAUM>>`, so the entry stays unchanged until this is given |
+| done | Replacement for "IT Specialist in System Integration" (`src/lib/translations.js`): title, company, period. The decision still held the unfilled template `<<TITEL, FIRMA, ZEITRAUM>>`, so the entry stays unchanged until this is given |
 | todo | Side-profile photo; `design/refs/pose-profile.jpg` and `design/refs/lovable/{stage,career,bonfire}.png` (gitignored, not on this machine's checkouts yet) |
 | todo | Text for the TODO keys: About (who / what / into) and the Descent panels |
 
@@ -226,10 +226,10 @@ Reviewer items already listed above are not repeated. The review was written bef
 | Status | Owner | Item |
 |---|---|---|
 | todo | claude-code | Visual rework after `design/refs/lovable/career.png` |
-| todo | claude-code | Big year numerals flipping on scroll |
-| todo | claude-code | Slanted role bars with roman rank |
-| todo | claude-code | KEY ITEMS grid + item description panel |
-| todo | claude-code | Replace the wrong "IT Specialist in System Integration" entry; blocked on the owner's title, company, period. No other entries change |
+| done | claude-code | Big year numerals flipping on scroll |
+| done | claude-code | Slanted role bars with roman rank |
+| done | claude-code | KEY ITEMS grid + item description panel |
+| done | claude-code | Replace the wrong "IT Specialist in System Integration" entry: now "IT System Administration (Minijob) · R2P GmbH · 2024–2025" |
 
 ### Bonfire
 | Status | Owner | Item |
@@ -280,3 +280,19 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | Roman numerals centred at the top of the card |
 | done | claude-code | Inspect animation for featured and deck cards: zoom, overshoot, flip, dim; back with title, lines, tags, VIEW SOURCE and DETAILS; Esc, outside click and back return it |
 | done | claude-code | Colour photo only in the zoomed inspect view |
+
+## Changelog v3b (Skill and Record)
+
+### Skill (on `/` and `/stack`)
+| Status | Owner | Item |
+|---|---|---|
+| done | claude-code | Section enter: category slabs slam in staggered; panel arrives with a diagonal slash wipe |
+| done | claude-code | Category click: slash-wipe of the panel, rows reveal staggered, animated mini vignette above the list (four vignettes) |
+| done | claude-code | Certificates as KEY ITEM cards in the Arcana frame family; Arcana inspect animation; verify link only for the exact credential |
+
+### Record (on `/` and `/career`)
+| Status | Owner | Item |
+|---|---|---|
+| done | claude-code | Timeline is jobs and education only; entry 02 becomes "IT System Administration (Minijob) · R2P GmbH · 2024–2025"; remove the two project entries |
+| done | claude-code | Big Anton year numerals flip on scroll; slanted bars with roman rank; click expands with slash wipe and 2–3 detail lines (TODO keys) |
+| done | claude-code | Section enter: camera travels into the section, speedlines, panels sliding in from depth |

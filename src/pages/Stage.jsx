@@ -12,6 +12,8 @@ import AboutSection from '../components/stage/AboutSection';
 import PanelIllustration from '../components/stage/PanelIllustration';
 import ProjectDeck from '../components/stage/ProjectDeck';
 import CardInspect from '../components/stage/CardInspect';
+import SkillBoard from '../components/atlus/SkillBoard';
+import RecordBoard from '../components/atlus/RecordBoard';
 import ContactList from '../three/bonfire/ContactList';
 import { grainTexture } from '../lib/noise-textures';
 
@@ -343,6 +345,20 @@ export default function Stage() {
           ))}
         </ul>
         <ProjectDeck onInspect={openInspect} />
+      </section>
+
+      <section id="skill" aria-labelledby="skill-title" className="stage-works scroll-mt-16">
+        <p className="font-mono text-xs tracking-widest text-ash-300">03 / {t.atlus.hud.stack}</p>
+        <h2 id="skill-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight mt-2">{t.landing.nav.stack}</h2>
+        <SkillBoard />
+        <Link to="/stack" className="stage-more">{t.atlus.boards.fullIndex} →</Link>
+      </section>
+
+      <section id="record" aria-labelledby="record-title" className="stage-works scroll-mt-16">
+        <p className="font-mono text-xs tracking-widest text-ash-300">04 / {t.atlus.hud.career}</p>
+        <h2 id="record-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight mt-2">{t.landing.nav.career}</h2>
+        <RecordBoard onEnter={() => sceneRef.current?.travel()} />
+        <Link to="/career" className="stage-more">{t.atlus.boards.fullRecord} →</Link>
       </section>
 
       <section id="bonfire" ref={abyssRef} aria-labelledby="abyss-title" className="stage-abyss scroll-mt-16">

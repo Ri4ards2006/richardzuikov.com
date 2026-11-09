@@ -17,6 +17,9 @@ const SLOW_FRAME_MS = 24;
 const IDLE_FRAME_MS = 1000 / 30;
 const ACTIVE_WINDOW_MS = 500;
 const SMALL_SCREEN = 768;
+const TRAVEL_MS = 900;
+const TRAVEL_DOLLY = 1.4;
+const TRAVEL_RISE = 5;
 // Follow rates of the delayed copies, nearest first.
 const GHOST_FOLLOW = [15, 11, 8, 6, 4.5, 3.4];
 const TILTS = [[-3, 4, -2], [2, -3, 3], [-4, -4, 1.5], [3, 2, -3]];
@@ -457,6 +460,11 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     mouse.x += (mouse.tx - mouse.x) * 0.08;
     mouse.y += (mouse.ty - mouse.y) * 0.08;
 
+    // A short dolly and a rush of ash when the Record section is entered.
+    const travelP = state.travelStart ? clamp01((now - state.travelStart) / TRAVEL_MS) : 1;
+    const travel = Math.sin(travelP * Math.PI);
+    if (travelP < 1) state.lastInput = now;
+
     const abyss = smooth(clamp01((state.scroll - (state.abyssTop - state.h * 0.7)) / (state.maxScroll - (state.abyssTop - state.h * 0.7))));
     camera.position.y = state.camY - abyss * 1.0;
     if (dive.active) {
@@ -475,7 +483,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       });
       if (p >= 1) endDive();
     } else {
-      camera.position.z = CAM_Z - abyss * 2.4;
+      camera.position.z = CAM_Z - abyss * 2.4 - travel * TRAVEL_DOLLY;
       camera.rotation.set(abyss * rad(7), 0, 0);
     }
 
@@ -485,7 +493,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     const story = clamp01((state.scroll - state.h * 0.3) / Math.max(1, ashEnd - state.h * 0.3));
     const emberStart = state.abyssTop - state.h * 0.8;
     const ember = smooth(clamp01((state.scroll - emberStart) / Math.max(1, state.maxScroll - emberStart)));
-    state.rise += dt * (0.18 + story * 0.42);
+    state.rise += dt * (0.18 + story * 0.42 + travel * TRAVEL_RISE);
     Object.assign(dust.material.uniforms.uStory, { value: story });
     dust.material.uniforms.uEmber.value = ember;
     dust.material.uniforms.uRise.value = state.rise;
@@ -613,6 +621,9 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
         dive.active = true;
         endDive();
       }
+    },
+    travel() {
+      state.travelStart = performance.now();
     },
     setHidden(index) {
       state.hiddenCard = index;

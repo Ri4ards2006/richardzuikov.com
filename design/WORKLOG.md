@@ -118,3 +118,31 @@ Append-only. Format: date · agent · done · next · files touched.
 **Files touched**
 `design/{DESIGN,TASKS,WORKLOG}.md`, `scripts/portraits.sh`, `src/assets/portraits/{front-silhouette.svg,raw/README.md}`, `src/css/style.scss`, `src/data/portraits.js`, `src/lib/{atlus,translations}.js`, `src/pages/Stage.jsx`, `src/components/{Footer,Header,MenuOverlay}.jsx`, `src/components/stage/{AboutSection.jsx,CardInspect.jsx,PanelIllustration.jsx,ProjectDeck.jsx,descent-props.js,floating-shards.js,scene.js}`
 
+## 2026-11-09 · Claude Code (Opus 5.5) · merges, Skill, Record
+
+**Done**
+- Merged PR #10 (`feat/atlus-v3`) and PR #9 (`feat/bonfire-v3`) into `feat/atlus-menu`, both builds green, no conflict. Stage, descent, arcana and bonfire checked at 1440×900 and 390×844; nothing to fix.
+- Skill on `/` and `/stack`: slabs slam in, slash-wipe panel, staggered rows, four vignettes, certificates as KEY ITEM cards with the Arcana inspect view.
+- Record on `/` and `/career`: jobs and education only, entry 02 corrected, flipping year numerals, slanted bars with roman rank and slash-wipe detail, camera dolly with speedlines and bars from depth.
+- `src/three/bonfire/` untouched on this branch.
+
+**Review (§10), two rounds per group, against the written spec only** (`design/refs/lovable/career.png` is not on this machine)
+- Skill 1: vignettes filled only part of their box; the active slab ran to the screen edge on phones. Fixed. Skill 2: no further defect found.
+- Record 1: the year was measured while the bars were still transformed, so it stayed wrong after landing; with no scroll room it never flipped. Fixed, hover and focus now flip it too. Record 2: no further defect found.
+
+**Decisions**
+- STACK and CAREER in the stage and global menus now fly to `#skill` and `#record`, as §6 specifies. The deep pages stay reachable through "FULL INDEX →" and "FULL RECORD →".
+- The expanded Record bar shows the first two sentences of the existing `desc`, so it is not empty in production. The TODO key `atlus.todoRecord` is visible in development only.
+- Certificates left `/career` but stay on `/quick`, the plain recruiter version.
+
+**Open questions for Richard**
+- Entry 02 keeps its old description (workstations, Bash, USB images). Does it fit the Minijob?
+- Text for the Record details (`atlus.todoRecord`).
+- `design/refs/lovable/career.png` is still missing here, so the look was not compared against it.
+
+**Preview**
+https://richardzuikov-com-git-feat-atlus-v3b-ri4ards2006s-projects.vercel.app/ (behind the Vercel login)
+
+**Files touched**
+`design/{TASKS,WORKLOG}.md`, `src/css/style.scss`, `src/hooks/use-section-enter.js`, `src/lib/{atlus,translations}.js`, `src/pages/{Stage,Stack,Career}.jsx`, `src/components/atlus/{SkillBoard,SkillVignette,KeyItems,RecordBoard}.jsx`, `src/components/stage/{CardInspect.jsx,scene.js}`
+

@@ -54,6 +54,8 @@ export const translations = {
       "allProjects": "ALLE PROJEKTE →",
       "deck": {"label":"ALLE PROJEKTE","hint":"ZIEHEN · SCROLLEN · ← →"},
       "inspect": {"source":"VIEW SOURCE","details":"DETAILS","back":"ZURÜCK"},
+      "todoRecord": "TODO: 2–3 Zeilen von Richard zu dieser Station.",
+      "boards": {"fullIndex":"GESAMTER INDEX","fullRecord":"GESAMTER WERDEGANG","keyItems":"KEY ITEMS","verify":"PRÜFEN"},
       "usedIn": "Eingesetzt in",
       "todoStackUse": "TODO: Wofür / wo eingesetzt ergänzen.",
       "flip": "Karte umdrehen",
@@ -235,31 +237,24 @@ export const translations = {
       timeline: [
         {
           year: "2025–2027",
-          type: "Aktuell · Duale Entwicklung",
-          title: "IT-Systemelektroniker | R2P GmbH",
+          type: "Ausbildung · Aktuell",
+          title: "Ausbildung IT-Systemelektroniker | R2P GmbH",
           desc: "Verkürzter Ausbildungsgang aufgrund hoher Vorkenntnisse. Montage, Inbetriebnahme und Wartung von video- und netzwerkbasierten Sicherheitssystemen. Technische Fehlersuche auf Hardware- und Systemebene. Nebenher IT-Support (Helpdesk, Tickets, Enterprise-Netzwerke).",
           tags: ["Enterprise Network", "Hardware Diagnostics", "CCNA Systems", "Flensburg"]
         },
         {
-          year: "2024–2025",
-          type: "Infrastruktur-Fokus",
-          title: "Fachinformatiker Systemintegration | R2P GmbH",
-          desc: "Aufbau, Reparatur und Provisionierung von IT-Arbeitsplätzen. Linux-basierte Systemarbeit: Entwicklung von Bash-Workflows, automatisierten Deployment-Prozessen und maßgeschneiderten, bootfähigen USB-Images.",
-          tags: ["Linux", "Bash Scripting", "Automated Deployment"]
+          year: "Dez. 2024 – Aug. 2025",
+          type: "Minijob",
+          title: "IT-Helpdesk & Systemadministration (Minijob) | R2P GmbH",
+          desc: "Helpdesk und laufende Administration der Microsoft-Umgebung des Unternehmens. Firewall-Prüfungen, Systemüberwachung und Systemübersicht sowie Benutzer-Support.",
+          tags: ["Microsoft", "Firewall", "Monitoring", "User Support"]
         },
         {
-          year: "2025",
-          type: "Forschung & Software",
-          title: "GO-CORE-LAB Framework",
-          desc: "Persönliches Low-Level Forschungsframework in Go. Parsing von ELF/PE Binaries, direkte Hardware-Bridges für serielle Busse (SPI/I2C/UART) und Netzwerk-Probes. Statisch kompiliert für universelle Infrastruktur-Kompatibilität.",
-          tags: ["Go", "Binary Analysis", "Hardware Bridge", "Self-Hosted"]
-        },
-        {
-          year: "2024",
-          type: "Hardware-Labor",
-          title: "Embedded Systems & Messtechnik",
-          desc: "Entwicklung einer AD-LED Clock auf ATmega8535 (KiCad PCB-Layout, 3D-gedrucktes Gehäuse, ISR-Level C++). Simulation von Verkehrskreuzen per Arduino Mega & Sensorik. Aufbau eines professionellen Messplatzes (Oszilloskop, Labornetzteil, Signalgenerator).",
-          tags: ["C++", "AVR / ATmega", "KiCad PCB Design", "Lab Gear"]
+          year: "Sep. 2024",
+          type: "Praktikum",
+          title: "Praktikum | R2P GmbH",
+          desc: "",
+          tags: []
         },
         {
           year: "2022–2025",
@@ -422,6 +417,8 @@ export const translations = {
       "allProjects": "ALL PROJECTS →",
       "deck": {"label":"ALL PROJECTS","hint":"DRAG · SCROLL · ← →"},
       "inspect": {"source":"VIEW SOURCE","details":"DETAILS","back":"BACK"},
+      "todoRecord": "TODO: 2–3 lines from Richard on this entry.",
+      "boards": {"fullIndex":"FULL INDEX","fullRecord":"FULL RECORD","keyItems":"KEY ITEMS","verify":"VERIFY"},
       "usedIn": "Used in",
       "todoStackUse": "TODO: add what this was used for and where.",
       "flip": "Flip card",
@@ -603,31 +600,24 @@ export const translations = {
       timeline: [
         {
           year: "2025–2027",
-          type: "Current · Dual Career",
-          title: "IT Systems Electronics Technician | R2P GmbH",
+          type: "Apprenticeship · Current",
+          title: "Apprenticeship IT Systems Electronics Technician (IT-Systemelektroniker) | R2P GmbH",
           desc: "Accelerated apprenticeship due to advanced pre-qualifications. Installation, commissioning, and maintenance of video and network-based security systems. Hardware-level diagnostic troubleshooting and enterprise IT support.",
           tags: ["Enterprise Network", "Hardware Diagnostics", "CCNA Systems", "Flensburg"]
         },
         {
-          year: "2024–2025",
-          type: "Infrastructure Focus",
-          title: "IT Specialist in System Integration | R2P GmbH",
-          desc: "Setup, repair, and provisioning of IT workstations. Linux-based system engineering: Bash automated workflows, deployment pipelines, and customized bootable USB deployment images.",
-          tags: ["Linux", "Bash Scripting", "Automated Deployment"]
+          year: "Dec 2024 – Aug 2025",
+          type: "Minijob",
+          title: "IT Helpdesk & System Administration (Minijob) | R2P GmbH",
+          desc: "Helpdesk and day-to-day administration of the company's Microsoft environment. Firewall checks, system monitoring and overview, and user support.",
+          tags: ["Microsoft", "Firewall", "Monitoring", "User Support"]
         },
         {
-          year: "2025",
-          type: "Research & Software",
-          title: "GO-CORE-LAB Framework",
-          desc: "Personal low-level research framework in Go. ELF/PE binary parsing, direct hardware telemetry bridges for SPI/I2C/UART, and network probes. Statically compiled for universal infrastructure portability.",
-          tags: ["Go", "Binary Analysis", "Hardware Bridge", "Self-Hosted"]
-        },
-        {
-          year: "2024",
-          type: "Hardware Lab",
-          title: "Embedded Systems & Signal Analysis",
-          desc: "Development of an AD-LED Clock on ATmega8535 (KiCad PCB layout, 3D printed housing, ISR-level C++). Traffic intersection simulation on Arduino Mega. Setup of electronics measurement workbench (oscilloscope, power supply, signal generator).",
-          tags: ["C++", "AVR / ATmega", "KiCad PCB Design", "Lab Gear"]
+          year: "Sep 2024",
+          type: "Internship",
+          title: "Internship | R2P GmbH",
+          desc: "",
+          tags: []
         },
         {
           year: "2022–2025",
