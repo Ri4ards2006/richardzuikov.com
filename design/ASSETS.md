@@ -10,7 +10,7 @@ All external assets used on the site are CC0 / Public Domain and documented here
 - **Asset Name**: Stone Floor (`stone_floor`)
 - **Source**: Poly Haven (https://polyhaven.com/a/stone_floor)
 - **License**: CC0 / Public Domain (No Rights Reserved)
-- **Author**: Rob Tuytel
+- **Author**: Dimitrios Savva
 - **Files in Repo**:
   - `public/textures/bonfire/stone_floor_diff.jpg` (Diffuse map, 512×512 optimized JPEG)
   - `public/textures/bonfire/stone_floor_rough.jpg` (Roughness map, 512×512 optimized JPEG)
