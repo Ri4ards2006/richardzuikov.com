@@ -16,6 +16,7 @@ import SkillBoard from '../components/atlus/SkillBoard';
 import RecordBoard from '../components/atlus/RecordBoard';
 import ContactList from '../three/bonfire/ContactList';
 import { grainTexture } from '../lib/noise-textures';
+import { ImpactInk, InkSplat, TraceStar } from '../components/atlus/glyphs';
 
 const INTRO_KEY = 'seen-stage-intro';
 const BOOT_MS = 800;
@@ -259,12 +260,14 @@ export default function Stage() {
 
       <section aria-labelledby="stage-title" className={`stage-hero ${phase === 'done' ? 'is-settled' : ''}`}>
         <div className="stage-name">
+          <InkSplat variant={1} className="ink-stage-name" />
           <h1 id="stage-title" className="stage-name-block"><span>Richard</span> <span>Zuikov</span></h1>
           <p className="stage-role">{t.career.role}</p>
         </div>
         <Link to={QUICK_PATH} className="stage-hud stage-quick">{t.landing.menuPlaceholder.quickRead} →</Link>
-        <p aria-hidden="true" className="stage-hud stage-cue">↓ {t.atlus.stage.scroll}</p>
+        <p aria-hidden="true" className="stage-hud stage-cue"><TraceStar small /> {t.atlus.stage.scroll}</p>
         <div className="relative z-10 flex flex-col justify-center">
+          <InkSplat variant={0} className="ink-stage-menu" />
           <nav aria-label={t.atlus.menuNav} className="has-message stage-menu">
             <ul onKeyDown={handleMenuKey}>
               {menuItems.map((item, index) => {
@@ -323,6 +326,7 @@ export default function Stage() {
       </section>
 
       <section id="arcana" aria-labelledby="works-title" className="stage-works scroll-mt-16">
+        <ImpactInk variant={3} />
         <h2 id="works-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight">{t.atlus.stage.works}</h2>
         <ul className="stage-tarot">
           {featuredProjects.map((project, index) => (
@@ -348,6 +352,7 @@ export default function Stage() {
       </section>
 
       <section id="skill" aria-labelledby="skill-title" className="stage-works scroll-mt-16">
+        <ImpactInk variant={4} />
         <p className="font-mono text-xs tracking-widest text-ash-300">03 / {t.atlus.hud.stack}</p>
         <h2 id="skill-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight mt-2">{t.landing.nav.stack}</h2>
         <SkillBoard />
@@ -355,6 +360,7 @@ export default function Stage() {
       </section>
 
       <section id="record" aria-labelledby="record-title" className="stage-works scroll-mt-16">
+        <ImpactInk variant={2} />
         <p className="font-mono text-xs tracking-widest text-ash-300">04 / {t.atlus.hud.career}</p>
         <h2 id="record-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight mt-2">{t.landing.nav.career}</h2>
         <RecordBoard onEnter={() => sceneRef.current?.travel()} />

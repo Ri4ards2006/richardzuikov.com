@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useLanguage } from '../../hooks/use-language';
 import { useReducedMotion } from '../../hooks/use-reduced-motion';
+import { CardFrame } from '../atlus/glyphs';
 
 const ZOOM_MS = 600;
 const FLIP_DELAY_MS = 430;
@@ -103,11 +104,13 @@ export default function CardInspect({ card, sourceEl, onClosed }) {
       <div ref={shellRef} className="inspect-card">
         <div ref={innerRef} className="inspect-inner">
           <div aria-hidden="true" className="inspect-face">
+            <CardFrame />
             <span className="deck-roman">{card.numeral}</span>
             {photo}
             <span className="deck-title inspect-front-title">{card.title}</span>
           </div>
           <div className="inspect-face inspect-back">
+            <CardFrame className="no-divider" />
             <span aria-hidden="true" className="deck-roman">{card.numeral}</span>
             <div className="inspect-photo">{photo}</div>
             <h3 className="font-anton uppercase text-3xl tracking-wide mt-2">{card.title}</h3>

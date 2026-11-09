@@ -2083,3 +2083,232 @@ html.dark .ground-message {
     100% { opacity: 0; transform: scale(1); }
   }
 }
+
+/* ---------- SVG glyphs from design/assets-src (PR #11) ---------- */
+
+.trace-star,
+.glyph-icon,
+.ink-splat {
+  display: inline-block;
+  line-height: 0;
+}
+
+.trace-star svg,
+.glyph-icon svg,
+.ink-splat svg {
+  width: 100%;
+  height: 100%;
+}
+
+.trace-star {
+  width: 1.1em;
+  height: 1.1em;
+  vertical-align: -0.2em;
+}
+
+/* Card frame: stretched to the card, strokes keep their width. The cartouche at 12 % holds the numeral,
+   the double rule at 86 % sits above the title. */
+.card-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  color: rgb(var(--ash-100));
+}
+
+.card-frame svg * {
+  vector-effect: non-scaling-stroke;
+}
+
+/* Paths 10 and 11 are the title rules; the inspect back has buttons there. */
+.card-frame.no-divider svg > path:nth-of-type(10),
+.card-frame.no-divider svg > path:nth-of-type(11) {
+  display: none;
+}
+
+.deck-face,
+.key-card,
+.inspect-face {
+  border: 0;
+  padding: 0 7% 0;
+}
+
+.deck-face::before,
+.key-card::before,
+.inspect-face:not(.inspect-back)::before {
+  content: '';
+  flex: 0 0 16.5%;
+}
+
+.deck-face > .deck-roman,
+.key-card > .deck-roman,
+.inspect-face > .deck-roman {
+  position: absolute;
+  top: 12%;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  justify-content: center;
+  transform: translateY(-50%);
+}
+
+.deck-face > .deck-roman::before,
+.deck-face > .deck-roman::after,
+.key-card > .deck-roman::before,
+.key-card > .deck-roman::after,
+.inspect-face > .deck-roman::before,
+.inspect-face > .deck-roman::after {
+  content: none;
+}
+
+.deck-face > .deck-title,
+.inspect-front-title {
+  flex: 0 0 11.5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5%;
+  padding: 0 6%;
+  overflow: hidden;
+}
+
+.deck-face > .deck-title {
+  font-size: 0.9375rem;
+  line-height: 1.05;
+}
+
+/* Bottom band below the title: the corner traces live here. */
+.deck-face::after,
+.key-card::after,
+.inspect-face:not(.inspect-back)::after {
+  content: '';
+  flex: 0 0 4%;
+}
+
+.key-card::after {
+  flex-basis: 9%;
+}
+
+.inspect-back {
+  padding-top: calc(16.5% * 1.6);
+  padding-bottom: 1.25rem;
+}
+
+.key-icon .glyph-icon {
+  width: 62%;
+  height: auto;
+  aspect-ratio: 1;
+}
+
+.inspect-icon .glyph-icon {
+  width: min(55%, 9rem);
+  aspect-ratio: 1;
+}
+
+.key-heading-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.ink-splat {
+  position: absolute;
+  pointer-events: none;
+  color: rgb(var(--ash-100));
+  animation: ink-boil 250ms steps(1) infinite;
+}
+
+/* Boil: three hand-drawn states at 12 fps (DESIGN.md §5). */
+@keyframes ink-boil {
+  0% { transform: var(--ink-t, none) rotate(0deg) scale(1); }
+  33% { transform: var(--ink-t, none) rotate(0.8deg) scale(1.012, 0.994); }
+  66% { transform: var(--ink-t, none) rotate(-0.6deg) scale(0.994, 1.01); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ink-splat {
+    animation: none;
+  }
+}
+
+.ink-stage-name {
+  right: -1rem;
+  bottom: 1.6rem;
+  width: clamp(14rem, 34vw, 30rem);
+  aspect-ratio: 4;
+  z-index: -1;
+  opacity: 0.16;
+  --ink-t: rotate(-6deg);
+}
+
+.ink-stage-menu {
+  left: -4rem;
+  top: 50%;
+  width: clamp(16rem, 36vw, 34rem);
+  aspect-ratio: 1;
+  margin-top: clamp(-17rem, -18vw, -8rem);
+  opacity: 0.09;
+  z-index: 0;
+}
+
+.stage-menu {
+  position: relative;
+  z-index: 1;
+}
+
+.about-copy {
+  position: relative;
+}
+
+.ink-about {
+  left: -3rem;
+  top: -2.5rem;
+  width: clamp(10rem, 22vw, 18rem);
+  aspect-ratio: 1;
+  opacity: 0.12;
+  z-index: -1;
+}
+
+.stage-works {
+  position: relative;
+}
+
+.impact-ink {
+  position: absolute;
+  top: -1.5rem;
+  left: -2rem;
+  width: clamp(9rem, 20vw, 16rem);
+  aspect-ratio: 1;
+  opacity: 0.14;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.impact-ink .ink-splat {
+  position: static;
+  width: 100%;
+  height: 100%;
+}
+
+.impact-ink.is-armed {
+  transform: scale(0.2);
+  opacity: 0;
+}
+
+.impact-ink.is-in {
+  animation: ink-slam 260ms cubic-bezier(0.2, 0.9, 0.1, 1) both;
+}
+
+@keyframes ink-slam {
+  0% { transform: scale(0.2) rotate(-12deg); opacity: 0; }
+  60% { transform: scale(1.08) rotate(2deg); opacity: 0.22; }
+  100% { transform: none; opacity: 0.14; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .impact-ink.is-armed,
+  .impact-ink.is-in {
+    transform: none;
+    opacity: 0.14;
+    animation: none;
+  }
+}

@@ -4,6 +4,7 @@ import { createFloatingShards } from './floating-shards';
 import { createInkWater } from './ink-water';
 import { createDescentProps } from './descent-props';
 import { disposeObject, hash, makeCanvas, pointsMaterial, seededPoints, smooth, texture } from '../../three/utils';
+import cardFrameSvg from '../../assets/svg/card-frame.svg?raw';
 
 const FOV = 40;
 const CAM_Z = 10;
@@ -109,35 +110,50 @@ function drawToned(ctx, img, x, y, w, h) {
   ctx.putImageData(pixels, x, y);
 }
 
+// Card frame from design/assets-src/card-frame.svg, rasterised once at texture size.
+// Strokes scaled up so they survive the texture's downsampling on screen.
+let frameImage = null;
+function cardFrameImage(w, h) {
+  if (frameImage) return frameImage;
+  const svg = cardFrameSvg
+    .replace('<svg ', `<svg width="${w}" height="${h}" preserveAspectRatio="none" `)
+    .replace(/currentColor/g, '#f4f4f0')
+    .replace(/stroke-width="([\d.]+)"/g, (m, v) => `stroke-width="${(+v * 1.4).toFixed(2)}"`)
+    .replace('stroke="currentColor"', 'stroke="#f4f4f0" stroke-width="1.4"');
+  frameImage = new Image(w, h);
+  frameImage.src = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+  return frameImage;
+}
+
 function drawCard(canvas, project, index, img) {
   const ctx = canvas.getContext('2d');
   const { width: w, height: h } = canvas;
   ctx.fillStyle = '#050505';
   ctx.fillRect(0, 0, w, h);
+  // Integer rect: drawToned indexes pixels by row width.
+  const imageX = Math.round(w * 0.07);
+  const imageY = Math.round(h * 0.165);
+  const imageW = w - imageX * 2;
+  const imageH = Math.round(h * 0.845) - imageY;
   if (img) {
     ctx.save();
     ctx.beginPath();
-    ctx.rect(30, 86, w - 60, h - 200);
+    ctx.rect(imageX, imageY, imageW, imageH);
     ctx.clip();
-    drawToned(ctx, img, 30, 86, w - 60, h - 200);
+    drawToned(ctx, img, imageX, imageY, imageW, imageH);
     ctx.restore();
   }
-  ctx.strokeStyle = '#f4f4f0';
-  ctx.lineWidth = 3;
-  ctx.strokeRect(10, 10, w - 20, h - 20);
-  ctx.lineWidth = 1.5;
-  ctx.strokeRect(19, 19, w - 38, h - 38);
+  const frame = cardFrameImage(w, h);
+  // Before it has decoded, the redraw after fonts and frame load fills it in.
+  if (frame.complete && frame.naturalWidth) ctx.drawImage(frame, 0, 0, w, h);
   ctx.fillStyle = '#f4f4f0';
   ctx.textAlign = 'center';
-  ctx.font = '700 34px Cinzel, serif';
-  const numeral = ROMAN[index] ?? String(index + 1);
-  ctx.fillText(numeral, w / 2, 70);
-  const rule = w / 2 - ctx.measureText(numeral).width / 2 - 16 - 34;
-  ctx.fillRect(34, 56, rule, 2);
-  ctx.fillRect(w - 34 - rule, 56, rule, 2);
-  ctx.textAlign = 'center';
-  ctx.font = '50px Anton, Impact, sans-serif';
-  ctx.fillText(project.title.toUpperCase(), w / 2, h - 44, w - 70);
+  ctx.textBaseline = 'middle';
+  ctx.font = '700 30px Cinzel, serif';
+  ctx.fillText(ROMAN[index] ?? String(index + 1), w / 2, h * 0.12 + 2);
+  ctx.font = '46px Anton, Impact, sans-serif';
+  ctx.fillText(project.title.toUpperCase(), w / 2, h * 0.925, w * 0.7);
+  ctx.textBaseline = 'alphabetic';
 }
 
 // About portrait: high-contrast grayscale, fine screentone only in the shadows, so features stay readable.
@@ -292,7 +308,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     const group = new THREE.Group();
     group.add(mesh);
     scene.add(group);
-    Promise.all([document.fonts?.load('50px Anton'), document.fonts?.load('700 34px Cinzel')]).then(() => {
+    Promise.all([document.fonts?.load('46px Anton'), document.fonts?.load('700 30px Cinzel'), cardFrameImage(512, 878).decode().catch(() => {})]).then(() => {
       if (state.disposed) return;
       drawCard(face, project, index, null);
       map.needsUpdate = true;

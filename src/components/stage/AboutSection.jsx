@@ -1,6 +1,7 @@
 import React, { forwardRef } from 'react';
 import { useLanguage } from '../../hooks/use-language';
 import { portraits } from '../../data/portraits';
+import { InkSplat } from '../atlus/glyphs';
 
 // Fixed so the letters do not shift between renders (DESIGN.md §3).
 const LETTER_TILT = [-5, 3, -2, 6, -4, 2, -6, 4, -3];
@@ -34,6 +35,7 @@ const AboutSection = forwardRef(function AboutSection({ portraitRef, webgl }, re
   return (
     <section id="about" ref={ref} aria-labelledby="about-title" className="stage-about scroll-mt-16">
       <div className="about-copy">
+        <InkSplat variant={2} className="ink-about" />
         <p className="font-mono text-xs tracking-widest text-ash-300">01 / {t.landing.nav.about}</p>
         <RansomTitle id="about-title" text={copy.title} />
         <div className="about-panel">

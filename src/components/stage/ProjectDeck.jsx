@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useLanguage } from '../../hooks/use-language';
 import { projectImageLift, projectImages } from '../../data/project-images';
 import { ROMAN } from '../../lib/atlus';
+import { CardFrame } from '../atlus/glyphs';
 
 const DRAG_THRESHOLD_PX = 6;
 const WHEEL_STEP = 60;
@@ -164,6 +165,7 @@ export default function ProjectDeck({ onInspect }) {
                   aria-label={index === selected ? `${project.title}: ${t.atlus.flip}` : project.title}
                   className="deck-face"
                 >
+                  <CardFrame />
                   <span aria-hidden="true" className="deck-roman">{ROMAN[index] ?? index + 1}</span>
                   <span className="deck-image" style={projectImageLift[project.id] ? { '--image-lift': projectImageLift[project.id] } : undefined}>
                     <img src={projectImages[project.id]} alt="" loading="lazy" decoding="async" draggable="false" />
