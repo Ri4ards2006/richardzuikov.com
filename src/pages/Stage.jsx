@@ -1,16 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Check, Copy, Download, Mail } from 'lucide-react';
 import { useDocumentTitle } from '../hooks/use-document-title';
 import { useLanguage } from '../hooks/use-language';
 import { useReducedMotion } from '../hooks/use-reduced-motion';
-import { useContactEmail } from '../hooks/use-contact-email';
 import { getActiveMenuId, menuItems, setActiveMenuId } from '../lib/atlus';
 import { QUICK_PATH } from '../lib/sections';
 import { portraits } from '../data/portraits';
 import { featuredProjects } from '../data/featured-projects';
-import { socialLinks } from '../components/home/SocialLinks';
 import IntroOverlay from '../components/stage/IntroOverlay';
+import ContactList from '../three/bonfire/ContactList';
 import { grainTexture } from '../lib/noise-textures';
 
 const INTRO_KEY = 'seen-stage-intro';
@@ -44,7 +42,6 @@ export default function Stage() {
   const { language, t } = useLanguage();
   const reducedMotion = useReducedMotion();
   const { hash } = useLocation();
-  const { email, copied, copy } = useContactEmail();
   const [webgl, setWebgl] = useState(() => !reducedMotion && 'WebGL2RenderingContext' in window);
   const [phase, setPhase] = useState(() => (webgl && !introSeen() && !hash ? 'boot' : 'done'));
   const [active, setActive] = useState(getActiveMenuId);
@@ -163,8 +160,6 @@ export default function Stage() {
     document.getElementById(id)?.scrollIntoView();
   };
 
-  const rowClass = 'abyss-row';
-
   return (
     <div ref={stageRef} className="stage" data-webgl={webgl ? 'on' : 'off'}>
       {webgl && <canvas ref={canvasRef} aria-hidden="true" className="stage-canvas" />}
@@ -265,24 +260,7 @@ export default function Stage() {
         <div className="relative z-10 max-w-md">
           <p className="font-mono text-xs tracking-widest text-ash-300">{t.atlus.stage.abyssLabel}</p>
           <h2 id="abyss-title" className="font-cinzel font-bold uppercase text-4xl sm:text-5xl tracking-wide leading-tight mt-3">{t.atlus.contact.headline}</h2>
-          <ul className="mt-8 border-t border-ash-700 font-mono text-sm">
-            <li><a href={email ? `mailto:${email}` : undefined} className={rowClass}><Mail aria-hidden="true" className="w-4 h-4 shrink-0" /><span className="break-all">{email}</span></a></li>
-            <li>
-              <button type="button" onClick={copy} className={rowClass}>
-                {copied ? <Check aria-hidden="true" className="w-4 h-4" /> : <Copy aria-hidden="true" className="w-4 h-4" />}
-                <span role="status">{copied ? t.telemetry.copied : t.landing.copyEmail}</span>
-              </button>
-            </li>
-            <li><a href="/cv/CV_Richard_Zuikov.pdf" download className={rowClass}><Download aria-hidden="true" className="w-4 h-4" />{t.landing.downloadCv}</a></li>
-            {socialLinks.map(({ label, href, icon }) => (
-              <li key={label}>
-                <a href={href} target="_blank" rel="noreferrer" className={rowClass}>
-                  <svg aria-hidden="true" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">{icon}</svg>
-                  {label}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <ContactList />
         </div>
       </section>
     </div>
