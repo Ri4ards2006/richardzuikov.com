@@ -317,7 +317,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 | Status | Owner | Item |
 |---|---|---|
 | done | claude-code | Name block larger and fluid, never clipped at 1280–1920 px |
-| todo | claude-code | Scroll cue smaller, fades out after the first scroll |
+| done | claude-code | Scroll cue smaller, fades out after the first scroll |
 
 ### Descent
 | Status | Owner | Item |

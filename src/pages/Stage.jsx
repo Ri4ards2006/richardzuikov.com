@@ -129,6 +129,18 @@ export default function Stage() {
     };
   }, [webgl]);
 
+  // The scroll cue fades out after the first scroll and stays gone.
+  useEffect(() => {
+    const onScroll = () => {
+      if (window.scrollY < 8) return;
+      stageRef.current?.classList.add('is-scrolled');
+      window.removeEventListener('scroll', onScroll);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   useEffect(() => {
     if (phase !== 'boot' && phase !== 'tear' && phase !== 'dive') return undefined;
     const skip = () => {
