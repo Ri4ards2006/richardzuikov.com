@@ -187,7 +187,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 80);
   camera.position.z = CAM_Z;
 
-  const state = { lastInput: 0, w: 1, h: 1, k: 0.01, scroll: window.scrollY, camY: 0, frame: 0, last: 0, time: 0, rise: 0, story: 0, slow: 0, count: 0, spent: 0, hover: -1, abyssTop: 1e9, panels: [], fireProgress: 0, fire: { x: 0, y: 0, scale: 1, pixel: 1 } };
+  const state = { lastInput: 0, w: 1, h: 1, k: 0.01, scroll: window.scrollY, camY: 0, frame: 0, last: 0, time: 0, rise: 0, story: 0, slow: 0, count: 0, spent: 0, hover: -1, hiddenCard: -1, abyssTop: 1e9, panels: [], fireProgress: 0, fire: { x: 0, y: 0, scale: 1, pixel: 1 } };
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
 
   // Screentone dust on the stage, rising ash through the descent, embers at the bonfire.
@@ -531,7 +531,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     }
 
     cards.forEach((card) => {
-      const visible = Math.abs(card.base.y - state.camY) < 12;
+      const visible = Math.abs(card.base.y - state.camY) < 12 && card.index !== state.hiddenCard;
       card.group.visible = visible;
       if (!visible) return;
       const hovered = state.hover === card.index ? 1 : 0;
@@ -613,6 +613,9 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
         dive.active = true;
         endDive();
       }
+    },
+    setHidden(index) {
+      state.hiddenCard = index;
     },
     setHover(index) {
       state.hover = index;

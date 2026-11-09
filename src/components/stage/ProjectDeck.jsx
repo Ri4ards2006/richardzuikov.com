@@ -1,20 +1,16 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useLanguage } from '../../hooks/use-language';
 import { projectImageLift, projectImages } from '../../data/project-images';
+import { ROMAN } from '../../lib/atlus';
 
-const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 const DRAG_THRESHOLD_PX = 6;
 const WHEEL_STEP = 60;
 const WHEEL_COOLDOWN_MS = 180;
 
-export default function ProjectDeck() {
+export default function ProjectDeck({ onInspect }) {
   const { t } = useLanguage();
   const projects = t.lab.projects;
   const [selected, setSelected] = useState(() => Math.floor((t.lab.projects.length - 1) / 2));
-  const [flipped, setFlipped] = useState(false);
-  const frontRefs = useRef([]);
-  const backRefs = useRef([]);
-  const flipSettled = useRef(false);
   const cardRefs = useRef([]);
 
   const layout = (position) => {
@@ -31,16 +27,23 @@ export default function ProjectDeck() {
 
   useLayoutEffect(() => layout(selected), [selected, projects.length]);
 
-  useEffect(() => setFlipped(false), [selected]);
-
-  useEffect(() => {
-    // Skip the first run so that mounting the deck never steals focus.
-    if (!flipSettled.current) {
-      flipSettled.current = true;
-      return;
-    }
-    (flipped ? backRefs : frontRefs).current[selected]?.focus({ preventScroll: true });
-  }, [flipped]);
+  const inspect = (index, element) => {
+    const project = projects[index];
+    // The Rack Configurator's repo entry is only the profile link, so it opens the live app instead.
+    const link = project.liveUrl
+      ? { href: project.liveUrl, label: t.lab.launch3d.toUpperCase() }
+      : project.repo && !project.isLiveApp && { href: project.repo, label: t.atlus.inspect.source };
+    onInspect({
+      numeral: ROMAN[index] ?? String(index + 1),
+      title: project.title,
+      image: projectImages[project.id],
+      imageLift: projectImageLift[project.id],
+      lines: project.desc,
+      details: [project.fullText],
+      tags: project.tags,
+      link: link || null,
+    }, element);
+  };
 
   const clampIndex = (index) => Math.max(0, Math.min(projects.length - 1, index));
   const step = (delta) => setSelected((current) => clampIndex(current + delta));
@@ -89,12 +92,9 @@ export default function ProjectDeck() {
     } else if (event.key === 'Home' || event.key === 'End') {
       event.preventDefault();
       setSelected(event.key === 'Home' ? 0 : projects.length - 1);
-    } else if (event.key === 'Escape') {
-      setFlipped(false);
     } else if (event.key === 'Enter' && event.target === deckRef.current) {
-      // Without this the same key press would also activate the back button that takes focus.
       event.preventDefault();
-      setFlipped(true);
+      inspect(selected, cardRefs.current[selected].querySelector('button'));
     }
   };
 
@@ -129,8 +129,8 @@ export default function ProjectDeck() {
     event.stopPropagation();
   };
 
-  const onCardClick = (index) => {
-    if (index === selected) setFlipped(true);
+  const onCardClick = (index, element) => {
+    if (index === selected) inspect(index, element);
     else setSelected(index);
   };
 
@@ -154,17 +154,14 @@ export default function ProjectDeck() {
         onKeyDown={onKeyDown}
       >
         {projects.map((project, index) => {
-          const isFlipped = flipped && index === selected;
           return (
             <div key={project.id} ref={(node) => { cardRefs.current[index] = node; }} className={`deck-card ${index === selected ? 'is-selected' : ''}`}>
-              <div className={`deck-inner ${isFlipped ? 'is-flipped' : ''}`}>
+              <div className="deck-inner">
                 <button
-                  ref={(node) => { frontRefs.current[index] = node; }}
                   type="button"
-                  onClick={() => onCardClick(index)}
+                  onClick={(event) => onCardClick(index, event.currentTarget)}
                   aria-pressed={index === selected}
                   aria-label={index === selected ? `${project.title}: ${t.atlus.flip}` : project.title}
-                  inert={isFlipped ? '' : undefined}
                   className="deck-face"
                 >
                   <span aria-hidden="true" className="deck-roman">{ROMAN[index] ?? index + 1}</span>
@@ -173,27 +170,6 @@ export default function ProjectDeck() {
                   </span>
                   <span className="deck-title">{project.title}</span>
                 </button>
-
-                <div inert={isFlipped ? undefined : ''} className="deck-face deck-back">
-                  <h4 className="font-anton uppercase text-lg tracking-wide">{project.title}</h4>
-                  <p className="deck-copy">
-                    <span className="max-md:hidden">{project.fullText}</span>
-                    <span className="md:hidden">{project.desc}</span>
-                  </p>
-                  <ul className="flex flex-wrap gap-1">
-                    {project.tags.map((tag) => <li key={tag} className="px-1 border border-ash-600 font-mono text-[10px] text-ash-200">{tag}</li>)}
-                  </ul>
-                  <div className="deck-actions">
-                    {project.liveUrl && (
-                      <a href={project.liveUrl} target="_blank" rel="noreferrer" className="deck-action underline underline-offset-4">{t.lab.launch3d} ↗</a>
-                    )}
-                    {/* The Rack Configurator's repo entry is only the profile link, so it gets no source link. */}
-                    {project.repo && !project.isLiveApp && (
-                      <a href={project.repo} target="_blank" rel="noreferrer" className="deck-action underline underline-offset-4">{t.lab.viewCode} ↗</a>
-                    )}
-                    <button ref={(node) => { backRefs.current[index] = node; }} type="button" onClick={() => setFlipped(false)} className="deck-action text-ash-300">↺ {t.atlus.flipBack}</button>
-                  </div>
-                </div>
               </div>
             </div>
           );

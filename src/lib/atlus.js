@@ -9,6 +9,8 @@ export const menuItems = [
 
 export const CONTACT_PATH = '/contact';
 
+export const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+
 // Menu entries that land on a section of "/" instead of opening a screen.
 export const scrollTargets = { about: 'about', work: 'arcana', contact: 'bonfire' };
 
