@@ -351,3 +351,35 @@ Reviewer items already listed above are not repeated. The review was written bef
 | Status | Owner | Item |
 |---|---|---|
 | done | claude-code | Small ruined chapel silhouette in the distance, fog-faded |
+
+## Changelog v5 (DESIGN.md §16)
+
+### Merges
+| Status | Owner | Item |
+|---|---|---|
+| done | claude-code | Merge PR #13 (CI, docs) and PR #14 (v4) into `feat/atlus-menu`, both with green CI |
+
+### Global menu
+| Status | Owner | Item |
+|---|---|---|
+| todo | claude-code | Only the overlay visible while open: stage menu, name, portrait hidden, page dimmed; screenshots 1440×900 and 390×844 |
+
+### Floating elements
+| Status | Owner | Item |
+|---|---|---|
+| todo | claude-code | Props only in gutters, never over text or headings, hidden on narrow screens |
+| todo | claude-code | Floating hints removed; HUD bottom-right "↑↓ SELECT · ⏎ OPEN · ESC BACK" |
+| todo | claude-code | Ink behind stage menu items only on hover / active |
+
+### Dedicated screens
+| Status | Owner | Item |
+|---|---|---|
+| todo | claude-code | "OPEN SCREEN →" slabs with shard wipe; ESC / BACK returns to the scroll position |
+| todo | claude-code | Screen layout: title slab, sub-menu, detail panel, 3D prop, idle motion on /about, /work, /stack, /career |
+| todo | claude-code | Career detail screen with rank, role, company, period, bullets, skills gained, ←/→, ESC |
+| todo | claude-code | Stack detail screen: what it is, where used (project cards into Work), experience in words |
+
+### Portrait
+| Status | Owner | Item |
+|---|---|---|
+| todo | claude-code | Pipeline: luminance → alpha for cream-on-black ink art; slots stage.png / about.png |
