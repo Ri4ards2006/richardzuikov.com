@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
+  <!-- Main compass spines -->
+  <line x1="8" y1="3" x2="8" y2="13.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" />
+  <line x1="3.5" y1="9" x2="12.5" y2="9" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" />
+
+  <!-- 45° Inner trace diamond -->
+  <path d="M8 4.5 L11.5 8 L11.5 9 L8 12.5 L4.5 9 L4.5 8 Z" stroke="currentColor" stroke-width="1" stroke-linejoin="miter" />
+
+  <!-- Center via -->
+  <circle cx="8" cy="9" r="1.2" fill="currentColor" />
+
+  <!-- Terminal Vias (North longer at y=1.5) -->
+  <circle cx="8" cy="1.6" r="1.4" fill="currentColor" />
+  <circle cx="8" cy="14.4" r="1.1" fill="currentColor" />
+  <circle cx="1.6" cy="9" r="1.1" fill="currentColor" />
+  <circle cx="14.4" cy="9" r="1.1" fill="currentColor" />
+</svg>

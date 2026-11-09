@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Design Assets Spec Sheet</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 1440px;
+      height: 900px;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background: #000;
+    }
+    .sheet-container {
+      display: flex;
+      width: 1440px;
+      height: 900px;
+    }
+    .theme-col {
+      flex: 1;
+      height: 900px;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .dark-theme {
+      background-color: #050505;
+      color: #f4f4f0;
+      border-right: 1px solid #222;
+    }
+    .light-theme {
+      background-color: #f4f4f0;
+      color: #050505;
+    }
+    .col-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid currentColor;
+      padding-bottom: 5px;
+      margin-bottom: 6px;
+    }
+    .col-header h1 {
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .badge {
+      font-family: monospace;
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0.85;
+      border: 1px solid currentColor;
+      padding: 2px 6px;
+    }
+    .section-title {
+      font-size: 10px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      opacity: 0.7;
+      margin: 4px 0 3px;
+      border-left: 2px solid currentColor;
+      padding-left: 5px;
+    }
+    .row-flex {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .icons-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 6px;
+      align-items: center;
+    }
+    .micro-icons {
+      display: flex;
+      gap: 16px;
+      margin-top: 2px;
+    }
+    .ink-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .item-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+    .lbl {
+      font-family: monospace;
+      font-size: 8px;
+      opacity: 0.65;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .size-16 { width: 16px; height: 16px; }
+    .size-48 { width: 44px; height: 44px; }
+    .size-200 { width: 165px; height: 165px; }
+    .size-200-ink { width: 135px; height: 135px; }
+    .size-card-200 { width: 110px; height: 165px; }
+    svg { width: 100%; height: 100%; display: block; }
+  </style>
+</head>
+<body>
+  <div class="sheet-container">
+    
+    <div class="theme-col dark-theme">
+      <div class="col-header">
+        <h1>Atlus Assets Spec · Dark</h1>
+        <span class="badge">#050505</span>
+      </div>
+
+      <!-- ROW 1: TRACESTAR (16 / 48 / 200) & CYBERNETIC CARD FRAME (200px) -->
+      <div class="section-title">1. TraceStar Glyph (16/48/200) &amp; Card Frame (200px)</div>
+      <div class="row-flex">
+        <div class="item-box">
+          <div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
+  <!-- Main compass spines -->
+  <line x1="8" y1="3" x2="8" y2="13.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" />
+  <line x1="3.5" y1="9" x2="12.5" y2="9" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" />
+
+  <!-- 45° Inner trace diamond -->
+  <path d="M8 4.5 L11.5 8 L11.5 9 L8 12.5 L4.5 9 L4.5 8 Z" stroke="currentColor" stroke-width="1" stroke-linejoin="miter" />
+
+  <!-- Center via -->
+  <circle cx="8" cy="9" r="1.2" fill="currentColor" />
+
+  <!-- Terminal Vias (North longer at y=1.5) -->
+  <circle cx="8" cy="1.6" r="1.4" fill="currentColor" />
+  <circle cx="8" cy="14.4" r="1.1" fill="currentColor" />
+  <circle cx="1.6" cy="9" r="1.1" fill="currentColor" />
+  <circle cx="14.4" cy="9" r="1.1" fill="currentColor" />
+</svg>
+</div>
+          <span class="lbl">16px Favicon</span>
+        </div>
+        <div class="item-box">
+          <div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Center hub via -->
+  <circle cx="32" cy="36" r="3.5" stroke="currentColor" stroke-width="1.75" />
+  <circle cx="32" cy="36" r="1.25" fill="currentColor" />
+
+  <!-- Main Compass Spines -->
+  <!-- North (Elongated: y 32.5 -> 7.5) -->
+  <line x1="32" y1="32.5" x2="32" y2="7.5" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+  <!-- South (y 39.5 -> 56.5) -->
+  <line x1="32" y1="39.5" x2="32" y2="56.5" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+  <!-- West (x 28.5 -> 9.5) -->
+  <line x1="28.5" y1="36" x2="9.5" y2="36" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+  <!-- East (x 35.5 -> 54.5) -->
+  <line x1="35.5" y1="36" x2="54.5" y2="36" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+
+  <!-- Terminal Vias at Compass Points -->
+  <!-- North Via (Primary) -->
+  <circle cx="32" cy="6" r="3.25" stroke="currentColor" stroke-width="1.75" />
+  <circle cx="32" cy="6" r="1" fill="currentColor" />
+  <!-- South Via -->
+  <circle cx="32" cy="58" r="2.75" stroke="currentColor" stroke-width="1.5" />
+  <circle cx="32" cy="58" r="0.9" fill="currentColor" />
+  <!-- West Via -->
+  <circle cx="8" cy="36" r="2.75" stroke="currentColor" stroke-width="1.5" />
+  <circle cx="8" cy="36" r="0.9" fill="currentColor" />
+  <!-- East Via -->
+  <circle cx="56" cy="36" r="2.75" stroke="currentColor" stroke-width="1.5" />
+  <circle cx="56" cy="36" r="0.9" fill="currentColor" />
+
+  <!-- Outer 45° Routed Trace Wings (Star Silhouette) -->
+  <!-- North-West Wing -->
+  <path d="M32 15 L22 25 L22 36" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" />
+  <circle cx="22" cy="25" r="1.75" fill="currentColor" />
+
+  <!-- North-East Wing -->
+  <path d="M32 15 L42 25 L42 36" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" />
+  <circle cx="42" cy="25" r="1.75" fill="currentColor" />
+
+  <!-- South-West Wing -->
+  <path d="M22 36 L22 43 L32 51" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" />
+  <circle cx="22" cy="43" r="1.75" fill="currentColor" />
+
+  <!-- South-East Wing -->
+  <path d="M42 36 L42 43 L32 51" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" />
+  <circle cx="42" cy="43" r="1.75" fill="currentColor" />
+
+  <!-- Inner 45° Concentric Miter Diamond -->
+  <path d="M32 24 L40 32 L40 36 L32 44 L24 36 L24 32 Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter" />
+
+  <!-- Diagonal Satellite Test Via Pads -->
+  <circle cx="27" cy="20" r="1.25" fill="currentColor" />
+  <circle cx="37" cy="20" r="1.25" fill="currentColor" />
+  <circle cx="27" cy="48" r="1.25" fill="currentColor" />
+  <circle cx="37" cy="48" r="1.25" fill="currentColor" />
+</svg>
+</div>
+          <span class="lbl">48px Nav</span>
+        </div>
+        <div class="item-box">
+          <div class="size-200"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Center hub via -->
+  <circle cx="32" cy="36" r="3.5" stroke="currentColor" stroke-width="1.75" />
+  <circle cx="32" cy="36" r="1.25" fill="currentColor" />
+
+  <!-- Main Compass Spines -->
+  <!-- North (Elongated: y 32.5 -> 7.5) -->
+  <line x1="32" y1="32.5" x2="32" y2="7.5" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+  <!-- South (y 39.5 -> 56.5) -->
+  <line x1="32" y1="39.5" x2="32" y2="56.5" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+  <!-- West (x 28.5 -> 9.5) -->
+  <line x1="28.5" y1="36" x2="9.5" y2="36" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+  <!-- East (x 35.5 -> 54.5) -->
+  <line x1="35.5" y1="36" x2="54.5" y2="36" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+
+  <!-- Terminal Vias at Compass Points -->
+  <!-- North Via (Primary) -->
+  <circle cx="32" cy="6" r="3.25" stroke="currentColor" stroke-width="1.75" />
+  <circle cx="32" cy="6" r="1" fill="currentColor" />
+  <!-- South Via -->
+  <circle cx="32" cy="58" r="2.75" stroke="currentColor" stroke-width="1.5" />
+  <circle cx="32" cy="58" r="0.9" fill="currentColor" />
+  <!-- West Via -->
+  <circle cx="8" cy="36" r="2.75" stroke="currentColor" stroke-width="1.5" />
+  <circle cx="8" cy="36" r="0.9" fill="currentColor" />
+  <!-- East Via -->
+  <circle cx="56" cy="36" r="2.75" stroke="currentColor" stroke-width="1.5" />
+  <circle cx="56" cy="36" r="0.9" fill="currentColor" />
+
+  <!-- Outer 45° Routed Trace Wings (Star Silhouette) -->
+  <!-- North-West Wing -->
+  <path d="M32 15 L22 25 L22 36" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" />
+  <circle cx="22" cy="25" r="1.75" fill="currentColor" />
+
+  <!-- North-East Wing -->
+  <path d="M32 15 L42 25 L42 36" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" />
+  <circle cx="42" cy="25" r="1.75" fill="currentColor" />
+
+  <!-- South-West Wing -->
+  <path d="M22 36 L22 43 L32 51" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" />
+  <circle cx="22" cy="43" r="1.75" fill="currentColor" />
+
+  <!-- South-East Wing -->
+  <path d="M42 36 L42 43 L32 51" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" />
+  <circle cx="42" cy="43" r="1.75" fill="currentColor" />
+
+  <!-- Inner 45° Concentric Miter Diamond -->
+  <path d="M32 24 L40 32 L40 36 L32 44 L24 36 L24 32 Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter" />
+
+  <!-- Diagonal Satellite Test Via Pads -->
+  <circle cx="27" cy="20" r="1.25" fill="currentColor" />
+  <circle cx="37" cy="20" r="1.25" fill="currentColor" />
+  <circle cx="27" cy="48" r="1.25" fill="currentColor" />
+  <circle cx="37" cy="48" r="1.25" fill="currentColor" />
+</svg>
+</div>
+          <span class="lbl">200px Hero Glyph</span>
+        </div>
+        <div class="item-box card-box">
+          <div class="size-card-200"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" fill="none" stroke="currentColor">
+  <!-- Outer Border with 45° Angular Corner Notches -->
+  <path d="M 32 16 L 368 16 L 384 32 L 384 568 L 368 584 L 32 584 L 16 568 L 16 32 Z" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter" />
+
+  <!-- Inner Border with 45° Angular Corner Notches -->
+  <path d="M 36 24 L 364 24 L 376 36 L 376 564 L 364 576 L 36 576 L 24 564 L 24 36 Z" stroke-width="1.0" stroke-linecap="square" stroke-linejoin="miter" />
+
+  <!-- Outer Edge Tick Accents -->
+  <line x1="200" y1="12" x2="200" y2="16" stroke-width="1.5" />
+  <line x1="200" y1="584" x2="200" y2="588" stroke-width="1.5" />
+  <line x1="12" y1="300" x2="16" y2="300" stroke-width="1.5" />
+  <line x1="384" y1="300" x2="388" y2="300" stroke-width="1.5" />
+
+  <!-- Top Rule with Centered Roman Numeral Slot -->
+  <!-- Left Rule Segment -->
+  <line x1="24" y1="72" x2="148" y2="72" stroke-width="1.25" stroke-linecap="square" />
+  <line x1="36" y1="76" x2="144" y2="76" stroke-width="0.75" stroke-linecap="square" />
+
+  <!-- Right Rule Segment -->
+  <line x1="252" y1="72" x2="376" y2="72" stroke-width="1.25" stroke-linecap="square" />
+  <line x1="256" y1="76" x2="364" y2="76" stroke-width="0.75" stroke-linecap="square" />
+
+  <!-- Centered Empty Slot / Cartouche Frame for Roman Numeral -->
+  <polygon points="152,72 162,56 238,56 248,72 238,88 162,88" stroke-width="1.5" stroke-linejoin="miter" />
+  <polygon points="156,72 164,60 236,60 244,72 236,84 164,84" stroke-width="0.75" stroke-linejoin="miter" />
+  <!-- Slot Corner Accents -->
+  <circle cx="148" cy="72" r="1.5" fill="currentColor" stroke="none" />
+  <circle cx="252" cy="72" r="1.5" fill="currentColor" stroke="none" />
+
+  <!-- Bottom Title Area Divider Rules -->
+  <line x1="24" y1="514" x2="376" y2="514" stroke-width="1.25" stroke-linecap="square" />
+  <line x1="36" y1="518" x2="364" y2="518" stroke-width="0.75" stroke-linecap="square" />
+
+  <!-- Small PCB-Trace Corner Ornaments (No Occult / No Astrological Symbols) -->
+  <!-- Top-Left Corner Traces -->
+  <g stroke-width="1.0" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M 40 56 L 40 46 L 46 40 L 56 40" />
+    <path d="M 40 46 L 48 46 L 54 40" />
+    <circle cx="59" cy="40" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="40" cy="59" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="51" cy="51" r="1.2" fill="currentColor" stroke="none" />
+  </g>
+
+  <!-- Top-Right Corner Traces -->
+  <g stroke-width="1.0" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M 360 56 L 360 46 L 354 40 L 344 40" />
+    <path d="M 360 46 L 352 46 L 346 40" />
+    <circle cx="341" cy="40" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="360" cy="59" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="349" cy="51" r="1.2" fill="currentColor" stroke="none" />
+  </g>
+
+  <!-- Bottom-Left Corner Traces -->
+  <g stroke-width="1.0" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M 40 544 L 40 554 L 46 560 L 56 560" />
+    <path d="M 40 554 L 48 554 L 54 560" />
+    <circle cx="59" cy="560" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="40" cy="541" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="51" cy="549" r="1.2" fill="currentColor" stroke="none" />
+  </g>
+
+  <!-- Bottom-Right Corner Traces -->
+  <g stroke-width="1.0" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M 360 544 L 360 554 L 354 560 L 344 560" />
+    <path d="M 360 554 L 352 554 L 346 560" />
+    <circle cx="341" cy="560" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="360" cy="541" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="349" cy="549" r="1.2" fill="currentColor" stroke="none" />
+  </g>
+</svg>
+</div>
+          <span class="lbl">200px Card Frame</span>
+        </div>
+      </div>
+
+      <!-- ROW 2: SYSTEM ICONS (16 & 48 px, stroke 1.5, square caps) -->
+      <div class="section-title">2. System Icons (48x48 &amp; 16x16, stroke 1.5, square caps)</div>
+      <div class="icons-grid">
+        <div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- QFP Package Body with pin 1 chamfer -->
+  <path d="M 16 12 L 36 12 L 36 36 L 12 36 L 12 16 Z" />
+  
+  <!-- Pin 1 index dot -->
+  <circle cx="16" cy="16" r="1.25" fill="currentColor" stroke="none" />
+  
+  <!-- Silicon Die Square -->
+  <rect x="20" y="20" width="8" height="8" />
+  <line x1="24" y1="22" x2="24" y2="26" />
+  <line x1="22" y1="24" x2="26" y2="24" />
+
+  <!-- Top Pins -->
+  <line x1="16" y1="12" x2="16" y2="6" />
+  <line x1="20" y1="12" x2="20" y2="6" />
+  <line x1="24" y1="12" x2="24" y2="6" />
+  <line x1="28" y1="12" x2="28" y2="6" />
+  <line x1="32" y1="12" x2="32" y2="6" />
+
+  <!-- Bottom Pins -->
+  <line x1="16" y1="36" x2="16" y2="42" />
+  <line x1="20" y1="36" x2="20" y2="42" />
+  <line x1="24" y1="36" x2="24" y2="42" />
+  <line x1="28" y1="36" x2="28" y2="42" />
+  <line x1="32" y1="36" x2="32" y2="42" />
+
+  <!-- Left Pins -->
+  <line x1="12" y1="16" x2="6" y2="16" />
+  <line x1="12" y1="20" x2="6" y2="20" />
+  <line x1="12" y1="24" x2="6" y2="24" />
+  <line x1="12" y1="28" x2="6" y2="28" />
+  <line x1="12" y1="32" x2="6" y2="32" />
+
+  <!-- Right Pins -->
+  <line x1="36" y1="16" x2="42" y2="16" />
+  <line x1="36" y1="20" x2="42" y2="20" />
+  <line x1="36" y1="24" x2="42" y2="24" />
+  <line x1="36" y1="28" x2="42" y2="28" />
+  <line x1="36" y1="32" x2="42" y2="32" />
+</svg></div><span class="lbl">microchip</span></div><div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Central Switch/Hub Node -->
+  <circle cx="24" cy="24" r="5" />
+  <circle cx="24" cy="24" r="1.5" fill="currentColor" stroke="none" />
+
+  <!-- Outer Distributed Nodes -->
+  <!-- North Node -->
+  <circle cx="24" cy="8" r="3.5" />
+  <circle cx="24" cy="8" r="1.2" fill="currentColor" stroke="none" />
+  <!-- East Node -->
+  <circle cx="40" cy="22" r="3.5" />
+  <circle cx="40" cy="22" r="1.2" fill="currentColor" stroke="none" />
+  <!-- South-East Node -->
+  <circle cx="36" cy="38" r="3.5" />
+  <circle cx="36" cy="38" r="1.2" fill="currentColor" stroke="none" />
+  <!-- South-West Node -->
+  <circle cx="12" cy="38" r="3.5" />
+  <circle cx="12" cy="38" r="1.2" fill="currentColor" stroke="none" />
+  <!-- West Node -->
+  <circle cx="8" cy="22" r="3.5" />
+  <circle cx="8" cy="22" r="1.2" fill="currentColor" stroke="none" />
+
+  <!-- Topology Interconnect Traces (with 45° bends) -->
+  <line x1="24" y1="19" x2="24" y2="11.5" />
+  <line x1="28.5" y1="22.5" x2="36.5" y2="22" />
+  <line x1="19.5" y1="22.5" x2="11.5" y2="22" />
+  <line x1="27.5" y1="27.5" x2="33.5" y2="35.5" />
+  <line x1="20.5" y1="27.5" x2="14.5" y2="35.5" />
+
+  <!-- Mesh Ring Interconnects -->
+  <path d="M 21 6.5 L 10 19" />
+  <path d="M 27 6.5 L 38 19" />
+  <line x1="15.5" y1="38" x2="32.5" y2="38" />
+</svg></div><span class="lbl">network-topology</span></div><div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Cloud Contour -->
+  <path d="M 12 25 C 9 25, 7 22.5, 7 19.5 C 7 16.5, 9.5 14.5, 12.5 14.5 C 13.5 11, 16.5 8, 21 8 C 25.5 8, 29 11, 29.5 14.5 C 31 14, 33 14, 34.5 15 C 37.5 16.5, 39 19, 39 22 C 39 25, 36.5 25, 34 25" />
+
+  <!-- Rack Server Chassis Unit -->
+  <rect x="8" y="27" width="32" height="15" />
+  <!-- Bay Splitter -->
+  <line x1="8" y1="34.5" x2="40" y2="34.5" />
+
+  <!-- Upper Bay Drive Slots & LEDs -->
+  <line x1="12" y1="30.5" x2="26" y2="30.5" />
+  <circle cx="31" cy="30.5" r="1.1" fill="currentColor" stroke="none" />
+  <circle cx="35" cy="30.5" r="1.1" fill="currentColor" stroke="none" />
+
+  <!-- Lower Bay Drive Slots & LEDs -->
+  <line x1="12" y1="38" x2="26" y2="38" />
+  <circle cx="31" cy="38" r="1.1" fill="currentColor" stroke="none" />
+  <circle cx="35" cy="38" r="1.1" fill="currentColor" stroke="none" />
+
+  <!-- Connection Bus Lines -->
+  <line x1="21" y1="25" x2="21" y2="27" />
+  <line x1="27" y1="25" x2="27" y2="27" />
+</svg></div><span class="lbl">cloud-server</span></div><div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Terminal Window Shell -->
+  <rect x="6" y="8" width="36" height="32" />
+
+  <!-- Title / Window Control Header -->
+  <line x1="6" y1="16" x2="42" y2="16" />
+  <!-- Control Dots -->
+  <circle cx="11" cy="12" r="1.2" fill="currentColor" stroke="none" />
+  <circle cx="15.5" cy="12" r="1.2" fill="currentColor" stroke="none" />
+  <circle cx="20" cy="12" r="1.2" fill="currentColor" stroke="none" />
+
+  <!-- Command Prompt Angle Chevron '>' -->
+  <path d="M 13 23 L 19 27.5 L 13 32" stroke-linejoin="miter" />
+
+  <!-- Input Path Line -->
+  <line x1="23" y1="32" x2="29" y2="32" />
+
+  <!-- Solid Block Cursor -->
+  <rect x="30" y="24" width="4" height="8" fill="currentColor" stroke="none" />
+</svg></div><span class="lbl">terminal-prompt</span></div><div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Outer Rim Ring -->
+  <circle cx="24" cy="24" r="13" />
+
+  <!-- Inner Hub Ring -->
+  <circle cx="24" cy="24" r="5" />
+  <circle cx="24" cy="24" r="1.5" fill="currentColor" stroke="none" />
+
+  <!-- 8 Symmetrical Spokes with Projecting Handles (Every 45°) -->
+  <!-- 0° (North) & 180° (South) -->
+  <line x1="24" y1="5" x2="24" y2="19" />
+  <line x1="24" y1="29" x2="24" y2="43" />
+
+  <!-- 90° (East) & 270° (West) -->
+  <line x1="5" y1="24" x2="19" y2="24" />
+  <line x1="29" y1="24" x2="43" y2="24" />
+
+  <!-- 45° (North-East) & 225° (South-West) -->
+  <line x1="10.5" y1="10.5" x2="20.5" y2="20.5" />
+  <line x1="27.5" y1="27.5" x2="37.5" y2="37.5" />
+
+  <!-- 135° (South-East) & 315° (North-West) -->
+  <line x1="37.5" y1="10.5" x2="27.5" y2="20.5" />
+  <line x1="20.5" y1="27.5" x2="10.5" y2="37.5" />
+</svg></div><span class="lbl">orchestration-wheel</span></div><div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Top Scroll Roll -->
+  <path d="M 11 13 C 11 10, 13 8, 16 8 L 36 8 C 38.5 8, 40 9.5, 40 11.5 C 40 13.5, 38.5 15, 36 15 L 12 15" />
+  
+  <!-- Parchment Body -->
+  <line x1="12" y1="15" x2="12" y2="36" />
+  <line x1="38" y1="15" x2="38" y2="34" />
+
+  <!-- Bottom Scroll Roll -->
+  <path d="M 39 34 C 39 37, 37 39, 34 39 L 14 39 C 11.5 39, 10 37.5, 10 35.5 C 10 33.5, 11.5 32, 14 32 L 38 32" />
+
+  <!-- Script Text / Code Lines -->
+  <line x1="17" y1="20" x2="32" y2="20" />
+  <line x1="17" y1="25" x2="32" y2="25" />
+  <line x1="17" y1="30" x2="26" y2="30" />
+
+  <!-- Ribbon Bookmark / Wax Seal Ribbon -->
+  <path d="M 27 39 L 27 44 L 29.5 42 L 32 44 L 32 39" fill="currentColor" stroke="none" />
+</svg></div><span class="lbl">script-scroll</span></div><div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- PCB Substrate Boundary with Corner Chamfer -->
+  <path d="M 12 6 L 42 6 L 42 42 L 6 42 L 6 12 Z" />
+
+  <!-- Central SMD IC Package -->
+  <rect x="15" y="15" width="10" height="10" />
+  <circle cx="18" cy="18" r="0.9" fill="currentColor" stroke="none" />
+
+  <!-- 45° Routed Traces & Vias -->
+  <!-- Trace 1: Chip to Top-Right Via -->
+  <path d="M 25 18 L 32 18 L 36 14 L 36 10" />
+  <circle cx="36" cy="10" r="1.75" />
+  <circle cx="36" cy="10" r="0.8" fill="currentColor" stroke="none" />
+
+  <!-- Trace 2: Chip to Mid-Right Via -->
+  <path d="M 25 22 L 34 22 L 38 26" />
+  <circle cx="38" cy="26" r="1.75" />
+  <circle cx="38" cy="26" r="0.8" fill="currentColor" stroke="none" />
+
+  <!-- Trace 3: Chip to Bottom Bus -->
+  <path d="M 18 25 L 18 31 L 22 35 L 22 42" />
+
+  <!-- Trace 4: Left Side Via -->
+  <path d="M 15 20 L 10 20 L 10 28" />
+  <circle cx="10" cy="28" r="1.75" />
+  <circle cx="10" cy="28" r="0.8" fill="currentColor" stroke="none" />
+
+  <!-- Bottom Connector Gold Fingers -->
+  <line x1="28" y1="37" x2="28" y2="42" />
+  <line x1="34" y1="37" x2="34" y2="42" />
+</svg></div><span class="lbl">circuit-board</span></div><div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Parchment Diploma Sheet with Mitered Corners -->
+  <path d="M 11 6 L 37 6 L 40 9 L 40 39 L 37 42 L 11 42 L 8 39 L 8 9 Z" />
+
+  <!-- Inner Diploma Border -->
+  <rect x="12" y="10" width="24" height="28" />
+
+  <!-- Certificate Heading Bar -->
+  <line x1="16" y1="15" x2="32" y2="15" />
+
+  <!-- Body Content Lines -->
+  <line x1="16" y1="20" x2="32" y2="20" />
+  <line x1="16" y1="24" x2="27" y2="24" />
+  <line x1="16" y1="28" x2="23" y2="28" />
+
+  <!-- Wax Seal in Bottom-Right Corner -->
+  <circle cx="31" cy="31" r="5" stroke="currentColor" stroke-width="1.5" />
+  <circle cx="31" cy="31" r="2.5" />
+  <circle cx="31" cy="31" r="0.9" fill="currentColor" stroke="none" />
+
+  <!-- Seal Ribbon Tails -->
+  <path d="M 28 35 L 26 42 L 28 41 L 30 42 L 29.5 35" fill="currentColor" stroke="none" />
+  <path d="M 32 35 L 32.5 42 L 34 41 L 35.5 42 L 34 35" fill="currentColor" stroke="none" />
+</svg></div><span class="lbl">certificate</span></div>
+      </div>
+      <div class="row-flex micro-icons">
+        <div class="item-box"><div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- QFP Package Body with pin 1 chamfer -->
+  <path d="M 16 12 L 36 12 L 36 36 L 12 36 L 12 16 Z" />
+  
+  <!-- Pin 1 index dot -->
+  <circle cx="16" cy="16" r="1.25" fill="currentColor" stroke="none" />
+  
+  <!-- Silicon Die Square -->
+  <rect x="20" y="20" width="8" height="8" />
+  <line x1="24" y1="22" x2="24" y2="26" />
+  <line x1="22" y1="24" x2="26" y2="24" />
+
+  <!-- Top Pins -->
+  <line x1="16" y1="12" x2="16" y2="6" />
+  <line x1="20" y1="12" x2="20" y2="6" />
+  <line x1="24" y1="12" x2="24" y2="6" />
+  <line x1="28" y1="12" x2="28" y2="6" />
+  <line x1="32" y1="12" x2="32" y2="6" />
+
+  <!-- Bottom Pins -->
+  <line x1="16" y1="36" x2="16" y2="42" />
+  <line x1="20" y1="36" x2="20" y2="42" />
+  <line x1="24" y1="36" x2="24" y2="42" />
+  <line x1="28" y1="36" x2="28" y2="42" />
+  <line x1="32" y1="36" x2="32" y2="42" />
+
+  <!-- Left Pins -->
+  <line x1="12" y1="16" x2="6" y2="16" />
+  <line x1="12" y1="20" x2="6" y2="20" />
+  <line x1="12" y1="24" x2="6" y2="24" />
+  <line x1="12" y1="28" x2="6" y2="28" />
+  <line x1="12" y1="32" x2="6" y2="32" />
+
+  <!-- Right Pins -->
+  <line x1="36" y1="16" x2="42" y2="16" />
+  <line x1="36" y1="20" x2="42" y2="20" />
+  <line x1="36" y1="24" x2="42" y2="24" />
+  <line x1="36" y1="28" x2="42" y2="28" />
+  <line x1="36" y1="32" x2="42" y2="32" />
+</svg></div><span class="lbl">16</span></div><div class="item-box"><div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Central Switch/Hub Node -->
+  <circle cx="24" cy="24" r="5" />
+  <circle cx="24" cy="24" r="1.5" fill="currentColor" stroke="none" />
+
+  <!-- Outer Distributed Nodes -->
+  <!-- North Node -->
+  <circle cx="24" cy="8" r="3.5" />
+  <circle cx="24" cy="8" r="1.2" fill="currentColor" stroke="none" />
+  <!-- East Node -->
+  <circle cx="40" cy="22" r="3.5" />
+  <circle cx="40" cy="22" r="1.2" fill="currentColor" stroke="none" />
+  <!-- South-East Node -->
+  <circle cx="36" cy="38" r="3.5" />
+  <circle cx="36" cy="38" r="1.2" fill="currentColor" stroke="none" />
+  <!-- South-West Node -->
+  <circle cx="12" cy="38" r="3.5" />
+  <circle cx="12" cy="38" r="1.2" fill="currentColor" stroke="none" />
+  <!-- West Node -->
+  <circle cx="8" cy="22" r="3.5" />
+  <circle cx="8" cy="22" r="1.2" fill="currentColor" stroke="none" />
+
+  <!-- Topology Interconnect Traces (with 45° bends) -->
+  <line x1="24" y1="19" x2="24" y2="11.5" />
+  <line x1="28.5" y1="22.5" x2="36.5" y2="22" />
+  <line x1="19.5" y1="22.5" x2="11.5" y2="22" />
+  <line x1="27.5" y1="27.5" x2="33.5" y2="35.5" />
+  <line x1="20.5" y1="27.5" x2="14.5" y2="35.5" />
+
+  <!-- Mesh Ring Interconnects -->
+  <path d="M 21 6.5 L 10 19" />
+  <path d="M 27 6.5 L 38 19" />
+  <line x1="15.5" y1="38" x2="32.5" y2="38" />
+</svg></div><span class="lbl">16</span></div><div class="item-box"><div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Cloud Contour -->
+  <path d="M 12 25 C 9 25, 7 22.5, 7 19.5 C 7 16.5, 9.5 14.5, 12.5 14.5 C 13.5 11, 16.5 8, 21 8 C 25.5 8, 29 11, 29.5 14.5 C 31 14, 33 14, 34.5 15 C 37.5 16.5, 39 19, 39 22 C 39 25, 36.5 25, 34 25" />
+
+  <!-- Rack Server Chassis Unit -->
+  <rect x="8" y="27" width="32" height="15" />
+  <!-- Bay Splitter -->
+  <line x1="8" y1="34.5" x2="40" y2="34.5" />
+
+  <!-- Upper Bay Drive Slots & LEDs -->
+  <line x1="12" y1="30.5" x2="26" y2="30.5" />
+  <circle cx="31" cy="30.5" r="1.1" fill="currentColor" stroke="none" />
+  <circle cx="35" cy="30.5" r="1.1" fill="currentColor" stroke="none" />
+
+  <!-- Lower Bay Drive Slots & LEDs -->
+  <line x1="12" y1="38" x2="26" y2="38" />
+  <circle cx="31" cy="38" r="1.1" fill="currentColor" stroke="none" />
+  <circle cx="35" cy="38" r="1.1" fill="currentColor" stroke="none" />
+
+  <!-- Connection Bus Lines -->
+  <line x1="21" y1="25" x2="21" y2="27" />
+  <line x1="27" y1="25" x2="27" y2="27" />
+</svg></div><span class="lbl">16</span></div><div class="item-box"><div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Terminal Window Shell -->
+  <rect x="6" y="8" width="36" height="32" />
+
+  <!-- Title / Window Control Header -->
+  <line x1="6" y1="16" x2="42" y2="16" />
+  <!-- Control Dots -->
+  <circle cx="11" cy="12" r="1.2" fill="currentColor" stroke="none" />
+  <circle cx="15.5" cy="12" r="1.2" fill="currentColor" stroke="none" />
+  <circle cx="20" cy="12" r="1.2" fill="currentColor" stroke="none" />
+
+  <!-- Command Prompt Angle Chevron '>' -->
+  <path d="M 13 23 L 19 27.5 L 13 32" stroke-linejoin="miter" />
+
+  <!-- Input Path Line -->
+  <line x1="23" y1="32" x2="29" y2="32" />
+
+  <!-- Solid Block Cursor -->
+  <rect x="30" y="24" width="4" height="8" fill="currentColor" stroke="none" />
+</svg></div><span class="lbl">16</span></div><div class="item-box"><div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Outer Rim Ring -->
+  <circle cx="24" cy="24" r="13" />
+
+  <!-- Inner Hub Ring -->
+  <circle cx="24" cy="24" r="5" />
+  <circle cx="24" cy="24" r="1.5" fill="currentColor" stroke="none" />
+
+  <!-- 8 Symmetrical Spokes with Projecting Handles (Every 45°) -->
+  <!-- 0° (North) & 180° (South) -->
+  <line x1="24" y1="5" x2="24" y2="19" />
+  <line x1="24" y1="29" x2="24" y2="43" />
+
+  <!-- 90° (East) & 270° (West) -->
+  <line x1="5" y1="24" x2="19" y2="24" />
+  <line x1="29" y1="24" x2="43" y2="24" />
+
+  <!-- 45° (North-East) & 225° (South-West) -->
+  <line x1="10.5" y1="10.5" x2="20.5" y2="20.5" />
+  <line x1="27.5" y1="27.5" x2="37.5" y2="37.5" />
+
+  <!-- 135° (South-East) & 315° (North-West) -->
+  <line x1="37.5" y1="10.5" x2="27.5" y2="20.5" />
+  <line x1="20.5" y1="27.5" x2="10.5" y2="37.5" />
+</svg></div><span class="lbl">16</span></div><div class="item-box"><div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Top Scroll Roll -->
+  <path d="M 11 13 C 11 10, 13 8, 16 8 L 36 8 C 38.5 8, 40 9.5, 40 11.5 C 40 13.5, 38.5 15, 36 15 L 12 15" />
+  
+  <!-- Parchment Body -->
+  <line x1="12" y1="15" x2="12" y2="36" />
+  <line x1="38" y1="15" x2="38" y2="34" />
+
+  <!-- Bottom Scroll Roll -->
+  <path d="M 39 34 C 39 37, 37 39, 34 39 L 14 39 C 11.5 39, 10 37.5, 10 35.5 C 10 33.5, 11.5 32, 14 32 L 38 32" />
+
+  <!-- Script Text / Code Lines -->
+  <line x1="17" y1="20" x2="32" y2="20" />
+  <line x1="17" y1="25" x2="32" y2="25" />
+  <line x1="17" y1="30" x2="26" y2="30" />
+
+  <!-- Ribbon Bookmark / Wax Seal Ribbon -->
+  <path d="M 27 39 L 27 44 L 29.5 42 L 32 44 L 32 39" fill="currentColor" stroke="none" />
+</svg></div><span class="lbl">16</span></div><div class="item-box"><div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- PCB Substrate Boundary with Corner Chamfer -->
+  <path d="M 12 6 L 42 6 L 42 42 L 6 42 L 6 12 Z" />
+
+  <!-- Central SMD IC Package -->
+  <rect x="15" y="15" width="10" height="10" />
+  <circle cx="18" cy="18" r="0.9" fill="currentColor" stroke="none" />
+
+  <!-- 45° Routed Traces & Vias -->
+  <!-- Trace 1: Chip to Top-Right Via -->
+  <path d="M 25 18 L 32 18 L 36 14 L 36 10" />
+  <circle cx="36" cy="10" r="1.75" />
+  <circle cx="36" cy="10" r="0.8" fill="currentColor" stroke="none" />
+
+  <!-- Trace 2: Chip to Mid-Right Via -->
+  <path d="M 25 22 L 34 22 L 38 26" />
+  <circle cx="38" cy="26" r="1.75" />
+  <circle cx="38" cy="26" r="0.8" fill="currentColor" stroke="none" />
+
+  <!-- Trace 3: Chip to Bottom Bus -->
+  <path d="M 18 25 L 18 31 L 22 35 L 22 42" />
+
+  <!-- Trace 4: Left Side Via -->
+  <path d="M 15 20 L 10 20 L 10 28" />
+  <circle cx="10" cy="28" r="1.75" />
+  <circle cx="10" cy="28" r="0.8" fill="currentColor" stroke="none" />
+
+  <!-- Bottom Connector Gold Fingers -->
+  <line x1="28" y1="37" x2="28" y2="42" />
+  <line x1="34" y1="37" x2="34" y2="42" />
+</svg></div><span class="lbl">16</span></div><div class="item-box"><div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Parchment Diploma Sheet with Mitered Corners -->
+  <path d="M 11 6 L 37 6 L 40 9 L 40 39 L 37 42 L 11 42 L 8 39 L 8 9 Z" />
+
+  <!-- Inner Diploma Border -->
+  <rect x="12" y="10" width="24" height="28" />
+
+  <!-- Certificate Heading Bar -->
+  <line x1="16" y1="15" x2="32" y2="15" />
+
+  <!-- Body Content Lines -->
+  <line x1="16" y1="20" x2="32" y2="20" />
+  <line x1="16" y1="24" x2="27" y2="24" />
+  <line x1="16" y1="28" x2="23" y2="28" />
+
+  <!-- Wax Seal in Bottom-Right Corner -->
+  <circle cx="31" cy="31" r="5" stroke="currentColor" stroke-width="1.5" />
+  <circle cx="31" cy="31" r="2.5" />
+  <circle cx="31" cy="31" r="0.9" fill="currentColor" stroke="none" />
+
+  <!-- Seal Ribbon Tails -->
+  <path d="M 28 35 L 26 42 L 28 41 L 30 42 L 29.5 35" fill="currentColor" stroke="none" />
+  <path d="M 32 35 L 32.5 42 L 34 41 L 35.5 42 L 34 35" fill="currentColor" stroke="none" />
+</svg></div><span class="lbl">16</span></div>
+      </div>
+
+      <!-- ROW 3: MANGA / SUMI-E INK ELEMENTS (48 & 200 px, organic, <8KB) -->
+      <div class="section-title">3. Manga / Sumi-e Ink Elements (48 &amp; 200 px, organic, &lt;8KB)</div>
+      <div class="row-flex ink-row">
+        <div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="currentColor">
+  <!-- ink-01: Big Splash -->
+  <path fill-rule="evenodd" d="M 156.0 120.0 C 157.6 121.5, 151.7 121.4, 160.1 125.3 C 168.5 129.1, 206.9 141.5, 206.3 143.1 C 205.7 144.8, 166.1 136.2, 156.7 135.2 C 147.2 134.2, 150.7 135.8, 149.4 137.0 C 148.2 138.2, 151.9 143.0, 149.4 142.5 C 146.8 142.1, 133.9 131.2, 134.2 134.2 C 134.5 137.2, 152.1 160.5, 151.1 160.6 C 150.2 160.7, 132.4 138.3, 128.5 134.8 C 124.7 131.3, 128.4 137.8, 128.2 139.8 C 128.0 141.8, 127.5 142.3, 127.2 146.9 C 126.9 151.4, 127.4 165.1, 126.2 167.0 C 125.0 168.8, 123.0 151.1, 120.0 158.0 C 117.0 164.9, 109.9 209.1, 108.3 208.7 C 106.8 208.2, 110.7 164.9, 110.6 155.1 C 110.5 145.3, 108.4 151.7, 107.6 150.0 C 106.7 148.4, 108.2 143.9, 105.5 145.2 C 102.7 146.5, 91.9 158.7, 90.9 157.9 C 90.0 157.1, 106.5 137.7, 99.8 140.2 C 93.1 142.8, 52.1 173.8, 50.6 173.3 C 49.1 172.7, 84.4 143.6, 90.6 137.0 C 96.7 130.4, 88.1 134.8, 87.6 133.4 C 87.1 132.0, 89.0 130.0, 87.7 128.7 C 86.3 127.3, 78.3 126.7, 79.7 125.3 C 81.1 123.9, 99.1 122.2, 96.0 120.0 C 92.9 117.8, 60.1 113.0, 61.2 112.3 C 62.3 111.5, 95.9 115.3, 102.6 115.3 C 109.3 115.3, 102.1 113.6, 101.2 112.2 C 100.4 110.8, 100.1 110.1, 97.5 107.0 C 94.8 103.9, 86.2 95.9, 85.3 93.3 C 84.3 90.8, 93.7 97.4, 91.8 91.8 C 89.9 86.2, 72.5 61.1, 73.7 59.6 C 74.8 58.1, 93.3 78.7, 98.5 82.8 C 103.8 86.9, 103.0 83.3, 105.2 84.3 C 107.4 85.4, 109.8 87.3, 111.7 88.9 C 113.6 90.6, 115.2 95.7, 116.6 94.3 C 118.0 92.9, 119.0 79.7, 120.0 80.4 C 121.0 81.2, 120.6 100.2, 122.8 98.8 C 124.9 97.4, 131.6 72.8, 132.8 72.1 C 134.1 71.4, 130.1 91.1, 130.5 94.6 C 131.0 98.1, 133.9 93.3, 135.5 93.2 C 137.0 93.2, 137.1 95.1, 139.7 94.3 C 142.4 93.5, 150.9 87.2, 151.4 88.6 C 151.9 90.0, 137.4 103.4, 142.8 102.5 C 148.2 101.6, 183.8 81.8, 183.9 83.1 C 183.9 84.5, 149.4 105.5, 143.0 110.5 C 136.6 115.5, 144.4 112.2, 145.6 113.1 C 146.8 114.1, 148.7 114.9, 150.4 116.0 C 152.1 117.1, 154.4 118.5, 156.0 120.0" />
+  <g>
+    <circle cx="48.0" cy="99.1" r="3.7" /><circle cx="143.8" cy="59.2" r="4.7" /><circle cx="94.3" cy="43.9" r="1.9" /><circle cx="197.3" cy="98.7" r="1.6" /><circle cx="204.7" cy="178.9" r="3.8" /><circle cx="154.4" cy="28.4" r="3.5" /><circle cx="200.9" cy="106.2" r="3.6" /><circle cx="164.4" cy="38.5" r="4.9" /><circle cx="34.5" cy="74.8" r="1.4" /><circle cx="130.8" cy="197.3" r="1.5" /><circle cx="127.5" cy="189.1" r="2.4" /><circle cx="66.4" cy="58.7" r="2.8" /><circle cx="139.4" cy="194.5" r="5.2" /><circle cx="64.8" cy="45.9" r="1.9" /><circle cx="110.5" cy="48.3" r="2.8" /><circle cx="213.6" cy="113.8" r="3.6" /><circle cx="78.9" cy="25.6" r="4.5" /><circle cx="128.7" cy="185.9" r="2.6" /><circle cx="111.7" cy="194.0" r="5.3" /><circle cx="176.5" cy="64.5" r="4.0" /><circle cx="35.9" cy="184.7" r="3.2" /><circle cx="112.9" cy="195.8" r="3.6" /><circle cx="112.7" cy="211.0" r="5.1" /><circle cx="59.6" cy="164.2" r="5.5" /><circle cx="51.0" cy="115.9" r="1.4" /><circle cx="192.0" cy="179.3" r="4.6" /><circle cx="60.1" cy="151.9" r="2.8" /><circle cx="208.8" cy="117.8" r="5.4" />
+  </g>
+</svg></div><span class="lbl">splash</span></div>
+        <div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" fill="currentColor">
+  <!-- ink-02: Dry Horizontal Brush Stroke -->
+  <path d="M 20 22.3 L 30.0 24.6 L 40.0 23.1 L 50.0 22.5 L 60.0 23.5 L 70.0 23.6 L 80.0 23.3 L 90.0 23.9 L 100.0 26.0 L 110.0 26.2 L 120.0 27.2 L 130.0 27.8 L 140.0 25.8 L 150.0 30.5 L 160.0 32.5 L 170.0 28.7 L 180.0 29.2 L 190.0 25.9 L 200.0 30.7 L 210.0 26.1 L 220.0 26.0 L 230.0 27.4 L 240.0 27.7 L 250.0 27.3 L 260.0 33.5 L 270.0 32.7 L 280.0 31.0 L 290.0 28.8 L 300.0 33.3 L 305 38 L 298 42 L 312 45 L 295 48 L 300.0 51.5 L 290.0 54.3 L 280.0 54.9 L 270.0 51.0 L 260.0 50.4 L 250.0 54.4 L 240.0 48.6 L 230.0 49.0 L 220.0 54.7 L 210.0 56.5 L 200.0 53.7 L 190.0 55.2 L 180.0 57.3 L 170.0 55.6 L 160.0 55.7 L 150.0 58.1 L 140.0 59.5 L 130.0 55.9 L 120.0 55.5 L 110.0 58.6 L 100.0 57.6 L 90.0 59.5 L 80.0 56.2 L 70.0 60.5 L 60.0 59.0 L 50.0 56.7 L 40.0 58.8 L 30.0 59.8 L 20.0 56.8 Z" /><path d="M 60 22 C 100 21, 160 23, 220 27 C 240 28, 270 30, 288 32 C 265 31, 210 27, 150 25 C 100 24, 65 24, 60 22 Z" /><path d="M 140 18 C 180 19, 230 22, 275 26 C 245 25, 200 22, 160 20 Z" /><path d="M 90 38 C 140 37, 210 40, 260 43 C 220 42, 150 39, 100 39 Z" /><path d="M 45 46 C 110 45, 180 48, 245 51 C 190 49, 120 47, 60 48 Z" /><path d="M 80 58 C 140 57, 200 55, 270 51 C 230 53, 160 56, 105 58 Z" /><path d="M 170 63 C 210 60, 250 56, 292 52 C 260 55, 220 59, 185 62 Z" />
+  <g>
+    <circle cx="26.7" cy="16.7" r="0.8" /><circle cx="123.5" cy="65.0" r="2.0" /><circle cx="264.0" cy="18.7" r="1.8" /><circle cx="245.7" cy="57.3" r="1.9" /><circle cx="65.0" cy="22.0" r="1.9" /><circle cx="235.4" cy="62.0" r="1.4" /><circle cx="278.5" cy="19.8" r="2.1" /><circle cx="260.0" cy="17.1" r="2.1" /><circle cx="96.3" cy="23.4" r="1.0" /><circle cx="304.6" cy="62.5" r="1.2" /><circle cx="278.0" cy="12.7" r="1.7" />
+  </g>
+</svg></div><span class="lbl">dry-brush</span></div>
+        <div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="currentColor">
+  <!-- ink-03: Diagonal Slash -->
+  <path d="M 28 20 C 20 28, 24 45, 36 48 C 52 56, 75 88, 105 120 C 135 152, 172 186, 218 218 C 214 212, 185 174, 155 138 C 125 102, 92 64, 62 38 C 48 26, 38 18, 28 20 Z" />
+  <path d="M 52 28 C 78 54, 118 96, 168 148 C 148 128, 108 86, 72 48 Z" /><path d="M 125 152 C 155 184, 192 216, 212 230 C 195 215, 162 182, 138 156 Z" /><circle cx="82" cy="54" r="2.8" /><circle cx="108" cy="76" r="2.2" /><circle cx="148" cy="116" r="3.2" /><circle cx="178" cy="144" r="2.5" /><circle cx="204" cy="182" r="2.0" /><circle cx="226" cy="214" r="3.0" /><circle cx="232" cy="228" r="1.8" /><circle cx="218" cy="235" r="1.4" /><circle cx="38" cy="62" r="2.4" /><circle cx="22" cy="48" r="3.5" /><circle cx="16" cy="32" r="2.0" />
+</svg></div><span class="lbl">slash</span></div>
+        <div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="currentColor">
+  <!-- ink-04: Droplet Cluster -->
+  <path d="M 68 56 C 76 55, 85 62, 86 70 C 87 79, 80 88, 71 89 C 61 90, 52 82, 53 73 C 54 63, 60 57, 68 56 Z" /><ellipse cx="42" cy="52" rx="6.5" ry="5.7" transform="rotate(22 42 52)" /><ellipse cx="96" cy="58" rx="7.2" ry="6.3" transform="rotate(103 96 58)" /><ellipse cx="54" cy="104" rx="8.0" ry="7.0" transform="rotate(0 54 104)" /><ellipse cx="92" cy="98" rx="6.8" ry="6.0" transform="rotate(132 92 98)" /><ellipse cx="116" cy="78" rx="5.5" ry="4.8" transform="rotate(23 116 78)" /><ellipse cx="38" cy="86" rx="5.0" ry="4.4" transform="rotate(174 38 86)" /><ellipse cx="82" cy="38" rx="4.8" ry="4.2" transform="rotate(152 82 38)" /><ellipse cx="112" cy="114" rx="5.2" ry="4.6" transform="rotate(24 112 114)" /><circle cx="43.2" cy="97.0" r="1.0" /><circle cx="42.9" cy="23.8" r="1.9" /><circle cx="90.5" cy="113.7" r="2.2" /><circle cx="92.8" cy="122.1" r="1.1" /><circle cx="100.3" cy="106.1" r="1.7" /><circle cx="104.3" cy="84.6" r="1.5" /><circle cx="19.4" cy="59.4" r="1.2" /><circle cx="89.9" cy="87.1" r="3.2" /><circle cx="30.3" cy="43.8" r="2.1" /><circle cx="115.8" cy="111.4" r="2.6" /><circle cx="56.2" cy="128.3" r="2.5" /><circle cx="53.4" cy="44.4" r="1.3" /><circle cx="102.5" cy="72.1" r="1.2" /><circle cx="70.3" cy="107.5" r="2.0" /><circle cx="101.5" cy="83.1" r="1.6" /><circle cx="112.3" cy="77.8" r="3.2" /><circle cx="45.9" cy="72.7" r="3.1" /><circle cx="113.0" cy="40.5" r="3.1" /><circle cx="26.3" cy="59.7" r="2.1" /><circle cx="103.8" cy="62.1" r="1.9" /><circle cx="91.3" cy="120.9" r="0.9" /><circle cx="115.2" cy="69.8" r="1.8" /><circle cx="44.2" cy="93.0" r="3.2" /><circle cx="45.0" cy="92.1" r="2.4" /><circle cx="39.5" cy="81.0" r="1.2" /><circle cx="117.2" cy="106.1" r="1.0" /><circle cx="74.5" cy="36.2" r="2.7" /><circle cx="15.3" cy="101.3" r="1.0" /><circle cx="71.5" cy="32.7" r="1.9" /><circle cx="24.5" cy="84.1" r="2.0" /><circle cx="25.1" cy="114.3" r="2.0" /><circle cx="112.7" cy="68.6" r="3.0" /><circle cx="36.7" cy="87.3" r="1.6" /><circle cx="49.2" cy="87.1" r="2.2" /><circle cx="34.8" cy="72.1" r="1.1" /><circle cx="53.1" cy="17.6" r="0.7" /><circle cx="62.9" cy="41.0" r="2.9" /><circle cx="111.6" cy="95.9" r="2.0" /><circle cx="84.4" cy="90.4" r="1.3" /><circle cx="48.4" cy="115.0" r="1.0" /><circle cx="66.3" cy="33.9" r="1.3" /><circle cx="125.5" cy="76.5" r="1.9" /><circle cx="67.9" cy="58.5" r="1.3" /><circle cx="94.9" cy="18.8" r="1.7" /><circle cx="83.0" cy="88.6" r="3.1" />
+</svg></div><span class="lbl">droplets</span></div>
+        <div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="currentColor">
+  <!-- ink-05: Broken Circular Stroke (Ensō) -->
+  <path d="M 45.1 150.3 L 38.6 142.9 L 33.3 134.7 L 28.6 125.9 L 25.1 116.5 L 24.2 106.5 L 23.3 96.5 L 24.0 86.4 L 26.1 76.5 L 30.9 67.5 L 35.4 58.5 L 40.6 49.7 L 47.5 42.2 L 55.3 35.6 L 64.5 31.0 L 73.6 26.2 L 83.7 24.2 L 93.7 22.9 L 103.9 21.4 L 114.1 23.2 L 123.9 26.0 L 133.1 30.3 L 142.5 34.5 L 150.9 40.4 L 158.0 47.7 L 164.0 56.1 L 169.0 64.9 L 172.5 74.4 L 175.1 84.1 L 176.2 94.1 L 176.4 104.2 L 175.4 114.1 L 172.0 123.6 L 167.9 132.6 L 162.3 140.7 L 156.4 148.5 L 149.1 155.0 L 141.8 161.4 L 133.2 165.9 L 124.0 168.9 L 114.7 171.1 L 138 48 L 134 52 L 142 56 L 112.8 161.7 L 120.5 159.0 L 127.9 155.3 L 134.8 151.1 L 140.9 145.8 L 146.9 140.4 L 150.8 133.2 L 155.1 126.5 L 156.8 118.6 L 159.6 111.2 L 159.4 103.2 L 158.7 95.5 L 157.4 87.9 L 156.3 80.1 L 151.8 73.6 L 148.4 66.7 L 143.8 60.6 L 137.4 56.2 L 131.6 51.3 L 124.7 48.0 L 117.8 44.9 L 110.6 42.3 L 102.9 41.6 L 95.3 41.8 L 87.9 43.7 L 80.5 45.5 L 73.2 47.8 L 66.6 51.8 L 60.4 56.4 L 54.7 61.7 L 50.2 68.0 L 47.0 75.1 L 44.0 82.2 L 40.9 89.4 L 40.2 97.3 L 40.4 105.1 L 40.9 113.0 L 44.0 120.3 L 45.9 128.1 L 50.0 135.0 L 54.6 141.6 Z" />
+  <path d="M 136 44 C 145 42, 154 44, 160 48 C 152 46, 142 45, 134 46 Z" /><path d="M 148 52 C 158 56, 166 64, 170 72 C 164 65, 156 58, 145 54 Z" /><path d="M 45 85 C 42 75, 44 65, 52 54 C 47 62, 45 72, 47 82 Z" /><circle cx="168" cy="56" r="2.5" /><circle cx="178" cy="74" r="2.0" /><circle cx="184" cy="98" r="3.0" /><circle cx="156" cy="38" r="1.8" /><circle cx="132" cy="32" r="2.2" /><circle cx="36" cy="128" r="2.8" /><circle cx="48" cy="154" r="2.2" /><circle cx="72" cy="178" r="3.2" />
+</svg></div><span class="lbl">ensō</span></div>
+        <div class="item-box"><div class="size-200-ink"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="currentColor">
+  <!-- ink-01: Big Splash -->
+  <path fill-rule="evenodd" d="M 156.0 120.0 C 157.6 121.5, 151.7 121.4, 160.1 125.3 C 168.5 129.1, 206.9 141.5, 206.3 143.1 C 205.7 144.8, 166.1 136.2, 156.7 135.2 C 147.2 134.2, 150.7 135.8, 149.4 137.0 C 148.2 138.2, 151.9 143.0, 149.4 142.5 C 146.8 142.1, 133.9 131.2, 134.2 134.2 C 134.5 137.2, 152.1 160.5, 151.1 160.6 C 150.2 160.7, 132.4 138.3, 128.5 134.8 C 124.7 131.3, 128.4 137.8, 128.2 139.8 C 128.0 141.8, 127.5 142.3, 127.2 146.9 C 126.9 151.4, 127.4 165.1, 126.2 167.0 C 125.0 168.8, 123.0 151.1, 120.0 158.0 C 117.0 164.9, 109.9 209.1, 108.3 208.7 C 106.8 208.2, 110.7 164.9, 110.6 155.1 C 110.5 145.3, 108.4 151.7, 107.6 150.0 C 106.7 148.4, 108.2 143.9, 105.5 145.2 C 102.7 146.5, 91.9 158.7, 90.9 157.9 C 90.0 157.1, 106.5 137.7, 99.8 140.2 C 93.1 142.8, 52.1 173.8, 50.6 173.3 C 49.1 172.7, 84.4 143.6, 90.6 137.0 C 96.7 130.4, 88.1 134.8, 87.6 133.4 C 87.1 132.0, 89.0 130.0, 87.7 128.7 C 86.3 127.3, 78.3 126.7, 79.7 125.3 C 81.1 123.9, 99.1 122.2, 96.0 120.0 C 92.9 117.8, 60.1 113.0, 61.2 112.3 C 62.3 111.5, 95.9 115.3, 102.6 115.3 C 109.3 115.3, 102.1 113.6, 101.2 112.2 C 100.4 110.8, 100.1 110.1, 97.5 107.0 C 94.8 103.9, 86.2 95.9, 85.3 93.3 C 84.3 90.8, 93.7 97.4, 91.8 91.8 C 89.9 86.2, 72.5 61.1, 73.7 59.6 C 74.8 58.1, 93.3 78.7, 98.5 82.8 C 103.8 86.9, 103.0 83.3, 105.2 84.3 C 107.4 85.4, 109.8 87.3, 111.7 88.9 C 113.6 90.6, 115.2 95.7, 116.6 94.3 C 118.0 92.9, 119.0 79.7, 120.0 80.4 C 121.0 81.2, 120.6 100.2, 122.8 98.8 C 124.9 97.4, 131.6 72.8, 132.8 72.1 C 134.1 71.4, 130.1 91.1, 130.5 94.6 C 131.0 98.1, 133.9 93.3, 135.5 93.2 C 137.0 93.2, 137.1 95.1, 139.7 94.3 C 142.4 93.5, 150.9 87.2, 151.4 88.6 C 151.9 90.0, 137.4 103.4, 142.8 102.5 C 148.2 101.6, 183.8 81.8, 183.9 83.1 C 183.9 84.5, 149.4 105.5, 143.0 110.5 C 136.6 115.5, 144.4 112.2, 145.6 113.1 C 146.8 114.1, 148.7 114.9, 150.4 116.0 C 152.1 117.1, 154.4 118.5, 156.0 120.0" />
+  <g>
+    <circle cx="48.0" cy="99.1" r="3.7" /><circle cx="143.8" cy="59.2" r="4.7" /><circle cx="94.3" cy="43.9" r="1.9" /><circle cx="197.3" cy="98.7" r="1.6" /><circle cx="204.7" cy="178.9" r="3.8" /><circle cx="154.4" cy="28.4" r="3.5" /><circle cx="200.9" cy="106.2" r="3.6" /><circle cx="164.4" cy="38.5" r="4.9" /><circle cx="34.5" cy="74.8" r="1.4" /><circle cx="130.8" cy="197.3" r="1.5" /><circle cx="127.5" cy="189.1" r="2.4" /><circle cx="66.4" cy="58.7" r="2.8" /><circle cx="139.4" cy="194.5" r="5.2" /><circle cx="64.8" cy="45.9" r="1.9" /><circle cx="110.5" cy="48.3" r="2.8" /><circle cx="213.6" cy="113.8" r="3.6" /><circle cx="78.9" cy="25.6" r="4.5" /><circle cx="128.7" cy="185.9" r="2.6" /><circle cx="111.7" cy="194.0" r="5.3" /><circle cx="176.5" cy="64.5" r="4.0" /><circle cx="35.9" cy="184.7" r="3.2" /><circle cx="112.9" cy="195.8" r="3.6" /><circle cx="112.7" cy="211.0" r="5.1" /><circle cx="59.6" cy="164.2" r="5.5" /><circle cx="51.0" cy="115.9" r="1.4" /><circle cx="192.0" cy="179.3" r="4.6" /><circle cx="60.1" cy="151.9" r="2.8" /><circle cx="208.8" cy="117.8" r="5.4" />
+  </g>
+</svg></div><span class="lbl">splash 200</span></div>
+        <div class="item-box"><div class="size-200-ink"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="currentColor">
+  <!-- ink-05: Broken Circular Stroke (Ensō) -->
+  <path d="M 45.1 150.3 L 38.6 142.9 L 33.3 134.7 L 28.6 125.9 L 25.1 116.5 L 24.2 106.5 L 23.3 96.5 L 24.0 86.4 L 26.1 76.5 L 30.9 67.5 L 35.4 58.5 L 40.6 49.7 L 47.5 42.2 L 55.3 35.6 L 64.5 31.0 L 73.6 26.2 L 83.7 24.2 L 93.7 22.9 L 103.9 21.4 L 114.1 23.2 L 123.9 26.0 L 133.1 30.3 L 142.5 34.5 L 150.9 40.4 L 158.0 47.7 L 164.0 56.1 L 169.0 64.9 L 172.5 74.4 L 175.1 84.1 L 176.2 94.1 L 176.4 104.2 L 175.4 114.1 L 172.0 123.6 L 167.9 132.6 L 162.3 140.7 L 156.4 148.5 L 149.1 155.0 L 141.8 161.4 L 133.2 165.9 L 124.0 168.9 L 114.7 171.1 L 138 48 L 134 52 L 142 56 L 112.8 161.7 L 120.5 159.0 L 127.9 155.3 L 134.8 151.1 L 140.9 145.8 L 146.9 140.4 L 150.8 133.2 L 155.1 126.5 L 156.8 118.6 L 159.6 111.2 L 159.4 103.2 L 158.7 95.5 L 157.4 87.9 L 156.3 80.1 L 151.8 73.6 L 148.4 66.7 L 143.8 60.6 L 137.4 56.2 L 131.6 51.3 L 124.7 48.0 L 117.8 44.9 L 110.6 42.3 L 102.9 41.6 L 95.3 41.8 L 87.9 43.7 L 80.5 45.5 L 73.2 47.8 L 66.6 51.8 L 60.4 56.4 L 54.7 61.7 L 50.2 68.0 L 47.0 75.1 L 44.0 82.2 L 40.9 89.4 L 40.2 97.3 L 40.4 105.1 L 40.9 113.0 L 44.0 120.3 L 45.9 128.1 L 50.0 135.0 L 54.6 141.6 Z" />
+  <path d="M 136 44 C 145 42, 154 44, 160 48 C 152 46, 142 45, 134 46 Z" /><path d="M 148 52 C 158 56, 166 64, 170 72 C 164 65, 156 58, 145 54 Z" /><path d="M 45 85 C 42 75, 44 65, 52 54 C 47 62, 45 72, 47 82 Z" /><circle cx="168" cy="56" r="2.5" /><circle cx="178" cy="74" r="2.0" /><circle cx="184" cy="98" r="3.0" /><circle cx="156" cy="38" r="1.8" /><circle cx="132" cy="32" r="2.2" /><circle cx="36" cy="128" r="2.8" /><circle cx="48" cy="154" r="2.2" /><circle cx="72" cy="178" r="3.2" />
+</svg></div><span class="lbl">ensō 200</span></div>
+      </div>
+    </div>
+    
+    
+    <div class="theme-col light-theme">
+      <div class="col-header">
+        <h1>Atlus Assets Spec · Light</h1>
+        <span class="badge">#f4f4f0</span>
+      </div>
+
+      <!-- ROW 1: TRACESTAR (16 / 48 / 200) & CYBERNETIC CARD FRAME (200px) -->
+      <div class="section-title">1. TraceStar Glyph (16/48/200) &amp; Card Frame (200px)</div>
+      <div class="row-flex">
+        <div class="item-box">
+          <div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
+  <!-- Main compass spines -->
+  <line x1="8" y1="3" x2="8" y2="13.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" />
+  <line x1="3.5" y1="9" x2="12.5" y2="9" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" />
+
+  <!-- 45° Inner trace diamond -->
+  <path d="M8 4.5 L11.5 8 L11.5 9 L8 12.5 L4.5 9 L4.5 8 Z" stroke="currentColor" stroke-width="1" stroke-linejoin="miter" />
+
+  <!-- Center via -->
+  <circle cx="8" cy="9" r="1.2" fill="currentColor" />
+
+  <!-- Terminal Vias (North longer at y=1.5) -->
+  <circle cx="8" cy="1.6" r="1.4" fill="currentColor" />
+  <circle cx="8" cy="14.4" r="1.1" fill="currentColor" />
+  <circle cx="1.6" cy="9" r="1.1" fill="currentColor" />
+  <circle cx="14.4" cy="9" r="1.1" fill="currentColor" />
+</svg>
+</div>
+          <span class="lbl">16px Favicon</span>
+        </div>
+        <div class="item-box">
+          <div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Center hub via -->
+  <circle cx="32" cy="36" r="3.5" stroke="currentColor" stroke-width="1.75" />
+  <circle cx="32" cy="36" r="1.25" fill="currentColor" />
+
+  <!-- Main Compass Spines -->
+  <!-- North (Elongated: y 32.5 -> 7.5) -->
+  <line x1="32" y1="32.5" x2="32" y2="7.5" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+  <!-- South (y 39.5 -> 56.5) -->
+  <line x1="32" y1="39.5" x2="32" y2="56.5" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+  <!-- West (x 28.5 -> 9.5) -->
+  <line x1="28.5" y1="36" x2="9.5" y2="36" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+  <!-- East (x 35.5 -> 54.5) -->
+  <line x1="35.5" y1="36" x2="54.5" y2="36" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+
+  <!-- Terminal Vias at Compass Points -->
+  <!-- North Via (Primary) -->
+  <circle cx="32" cy="6" r="3.25" stroke="currentColor" stroke-width="1.75" />
+  <circle cx="32" cy="6" r="1" fill="currentColor" />
+  <!-- South Via -->
+  <circle cx="32" cy="58" r="2.75" stroke="currentColor" stroke-width="1.5" />
+  <circle cx="32" cy="58" r="0.9" fill="currentColor" />
+  <!-- West Via -->
+  <circle cx="8" cy="36" r="2.75" stroke="currentColor" stroke-width="1.5" />
+  <circle cx="8" cy="36" r="0.9" fill="currentColor" />
+  <!-- East Via -->
+  <circle cx="56" cy="36" r="2.75" stroke="currentColor" stroke-width="1.5" />
+  <circle cx="56" cy="36" r="0.9" fill="currentColor" />
+
+  <!-- Outer 45° Routed Trace Wings (Star Silhouette) -->
+  <!-- North-West Wing -->
+  <path d="M32 15 L22 25 L22 36" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" />
+  <circle cx="22" cy="25" r="1.75" fill="currentColor" />
+
+  <!-- North-East Wing -->
+  <path d="M32 15 L42 25 L42 36" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" />
+  <circle cx="42" cy="25" r="1.75" fill="currentColor" />
+
+  <!-- South-West Wing -->
+  <path d="M22 36 L22 43 L32 51" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" />
+  <circle cx="22" cy="43" r="1.75" fill="currentColor" />
+
+  <!-- South-East Wing -->
+  <path d="M42 36 L42 43 L32 51" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" />
+  <circle cx="42" cy="43" r="1.75" fill="currentColor" />
+
+  <!-- Inner 45° Concentric Miter Diamond -->
+  <path d="M32 24 L40 32 L40 36 L32 44 L24 36 L24 32 Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter" />
+
+  <!-- Diagonal Satellite Test Via Pads -->
+  <circle cx="27" cy="20" r="1.25" fill="currentColor" />
+  <circle cx="37" cy="20" r="1.25" fill="currentColor" />
+  <circle cx="27" cy="48" r="1.25" fill="currentColor" />
+  <circle cx="37" cy="48" r="1.25" fill="currentColor" />
+</svg>
+</div>
+          <span class="lbl">48px Nav</span>
+        </div>
+        <div class="item-box">
+          <div class="size-200"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Center hub via -->
+  <circle cx="32" cy="36" r="3.5" stroke="currentColor" stroke-width="1.75" />
+  <circle cx="32" cy="36" r="1.25" fill="currentColor" />
+
+  <!-- Main Compass Spines -->
+  <!-- North (Elongated: y 32.5 -> 7.5) -->
+  <line x1="32" y1="32.5" x2="32" y2="7.5" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+  <!-- South (y 39.5 -> 56.5) -->
+  <line x1="32" y1="39.5" x2="32" y2="56.5" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+  <!-- West (x 28.5 -> 9.5) -->
+  <line x1="28.5" y1="36" x2="9.5" y2="36" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+  <!-- East (x 35.5 -> 54.5) -->
+  <line x1="35.5" y1="36" x2="54.5" y2="36" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+
+  <!-- Terminal Vias at Compass Points -->
+  <!-- North Via (Primary) -->
+  <circle cx="32" cy="6" r="3.25" stroke="currentColor" stroke-width="1.75" />
+  <circle cx="32" cy="6" r="1" fill="currentColor" />
+  <!-- South Via -->
+  <circle cx="32" cy="58" r="2.75" stroke="currentColor" stroke-width="1.5" />
+  <circle cx="32" cy="58" r="0.9" fill="currentColor" />
+  <!-- West Via -->
+  <circle cx="8" cy="36" r="2.75" stroke="currentColor" stroke-width="1.5" />
+  <circle cx="8" cy="36" r="0.9" fill="currentColor" />
+  <!-- East Via -->
+  <circle cx="56" cy="36" r="2.75" stroke="currentColor" stroke-width="1.5" />
+  <circle cx="56" cy="36" r="0.9" fill="currentColor" />
+
+  <!-- Outer 45° Routed Trace Wings (Star Silhouette) -->
+  <!-- North-West Wing -->
+  <path d="M32 15 L22 25 L22 36" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" />
+  <circle cx="22" cy="25" r="1.75" fill="currentColor" />
+
+  <!-- North-East Wing -->
+  <path d="M32 15 L42 25 L42 36" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" />
+  <circle cx="42" cy="25" r="1.75" fill="currentColor" />
+
+  <!-- South-West Wing -->
+  <path d="M22 36 L22 43 L32 51" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" />
+  <circle cx="22" cy="43" r="1.75" fill="currentColor" />
+
+  <!-- South-East Wing -->
+  <path d="M42 36 L42 43 L32 51" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" />
+  <circle cx="42" cy="43" r="1.75" fill="currentColor" />
+
+  <!-- Inner 45° Concentric Miter Diamond -->
+  <path d="M32 24 L40 32 L40 36 L32 44 L24 36 L24 32 Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="miter" />
+
+  <!-- Diagonal Satellite Test Via Pads -->
+  <circle cx="27" cy="20" r="1.25" fill="currentColor" />
+  <circle cx="37" cy="20" r="1.25" fill="currentColor" />
+  <circle cx="27" cy="48" r="1.25" fill="currentColor" />
+  <circle cx="37" cy="48" r="1.25" fill="currentColor" />
+</svg>
+</div>
+          <span class="lbl">200px Hero Glyph</span>
+        </div>
+        <div class="item-box card-box">
+          <div class="size-card-200"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" fill="none" stroke="currentColor">
+  <!-- Outer Border with 45° Angular Corner Notches -->
+  <path d="M 32 16 L 368 16 L 384 32 L 384 568 L 368 584 L 32 584 L 16 568 L 16 32 Z" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter" />
+
+  <!-- Inner Border with 45° Angular Corner Notches -->
+  <path d="M 36 24 L 364 24 L 376 36 L 376 564 L 364 576 L 36 576 L 24 564 L 24 36 Z" stroke-width="1.0" stroke-linecap="square" stroke-linejoin="miter" />
+
+  <!-- Outer Edge Tick Accents -->
+  <line x1="200" y1="12" x2="200" y2="16" stroke-width="1.5" />
+  <line x1="200" y1="584" x2="200" y2="588" stroke-width="1.5" />
+  <line x1="12" y1="300" x2="16" y2="300" stroke-width="1.5" />
+  <line x1="384" y1="300" x2="388" y2="300" stroke-width="1.5" />
+
+  <!-- Top Rule with Centered Roman Numeral Slot -->
+  <!-- Left Rule Segment -->
+  <line x1="24" y1="72" x2="148" y2="72" stroke-width="1.25" stroke-linecap="square" />
+  <line x1="36" y1="76" x2="144" y2="76" stroke-width="0.75" stroke-linecap="square" />
+
+  <!-- Right Rule Segment -->
+  <line x1="252" y1="72" x2="376" y2="72" stroke-width="1.25" stroke-linecap="square" />
+  <line x1="256" y1="76" x2="364" y2="76" stroke-width="0.75" stroke-linecap="square" />
+
+  <!-- Centered Empty Slot / Cartouche Frame for Roman Numeral -->
+  <polygon points="152,72 162,56 238,56 248,72 238,88 162,88" stroke-width="1.5" stroke-linejoin="miter" />
+  <polygon points="156,72 164,60 236,60 244,72 236,84 164,84" stroke-width="0.75" stroke-linejoin="miter" />
+  <!-- Slot Corner Accents -->
+  <circle cx="148" cy="72" r="1.5" fill="currentColor" stroke="none" />
+  <circle cx="252" cy="72" r="1.5" fill="currentColor" stroke="none" />
+
+  <!-- Bottom Title Area Divider Rules -->
+  <line x1="24" y1="514" x2="376" y2="514" stroke-width="1.25" stroke-linecap="square" />
+  <line x1="36" y1="518" x2="364" y2="518" stroke-width="0.75" stroke-linecap="square" />
+
+  <!-- Small PCB-Trace Corner Ornaments (No Occult / No Astrological Symbols) -->
+  <!-- Top-Left Corner Traces -->
+  <g stroke-width="1.0" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M 40 56 L 40 46 L 46 40 L 56 40" />
+    <path d="M 40 46 L 48 46 L 54 40" />
+    <circle cx="59" cy="40" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="40" cy="59" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="51" cy="51" r="1.2" fill="currentColor" stroke="none" />
+  </g>
+
+  <!-- Top-Right Corner Traces -->
+  <g stroke-width="1.0" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M 360 56 L 360 46 L 354 40 L 344 40" />
+    <path d="M 360 46 L 352 46 L 346 40" />
+    <circle cx="341" cy="40" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="360" cy="59" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="349" cy="51" r="1.2" fill="currentColor" stroke="none" />
+  </g>
+
+  <!-- Bottom-Left Corner Traces -->
+  <g stroke-width="1.0" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M 40 544 L 40 554 L 46 560 L 56 560" />
+    <path d="M 40 554 L 48 554 L 54 560" />
+    <circle cx="59" cy="560" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="40" cy="541" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="51" cy="549" r="1.2" fill="currentColor" stroke="none" />
+  </g>
+
+  <!-- Bottom-Right Corner Traces -->
+  <g stroke-width="1.0" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M 360 544 L 360 554 L 354 560 L 344 560" />
+    <path d="M 360 554 L 352 554 L 346 560" />
+    <circle cx="341" cy="560" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="360" cy="541" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="349" cy="549" r="1.2" fill="currentColor" stroke="none" />
+  </g>
+</svg>
+</div>
+          <span class="lbl">200px Card Frame</span>
+        </div>
+      </div>
+
+      <!-- ROW 2: SYSTEM ICONS (16 & 48 px, stroke 1.5, square caps) -->
+      <div class="section-title">2. System Icons (48x48 &amp; 16x16, stroke 1.5, square caps)</div>
+      <div class="icons-grid">
+        <div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- QFP Package Body with pin 1 chamfer -->
+  <path d="M 16 12 L 36 12 L 36 36 L 12 36 L 12 16 Z" />
+  
+  <!-- Pin 1 index dot -->
+  <circle cx="16" cy="16" r="1.25" fill="currentColor" stroke="none" />
+  
+  <!-- Silicon Die Square -->
+  <rect x="20" y="20" width="8" height="8" />
+  <line x1="24" y1="22" x2="24" y2="26" />
+  <line x1="22" y1="24" x2="26" y2="24" />
+
+  <!-- Top Pins -->
+  <line x1="16" y1="12" x2="16" y2="6" />
+  <line x1="20" y1="12" x2="20" y2="6" />
+  <line x1="24" y1="12" x2="24" y2="6" />
+  <line x1="28" y1="12" x2="28" y2="6" />
+  <line x1="32" y1="12" x2="32" y2="6" />
+
+  <!-- Bottom Pins -->
+  <line x1="16" y1="36" x2="16" y2="42" />
+  <line x1="20" y1="36" x2="20" y2="42" />
+  <line x1="24" y1="36" x2="24" y2="42" />
+  <line x1="28" y1="36" x2="28" y2="42" />
+  <line x1="32" y1="36" x2="32" y2="42" />
+
+  <!-- Left Pins -->
+  <line x1="12" y1="16" x2="6" y2="16" />
+  <line x1="12" y1="20" x2="6" y2="20" />
+  <line x1="12" y1="24" x2="6" y2="24" />
+  <line x1="12" y1="28" x2="6" y2="28" />
+  <line x1="12" y1="32" x2="6" y2="32" />
+
+  <!-- Right Pins -->
+  <line x1="36" y1="16" x2="42" y2="16" />
+  <line x1="36" y1="20" x2="42" y2="20" />
+  <line x1="36" y1="24" x2="42" y2="24" />
+  <line x1="36" y1="28" x2="42" y2="28" />
+  <line x1="36" y1="32" x2="42" y2="32" />
+</svg></div><span class="lbl">microchip</span></div><div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Central Switch/Hub Node -->
+  <circle cx="24" cy="24" r="5" />
+  <circle cx="24" cy="24" r="1.5" fill="currentColor" stroke="none" />
+
+  <!-- Outer Distributed Nodes -->
+  <!-- North Node -->
+  <circle cx="24" cy="8" r="3.5" />
+  <circle cx="24" cy="8" r="1.2" fill="currentColor" stroke="none" />
+  <!-- East Node -->
+  <circle cx="40" cy="22" r="3.5" />
+  <circle cx="40" cy="22" r="1.2" fill="currentColor" stroke="none" />
+  <!-- South-East Node -->
+  <circle cx="36" cy="38" r="3.5" />
+  <circle cx="36" cy="38" r="1.2" fill="currentColor" stroke="none" />
+  <!-- South-West Node -->
+  <circle cx="12" cy="38" r="3.5" />
+  <circle cx="12" cy="38" r="1.2" fill="currentColor" stroke="none" />
+  <!-- West Node -->
+  <circle cx="8" cy="22" r="3.5" />
+  <circle cx="8" cy="22" r="1.2" fill="currentColor" stroke="none" />
+
+  <!-- Topology Interconnect Traces (with 45° bends) -->
+  <line x1="24" y1="19" x2="24" y2="11.5" />
+  <line x1="28.5" y1="22.5" x2="36.5" y2="22" />
+  <line x1="19.5" y1="22.5" x2="11.5" y2="22" />
+  <line x1="27.5" y1="27.5" x2="33.5" y2="35.5" />
+  <line x1="20.5" y1="27.5" x2="14.5" y2="35.5" />
+
+  <!-- Mesh Ring Interconnects -->
+  <path d="M 21 6.5 L 10 19" />
+  <path d="M 27 6.5 L 38 19" />
+  <line x1="15.5" y1="38" x2="32.5" y2="38" />
+</svg></div><span class="lbl">network-topology</span></div><div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Cloud Contour -->
+  <path d="M 12 25 C 9 25, 7 22.5, 7 19.5 C 7 16.5, 9.5 14.5, 12.5 14.5 C 13.5 11, 16.5 8, 21 8 C 25.5 8, 29 11, 29.5 14.5 C 31 14, 33 14, 34.5 15 C 37.5 16.5, 39 19, 39 22 C 39 25, 36.5 25, 34 25" />
+
+  <!-- Rack Server Chassis Unit -->
+  <rect x="8" y="27" width="32" height="15" />
+  <!-- Bay Splitter -->
+  <line x1="8" y1="34.5" x2="40" y2="34.5" />
+
+  <!-- Upper Bay Drive Slots & LEDs -->
+  <line x1="12" y1="30.5" x2="26" y2="30.5" />
+  <circle cx="31" cy="30.5" r="1.1" fill="currentColor" stroke="none" />
+  <circle cx="35" cy="30.5" r="1.1" fill="currentColor" stroke="none" />
+
+  <!-- Lower Bay Drive Slots & LEDs -->
+  <line x1="12" y1="38" x2="26" y2="38" />
+  <circle cx="31" cy="38" r="1.1" fill="currentColor" stroke="none" />
+  <circle cx="35" cy="38" r="1.1" fill="currentColor" stroke="none" />
+
+  <!-- Connection Bus Lines -->
+  <line x1="21" y1="25" x2="21" y2="27" />
+  <line x1="27" y1="25" x2="27" y2="27" />
+</svg></div><span class="lbl">cloud-server</span></div><div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Terminal Window Shell -->
+  <rect x="6" y="8" width="36" height="32" />
+
+  <!-- Title / Window Control Header -->
+  <line x1="6" y1="16" x2="42" y2="16" />
+  <!-- Control Dots -->
+  <circle cx="11" cy="12" r="1.2" fill="currentColor" stroke="none" />
+  <circle cx="15.5" cy="12" r="1.2" fill="currentColor" stroke="none" />
+  <circle cx="20" cy="12" r="1.2" fill="currentColor" stroke="none" />
+
+  <!-- Command Prompt Angle Chevron '>' -->
+  <path d="M 13 23 L 19 27.5 L 13 32" stroke-linejoin="miter" />
+
+  <!-- Input Path Line -->
+  <line x1="23" y1="32" x2="29" y2="32" />
+
+  <!-- Solid Block Cursor -->
+  <rect x="30" y="24" width="4" height="8" fill="currentColor" stroke="none" />
+</svg></div><span class="lbl">terminal-prompt</span></div><div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Outer Rim Ring -->
+  <circle cx="24" cy="24" r="13" />
+
+  <!-- Inner Hub Ring -->
+  <circle cx="24" cy="24" r="5" />
+  <circle cx="24" cy="24" r="1.5" fill="currentColor" stroke="none" />
+
+  <!-- 8 Symmetrical Spokes with Projecting Handles (Every 45°) -->
+  <!-- 0° (North) & 180° (South) -->
+  <line x1="24" y1="5" x2="24" y2="19" />
+  <line x1="24" y1="29" x2="24" y2="43" />
+
+  <!-- 90° (East) & 270° (West) -->
+  <line x1="5" y1="24" x2="19" y2="24" />
+  <line x1="29" y1="24" x2="43" y2="24" />
+
+  <!-- 45° (North-East) & 225° (South-West) -->
+  <line x1="10.5" y1="10.5" x2="20.5" y2="20.5" />
+  <line x1="27.5" y1="27.5" x2="37.5" y2="37.5" />
+
+  <!-- 135° (South-East) & 315° (North-West) -->
+  <line x1="37.5" y1="10.5" x2="27.5" y2="20.5" />
+  <line x1="20.5" y1="27.5" x2="10.5" y2="37.5" />
+</svg></div><span class="lbl">orchestration-wheel</span></div><div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Top Scroll Roll -->
+  <path d="M 11 13 C 11 10, 13 8, 16 8 L 36 8 C 38.5 8, 40 9.5, 40 11.5 C 40 13.5, 38.5 15, 36 15 L 12 15" />
+  
+  <!-- Parchment Body -->
+  <line x1="12" y1="15" x2="12" y2="36" />
+  <line x1="38" y1="15" x2="38" y2="34" />
+
+  <!-- Bottom Scroll Roll -->
+  <path d="M 39 34 C 39 37, 37 39, 34 39 L 14 39 C 11.5 39, 10 37.5, 10 35.5 C 10 33.5, 11.5 32, 14 32 L 38 32" />
+
+  <!-- Script Text / Code Lines -->
+  <line x1="17" y1="20" x2="32" y2="20" />
+  <line x1="17" y1="25" x2="32" y2="25" />
+  <line x1="17" y1="30" x2="26" y2="30" />
+
+  <!-- Ribbon Bookmark / Wax Seal Ribbon -->
+  <path d="M 27 39 L 27 44 L 29.5 42 L 32 44 L 32 39" fill="currentColor" stroke="none" />
+</svg></div><span class="lbl">script-scroll</span></div><div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- PCB Substrate Boundary with Corner Chamfer -->
+  <path d="M 12 6 L 42 6 L 42 42 L 6 42 L 6 12 Z" />
+
+  <!-- Central SMD IC Package -->
+  <rect x="15" y="15" width="10" height="10" />
+  <circle cx="18" cy="18" r="0.9" fill="currentColor" stroke="none" />
+
+  <!-- 45° Routed Traces & Vias -->
+  <!-- Trace 1: Chip to Top-Right Via -->
+  <path d="M 25 18 L 32 18 L 36 14 L 36 10" />
+  <circle cx="36" cy="10" r="1.75" />
+  <circle cx="36" cy="10" r="0.8" fill="currentColor" stroke="none" />
+
+  <!-- Trace 2: Chip to Mid-Right Via -->
+  <path d="M 25 22 L 34 22 L 38 26" />
+  <circle cx="38" cy="26" r="1.75" />
+  <circle cx="38" cy="26" r="0.8" fill="currentColor" stroke="none" />
+
+  <!-- Trace 3: Chip to Bottom Bus -->
+  <path d="M 18 25 L 18 31 L 22 35 L 22 42" />
+
+  <!-- Trace 4: Left Side Via -->
+  <path d="M 15 20 L 10 20 L 10 28" />
+  <circle cx="10" cy="28" r="1.75" />
+  <circle cx="10" cy="28" r="0.8" fill="currentColor" stroke="none" />
+
+  <!-- Bottom Connector Gold Fingers -->
+  <line x1="28" y1="37" x2="28" y2="42" />
+  <line x1="34" y1="37" x2="34" y2="42" />
+</svg></div><span class="lbl">circuit-board</span></div><div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Parchment Diploma Sheet with Mitered Corners -->
+  <path d="M 11 6 L 37 6 L 40 9 L 40 39 L 37 42 L 11 42 L 8 39 L 8 9 Z" />
+
+  <!-- Inner Diploma Border -->
+  <rect x="12" y="10" width="24" height="28" />
+
+  <!-- Certificate Heading Bar -->
+  <line x1="16" y1="15" x2="32" y2="15" />
+
+  <!-- Body Content Lines -->
+  <line x1="16" y1="20" x2="32" y2="20" />
+  <line x1="16" y1="24" x2="27" y2="24" />
+  <line x1="16" y1="28" x2="23" y2="28" />
+
+  <!-- Wax Seal in Bottom-Right Corner -->
+  <circle cx="31" cy="31" r="5" stroke="currentColor" stroke-width="1.5" />
+  <circle cx="31" cy="31" r="2.5" />
+  <circle cx="31" cy="31" r="0.9" fill="currentColor" stroke="none" />
+
+  <!-- Seal Ribbon Tails -->
+  <path d="M 28 35 L 26 42 L 28 41 L 30 42 L 29.5 35" fill="currentColor" stroke="none" />
+  <path d="M 32 35 L 32.5 42 L 34 41 L 35.5 42 L 34 35" fill="currentColor" stroke="none" />
+</svg></div><span class="lbl">certificate</span></div>
+      </div>
+      <div class="row-flex micro-icons">
+        <div class="item-box"><div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- QFP Package Body with pin 1 chamfer -->
+  <path d="M 16 12 L 36 12 L 36 36 L 12 36 L 12 16 Z" />
+  
+  <!-- Pin 1 index dot -->
+  <circle cx="16" cy="16" r="1.25" fill="currentColor" stroke="none" />
+  
+  <!-- Silicon Die Square -->
+  <rect x="20" y="20" width="8" height="8" />
+  <line x1="24" y1="22" x2="24" y2="26" />
+  <line x1="22" y1="24" x2="26" y2="24" />
+
+  <!-- Top Pins -->
+  <line x1="16" y1="12" x2="16" y2="6" />
+  <line x1="20" y1="12" x2="20" y2="6" />
+  <line x1="24" y1="12" x2="24" y2="6" />
+  <line x1="28" y1="12" x2="28" y2="6" />
+  <line x1="32" y1="12" x2="32" y2="6" />
+
+  <!-- Bottom Pins -->
+  <line x1="16" y1="36" x2="16" y2="42" />
+  <line x1="20" y1="36" x2="20" y2="42" />
+  <line x1="24" y1="36" x2="24" y2="42" />
+  <line x1="28" y1="36" x2="28" y2="42" />
+  <line x1="32" y1="36" x2="32" y2="42" />
+
+  <!-- Left Pins -->
+  <line x1="12" y1="16" x2="6" y2="16" />
+  <line x1="12" y1="20" x2="6" y2="20" />
+  <line x1="12" y1="24" x2="6" y2="24" />
+  <line x1="12" y1="28" x2="6" y2="28" />
+  <line x1="12" y1="32" x2="6" y2="32" />
+
+  <!-- Right Pins -->
+  <line x1="36" y1="16" x2="42" y2="16" />
+  <line x1="36" y1="20" x2="42" y2="20" />
+  <line x1="36" y1="24" x2="42" y2="24" />
+  <line x1="36" y1="28" x2="42" y2="28" />
+  <line x1="36" y1="32" x2="42" y2="32" />
+</svg></div><span class="lbl">16</span></div><div class="item-box"><div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Central Switch/Hub Node -->
+  <circle cx="24" cy="24" r="5" />
+  <circle cx="24" cy="24" r="1.5" fill="currentColor" stroke="none" />
+
+  <!-- Outer Distributed Nodes -->
+  <!-- North Node -->
+  <circle cx="24" cy="8" r="3.5" />
+  <circle cx="24" cy="8" r="1.2" fill="currentColor" stroke="none" />
+  <!-- East Node -->
+  <circle cx="40" cy="22" r="3.5" />
+  <circle cx="40" cy="22" r="1.2" fill="currentColor" stroke="none" />
+  <!-- South-East Node -->
+  <circle cx="36" cy="38" r="3.5" />
+  <circle cx="36" cy="38" r="1.2" fill="currentColor" stroke="none" />
+  <!-- South-West Node -->
+  <circle cx="12" cy="38" r="3.5" />
+  <circle cx="12" cy="38" r="1.2" fill="currentColor" stroke="none" />
+  <!-- West Node -->
+  <circle cx="8" cy="22" r="3.5" />
+  <circle cx="8" cy="22" r="1.2" fill="currentColor" stroke="none" />
+
+  <!-- Topology Interconnect Traces (with 45° bends) -->
+  <line x1="24" y1="19" x2="24" y2="11.5" />
+  <line x1="28.5" y1="22.5" x2="36.5" y2="22" />
+  <line x1="19.5" y1="22.5" x2="11.5" y2="22" />
+  <line x1="27.5" y1="27.5" x2="33.5" y2="35.5" />
+  <line x1="20.5" y1="27.5" x2="14.5" y2="35.5" />
+
+  <!-- Mesh Ring Interconnects -->
+  <path d="M 21 6.5 L 10 19" />
+  <path d="M 27 6.5 L 38 19" />
+  <line x1="15.5" y1="38" x2="32.5" y2="38" />
+</svg></div><span class="lbl">16</span></div><div class="item-box"><div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Cloud Contour -->
+  <path d="M 12 25 C 9 25, 7 22.5, 7 19.5 C 7 16.5, 9.5 14.5, 12.5 14.5 C 13.5 11, 16.5 8, 21 8 C 25.5 8, 29 11, 29.5 14.5 C 31 14, 33 14, 34.5 15 C 37.5 16.5, 39 19, 39 22 C 39 25, 36.5 25, 34 25" />
+
+  <!-- Rack Server Chassis Unit -->
+  <rect x="8" y="27" width="32" height="15" />
+  <!-- Bay Splitter -->
+  <line x1="8" y1="34.5" x2="40" y2="34.5" />
+
+  <!-- Upper Bay Drive Slots & LEDs -->
+  <line x1="12" y1="30.5" x2="26" y2="30.5" />
+  <circle cx="31" cy="30.5" r="1.1" fill="currentColor" stroke="none" />
+  <circle cx="35" cy="30.5" r="1.1" fill="currentColor" stroke="none" />
+
+  <!-- Lower Bay Drive Slots & LEDs -->
+  <line x1="12" y1="38" x2="26" y2="38" />
+  <circle cx="31" cy="38" r="1.1" fill="currentColor" stroke="none" />
+  <circle cx="35" cy="38" r="1.1" fill="currentColor" stroke="none" />
+
+  <!-- Connection Bus Lines -->
+  <line x1="21" y1="25" x2="21" y2="27" />
+  <line x1="27" y1="25" x2="27" y2="27" />
+</svg></div><span class="lbl">16</span></div><div class="item-box"><div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Terminal Window Shell -->
+  <rect x="6" y="8" width="36" height="32" />
+
+  <!-- Title / Window Control Header -->
+  <line x1="6" y1="16" x2="42" y2="16" />
+  <!-- Control Dots -->
+  <circle cx="11" cy="12" r="1.2" fill="currentColor" stroke="none" />
+  <circle cx="15.5" cy="12" r="1.2" fill="currentColor" stroke="none" />
+  <circle cx="20" cy="12" r="1.2" fill="currentColor" stroke="none" />
+
+  <!-- Command Prompt Angle Chevron '>' -->
+  <path d="M 13 23 L 19 27.5 L 13 32" stroke-linejoin="miter" />
+
+  <!-- Input Path Line -->
+  <line x1="23" y1="32" x2="29" y2="32" />
+
+  <!-- Solid Block Cursor -->
+  <rect x="30" y="24" width="4" height="8" fill="currentColor" stroke="none" />
+</svg></div><span class="lbl">16</span></div><div class="item-box"><div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Outer Rim Ring -->
+  <circle cx="24" cy="24" r="13" />
+
+  <!-- Inner Hub Ring -->
+  <circle cx="24" cy="24" r="5" />
+  <circle cx="24" cy="24" r="1.5" fill="currentColor" stroke="none" />
+
+  <!-- 8 Symmetrical Spokes with Projecting Handles (Every 45°) -->
+  <!-- 0° (North) & 180° (South) -->
+  <line x1="24" y1="5" x2="24" y2="19" />
+  <line x1="24" y1="29" x2="24" y2="43" />
+
+  <!-- 90° (East) & 270° (West) -->
+  <line x1="5" y1="24" x2="19" y2="24" />
+  <line x1="29" y1="24" x2="43" y2="24" />
+
+  <!-- 45° (North-East) & 225° (South-West) -->
+  <line x1="10.5" y1="10.5" x2="20.5" y2="20.5" />
+  <line x1="27.5" y1="27.5" x2="37.5" y2="37.5" />
+
+  <!-- 135° (South-East) & 315° (North-West) -->
+  <line x1="37.5" y1="10.5" x2="27.5" y2="20.5" />
+  <line x1="20.5" y1="27.5" x2="10.5" y2="37.5" />
+</svg></div><span class="lbl">16</span></div><div class="item-box"><div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Top Scroll Roll -->
+  <path d="M 11 13 C 11 10, 13 8, 16 8 L 36 8 C 38.5 8, 40 9.5, 40 11.5 C 40 13.5, 38.5 15, 36 15 L 12 15" />
+  
+  <!-- Parchment Body -->
+  <line x1="12" y1="15" x2="12" y2="36" />
+  <line x1="38" y1="15" x2="38" y2="34" />
+
+  <!-- Bottom Scroll Roll -->
+  <path d="M 39 34 C 39 37, 37 39, 34 39 L 14 39 C 11.5 39, 10 37.5, 10 35.5 C 10 33.5, 11.5 32, 14 32 L 38 32" />
+
+  <!-- Script Text / Code Lines -->
+  <line x1="17" y1="20" x2="32" y2="20" />
+  <line x1="17" y1="25" x2="32" y2="25" />
+  <line x1="17" y1="30" x2="26" y2="30" />
+
+  <!-- Ribbon Bookmark / Wax Seal Ribbon -->
+  <path d="M 27 39 L 27 44 L 29.5 42 L 32 44 L 32 39" fill="currentColor" stroke="none" />
+</svg></div><span class="lbl">16</span></div><div class="item-box"><div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- PCB Substrate Boundary with Corner Chamfer -->
+  <path d="M 12 6 L 42 6 L 42 42 L 6 42 L 6 12 Z" />
+
+  <!-- Central SMD IC Package -->
+  <rect x="15" y="15" width="10" height="10" />
+  <circle cx="18" cy="18" r="0.9" fill="currentColor" stroke="none" />
+
+  <!-- 45° Routed Traces & Vias -->
+  <!-- Trace 1: Chip to Top-Right Via -->
+  <path d="M 25 18 L 32 18 L 36 14 L 36 10" />
+  <circle cx="36" cy="10" r="1.75" />
+  <circle cx="36" cy="10" r="0.8" fill="currentColor" stroke="none" />
+
+  <!-- Trace 2: Chip to Mid-Right Via -->
+  <path d="M 25 22 L 34 22 L 38 26" />
+  <circle cx="38" cy="26" r="1.75" />
+  <circle cx="38" cy="26" r="0.8" fill="currentColor" stroke="none" />
+
+  <!-- Trace 3: Chip to Bottom Bus -->
+  <path d="M 18 25 L 18 31 L 22 35 L 22 42" />
+
+  <!-- Trace 4: Left Side Via -->
+  <path d="M 15 20 L 10 20 L 10 28" />
+  <circle cx="10" cy="28" r="1.75" />
+  <circle cx="10" cy="28" r="0.8" fill="currentColor" stroke="none" />
+
+  <!-- Bottom Connector Gold Fingers -->
+  <line x1="28" y1="37" x2="28" y2="42" />
+  <line x1="34" y1="37" x2="34" y2="42" />
+</svg></div><span class="lbl">16</span></div><div class="item-box"><div class="size-16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Parchment Diploma Sheet with Mitered Corners -->
+  <path d="M 11 6 L 37 6 L 40 9 L 40 39 L 37 42 L 11 42 L 8 39 L 8 9 Z" />
+
+  <!-- Inner Diploma Border -->
+  <rect x="12" y="10" width="24" height="28" />
+
+  <!-- Certificate Heading Bar -->
+  <line x1="16" y1="15" x2="32" y2="15" />
+
+  <!-- Body Content Lines -->
+  <line x1="16" y1="20" x2="32" y2="20" />
+  <line x1="16" y1="24" x2="27" y2="24" />
+  <line x1="16" y1="28" x2="23" y2="28" />
+
+  <!-- Wax Seal in Bottom-Right Corner -->
+  <circle cx="31" cy="31" r="5" stroke="currentColor" stroke-width="1.5" />
+  <circle cx="31" cy="31" r="2.5" />
+  <circle cx="31" cy="31" r="0.9" fill="currentColor" stroke="none" />
+
+  <!-- Seal Ribbon Tails -->
+  <path d="M 28 35 L 26 42 L 28 41 L 30 42 L 29.5 35" fill="currentColor" stroke="none" />
+  <path d="M 32 35 L 32.5 42 L 34 41 L 35.5 42 L 34 35" fill="currentColor" stroke="none" />
+</svg></div><span class="lbl">16</span></div>
+      </div>
+
+      <!-- ROW 3: MANGA / SUMI-E INK ELEMENTS (48 & 200 px, organic, <8KB) -->
+      <div class="section-title">3. Manga / Sumi-e Ink Elements (48 &amp; 200 px, organic, &lt;8KB)</div>
+      <div class="row-flex ink-row">
+        <div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="currentColor">
+  <!-- ink-01: Big Splash -->
+  <path fill-rule="evenodd" d="M 156.0 120.0 C 157.6 121.5, 151.7 121.4, 160.1 125.3 C 168.5 129.1, 206.9 141.5, 206.3 143.1 C 205.7 144.8, 166.1 136.2, 156.7 135.2 C 147.2 134.2, 150.7 135.8, 149.4 137.0 C 148.2 138.2, 151.9 143.0, 149.4 142.5 C 146.8 142.1, 133.9 131.2, 134.2 134.2 C 134.5 137.2, 152.1 160.5, 151.1 160.6 C 150.2 160.7, 132.4 138.3, 128.5 134.8 C 124.7 131.3, 128.4 137.8, 128.2 139.8 C 128.0 141.8, 127.5 142.3, 127.2 146.9 C 126.9 151.4, 127.4 165.1, 126.2 167.0 C 125.0 168.8, 123.0 151.1, 120.0 158.0 C 117.0 164.9, 109.9 209.1, 108.3 208.7 C 106.8 208.2, 110.7 164.9, 110.6 155.1 C 110.5 145.3, 108.4 151.7, 107.6 150.0 C 106.7 148.4, 108.2 143.9, 105.5 145.2 C 102.7 146.5, 91.9 158.7, 90.9 157.9 C 90.0 157.1, 106.5 137.7, 99.8 140.2 C 93.1 142.8, 52.1 173.8, 50.6 173.3 C 49.1 172.7, 84.4 143.6, 90.6 137.0 C 96.7 130.4, 88.1 134.8, 87.6 133.4 C 87.1 132.0, 89.0 130.0, 87.7 128.7 C 86.3 127.3, 78.3 126.7, 79.7 125.3 C 81.1 123.9, 99.1 122.2, 96.0 120.0 C 92.9 117.8, 60.1 113.0, 61.2 112.3 C 62.3 111.5, 95.9 115.3, 102.6 115.3 C 109.3 115.3, 102.1 113.6, 101.2 112.2 C 100.4 110.8, 100.1 110.1, 97.5 107.0 C 94.8 103.9, 86.2 95.9, 85.3 93.3 C 84.3 90.8, 93.7 97.4, 91.8 91.8 C 89.9 86.2, 72.5 61.1, 73.7 59.6 C 74.8 58.1, 93.3 78.7, 98.5 82.8 C 103.8 86.9, 103.0 83.3, 105.2 84.3 C 107.4 85.4, 109.8 87.3, 111.7 88.9 C 113.6 90.6, 115.2 95.7, 116.6 94.3 C 118.0 92.9, 119.0 79.7, 120.0 80.4 C 121.0 81.2, 120.6 100.2, 122.8 98.8 C 124.9 97.4, 131.6 72.8, 132.8 72.1 C 134.1 71.4, 130.1 91.1, 130.5 94.6 C 131.0 98.1, 133.9 93.3, 135.5 93.2 C 137.0 93.2, 137.1 95.1, 139.7 94.3 C 142.4 93.5, 150.9 87.2, 151.4 88.6 C 151.9 90.0, 137.4 103.4, 142.8 102.5 C 148.2 101.6, 183.8 81.8, 183.9 83.1 C 183.9 84.5, 149.4 105.5, 143.0 110.5 C 136.6 115.5, 144.4 112.2, 145.6 113.1 C 146.8 114.1, 148.7 114.9, 150.4 116.0 C 152.1 117.1, 154.4 118.5, 156.0 120.0" />
+  <g>
+    <circle cx="48.0" cy="99.1" r="3.7" /><circle cx="143.8" cy="59.2" r="4.7" /><circle cx="94.3" cy="43.9" r="1.9" /><circle cx="197.3" cy="98.7" r="1.6" /><circle cx="204.7" cy="178.9" r="3.8" /><circle cx="154.4" cy="28.4" r="3.5" /><circle cx="200.9" cy="106.2" r="3.6" /><circle cx="164.4" cy="38.5" r="4.9" /><circle cx="34.5" cy="74.8" r="1.4" /><circle cx="130.8" cy="197.3" r="1.5" /><circle cx="127.5" cy="189.1" r="2.4" /><circle cx="66.4" cy="58.7" r="2.8" /><circle cx="139.4" cy="194.5" r="5.2" /><circle cx="64.8" cy="45.9" r="1.9" /><circle cx="110.5" cy="48.3" r="2.8" /><circle cx="213.6" cy="113.8" r="3.6" /><circle cx="78.9" cy="25.6" r="4.5" /><circle cx="128.7" cy="185.9" r="2.6" /><circle cx="111.7" cy="194.0" r="5.3" /><circle cx="176.5" cy="64.5" r="4.0" /><circle cx="35.9" cy="184.7" r="3.2" /><circle cx="112.9" cy="195.8" r="3.6" /><circle cx="112.7" cy="211.0" r="5.1" /><circle cx="59.6" cy="164.2" r="5.5" /><circle cx="51.0" cy="115.9" r="1.4" /><circle cx="192.0" cy="179.3" r="4.6" /><circle cx="60.1" cy="151.9" r="2.8" /><circle cx="208.8" cy="117.8" r="5.4" />
+  </g>
+</svg></div><span class="lbl">splash</span></div>
+        <div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" fill="currentColor">
+  <!-- ink-02: Dry Horizontal Brush Stroke -->
+  <path d="M 20 22.3 L 30.0 24.6 L 40.0 23.1 L 50.0 22.5 L 60.0 23.5 L 70.0 23.6 L 80.0 23.3 L 90.0 23.9 L 100.0 26.0 L 110.0 26.2 L 120.0 27.2 L 130.0 27.8 L 140.0 25.8 L 150.0 30.5 L 160.0 32.5 L 170.0 28.7 L 180.0 29.2 L 190.0 25.9 L 200.0 30.7 L 210.0 26.1 L 220.0 26.0 L 230.0 27.4 L 240.0 27.7 L 250.0 27.3 L 260.0 33.5 L 270.0 32.7 L 280.0 31.0 L 290.0 28.8 L 300.0 33.3 L 305 38 L 298 42 L 312 45 L 295 48 L 300.0 51.5 L 290.0 54.3 L 280.0 54.9 L 270.0 51.0 L 260.0 50.4 L 250.0 54.4 L 240.0 48.6 L 230.0 49.0 L 220.0 54.7 L 210.0 56.5 L 200.0 53.7 L 190.0 55.2 L 180.0 57.3 L 170.0 55.6 L 160.0 55.7 L 150.0 58.1 L 140.0 59.5 L 130.0 55.9 L 120.0 55.5 L 110.0 58.6 L 100.0 57.6 L 90.0 59.5 L 80.0 56.2 L 70.0 60.5 L 60.0 59.0 L 50.0 56.7 L 40.0 58.8 L 30.0 59.8 L 20.0 56.8 Z" /><path d="M 60 22 C 100 21, 160 23, 220 27 C 240 28, 270 30, 288 32 C 265 31, 210 27, 150 25 C 100 24, 65 24, 60 22 Z" /><path d="M 140 18 C 180 19, 230 22, 275 26 C 245 25, 200 22, 160 20 Z" /><path d="M 90 38 C 140 37, 210 40, 260 43 C 220 42, 150 39, 100 39 Z" /><path d="M 45 46 C 110 45, 180 48, 245 51 C 190 49, 120 47, 60 48 Z" /><path d="M 80 58 C 140 57, 200 55, 270 51 C 230 53, 160 56, 105 58 Z" /><path d="M 170 63 C 210 60, 250 56, 292 52 C 260 55, 220 59, 185 62 Z" />
+  <g>
+    <circle cx="26.7" cy="16.7" r="0.8" /><circle cx="123.5" cy="65.0" r="2.0" /><circle cx="264.0" cy="18.7" r="1.8" /><circle cx="245.7" cy="57.3" r="1.9" /><circle cx="65.0" cy="22.0" r="1.9" /><circle cx="235.4" cy="62.0" r="1.4" /><circle cx="278.5" cy="19.8" r="2.1" /><circle cx="260.0" cy="17.1" r="2.1" /><circle cx="96.3" cy="23.4" r="1.0" /><circle cx="304.6" cy="62.5" r="1.2" /><circle cx="278.0" cy="12.7" r="1.7" />
+  </g>
+</svg></div><span class="lbl">dry-brush</span></div>
+        <div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="currentColor">
+  <!-- ink-03: Diagonal Slash -->
+  <path d="M 28 20 C 20 28, 24 45, 36 48 C 52 56, 75 88, 105 120 C 135 152, 172 186, 218 218 C 214 212, 185 174, 155 138 C 125 102, 92 64, 62 38 C 48 26, 38 18, 28 20 Z" />
+  <path d="M 52 28 C 78 54, 118 96, 168 148 C 148 128, 108 86, 72 48 Z" /><path d="M 125 152 C 155 184, 192 216, 212 230 C 195 215, 162 182, 138 156 Z" /><circle cx="82" cy="54" r="2.8" /><circle cx="108" cy="76" r="2.2" /><circle cx="148" cy="116" r="3.2" /><circle cx="178" cy="144" r="2.5" /><circle cx="204" cy="182" r="2.0" /><circle cx="226" cy="214" r="3.0" /><circle cx="232" cy="228" r="1.8" /><circle cx="218" cy="235" r="1.4" /><circle cx="38" cy="62" r="2.4" /><circle cx="22" cy="48" r="3.5" /><circle cx="16" cy="32" r="2.0" />
+</svg></div><span class="lbl">slash</span></div>
+        <div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="currentColor">
+  <!-- ink-04: Droplet Cluster -->
+  <path d="M 68 56 C 76 55, 85 62, 86 70 C 87 79, 80 88, 71 89 C 61 90, 52 82, 53 73 C 54 63, 60 57, 68 56 Z" /><ellipse cx="42" cy="52" rx="6.5" ry="5.7" transform="rotate(22 42 52)" /><ellipse cx="96" cy="58" rx="7.2" ry="6.3" transform="rotate(103 96 58)" /><ellipse cx="54" cy="104" rx="8.0" ry="7.0" transform="rotate(0 54 104)" /><ellipse cx="92" cy="98" rx="6.8" ry="6.0" transform="rotate(132 92 98)" /><ellipse cx="116" cy="78" rx="5.5" ry="4.8" transform="rotate(23 116 78)" /><ellipse cx="38" cy="86" rx="5.0" ry="4.4" transform="rotate(174 38 86)" /><ellipse cx="82" cy="38" rx="4.8" ry="4.2" transform="rotate(152 82 38)" /><ellipse cx="112" cy="114" rx="5.2" ry="4.6" transform="rotate(24 112 114)" /><circle cx="43.2" cy="97.0" r="1.0" /><circle cx="42.9" cy="23.8" r="1.9" /><circle cx="90.5" cy="113.7" r="2.2" /><circle cx="92.8" cy="122.1" r="1.1" /><circle cx="100.3" cy="106.1" r="1.7" /><circle cx="104.3" cy="84.6" r="1.5" /><circle cx="19.4" cy="59.4" r="1.2" /><circle cx="89.9" cy="87.1" r="3.2" /><circle cx="30.3" cy="43.8" r="2.1" /><circle cx="115.8" cy="111.4" r="2.6" /><circle cx="56.2" cy="128.3" r="2.5" /><circle cx="53.4" cy="44.4" r="1.3" /><circle cx="102.5" cy="72.1" r="1.2" /><circle cx="70.3" cy="107.5" r="2.0" /><circle cx="101.5" cy="83.1" r="1.6" /><circle cx="112.3" cy="77.8" r="3.2" /><circle cx="45.9" cy="72.7" r="3.1" /><circle cx="113.0" cy="40.5" r="3.1" /><circle cx="26.3" cy="59.7" r="2.1" /><circle cx="103.8" cy="62.1" r="1.9" /><circle cx="91.3" cy="120.9" r="0.9" /><circle cx="115.2" cy="69.8" r="1.8" /><circle cx="44.2" cy="93.0" r="3.2" /><circle cx="45.0" cy="92.1" r="2.4" /><circle cx="39.5" cy="81.0" r="1.2" /><circle cx="117.2" cy="106.1" r="1.0" /><circle cx="74.5" cy="36.2" r="2.7" /><circle cx="15.3" cy="101.3" r="1.0" /><circle cx="71.5" cy="32.7" r="1.9" /><circle cx="24.5" cy="84.1" r="2.0" /><circle cx="25.1" cy="114.3" r="2.0" /><circle cx="112.7" cy="68.6" r="3.0" /><circle cx="36.7" cy="87.3" r="1.6" /><circle cx="49.2" cy="87.1" r="2.2" /><circle cx="34.8" cy="72.1" r="1.1" /><circle cx="53.1" cy="17.6" r="0.7" /><circle cx="62.9" cy="41.0" r="2.9" /><circle cx="111.6" cy="95.9" r="2.0" /><circle cx="84.4" cy="90.4" r="1.3" /><circle cx="48.4" cy="115.0" r="1.0" /><circle cx="66.3" cy="33.9" r="1.3" /><circle cx="125.5" cy="76.5" r="1.9" /><circle cx="67.9" cy="58.5" r="1.3" /><circle cx="94.9" cy="18.8" r="1.7" /><circle cx="83.0" cy="88.6" r="3.1" />
+</svg></div><span class="lbl">droplets</span></div>
+        <div class="item-box"><div class="size-48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="currentColor">
+  <!-- ink-05: Broken Circular Stroke (Ensō) -->
+  <path d="M 45.1 150.3 L 38.6 142.9 L 33.3 134.7 L 28.6 125.9 L 25.1 116.5 L 24.2 106.5 L 23.3 96.5 L 24.0 86.4 L 26.1 76.5 L 30.9 67.5 L 35.4 58.5 L 40.6 49.7 L 47.5 42.2 L 55.3 35.6 L 64.5 31.0 L 73.6 26.2 L 83.7 24.2 L 93.7 22.9 L 103.9 21.4 L 114.1 23.2 L 123.9 26.0 L 133.1 30.3 L 142.5 34.5 L 150.9 40.4 L 158.0 47.7 L 164.0 56.1 L 169.0 64.9 L 172.5 74.4 L 175.1 84.1 L 176.2 94.1 L 176.4 104.2 L 175.4 114.1 L 172.0 123.6 L 167.9 132.6 L 162.3 140.7 L 156.4 148.5 L 149.1 155.0 L 141.8 161.4 L 133.2 165.9 L 124.0 168.9 L 114.7 171.1 L 138 48 L 134 52 L 142 56 L 112.8 161.7 L 120.5 159.0 L 127.9 155.3 L 134.8 151.1 L 140.9 145.8 L 146.9 140.4 L 150.8 133.2 L 155.1 126.5 L 156.8 118.6 L 159.6 111.2 L 159.4 103.2 L 158.7 95.5 L 157.4 87.9 L 156.3 80.1 L 151.8 73.6 L 148.4 66.7 L 143.8 60.6 L 137.4 56.2 L 131.6 51.3 L 124.7 48.0 L 117.8 44.9 L 110.6 42.3 L 102.9 41.6 L 95.3 41.8 L 87.9 43.7 L 80.5 45.5 L 73.2 47.8 L 66.6 51.8 L 60.4 56.4 L 54.7 61.7 L 50.2 68.0 L 47.0 75.1 L 44.0 82.2 L 40.9 89.4 L 40.2 97.3 L 40.4 105.1 L 40.9 113.0 L 44.0 120.3 L 45.9 128.1 L 50.0 135.0 L 54.6 141.6 Z" />
+  <path d="M 136 44 C 145 42, 154 44, 160 48 C 152 46, 142 45, 134 46 Z" /><path d="M 148 52 C 158 56, 166 64, 170 72 C 164 65, 156 58, 145 54 Z" /><path d="M 45 85 C 42 75, 44 65, 52 54 C 47 62, 45 72, 47 82 Z" /><circle cx="168" cy="56" r="2.5" /><circle cx="178" cy="74" r="2.0" /><circle cx="184" cy="98" r="3.0" /><circle cx="156" cy="38" r="1.8" /><circle cx="132" cy="32" r="2.2" /><circle cx="36" cy="128" r="2.8" /><circle cx="48" cy="154" r="2.2" /><circle cx="72" cy="178" r="3.2" />
+</svg></div><span class="lbl">ensō</span></div>
+        <div class="item-box"><div class="size-200-ink"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="currentColor">
+  <!-- ink-01: Big Splash -->
+  <path fill-rule="evenodd" d="M 156.0 120.0 C 157.6 121.5, 151.7 121.4, 160.1 125.3 C 168.5 129.1, 206.9 141.5, 206.3 143.1 C 205.7 144.8, 166.1 136.2, 156.7 135.2 C 147.2 134.2, 150.7 135.8, 149.4 137.0 C 148.2 138.2, 151.9 143.0, 149.4 142.5 C 146.8 142.1, 133.9 131.2, 134.2 134.2 C 134.5 137.2, 152.1 160.5, 151.1 160.6 C 150.2 160.7, 132.4 138.3, 128.5 134.8 C 124.7 131.3, 128.4 137.8, 128.2 139.8 C 128.0 141.8, 127.5 142.3, 127.2 146.9 C 126.9 151.4, 127.4 165.1, 126.2 167.0 C 125.0 168.8, 123.0 151.1, 120.0 158.0 C 117.0 164.9, 109.9 209.1, 108.3 208.7 C 106.8 208.2, 110.7 164.9, 110.6 155.1 C 110.5 145.3, 108.4 151.7, 107.6 150.0 C 106.7 148.4, 108.2 143.9, 105.5 145.2 C 102.7 146.5, 91.9 158.7, 90.9 157.9 C 90.0 157.1, 106.5 137.7, 99.8 140.2 C 93.1 142.8, 52.1 173.8, 50.6 173.3 C 49.1 172.7, 84.4 143.6, 90.6 137.0 C 96.7 130.4, 88.1 134.8, 87.6 133.4 C 87.1 132.0, 89.0 130.0, 87.7 128.7 C 86.3 127.3, 78.3 126.7, 79.7 125.3 C 81.1 123.9, 99.1 122.2, 96.0 120.0 C 92.9 117.8, 60.1 113.0, 61.2 112.3 C 62.3 111.5, 95.9 115.3, 102.6 115.3 C 109.3 115.3, 102.1 113.6, 101.2 112.2 C 100.4 110.8, 100.1 110.1, 97.5 107.0 C 94.8 103.9, 86.2 95.9, 85.3 93.3 C 84.3 90.8, 93.7 97.4, 91.8 91.8 C 89.9 86.2, 72.5 61.1, 73.7 59.6 C 74.8 58.1, 93.3 78.7, 98.5 82.8 C 103.8 86.9, 103.0 83.3, 105.2 84.3 C 107.4 85.4, 109.8 87.3, 111.7 88.9 C 113.6 90.6, 115.2 95.7, 116.6 94.3 C 118.0 92.9, 119.0 79.7, 120.0 80.4 C 121.0 81.2, 120.6 100.2, 122.8 98.8 C 124.9 97.4, 131.6 72.8, 132.8 72.1 C 134.1 71.4, 130.1 91.1, 130.5 94.6 C 131.0 98.1, 133.9 93.3, 135.5 93.2 C 137.0 93.2, 137.1 95.1, 139.7 94.3 C 142.4 93.5, 150.9 87.2, 151.4 88.6 C 151.9 90.0, 137.4 103.4, 142.8 102.5 C 148.2 101.6, 183.8 81.8, 183.9 83.1 C 183.9 84.5, 149.4 105.5, 143.0 110.5 C 136.6 115.5, 144.4 112.2, 145.6 113.1 C 146.8 114.1, 148.7 114.9, 150.4 116.0 C 152.1 117.1, 154.4 118.5, 156.0 120.0" />
+  <g>
+    <circle cx="48.0" cy="99.1" r="3.7" /><circle cx="143.8" cy="59.2" r="4.7" /><circle cx="94.3" cy="43.9" r="1.9" /><circle cx="197.3" cy="98.7" r="1.6" /><circle cx="204.7" cy="178.9" r="3.8" /><circle cx="154.4" cy="28.4" r="3.5" /><circle cx="200.9" cy="106.2" r="3.6" /><circle cx="164.4" cy="38.5" r="4.9" /><circle cx="34.5" cy="74.8" r="1.4" /><circle cx="130.8" cy="197.3" r="1.5" /><circle cx="127.5" cy="189.1" r="2.4" /><circle cx="66.4" cy="58.7" r="2.8" /><circle cx="139.4" cy="194.5" r="5.2" /><circle cx="64.8" cy="45.9" r="1.9" /><circle cx="110.5" cy="48.3" r="2.8" /><circle cx="213.6" cy="113.8" r="3.6" /><circle cx="78.9" cy="25.6" r="4.5" /><circle cx="128.7" cy="185.9" r="2.6" /><circle cx="111.7" cy="194.0" r="5.3" /><circle cx="176.5" cy="64.5" r="4.0" /><circle cx="35.9" cy="184.7" r="3.2" /><circle cx="112.9" cy="195.8" r="3.6" /><circle cx="112.7" cy="211.0" r="5.1" /><circle cx="59.6" cy="164.2" r="5.5" /><circle cx="51.0" cy="115.9" r="1.4" /><circle cx="192.0" cy="179.3" r="4.6" /><circle cx="60.1" cy="151.9" r="2.8" /><circle cx="208.8" cy="117.8" r="5.4" />
+  </g>
+</svg></div><span class="lbl">splash 200</span></div>
+        <div class="item-box"><div class="size-200-ink"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="currentColor">
+  <!-- ink-05: Broken Circular Stroke (Ensō) -->
+  <path d="M 45.1 150.3 L 38.6 142.9 L 33.3 134.7 L 28.6 125.9 L 25.1 116.5 L 24.2 106.5 L 23.3 96.5 L 24.0 86.4 L 26.1 76.5 L 30.9 67.5 L 35.4 58.5 L 40.6 49.7 L 47.5 42.2 L 55.3 35.6 L 64.5 31.0 L 73.6 26.2 L 83.7 24.2 L 93.7 22.9 L 103.9 21.4 L 114.1 23.2 L 123.9 26.0 L 133.1 30.3 L 142.5 34.5 L 150.9 40.4 L 158.0 47.7 L 164.0 56.1 L 169.0 64.9 L 172.5 74.4 L 175.1 84.1 L 176.2 94.1 L 176.4 104.2 L 175.4 114.1 L 172.0 123.6 L 167.9 132.6 L 162.3 140.7 L 156.4 148.5 L 149.1 155.0 L 141.8 161.4 L 133.2 165.9 L 124.0 168.9 L 114.7 171.1 L 138 48 L 134 52 L 142 56 L 112.8 161.7 L 120.5 159.0 L 127.9 155.3 L 134.8 151.1 L 140.9 145.8 L 146.9 140.4 L 150.8 133.2 L 155.1 126.5 L 156.8 118.6 L 159.6 111.2 L 159.4 103.2 L 158.7 95.5 L 157.4 87.9 L 156.3 80.1 L 151.8 73.6 L 148.4 66.7 L 143.8 60.6 L 137.4 56.2 L 131.6 51.3 L 124.7 48.0 L 117.8 44.9 L 110.6 42.3 L 102.9 41.6 L 95.3 41.8 L 87.9 43.7 L 80.5 45.5 L 73.2 47.8 L 66.6 51.8 L 60.4 56.4 L 54.7 61.7 L 50.2 68.0 L 47.0 75.1 L 44.0 82.2 L 40.9 89.4 L 40.2 97.3 L 40.4 105.1 L 40.9 113.0 L 44.0 120.3 L 45.9 128.1 L 50.0 135.0 L 54.6 141.6 Z" />
+  <path d="M 136 44 C 145 42, 154 44, 160 48 C 152 46, 142 45, 134 46 Z" /><path d="M 148 52 C 158 56, 166 64, 170 72 C 164 65, 156 58, 145 54 Z" /><path d="M 45 85 C 42 75, 44 65, 52 54 C 47 62, 45 72, 47 82 Z" /><circle cx="168" cy="56" r="2.5" /><circle cx="178" cy="74" r="2.0" /><circle cx="184" cy="98" r="3.0" /><circle cx="156" cy="38" r="1.8" /><circle cx="132" cy="32" r="2.2" /><circle cx="36" cy="128" r="2.8" /><circle cx="48" cy="154" r="2.2" /><circle cx="72" cy="178" r="3.2" />
+</svg></div><span class="lbl">ensō 200</span></div>
+      </div>
+    </div>
+    
+  </div>
+</body>
+</html>

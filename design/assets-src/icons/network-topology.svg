@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Central Switch/Hub Node -->
+  <circle cx="24" cy="24" r="5" />
+  <circle cx="24" cy="24" r="1.5" fill="currentColor" stroke="none" />
+
+  <!-- Outer Distributed Nodes -->
+  <!-- North Node -->
+  <circle cx="24" cy="8" r="3.5" />
+  <circle cx="24" cy="8" r="1.2" fill="currentColor" stroke="none" />
+  <!-- East Node -->
+  <circle cx="40" cy="22" r="3.5" />
+  <circle cx="40" cy="22" r="1.2" fill="currentColor" stroke="none" />
+  <!-- South-East Node -->
+  <circle cx="36" cy="38" r="3.5" />
+  <circle cx="36" cy="38" r="1.2" fill="currentColor" stroke="none" />
+  <!-- South-West Node -->
+  <circle cx="12" cy="38" r="3.5" />
+  <circle cx="12" cy="38" r="1.2" fill="currentColor" stroke="none" />
+  <!-- West Node -->
+  <circle cx="8" cy="22" r="3.5" />
+  <circle cx="8" cy="22" r="1.2" fill="currentColor" stroke="none" />
+
+  <!-- Topology Interconnect Traces (with 45° bends) -->
+  <line x1="24" y1="19" x2="24" y2="11.5" />
+  <line x1="28.5" y1="22.5" x2="36.5" y2="22" />
+  <line x1="19.5" y1="22.5" x2="11.5" y2="22" />
+  <line x1="27.5" y1="27.5" x2="33.5" y2="35.5" />
+  <line x1="20.5" y1="27.5" x2="14.5" y2="35.5" />
+
+  <!-- Mesh Ring Interconnects -->
+  <path d="M 21 6.5 L 10 19" />
+  <path d="M 27 6.5 L 38 19" />
+  <line x1="15.5" y1="38" x2="32.5" y2="38" />
+</svg>

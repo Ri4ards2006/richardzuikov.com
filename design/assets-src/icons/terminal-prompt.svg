@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- Terminal Window Shell -->
+  <rect x="6" y="8" width="36" height="32" />
+
+  <!-- Title / Window Control Header -->
+  <line x1="6" y1="16" x2="42" y2="16" />
+  <!-- Control Dots -->
+  <circle cx="11" cy="12" r="1.2" fill="currentColor" stroke="none" />
+  <circle cx="15.5" cy="12" r="1.2" fill="currentColor" stroke="none" />
+  <circle cx="20" cy="12" r="1.2" fill="currentColor" stroke="none" />
+
+  <!-- Command Prompt Angle Chevron '>' -->
+  <path d="M 13 23 L 19 27.5 L 13 32" stroke-linejoin="miter" />
+
+  <!-- Input Path Line -->
+  <line x1="23" y1="32" x2="29" y2="32" />
+
+  <!-- Solid Block Cursor -->
+  <rect x="30" y="24" width="4" height="8" fill="currentColor" stroke="none" />
+</svg>
