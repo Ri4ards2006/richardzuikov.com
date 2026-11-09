@@ -28,6 +28,8 @@ function Panel({ closing, onClose, onExited }) {
     document.body.style.overflow = 'hidden';
     const onKeyDown = (event) => {
       if (event.key === 'Escape') {
+        // Deep pages also use Escape to go back; while the menu is open it only closes the menu.
+        event.stopImmediatePropagation();
         onClose();
         return;
       }
@@ -43,10 +45,10 @@ function Panel({ closing, onClose, onExited }) {
         first.focus();
       }
     };
-    document.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keydown', onKeyDown, true);
     return () => {
       document.body.style.overflow = previousOverflow;
-      document.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keydown', onKeyDown, true);
     };
   }, [onClose]);
 
