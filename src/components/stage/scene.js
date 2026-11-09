@@ -463,7 +463,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     floating.mesh.visible = hero.visible;
     water.mesh.visible = hero.visible;
     if (hero.visible) {
-      water.setTime(time);
+      water.update(time, clamp01(state.scroll / (state.h * 0.55)) * 1.2);
       floating.update(dt, time, pointerSeen ? pointer.set(mouse.x, -mouse.y) : null);
       heroLayers.forEach(({ object, depth, base }) => {
         object.position.set(base.x + mouse.x * depth, base.y - mouse.y * depth * 0.6, base.z);

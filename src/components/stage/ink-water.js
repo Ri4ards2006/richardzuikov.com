@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 const fragmentShader = `
-  varying vec2 vUv; uniform float uTime;
+  varying vec2 vUv; uniform float uTime,uDry;
   float caustic(vec2 uv,float t){
     vec2 p=mod(uv*6.283,6.283)-250.;
     vec2 i=p; float c=1.;
@@ -21,17 +21,24 @@ const fragmentShader = `
     vec3 ink=vec3(.02);
     vec3 tone=mix(vec3(.05),vec3(.32),dots);
     vec3 crest=vec3(.72,.71,.68);
-    gl_FragColor=vec4(v<.12?ink:v<.42?tone:crest,1.);
+    // Raising the thresholds drains the water with hard edges instead of a soft fade.
+    gl_FragColor=vec4(v<.12+uDry?ink:v<.42+uDry*2.?tone:crest,1.);
   }`;
 
 export function createInkWater() {
   const material = new THREE.ShaderMaterial({
-    uniforms: { uTime: { value: 0 } },
+    uniforms: { uTime: { value: 0 }, uDry: { value: 0 } },
     vertexShader: 'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
     fragmentShader,
   });
   const mesh = new THREE.Mesh(new THREE.PlaneGeometry(46, 26), material);
   mesh.rotation.x = -1.34;
   mesh.position.set(0, -3.4, -4);
-  return { mesh, setTime: (time) => { material.uniforms.uTime.value = time; } };
+  return {
+    mesh,
+    update(time, dry) {
+      material.uniforms.uTime.value = time;
+      material.uniforms.uDry.value = dry;
+    },
+  };
 }
