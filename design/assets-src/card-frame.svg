@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" fill="none" stroke="currentColor">
+  <!-- Outer Border with 45° Angular Corner Notches -->
+  <path d="M 32 16 L 368 16 L 384 32 L 384 568 L 368 584 L 32 584 L 16 568 L 16 32 Z" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter" />
+
+  <!-- Inner Border with 45° Angular Corner Notches -->
+  <path d="M 36 24 L 364 24 L 376 36 L 376 564 L 364 576 L 36 576 L 24 564 L 24 36 Z" stroke-width="1.0" stroke-linecap="square" stroke-linejoin="miter" />
+
+  <!-- Outer Edge Tick Accents -->
+  <line x1="200" y1="12" x2="200" y2="16" stroke-width="1.5" />
+  <line x1="200" y1="584" x2="200" y2="588" stroke-width="1.5" />
+  <line x1="12" y1="300" x2="16" y2="300" stroke-width="1.5" />
+  <line x1="384" y1="300" x2="388" y2="300" stroke-width="1.5" />
+
+  <!-- Top Rule with Centered Roman Numeral Slot -->
+  <!-- Left Rule Segment -->
+  <line x1="24" y1="72" x2="148" y2="72" stroke-width="1.25" stroke-linecap="square" />
+  <line x1="36" y1="76" x2="144" y2="76" stroke-width="0.75" stroke-linecap="square" />
+
+  <!-- Right Rule Segment -->
+  <line x1="252" y1="72" x2="376" y2="72" stroke-width="1.25" stroke-linecap="square" />
+  <line x1="256" y1="76" x2="364" y2="76" stroke-width="0.75" stroke-linecap="square" />
+
+  <!-- Centered Empty Slot / Cartouche Frame for Roman Numeral -->
+  <polygon points="152,72 162,56 238,56 248,72 238,88 162,88" stroke-width="1.5" stroke-linejoin="miter" />
+  <polygon points="156,72 164,60 236,60 244,72 236,84 164,84" stroke-width="0.75" stroke-linejoin="miter" />
+  <!-- Slot Corner Accents -->
+  <circle cx="148" cy="72" r="1.5" fill="currentColor" stroke="none" />
+  <circle cx="252" cy="72" r="1.5" fill="currentColor" stroke="none" />
+
+  <!-- Bottom Title Area Divider Rules -->
+  <line x1="24" y1="514" x2="376" y2="514" stroke-width="1.25" stroke-linecap="square" />
+  <line x1="36" y1="518" x2="364" y2="518" stroke-width="0.75" stroke-linecap="square" />
+
+  <!-- Small PCB-Trace Corner Ornaments (No Occult / No Astrological Symbols) -->
+  <!-- Top-Left Corner Traces -->
+  <g stroke-width="1.0" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M 40 56 L 40 46 L 46 40 L 56 40" />
+    <path d="M 40 46 L 48 46 L 54 40" />
+    <circle cx="59" cy="40" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="40" cy="59" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="51" cy="51" r="1.2" fill="currentColor" stroke="none" />
+  </g>
+
+  <!-- Top-Right Corner Traces -->
+  <g stroke-width="1.0" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M 360 56 L 360 46 L 354 40 L 344 40" />
+    <path d="M 360 46 L 352 46 L 346 40" />
+    <circle cx="341" cy="40" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="360" cy="59" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="349" cy="51" r="1.2" fill="currentColor" stroke="none" />
+  </g>
+
+  <!-- Bottom-Left Corner Traces -->
+  <g stroke-width="1.0" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M 40 544 L 40 554 L 46 560 L 56 560" />
+    <path d="M 40 554 L 48 554 L 54 560" />
+    <circle cx="59" cy="560" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="40" cy="541" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="51" cy="549" r="1.2" fill="currentColor" stroke="none" />
+  </g>
+
+  <!-- Bottom-Right Corner Traces -->
+  <g stroke-width="1.0" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M 360 544 L 360 554 L 354 560 L 344 560" />
+    <path d="M 360 554 L 352 554 L 346 560" />
+    <circle cx="341" cy="560" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="360" cy="541" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="349" cy="549" r="1.2" fill="currentColor" stroke="none" />
+  </g>
+</svg>

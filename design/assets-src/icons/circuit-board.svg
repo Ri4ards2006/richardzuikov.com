@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- PCB Substrate Boundary with Corner Chamfer -->
+  <path d="M 12 6 L 42 6 L 42 42 L 6 42 L 6 12 Z" />
+
+  <!-- Central SMD IC Package -->
+  <rect x="15" y="15" width="10" height="10" />
+  <circle cx="18" cy="18" r="0.9" fill="currentColor" stroke="none" />
+
+  <!-- 45° Routed Traces & Vias -->
+  <!-- Trace 1: Chip to Top-Right Via -->
+  <path d="M 25 18 L 32 18 L 36 14 L 36 10" />
+  <circle cx="36" cy="10" r="1.75" />
+  <circle cx="36" cy="10" r="0.8" fill="currentColor" stroke="none" />
+
+  <!-- Trace 2: Chip to Mid-Right Via -->
+  <path d="M 25 22 L 34 22 L 38 26" />
+  <circle cx="38" cy="26" r="1.75" />
+  <circle cx="38" cy="26" r="0.8" fill="currentColor" stroke="none" />
+
+  <!-- Trace 3: Chip to Bottom Bus -->
+  <path d="M 18 25 L 18 31 L 22 35 L 22 42" />
+
+  <!-- Trace 4: Left Side Via -->
+  <path d="M 15 20 L 10 20 L 10 28" />
+  <circle cx="10" cy="28" r="1.75" />
+  <circle cx="10" cy="28" r="0.8" fill="currentColor" stroke="none" />
+
+  <!-- Bottom Connector Gold Fingers -->
+  <line x1="28" y1="37" x2="28" y2="42" />
+  <line x1="34" y1="37" x2="34" y2="42" />
+</svg>
