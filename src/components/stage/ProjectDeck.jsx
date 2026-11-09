@@ -92,6 +92,8 @@ export default function ProjectDeck() {
     } else if (event.key === 'Escape') {
       setFlipped(false);
     } else if (event.key === 'Enter' && event.target === deckRef.current) {
+      // Without this the same key press would also activate the back button that takes focus.
+      event.preventDefault();
       setFlipped(true);
     }
   };
