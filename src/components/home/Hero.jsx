@@ -24,7 +24,7 @@ export default function Hero() {
             {t.telemetry.location}
           </p>
           <div className="flex flex-wrap items-center gap-3 pt-2">
-            <Link to="/#work" className="inline-flex items-center gap-2 min-h-11 px-5 py-3 rounded-lg bg-[#FFB000] text-[#09090b] text-sm font-semibold hover:bg-[#ffc233] transition-colors duration-200">
+            <Link to="/quick#work" className="inline-flex items-center gap-2 min-h-11 px-5 py-3 rounded-lg bg-[#FFB000] text-[#09090b] text-sm font-semibold hover:bg-[#ffc233] transition-colors duration-200">
               {t.landing.viewWork}
               <ArrowDown aria-hidden="true" className="w-4 h-4" />
             </Link>

@@ -19,8 +19,8 @@ const components = {
   contact: ContactSection,
 };
 
-export default function Home() {
-  useDocumentTitle('Richard Zuikov — Embedded Systems & Hardware Developer');
+export default function Quick() {
+  useDocumentTitle('Quick Read — Richard Zuikov');
   const { hash, key } = useLocation();
 
   useEffect(() => {

@@ -5,7 +5,7 @@ import { Moon, Sun, X } from 'lucide-react';
 import { useTheme } from '../hooks/use-theme';
 import { useLanguage } from '../hooks/use-language';
 import { useReducedMotion } from '../hooks/use-reduced-motion';
-import { sections } from '../lib/sections';
+import { QUICK_PATH, sections } from '../lib/sections';
 
 const CLOSED = 'polygon(0% 0%, 0% 0%, -20% 100%, -20% 100%)';
 const OPEN = 'polygon(0% 0%, 120% 0%, 100% 100%, -20% 100%)';
@@ -79,7 +79,7 @@ function Panel({ onClose }) {
           {sections.map(({ id, number }) => (
             <li key={id} className="flex items-baseline gap-4">
               <span aria-hidden="true" className="font-mono text-xs text-zinc-600 dark:text-zinc-400">{number}</span>
-              <Link to={`/#${id}`} onClick={onClose} className={linkClass}>{t.landing.nav[id]}</Link>
+              <Link to={`${QUICK_PATH}#${id}`} onClick={onClose} className={linkClass}>{t.landing.nav[id]}</Link>
             </li>
           ))}
           <li className="flex items-baseline gap-4">

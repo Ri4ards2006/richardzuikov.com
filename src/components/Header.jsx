@@ -4,7 +4,7 @@ import { Menu, Moon, Sun } from 'lucide-react';
 import { useLanguage } from '../hooks/use-language';
 import { useTheme } from '../hooks/use-theme';
 import { useScrollSpy } from '../hooks/use-scroll-spy';
-import { sections } from '../lib/sections';
+import { QUICK_PATH, sections } from '../lib/sections';
 
 // Keeps framer-motion out of the initial bundle until the menu is first opened.
 const MenuOverlay = lazy(() => import('./MenuOverlay'));
@@ -19,7 +19,7 @@ export default function Header() {
   const { pathname } = useLocation();
   const { language, toggleLanguage, t } = useLanguage();
   const [theme, toggleTheme] = useTheme();
-  const active = useScrollSpy(sectionIds, pathname === '/');
+  const active = useScrollSpy(sectionIds, pathname === QUICK_PATH);
 
   const openMenu = () => {
     setMenuLoaded(true);
@@ -34,7 +34,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 bg-white/95 dark:bg-[#09090b]/95 border-b border-zinc-200 dark:border-zinc-800">
       <div className="max-w-6xl mx-auto h-16 px-6 sm:px-12 flex items-center justify-between gap-6">
-        <Link to="/#top" aria-label="RZ · Richard Zuikov" className="font-mono text-sm font-bold tracking-widest text-zinc-950 dark:text-white">
+        <Link to="/" aria-label="RZ · Richard Zuikov" className="font-mono text-sm font-bold tracking-widest text-zinc-950 dark:text-white">
           RZ
         </Link>
 
@@ -43,7 +43,7 @@ export default function Header() {
             {sections.map(({ id }) => (
               <li key={id}>
                 <Link
-                  to={`/#${id}`}
+                  to={`${QUICK_PATH}#${id}`}
                   aria-current={active === id ? 'true' : undefined}
                   className={`inline-block py-2 font-mono text-xs uppercase tracking-wider border-b-2 transition-colors duration-150 ${
                     active === id

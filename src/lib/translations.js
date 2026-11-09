@@ -44,6 +44,7 @@ export const translations = {
       overview: "Übersicht"
     },
     landing: {
+      "menuPlaceholder": {"label":"Menü im Aufbau","quickRead":"Zur Kurzfassung"},
       "sectionNav": "Sektionen",
       "nav": {
         "about": "Über mich",
@@ -377,6 +378,7 @@ export const translations = {
       overview: "Overview"
     },
     landing: {
+      "menuPlaceholder": {"label":"Menu under construction","quickRead":"Open Quick Read"},
       "sectionNav": "Sections",
       "nav": {
         "about": "About",

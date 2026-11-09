@@ -6,13 +6,12 @@ Personal portfolio website of Richard Zuikov. A single-page app, German/English,
 
 | Route | Content |
 |---|---|
-| `/` | Home |
-| `/about` | About |
-| `/career` | Career timeline and credentials |
+| `/` | Menu home (placeholder for now) |
+| `/quick` | Quick Read: long-scroll landing |
 | `/lab` | Projects |
-| `/contact` | Contact |
 | `/impressum` | Legal notice / privacy (also served at `/datenschutz` and `/legal`) |
 
+`/about`, `/career` and `/contact` redirect to the matching section of `/quick`.
 `/works`, `/portfolio` and `/dev` redirect to `/lab`.
 
 ## Stack
@@ -22,7 +21,7 @@ From `package.json`:
 - React 18, React Router 6
 - Vite 5 (`@vitejs/plugin-react`)
 - Tailwind CSS 3 + Sass (`src/css/style.scss`)
-- framer-motion (animations), lucide-react and @tabler/icons-react (icons)
+- framer-motion (animations), lucide-react (icons)
 - clsx + tailwind-merge (`cn()` in `src/lib/utils.js`)
 
 ## Development
