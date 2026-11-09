@@ -130,8 +130,8 @@ export const translations = {
         },
         {
           title: "Lab- & Ausbildungspfad",
-          desc: "Gezielter Weg zum IT-Systemelektroniker bis 2027 mit Fokus auf industrielle Sicherheitssysteme und Netzwerkinfrastruktur.",
-          todo: "TODO: 2–3 Sätze von Richard zu „Lab- & Ausbildungspfad“."
+          desc: "Seit 2025 mache ich bei R2P die Ausbildung zum IT-Systemelektroniker, Abschluss 2027. Ein großer Teil ist Außendienst beim Kunden: Ich installiere Netzwerke, baue Sicherheits- und Kamerasysteme auf und nehme sie in Betrieb.",
+          todo: "ENTWURF: von Richard zu prüfen (Lab- & Ausbildungspfad)."
         }
       ],
       workbenchTitle: "Hardware Labor & Werkbank",
@@ -494,8 +494,8 @@ export const translations = {
         },
         {
           title: "Lab & Development Path",
-          desc: "Targeted journey toward IT Systems Electronics certification by 2027 with focus on enterprise network arrays.",
-          todo: "TODO: 2–3 sentences from Richard on “Lab & Development Path”."
+          desc: "Since 2025 I have been training as an IT Systems Electronics Technician at R2P, finishing in 2027. Much of it is field work at customer sites: I install networks, set up security and camera systems and put them into operation.",
+          todo: "DRAFT: for Richard's review (Lab & Development Path)."
         }
       ],
       workbenchTitle: "Hardware Lab & Workbench",

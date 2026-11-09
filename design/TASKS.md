@@ -324,7 +324,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 |---|---|---|
 | done | claude-code | Headline "FROM PIN TO PACKET" |
 | todo | claude-code | Props: PCB (02), monitor with scrolling code (03), rack unit with LEDs (04), dome camera following the cursor (05) |
-| todo | claude-code | Panel 05 text around the apprenticeship (draft for review) |
+| done | claude-code | Panel 05 text around the apprenticeship (draft for review) |
 
 ### Now
 | Status | Owner | Item |
