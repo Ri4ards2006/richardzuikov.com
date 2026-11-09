@@ -2,11 +2,10 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Quick from './pages/Quick';
+import Stage from './pages/Stage';
 import NotFound from './pages/NotFound';
 import { useWipeLocation } from './hooks/use-wipe-location';
-import FogGate from './components/atlus/FogGate';
 
-const Stage = lazy(() => import('./pages/Stage'));
 const About = lazy(() => import('./pages/About'));
 const Work = lazy(() => import('./pages/Work'));
 const Stack = lazy(() => import('./pages/Stack'));
@@ -20,7 +19,6 @@ function AppRoutes() {
   return (
     <>
       {transition?.type === 'wipe' && <div key={transition.key} aria-hidden="true" className="wipe-panel" onAnimationEnd={clearTransition} />}
-      {transition?.type === 'fog' && <FogGate key={transition.key} onDone={clearTransition} />}
       <Suspense fallback={<div className="min-h-screen" />}>
         <Routes location={displayed}>
           <Route path="/" element={<Stage />} />

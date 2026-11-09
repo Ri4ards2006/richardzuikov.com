@@ -39,21 +39,13 @@ const markIntroSeen = () => {
   }
 };
 
-const hasWebGL = () => {
-  try {
-    return Boolean(document.createElement('canvas').getContext('webgl2'));
-  } catch {
-    return false;
-  }
-};
-
 export default function Stage() {
   useDocumentTitle('Richard Zuikov — Embedded Systems & Hardware Developer');
   const { language, t } = useLanguage();
   const reducedMotion = useReducedMotion();
   const { hash } = useLocation();
   const { email, copied, copy } = useContactEmail();
-  const [webgl] = useState(() => !reducedMotion && hasWebGL());
+  const [webgl, setWebgl] = useState(() => !reducedMotion && 'WebGL2RenderingContext' in window);
   const [phase, setPhase] = useState(() => (webgl && !introSeen() && !hash ? 'boot' : 'done'));
   const [active, setActive] = useState(getActiveMenuId);
 
@@ -74,7 +66,8 @@ export default function Stage() {
     let cancelled = false;
     const playIntro = phaseRef.current === 'boot';
 
-    const scenePromise = import('../components/stage/scene').then(({ createStage }) => {
+    // Context creation is expensive, so it gets its own task after the first paint.
+    const scenePromise = Promise.all([import('../components/stage/scene'), delay(0)]).then(([{ createStage }]) => {
       if (cancelled) return null;
       const stage = createStage({
         canvas: canvasRef.current,
@@ -94,7 +87,13 @@ export default function Stage() {
         if (!cancelled) stage.start();
         return stage;
       });
-    }).catch(() => null);
+    }).catch(() => {
+      if (!cancelled) {
+        setWebgl(false);
+        setPhase('done');
+      }
+      return null;
+    });
 
     if (playIntro) {
       markIntroSeen();
