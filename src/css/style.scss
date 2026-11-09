@@ -575,7 +575,7 @@ html.dark .ground-message {
   --tilt: 9deg;
   max-width: 34rem;
   padding: 1.75rem;
-  background: radial-gradient(circle, rgb(var(--ash-700) / 0.65) 1.1px, transparent 1.4px) 0 0 / 7px 7px, rgb(var(--ash-800) / 0.94);
+  background: rgb(var(--ash-800) / 0.94);
   border: 3px solid rgb(var(--ash-100));
   box-shadow: 10px 10px 0 rgb(var(--ash-900));
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2rem), calc(100% - 2rem) 100%, 0 100%);

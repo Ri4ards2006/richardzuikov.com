@@ -198,7 +198,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 ### Descent
 | Status | Owner | Item |
 |---|---|---|
-| todo | claude-code | Remove the dot-grid / KiCad paper background everywhere |
+| done | claude-code | Remove the dot-grid / KiCad paper background everywhere |
 | todo | claude-code | Panels at different depths with parallax |
 | todo | claude-code | Panel entrance motion: slide + slight rotation + slam |
 | todo | claude-code | Animated monochrome line illustration per panel: register bits flipping, SPI/I2C waveform, code typing |

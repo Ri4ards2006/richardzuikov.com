@@ -116,25 +116,6 @@ function drawCard(canvas, project, index, img) {
   ctx.fillText(project.title.toUpperCase(), w / 2, h - 44, w - 70);
 }
 
-function screentone() {
-  const canvas = makeCanvas(256, 256);
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#121212';
-  ctx.fillRect(0, 0, 256, 256);
-  ctx.fillStyle = '#3a3a39';
-  for (let y = 0; y < 256; y += 8) {
-    for (let x = (y / 8) % 2 ? 4 : 0; x < 256; x += 8) {
-      ctx.beginPath();
-      ctx.arc(x, y, 2, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-  const map = texture(canvas);
-  map.wrapS = THREE.RepeatWrapping;
-  map.wrapT = THREE.RepeatWrapping;
-  return map;
-}
-
 function createPortrait(map, { ghost = false } = {}) {
   return new THREE.ShaderMaterial({
     transparent: true,
@@ -204,7 +185,6 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     return ring;
   });
 
-  const toneMap = screentone();
   const water = createInkWater();
   scene.add(water.mesh);
 
@@ -248,14 +228,6 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     mesh.scale.setScalar(THREE.MathUtils.lerp(hero.scale.x * 3.1, profileHeight(), p));
     mesh.rotation.y = rad(-90) * (1 - smooth(clamp01((p - 0.5) / 0.5)));
   }
-
-  // Inclined screentone panels behind the descent.
-  const backPanels = Array.from({ length: 6 }, (_, i) => {
-    const panel = new THREE.Mesh(new THREE.PlaneGeometry(9, 5.4), new THREE.MeshBasicMaterial({ map: toneMap, color: 0xaaaaaa }));
-    panel.rotation.set(rad(i % 2 ? -14 : 12), rad(i % 2 ? 24 : -22), rad(i % 2 ? 5 : -6));
-    scene.add(panel);
-    return panel;
-  });
 
   // Tarot cards positioned over measured DOM slots.
   const cards = projects.map((project, index) => {
@@ -372,12 +344,6 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       const r = el.getBoundingClientRect();
       return { el, top: r.top + state.scroll, height: r.height };
     });
-    state.panels.forEach(({ top, height }, i) => {
-      const panel = backPanels[i];
-      if (!panel) return;
-      panel.position.set((i % 2 ? 2.2 : -2.2) * (state.w / state.h) * 0.7, -(top + height / 2 - state.h / 2) * state.k, -3 - (i % 3) * 0.7);
-    });
-    backPanels.forEach((panel, i) => { panel.visible = i < state.panels.length; });
 
     const about = worldOf(a.aboutPortrait.getBoundingClientRect());
     profile.to.set(about.x, about.y, 0);
