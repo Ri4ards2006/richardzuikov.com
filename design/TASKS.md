@@ -238,7 +238,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | Recognisable soldering iron: conical chrome tip, thin shaft, heat-sink sleeve, ribbed rubber grip, stuck diagonally into the pile |
 | done | claude-code | Varied stones |
 | done | claude-code | Charred PCB pile with glowing traces |
-| todo | antigravity | A few logs |
+| done | claude-code | A few logs |
 | todo | antigravity | Layered flame shader |
 | todo | antigravity | Sparks and thin smoke |
 | todo | antigravity | Flickering light on stones and floor |

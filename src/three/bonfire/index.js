@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { disposeObject, hash, pointsMaterial, seededPoints, smooth } from '../utils';
 import { buildIron } from './iron';
+import { buildLogs } from './logs';
 import { buildPcbPile } from './pcb';
 import { bonfireQuality } from './quality';
 import { buildStones } from './stones';
@@ -14,7 +15,6 @@ function buildBonfire(emberCount, q) {
   const group = new THREE.Group();
   const textures = [];
   const stone = new THREE.MeshStandardMaterial({ color: 0x4a4a48, roughness: 0.95, flatShading: true });
-  const char = new THREE.MeshStandardMaterial({ color: 0x1a1a19, roughness: 1, flatShading: true });
 
   const slabs = new THREE.InstancedMesh(new THREE.BoxGeometry(1.62, 0.3, 1.62), stone, 11 * 8);
   const matrix = new THREE.Matrix4();
@@ -39,14 +39,9 @@ function buildBonfire(emberCount, q) {
   ash.scale.set(1.25, 0.34, 1.25);
   group.add(ash);
 
-  const logGeometry = new THREE.CylinderGeometry(0.11, 0.15, 1.9, 6);
-  for (let i = 0; i < 7; i += 1) {
-    const log = new THREE.Mesh(logGeometry, char);
-    const a = (i / 7) * Math.PI * 2;
-    log.position.set(Math.cos(a) * 0.55, 0.42, Math.sin(a) * 0.55);
-    log.rotation.set(Math.sin(a) * 0.62, a * 0.3, -Math.cos(a) * 0.62);
-    group.add(log);
-  }
+  const { logs, glow: logGlow } = buildLogs(q);
+  group.add(logs);
+  textures.push(logGlow);
 
   const { iron, matcap } = buildIron(q);
   group.add(iron);
