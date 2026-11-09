@@ -178,7 +178,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 | Status | Owner | Item |
 |---|---|---|
 | done | claude-code | Remove the "STATUS: AVAILABLE…" chip |
-| todo | claude-code | Remove the diagonal white line across the portrait |
+| done | claude-code | Remove the diagonal white line across the portrait |
 | todo | claude-code | Name as big angled Anton block "RICHARD / ZUIKOV" top-right, small role line underneath |
 | todo | claude-code | Remove the name/role line above the menu |
 | todo | claude-code | Menu slabs ~1.5× larger, up to ~120 px desktop; keep wedge, inversion, echo text; no overflow at 390 px (review 9.1) |

@@ -213,12 +213,6 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
     heroLayers.push({ object: figure, depth: 0.42, base: new THREE.Vector3(0, -0.1, 0) });
   }).catch(() => {});
 
-  // Ink slash in front of the portrait.
-  const slash = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 0.045), new THREE.MeshBasicMaterial({ color: PAPER }));
-  slash.rotation.z = rad(-24);
-  hero.add(slash);
-  heroLayers.push({ object: slash, depth: 0.75, base: new THREE.Vector3(0, -0.9, 0.7) });
-
   // Inclined screentone panels behind the descent.
   const backPanels = Array.from({ length: 6 }, (_, i) => {
     const panel = new THREE.Mesh(new THREE.PlaneGeometry(9, 5.4), new THREE.MeshBasicMaterial({ map: toneMap, color: 0xaaaaaa }));
