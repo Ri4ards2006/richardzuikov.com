@@ -21,7 +21,7 @@ const SCENE_TIMEOUT_MS = 4000;
 const SLAB_SIZES = [1, 0.84, 1.12, 0.92, 1.04];
 const SLAB_OFFSETS = [0, 1.1, 0.4, 1.6, 0.7];
 // Depth layer per descent panel: near panels move against the scroll, far ones trail it.
-const PANEL_LAYERS = ['near', 'far', 'mid', 'near'];
+const PANEL_LAYERS = ['near', 'far', 'mid', 'near', 'far'];
 const LAND_PIN_MS = 1500;
 const LAND_RELEASE_EVENTS = ['wheel', 'touchstart', 'keydown', 'pointerdown'];
 

@@ -120,6 +120,11 @@ export const translations = {
           todo: "TODO: 2–3 Sätze von Richard zu „Warum C++ & Go?“."
         },
         {
+          title: "Cluster & Infrastruktur",
+          desc: "Im Home-Lab läuft ein Cluster aus Proxmox VE und K3s, deployt per GitOps mit ArgoCD. Von außen erreichbar ist er über WireGuard und Cloudflare-Tunnel.",
+          todo: "ENTWURF: von Richard zu prüfen (Cluster & Infrastruktur)."
+        },
+        {
           title: "Lab- & Ausbildungspfad",
           desc: "Gezielter Weg zum IT-Systemelektroniker bis 2027 mit Fokus auf industrielle Sicherheitssysteme und Netzwerkinfrastruktur.",
           todo: "TODO: 2–3 Sätze von Richard zu „Lab- & Ausbildungspfad“."
@@ -480,6 +485,11 @@ export const translations = {
           title: "Why C++ & Go?",
           desc: "The ideal equilibrium between bare-metal register control and highly concurrent network telemetry pipelines.",
           todo: "TODO: 2–3 sentences from Richard on “Why C++ & Go?”."
+        },
+        {
+          title: "Cluster & Infrastructure",
+          desc: "My home lab runs a cluster on Proxmox VE and K3s, deployed through GitOps with ArgoCD. It is reached from outside through WireGuard and Cloudflare tunnels.",
+          todo: "DRAFT: for Richard's review (Cluster & Infrastructure)."
         },
         {
           title: "Lab & Development Path",

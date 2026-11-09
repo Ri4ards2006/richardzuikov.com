@@ -69,7 +69,7 @@ function Trace() {
   );
 }
 
-const ILLUSTRATIONS = [Bits, Wave, Code, Trace];
+const ILLUSTRATIONS = [Bits, Wave, Code, Trace, Trace];
 
 export default function PanelIllustration({ index }) {
   const Illustration = ILLUSTRATIONS[index % ILLUSTRATIONS.length];
