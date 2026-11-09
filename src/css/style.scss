@@ -667,6 +667,16 @@ html.dark .ground-message {
   opacity: 0.3;
 }
 
+.ill-node {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+.ill-pod {
+  fill: currentColor;
+}
+
 .ill-trace-pulse {
   stroke-dasharray: 18 82;
 }
@@ -706,6 +716,17 @@ html.dark .ground-message {
 
   .ill-trace-pulse {
     animation: trace-run 2.6s linear infinite;
+  }
+
+  .ill-pod {
+    animation: pod-schedule 7s cubic-bezier(0.2, 0.9, 0.1, 1) var(--delay) infinite backwards;
+  }
+
+  @keyframes pod-schedule {
+    0% { transform: translate(var(--from-x), var(--from-y)); opacity: 0; }
+    2% { opacity: 1; }
+    12%, 88% { transform: translate(0, 0); opacity: 1; }
+    92%, 100% { transform: translate(0, 0); opacity: 0; }
   }
 
   .ill-line {
