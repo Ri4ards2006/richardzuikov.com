@@ -23,7 +23,7 @@ const LED_PERIODS = [0.9, 1.7, 0.6, 2.3, 1.2, 0.8, 1.9, 1.4];
 
 function Systems() {
   return (
-    <svg viewBox="0 0 240 72" role="presentation" className="vg-svg">
+    <svg viewBox="0 0 240 72" role="presentation" preserveAspectRatio="none" className="vg-svg">
       {[0, 1, 2, 3].map((unit) => (
         <g key={unit} transform={`translate(0 ${unit * 18})`}>
           <rect className="vg-line" x="1" y="1" width="238" height="15" />
@@ -41,7 +41,7 @@ const WAVE = Array.from({ length: 121 }, (_, i) => `${i ? 'L' : 'M'}${i * 2} ${3
 
 function Hardware() {
   return (
-    <svg viewBox="0 0 240 72" role="presentation" className="vg-svg">
+    <svg viewBox="0 0 240 72" role="presentation" preserveAspectRatio="none" className="vg-svg">
       {[40, 80, 120, 160, 200].map((x) => <path key={x} className="vg-faint" d={`M${x} 0 V72`} />)}
       {[18, 36, 54].map((y) => <path key={y} className="vg-faint" d={`M0 ${y} H240`} />)}
       <path className="vg-scope" d={WAVE} pathLength="100" />
@@ -53,7 +53,7 @@ const WIRE = [[0, 0, 240, 12], [8, 20, 104, 8], [8, 34, 80, 6], [8, 46, 92, 6], 
 
 function Software() {
   return (
-    <svg viewBox="0 0 240 72" role="presentation" className="vg-svg">
+    <svg viewBox="0 0 240 72" role="presentation" preserveAspectRatio="none" className="vg-svg">
       <rect className="vg-line" x="1" y="1" width="238" height="70" />
       {WIRE.map(([x, y, width, height], index) => (
         <rect key={`${x}-${y}`} className="vg-wire" x={x} y={y} width={width} height={height} style={{ '--step': index }} />

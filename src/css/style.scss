@@ -1640,6 +1640,10 @@ html.dark .ground-message {
   .skill-board {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  .skill-slab.is-active {
+    transform: translateX(0.25rem) rotateY(-4deg);
+  }
 }
 
 .stage-more {
@@ -1671,6 +1675,10 @@ html.dark .ground-message {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+.vg-svg * {
+  vector-effect: non-scaling-stroke;
 }
 
 .vg-line,
