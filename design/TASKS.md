@@ -150,7 +150,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | Remove the last `#FFB000` in `Impressum.jsx` | 8.1 |
 | done | Slab entrance within 220 ms with the §5 curve | 4.2 |
 | done | Manga panels use 3 px borders | 4.3 |
-| todo | Row labels and icons: prompt-style text list instead of Lucide icons | 7.2 |
+| done | Row labels and icons: prompt-style text list instead of Lucide icons | 7.2 |
 | todo | Skip control as a slab with a key cue | 1.5 |
 | todo | Rack link as a slanted chip | 5.5 |
 | todo | Sharp binary halftone on panels instead of the soft gradient | 4.5 |
@@ -242,5 +242,5 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | antigravity | Layered flame shader |
 | done | antigravity | Sparks and thin smoke |
 | done | antigravity | Flickering light on stones and floor |
-| todo | antigravity | Contact list: SEND MAIL · CV (PDF) · GITHUB · LINKEDIN |
-| todo | antigravity | Remove "Copy email" from the list; small copy box next to the displayed email, checkmark for 2 s |
+| done | antigravity | Contact list: SEND MAIL · CV (PDF) · GITHUB · LINKEDIN |
+| done | antigravity | Remove "Copy email" from the list; small copy box next to the displayed email, checkmark for 2 s |
