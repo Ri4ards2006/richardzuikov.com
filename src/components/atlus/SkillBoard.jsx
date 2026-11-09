@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLanguage } from '../../hooks/use-language';
 import { useSectionEnter } from '../../hooks/use-section-enter';
 import { stackUses } from '../../data/stack-uses';
+import SkillVignette from './SkillVignette';
 
 const pad = (value) => String(value).padStart(2, '0');
 
@@ -29,7 +30,9 @@ export default function SkillBoard() {
         <span aria-hidden="true" className="ground-message mt-2">{t.atlus.hints.stack}</span>
       </div>
 
-      <section aria-label={domain.name} className="skill-panel slash-wipe">
+      {/* The key replays the slash wipe and the row reveal on every category change. */}
+      <section key={selected} aria-label={domain.name} className="skill-panel slash-wipe">
+        <SkillVignette category={selected} />
         <p className="font-mono text-xs tracking-widest text-ash-300">{pad(selectedIndex + 1)} / {t.atlus.skills}</p>
         <h3 className="font-anton uppercase text-3xl tracking-wide mt-2">{domain.name}</h3>
         <p className="mt-1 text-sm text-ash-300">{domain.desc}</p>
@@ -37,7 +40,7 @@ export default function SkillBoard() {
           {domain.items.map((item, index) => {
             const uses = stackUses[selected]?.[index];
             return (
-              <li key={item} className="skill-row grid grid-cols-[2rem_minmax(0,1fr)] items-baseline gap-3 py-3">
+              <li key={item} style={{ '--i': index }} className="skill-row grid grid-cols-[2rem_minmax(0,1fr)] items-baseline gap-3 py-3">
                 <span aria-hidden="true" className="font-mono text-xs text-ash-400">{pad(index + 1)}</span>
                 <div className="min-w-0">
                   <span className="text-sm text-ash-100">{item}</span>
