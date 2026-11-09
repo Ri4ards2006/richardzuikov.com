@@ -6,6 +6,9 @@ import { ROMAN } from '../../lib/atlus';
 const DETAIL_SENTENCES = 2;
 const HEADER_PX = 64;
 
+// Periods such as "Dec 2024 – Aug 2025" flip to their first four-digit year.
+const firstYear = (period) => period.match(/\d{4}/)?.[0] ?? period.slice(0, 4);
+
 const firstSentences = (text) => text.split(/(?<=\.)\s+/).slice(0, DETAIL_SENTENCES).join(' ');
 
 function FlipDigit({ value }) {
@@ -62,7 +65,7 @@ export default function RecordBoard({ onEnter }) {
     <div ref={boardRef} className="record-board">
       <span aria-hidden="true" className="travel-lines" />
       <div aria-hidden="true" className="record-year">
-        {[...timeline[active].year.slice(0, 4)].map((digit, index) => (
+        {[...firstYear(timeline[active].year)].map((digit, index) => (
           // eslint-disable-next-line react/no-array-index-key
           <FlipDigit key={index} value={digit} />
         ))}
@@ -80,7 +83,7 @@ export default function RecordBoard({ onEnter }) {
               </button>
               {isOpen && (
                 <div className="record-detail slash-wipe">
-                  <p>{firstSentences(entry.desc)}</p>
+                  {entry.desc && <p>{firstSentences(entry.desc)}</p>}
                   {/* TODO strings are placeholders for facts still to be supplied, so visitors never see them. */}
                   {import.meta.env.DEV && <p className="mt-2 font-mono text-[11px] text-ash-300">{t.atlus.todoRecord}</p>}
                 </div>

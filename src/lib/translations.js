@@ -237,17 +237,24 @@ export const translations = {
       timeline: [
         {
           year: "2025–2027",
-          type: "Aktuell · Duale Entwicklung",
-          title: "IT-Systemelektroniker | R2P GmbH",
+          type: "Ausbildung · Aktuell",
+          title: "Ausbildung IT-Systemelektroniker | R2P GmbH",
           desc: "Verkürzter Ausbildungsgang aufgrund hoher Vorkenntnisse. Montage, Inbetriebnahme und Wartung von video- und netzwerkbasierten Sicherheitssystemen. Technische Fehlersuche auf Hardware- und Systemebene. Nebenher IT-Support (Helpdesk, Tickets, Enterprise-Netzwerke).",
           tags: ["Enterprise Network", "Hardware Diagnostics", "CCNA Systems", "Flensburg"]
         },
         {
-          year: "2024–2025",
+          year: "Dez. 2024 – Aug. 2025",
           type: "Minijob",
-          title: "IT System Administration (Minijob) | R2P GmbH",
-          desc: "Aufbau, Reparatur und Provisionierung von IT-Arbeitsplätzen. Linux-basierte Systemarbeit: Entwicklung von Bash-Workflows, automatisierten Deployment-Prozessen und maßgeschneiderten, bootfähigen USB-Images.",
-          tags: ["Linux", "Bash Scripting", "Automated Deployment"]
+          title: "IT-Helpdesk & Systemadministration (Minijob) | R2P GmbH",
+          desc: "Helpdesk und laufende Administration der Microsoft-Umgebung des Unternehmens. Firewall-Prüfungen, Systemüberwachung und Systemübersicht sowie Benutzer-Support.",
+          tags: ["Microsoft", "Firewall", "Monitoring", "User Support"]
+        },
+        {
+          year: "Sep. 2024",
+          type: "Praktikum",
+          title: "Praktikum | R2P GmbH",
+          desc: "",
+          tags: []
         },
         {
           year: "2022–2025",
@@ -593,17 +600,24 @@ export const translations = {
       timeline: [
         {
           year: "2025–2027",
-          type: "Current · Dual Career",
-          title: "IT Systems Electronics Technician | R2P GmbH",
+          type: "Apprenticeship · Current",
+          title: "Apprenticeship IT Systems Electronics Technician (IT-Systemelektroniker) | R2P GmbH",
           desc: "Accelerated apprenticeship due to advanced pre-qualifications. Installation, commissioning, and maintenance of video and network-based security systems. Hardware-level diagnostic troubleshooting and enterprise IT support.",
           tags: ["Enterprise Network", "Hardware Diagnostics", "CCNA Systems", "Flensburg"]
         },
         {
-          year: "2024–2025",
+          year: "Dec 2024 – Aug 2025",
           type: "Minijob",
-          title: "IT System Administration (Minijob) | R2P GmbH",
-          desc: "Setup, repair, and provisioning of IT workstations. Linux-based system engineering: Bash automated workflows, deployment pipelines, and customized bootable USB deployment images.",
-          tags: ["Linux", "Bash Scripting", "Automated Deployment"]
+          title: "IT Helpdesk & System Administration (Minijob) | R2P GmbH",
+          desc: "Helpdesk and day-to-day administration of the company's Microsoft environment. Firewall checks, system monitoring and overview, and user support.",
+          tags: ["Microsoft", "Firewall", "Monitoring", "User Support"]
+        },
+        {
+          year: "Sep 2024",
+          type: "Internship",
+          title: "Internship | R2P GmbH",
+          desc: "",
+          tags: []
         },
         {
           year: "2022–2025",
