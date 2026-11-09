@@ -12,7 +12,7 @@ export const CONTACT_PATH = '/contact';
 export const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 
 // Menu entries that land on a section of "/" instead of opening a screen.
-export const scrollTargets = { about: 'about', work: 'arcana', contact: 'bonfire' };
+export const scrollTargets = { about: 'about', work: 'arcana', stack: 'skill', contact: 'bonfire' };
 
 // The bonfire only rests at the very end of the camera rail; its section top is still mid-zoom.
 export function landOnSection(id, behavior = 'smooth') {
