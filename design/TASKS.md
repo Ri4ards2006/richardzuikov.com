@@ -1,6 +1,6 @@
 # Tasks
 
-Derived from DESIGN.md §6, §7 and §11. Status: `todo` / `doing` / `done`. Owner: implementation agent.
+Derived from DESIGN.md §6, §7 and §11. Status: `todo` / `doing` / `done` / `superseded` (replaced by §13). Owner: implementation agent, unless a table has its own Owner column.
 
 ## §6 Information architecture
 
@@ -9,7 +9,7 @@ Derived from DESIGN.md §6, §7 and §11. Status: `todo` / `doing` / `done`. Own
 | done | One page with one fixed WebGL canvas behind HTML sections |
 | done | Sections `arcana` and `bonfire` with these ids |
 | todo | Section ids `intro`, `stage` |
-| todo | Section `who` (STATUS): 3–4 sentences, ink portrait detail, optional stat hexagon |
+| superseded | Section `who` (STATUS): 3–4 sentences, ink portrait detail, optional stat hexagon |
 | todo | Section `heading` (HEADING): 2027 goal, focus areas |
 | todo | Section `skill` (SKILL): condensed ranked list, vignettes, "FULL INDEX →" `/stack` |
 | todo | Section `record` (RECORD): calendar timeline, KEY ITEMS, "FULL RECORD →" `/career` |
@@ -17,10 +17,10 @@ Derived from DESIGN.md §6, §7 and §11. Status: `todo` / `doing` / `done`. Own
 | todo | Lenis `scrollTo` driving the camera rail |
 | done | Deep pages `/about /work /stack /career` |
 | doing | `/contact` as full screen: conflicts with the owner's redirect decision, needs a ruling |
-| todo | Global fixed `…` button after the stage, opening the full-screen MENU overlay (vertical letters, monochrome, shard transition) |
+| superseded | Global fixed `…` button after the stage, opening the full-screen MENU overlay (vertical letters, monochrome, shard transition) |
 | todo | Language and theme toggles inside that overlay |
-| doing | HUD status chip top-left (present; exact `STATUS: AVAILABLE · FLENSBURG` wording open) |
-| todo | HUD top-right chips GitHub / LinkedIn / CV / Mail |
+| superseded | HUD status chip top-left (present; exact `STATUS: AVAILABLE · FLENSBURG` wording open) |
+| superseded | HUD top-right chips GitHub / LinkedIn / CV / Mail |
 | todo | HUD bottom-right control hints + `QUICK READ →` (link exists, not as HUD) |
 | doing | HUD bottom-centre `SCROLL TO DESCEND` (cue exists, TraceStar missing) |
 
@@ -79,7 +79,7 @@ Derived from DESIGN.md §6, §7 and §11. Status: `todo` / `doing` / `done`. Own
 | todo | Skill vignettes: source→asm→hex, rack LEDs, oscilloscope, browser wireframe |
 | todo | Detail panel for the selected skill |
 | todo | Years as Anton numerals that flip like a calendar on scroll |
-| todo | Roles as slanted bars with rank pips |
+| superseded | Roles as slanted bars with rank pips |
 | todo | KEY ITEMS inventory grid with generic line icons, detail panel, flavor text |
 | todo | 55–80 %: panels fade, darkness grows, ash shifts into embers |
 
@@ -90,13 +90,13 @@ Derived from DESIGN.md §6, §7 and §11. Status: `todo` / `doing` / `done`. Own
 | todo | `design/ASSETS.md` |
 | todo | Ring of noise-displaced stones |
 | doing | Charred PCB pile: one PCB board exists; fragments with emissive edges missing |
-| doing | Soldering iron exists; LatheGeometry profile and TubeGeometry cable missing |
+| superseded | Soldering iron exists; LatheGeometry profile and TubeGeometry cable missing |
 | todo | Flames as crossed billboards with fbm shader (currently cones) |
 | doing | Instanced embers: 80 points; spec 120 |
 | done | PointLight `#ff6600` with sine + noise flicker |
 | todo | Selective bloom on the fire, vignette |
 | done | Cinzel headline, list with `>` marker, hover to `--glow` |
-| doing | Row labels: spec `SEND MAIL`, `COPY MAIL`, `CV (PDF)`, `GITHUB`, `LINKEDIN` |
+| superseded | Row labels: spec `SEND MAIL`, `COPY MAIL`, `CV (PDF)`, `GITHUB`, `LINKEDIN` |
 | todo | "CONNECTION KINDLED" on first arrival on `/` (exists only on unrouted `/contact`) |
 | done | Plain footer with Impressum / Datenschutz |
 
@@ -137,6 +137,9 @@ Derived from DESIGN.md §6, §7 and §11. Status: `todo` / `doing` / `done`. Own
 | todo | Rule on `/contact`: redirect (current) or full screen (§6) |
 | todo | Provide `design/storyboard/card-01…05.png` and `design/refs/` for the §10 comparison |
 | todo | Portrait photos in `src/assets/portraits/raw/` |
+| todo | Replacement for "IT Specialist in System Integration" (`src/lib/translations.js`): title, company, period. The decision still held the unfilled template `<<TITEL, FIRMA, ZEITRAUM>>`, so the entry stays unchanged until this is given |
+| todo | Side-profile photo; `design/refs/pose-profile.jpg` and `design/refs/lovable/{stage,career,bonfire}.png` (gitignored, not on this machine's checkouts yet) |
+| todo | Text for the TODO keys: About (who / what / into) and the Descent panels |
 
 ## Added from REVIEW.md (2026-11-09)
 
@@ -154,3 +157,90 @@ Reviewer items already listed above are not repeated. The review was written bef
 | todo | Touch or gyro input in place of mouse parallax on mobile | 9.3 |
 | todo | Preloader bar relative to viewport width | 9.5 |
 | todo | Rename tokens to `--bone`, `--paper`, `--ember`, `--flame`, `--glow` | 8.4 |
+
+## Changelog v2 (DESIGN.md §13)
+
+### Housekeeping
+| Status | Owner | Item |
+|---|---|---|
+| done | claude-code | Tag `checkpoint-atlus-v1` as restore point |
+| done | claude-code | Bonfire moved to `src/three/bonfire/` with `mount` / `update` / `dispose`; no visual change |
+
+### Global
+| Status | Owner | Item |
+|---|---|---|
+| todo | claude-code | One numbering format, mono `01 /`, for sections, menu items and panels |
+| todo | claude-code | `…` button top-right, always visible |
+| todo | claude-code | Full-screen Atlus-style menu overlay: sections, Quick Read, DE/EN, theme, GitHub / LinkedIn / Mail |
+| todo | claude-code | TODO translation keys hidden in production |
+
+### Stage
+| Status | Owner | Item |
+|---|---|---|
+| todo | claude-code | Remove the "STATUS: AVAILABLE…" chip |
+| todo | claude-code | Remove the diagonal white line across the portrait |
+| todo | claude-code | Name as big angled Anton block "RICHARD / ZUIKOV" top-right, small role line underneath |
+| todo | claude-code | Remove the name/role line above the menu |
+| todo | claude-code | Menu slabs ~1.5× larger, up to ~120 px desktop; keep wedge, inversion, echo text; no overflow at 390 px (review 9.1) |
+| todo | claude-code | QUICK READ out from under the menu: global menu + small HUD link bottom-right |
+| todo | claude-code | 40–60 floating 3D shards: flat-shaded greys, slow rotation, cursor push, spring back |
+| todo | claude-code | Replace the halftone ellipse band with hard ink-water (Card 03) |
+
+### About
+| Status | Owner | Item |
+|---|---|---|
+| todo | claude-code | New section directly after the stage, before "From Register to Network"; text from translations, missing facts as TODO keys |
+| todo | claude-code | Side-profile portrait with placeholder silhouette until the real photo exists |
+| todo | claude-code | Stage → About: portrait turns ~90° on Y and moves forward/larger into the layout |
+| todo | claude-code | Monochrome afterimage trail: 5–6 delayed ghost copies fading out |
+| todo | claude-code | Leaving About: figure dissolves into halftone dots |
+
+### Descent
+| Status | Owner | Item |
+|---|---|---|
+| todo | claude-code | Remove the dot-grid / KiCad paper background everywhere |
+| todo | claude-code | Panels at different depths with parallax |
+| todo | claude-code | Panel entrance motion: slide + slight rotation + slam |
+| todo | claude-code | Animated monochrome line illustration per panel: register bits flipping, SPI/I2C waveform, code typing |
+| todo | claude-code | Panel text 2–3 sentences as TODO keys |
+
+### Arcana
+| Status | Owner | Item |
+|---|---|---|
+| todo | claude-code | Card images: high-contrast grayscale with very fine screentone instead of coarse halftone; object recognisable |
+| todo | claude-code | Browsable deck of all projects (Lab data) below the 3 featured cards: smaller cards in a fan/carousel |
+| todo | claude-code | Deck input: drag, wheel, arrow keys |
+| todo | claude-code | Selected deck card lifts and flips to specs + repo link |
+| todo | claude-code | Rack Configurator as one card in the deck |
+| todo | claude-code | "ALL PROJECTS" no longer links to `/lab`; `/lab` redirects to `/#arcana` |
+| todo | claude-code | Game-card style with roman numerals, no occult symbols |
+| todo | claude-code | Remove slogan headlines such as "ENGINEERED WITH INTENT" and any ad copy |
+
+### Skill
+| Status | Owner | Item |
+|---|---|---|
+| todo | claude-code | Remove the "not rated" column and every rating |
+| todo | claude-code | Short "used for / where" tags per item |
+
+### Record
+| Status | Owner | Item |
+|---|---|---|
+| todo | claude-code | Visual rework after `design/refs/lovable/career.png` |
+| todo | claude-code | Big year numerals flipping on scroll |
+| todo | claude-code | Slanted role bars with roman rank |
+| todo | claude-code | KEY ITEMS grid + item description panel |
+| todo | claude-code | Replace the wrong "IT Specialist in System Integration" entry; blocked on the owner's title, company, period. No other entries change |
+
+### Bonfire
+| Status | Owner | Item |
+|---|---|---|
+| todo | antigravity | Remove the cable entirely |
+| todo | antigravity | Recognisable soldering iron: conical chrome tip, thin shaft, heat-sink sleeve, ribbed rubber grip, stuck diagonally into the pile |
+| todo | antigravity | Varied stones |
+| todo | antigravity | Charred PCB pile with glowing traces |
+| todo | antigravity | A few logs |
+| todo | antigravity | Layered flame shader |
+| todo | antigravity | Sparks and thin smoke |
+| todo | antigravity | Flickering light on stones and floor |
+| todo | antigravity | Contact list: SEND MAIL · CV (PDF) · GITHUB · LINKEDIN |
+| todo | antigravity | Remove "Copy email" from the list; small copy box next to the displayed email, checkmark for 2 s |

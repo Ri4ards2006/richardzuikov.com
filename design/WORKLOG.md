@@ -34,3 +34,22 @@ Append-only. Format: date · agent · done · next · files touched.
 
 **Files touched**
 `design/TASKS.md`, `design/WORKLOG.md`, `src/pages/Impressum.jsx`, `src/css/style.scss`
+
+## 2026-11-09 · Claude Code (Opus 5.5) · housekeeping for changelog v2
+
+**Done**
+- Tagged `a7ffea7` as `checkpoint-atlus-v1` and pushed the tag.
+- Moved the bonfire (geometry, flame and ember shaders, light, flicker) from `scene.js` to `src/three/bonfire/index.js` and the contact list from `Stage.jsx` to `src/three/bonfire/ContactList.jsx`. Helpers both sides need went to `src/three/utils.js`.
+- Verified no visual change: same seeded `Math.random` and virtual clock, 150 frames, stage and bonfire at 1440×900 and 390×844. All four PNGs are byte-identical to the build of `a7ffea7`; two baseline runs were also identical to each other. Leaving and re-entering the route three times disposes and rebuilds with no console error. Scene chunk 148.4 → 148.6 KB gzip; three.js stays out of the initial chunk.
+- Added DESIGN.md §13, adjusted §6 / §7, added the v2 tasks.
+
+**Next**
+- The v2 tasks in TASKS.md. Bonfire items belong to antigravity.
+
+**Notes**
+- `update(dt, progress)` also needs the DOM-measured placement, so `createBonfire` takes a `getLayout` callback instead of a fourth method.
+- The replacement for the wrong career entry arrived as an unfilled template. The entry is unchanged and listed under "Needs the owner".
+- `design/refs/` is gitignored and does not exist in the checkouts here, so the referenced images could not be opened.
+
+**Files touched**
+`design/{DESIGN,TASKS,WORKLOG}.md`, `src/three/**`, `src/components/stage/scene.js`, `src/pages/Stage.jsx`

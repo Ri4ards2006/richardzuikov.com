@@ -109,20 +109,22 @@ Home `/` = one page: one fixed WebGL canvas behind, HTML sections on top.
 |---|---|---|---|---|
 | 00 | `intro` | – | Card 01–02 | preload → tear → shatter → dive |
 | 01 | `stage` | – | Card 03 | menu stage, portrait, HUD |
-| 02 | `who` | ABOUT | STATUS | who I am (3–4 sentences), ink portrait detail, optional stat hexagon |
-| 03 | `heading` | ABOUT | HEADING | where I'm heading (2027 goal, focus areas) |
-| 04 | `arcana` | WORK | ARCANA | 3 featured tarot cards; "ALL PROJECTS →" `/lab` |
-| 05 | `skill` | STACK | SKILL | condensed ranked list + vignettes; "FULL INDEX →" `/stack` |
-| 06 | `record` | CAREER | RECORD | calendar timeline + KEY ITEMS (certificates); "FULL RECORD →" `/career` |
-| 07 | `bonfire` | CONTACT | BONFIRE | Card 05 |
+| 02 | `about` | ABOUT | ABOUT | who I am, what I do, what I'm into; side-profile portrait (see §13) |
+| 03 | `descent` | – | FROM REGISTER TO NETWORK | panels at different depths with line illustrations |
+| 04 | `heading` | ABOUT | HEADING | where I'm heading (2027 goal, focus areas) |
+| 05 | `arcana` | WORK | ARCANA | 3 featured cards + browsable deck of all projects |
+| 06 | `skill` | STACK | SKILL | condensed list with "used for / where" tags, no ratings + vignettes; "FULL INDEX →" `/stack` |
+| 07 | `record` | CAREER | RECORD | year numerals, role bars, KEY ITEMS (certificates); "FULL RECORD →" `/career` |
+| 08 | `bonfire` | CONTACT | BONFIRE | Card 05 |
 
 - Menu click / Enter → camera flies to the section (Lenis `scrollTo` driving the camera rail).
-- Deep pages `/about /work /stack /career /contact` stay as full screens in the same vocabulary.
-- **Global nav:** once scrolled past the stage, a fixed top-right `…` button opens the full-screen MENU overlay
+- Deep pages `/about /work /stack /career /contact` stay as full screens in the same vocabulary. `/lab` redirects to `/#arcana`.
+- **Global nav:** a fixed top-right `…` button, always visible, opens the full-screen Atlus-style MENU overlay
   (Richard's original overlay with the vertical "MENU" letters — restyled monochrome, slab items, shard transition).
-  Language + theme toggles live there.
-- **HUD (stage only):** top-left status chip `STATUS: AVAILABLE · FLENSBURG`; top-right GitHub / LinkedIn / CV / Mail
-  as slanted chips; bottom-right control hints + `QUICK READ →`; bottom-centre `SCROLL TO DESCEND` with TraceStar.
+  It holds the sections, Quick Read, DE/EN, theme and GitHub / LinkedIn / Mail.
+- **HUD (stage only):** bottom-right control hints + small `QUICK READ →` link; bottom-centre `SCROLL TO DESCEND` with TraceStar.
+  No status chip. The top-right corner belongs to the `…` button and the name block.
+- **Numbering:** sections, menu items and panels use one format, mono `01 /`.
 
 ---
 
@@ -143,33 +145,38 @@ Home `/` = one page: one fixed WebGL canvas behind, HTML sections on top.
 - Five large fragments decelerate hard (damping jumps at 1.8 s) and snap into the 5 menu slab positions; then cross-fade WebGL slabs → HTML slabs at identical screen positions (crisp text, accessible).
 
 ### Card 03 — Hero stage (idle + hover)
-- **Left:** 5 slabs as a real HTML `<nav>` with CSS 3D (`perspective: 900px`, `rotateY(-18deg)`, `rotateZ(-6…-10deg)`), each its own size and offset, mono numbers 01–05 beside them.
+- **Name:** big angled Anton block "RICHARD / ZUIKOV" top-right (Persona style), small role line underneath. No name or role line above the menu.
+- **Left:** 5 slabs as a real HTML `<nav>` with CSS 3D (`perspective: 900px`, `rotateY(-18deg)`, `rotateZ(-6…-10deg)`), up to ~120 px on desktop, each its own size and offset, mono numbers `01 /`–`05 /` beside them.
 - **Hover / focus / arrow keys:** paper wedge shoots out behind the item (120 ms), item inverts, 2° camera nudge, speedlines + tiny debris at the slab edge, large echo text ("03 STACK").
-- **Right:** Richard's ink portrait in 3 layers — (1) splatter + HUD rings, (2) figure, (3) foreground brush strokes. Parallax opposite to the mouse (0.5 / 1.5 / 3 %), boil on strokes, breathing scale 1 → 1.012.
+- **Right:** Richard's ink portrait in 3 layers — (1) splatter + HUD rings, (2) figure, (3) foreground brush strokes. Parallax opposite to the mouse (0.5 / 1.5 / 3 %), boil on strokes, breathing scale 1 → 1.012. No diagonal line across the portrait.
   Ink treatment in a shader: threshold to 2–3 tones + halftone in mid-tones + darkened edges.
-- **Background:** replace the soft caustics with **hard ink water**: caustics posterized to 3 tones + screentone + floating screentone dust.
+- **Background:** **hard ink water** instead of the halftone ellipse band: caustics posterized to 3 tones + screentone + floating screentone dust.
+- **Floating shards:** 40–60 flat-shaded grey 3D shards, slow rotation, pushed away by the cursor and springing back.
 - First wheel/scroll on the stage starts the descent. Arrow keys navigate the menu.
 
 ### Card 04 — Descent (scroll)
 - Fixed canvas, camera rail y 0 → −60. HTML content sits in **slanted manga panels** (3 px paper borders, gutters, angled cuts) that pass at different depths (parallax). Speedlines on fast scroll.
-- **who / heading:** panels with ransom-note headline "WHO AM I" / "WHERE I'M HEADING", short text, ink portrait detail.
-- **arcana:** entering the section deals the 3 cards onto a table (fly in, slam, small bounce, dust puff). Scroll progress rotates the fan. Hover = 3D tilt + silver sheen sweep. Click flips (front: halftone image, roman numeral, title; back: specs, tags, repo link). Frame drawn as SVG, no image.
-- **skill:** list tilted in 3D; active item = asymmetric paper slab. Right panel: animated monochrome mini vignette per category — Low-level: source → asm → hex scrolling; Systems: rack with blinking LEDs; Hardware: oscilloscope trace; Web: browser wireframe assembling itself. The empty space below is filled by a detail panel for the selected item.
-- **record:** years as big Anton numerals that **flip like a calendar** while scrolling; each role slides in as a slanted bar with rank pips. **KEY ITEMS:** certificates as a Souls-style inventory grid (square tiles, generic line icons — no brand logos). Selected tile → right panel: title (Cinzel), issuer, date, one dry flavor-text line (editable), verify link only when it points at that exact credential.
+- **about:** directly after the stage. Who I am, what I do, what I'm into, from translation keys. Side-profile portrait: Stage → About it turns ~90° on Y toward the viewer and moves forward/larger, leaving 5–6 delayed monochrome ghost copies that fade out. Leaving About it dissolves into halftone dots. Side-profile placeholder silhouette until the real photo exists.
+- **descent ("From Register to Network"):** no dot-grid or KiCad-paper background anywhere. Panels at different depths with parallax and entrance motion (slide + slight rotation + slam), each with a small animated monochrome line illustration (register bits flipping, SPI/I2C waveform, code typing). 2–3 sentences each.
+- **heading:** panel with ransom-note headline "WHERE I'M HEADING", short text.
+- **arcana:** game-card style with roman numerals, no occult symbols, no slogan headlines. Entering the section deals the 3 cards onto a table (fly in, slam, small bounce, dust puff). Scroll progress rotates the fan. Hover = 3D tilt + silver sheen sweep. Click flips (front: high-contrast grayscale image with very fine screentone, object recognisable, roman numeral, title; back: specs, tags, repo link). Frame drawn as SVG, no image. Below: a browsable deck of all projects (data from Lab) as smaller cards in a fan/carousel (drag, wheel, arrow keys); the selected card lifts and flips to specs + repo link. Rack Configurator is one card in the deck.
+- **skill:** no ratings; each item shows short "used for / where" tags. List tilted in 3D; active item = asymmetric paper slab. Right panel: animated monochrome mini vignette per category — Low-level: source → asm → hex scrolling; Systems: rack with blinking LEDs; Hardware: oscilloscope trace; Web: browser wireframe assembling itself. The empty space below is filled by a detail panel for the selected item.
+- **record:** years as big Anton numerals that **flip like a calendar** while scrolling; each role slides in as a slanted bar with a roman rank. **KEY ITEMS:** certificates as a Souls-style inventory grid (square tiles, generic line icons — no brand logos). Selected tile → right panel: title (Cinzel), issuer, date, one dry flavor-text line (editable), verify link only when it points at that exact credential.
 - 55 – 80 %: panels fade, darkness grows, ash particles shift colour into embers.
 
 ### Card 05 — Bonfire (80 – 100 %)
 - Camera lands low-angle (pitch ≈ +8°) on a stone floor (Poly Haven CC0 PBR texture, committed, source logged in `design/ASSETS.md`).
-- **Bonfire built procedurally in R3F** (no external model needed):
-  - ring of low-poly stones (icosahedrons with noise displacement),
-  - pile of charred PCB fragments (thin boxes, canvas-generated trace textures, emissive glowing edges),
-  - **soldering iron** stuck in diagonally (`LatheGeometry` profile: tip, barrel, grip; cable = `TubeGeometry` along a CatmullRom curve),
-  - flames = 2–3 crossed billboards with an fbm flame shader (additive),
+- **Bonfire built procedurally in `src/three/bonfire/`** (no external model needed):
+  - ring of varied low-poly stones (icosahedrons with noise displacement),
+  - pile of charred PCB fragments (thin boxes, canvas-generated trace textures, glowing traces and edges), a few logs,
+  - clearly recognisable **soldering iron** stuck diagonally into the pile, no cable at all (conical chrome tip, thin shaft, heat-sink sleeve, ribbed rubber grip),
+  - flames = layered crossed billboards with an fbm flame shader (additive), sparks, thin smoke,
   - 120 instanced embers rising with sine drift,
-  - PointLight `#ff6600`, flicker `Φ(t) = base + A1·sin(ω1t) + A2·sin(ω2t) + A3·noise(4t)`,
+  - PointLight `#ff6600` flickering on stones and floor, `Φ(t) = base + A1·sin(ω1t) + A2·sin(ω2t) + A3·noise(4t)`,
   - selective bloom on the fire only, vignette.
 - **UI left:** Cinzel "REST HERE, TRAVELLER" (translation key), Souls-style list with selection marker:
-  `> SEND MAIL` · `> COPY MAIL` · `> CV (PDF)` · `> GITHUB` · `> LINKEDIN`. Hover ash-grey → `--glow`.
+  `> SEND MAIL` · `> CV (PDF)` · `> GITHUB` · `> LINKEDIN`. Hover ash-grey → `--glow`.
+  Small copy box next to the displayed email; it turns into a checkmark for 2 s.
 - First arrival per session: Cinzel line "CONNECTION KINDLED" (keep).
 - Footer with Impressum / Datenschutz below the bonfire, plain and readable.
 
@@ -217,6 +224,7 @@ Factual state of the build. The rules above win over anything noted here.
 
 **Files**
 - Home: `src/pages/Stage.jsx` (DOM), `src/components/stage/scene.js` (three.js), `src/components/stage/IntroOverlay.jsx`.
+- Bonfire: `src/three/bonfire/index.js` (`createBonfire({ emberCount, getLayout })` → `mount(scene, camera)`, `update(dt, progress)`, `dispose()`) and `ContactList.jsx`. Import `ContactList.jsx` directly so three.js stays out of the initial bundle. Shared helpers: `src/three/utils.js`.
 - Tokens: `src/css/tokens.css`, exposed through `tailwind.config.cjs`. Stage styles: `src/css/style.scss`.
 - Menu data and selection memory: `src/lib/atlus.js`. Route transition: `src/hooks/use-wipe-location.js`.
 - Tarot data: `src/data/featured-projects.js`. Portraits: `src/data/portraits.js`, `scripts/portraits.sh`.
@@ -232,3 +240,46 @@ Factual state of the build. The rules above win over anything noted here.
 - Tarot images load near the viewport and are downscaled with `createImageBitmap`.
 - `Stage.jsx` stays in the initial bundle: lazy-loading it moved its startup work behind First Contentful Paint and raised Total Blocking Time.
 - `/contact` redirects to `/#bonfire` by owner decision, which differs from §6. `src/pages/Contact.jsx` and `FogGate.jsx` are kept unrouted until that is settled.
+
+---
+
+## §13 Changelog v2
+
+Owner decisions of 2026-11-09. §6 and §7 are updated to match; open work is in TASKS.md. Restore point: tag `checkpoint-atlus-v1`.
+
+**Global**
+- One numbering format, mono `01 /`, for sections, menu items and panels. Roman numerals remain only where these decisions name them: game cards and role ranks.
+- `…` button top-right, always visible, opens the full-screen menu overlay: sections, Quick Read, DE/EN, theme, GitHub / LinkedIn / Mail.
+- Missing facts are TODO translation keys, hidden in production. Never invent facts.
+
+**Stage**
+- Removed: "STATUS: AVAILABLE…" chip, diagonal white line across the portrait, name/role line above the menu, QUICK READ under the menu.
+- Name: big angled Anton block "RICHARD / ZUIKOV" top-right, small role line underneath.
+- Menu slabs ~1.5× larger, up to ~120 px on desktop; wedge, inversion and echo text stay.
+- QUICK READ: inside the global menu and as a small HUD link bottom-right.
+- 40–60 floating 3D shards (flat-shaded greys, slow rotation), pushed by the cursor, springing back. Hard ink-water replaces the halftone ellipse band. Reference: `design/refs/lovable/stage.png`.
+
+**About** (new, directly after the stage)
+- Who I am, what I do, what I'm into, from translations.
+- Portrait in side profile (reference `design/refs/pose-profile.jpg`). Stage → About: turns ~90° on Y toward the viewer, moves forward/larger, leaves 5–6 delayed monochrome ghost copies. Leaving About: dissolves into halftone dots. Placeholder silhouette until the real photo exists.
+
+**Descent** ("From Register to Network")
+- No dot-grid / KiCad paper background anywhere.
+- Panels at different depths with parallax and entrance motion (slide + slight rotation + slam), each with a small animated monochrome line illustration. Text 2–3 sentences each, as TODO keys for Richard.
+
+**Arcana**
+- Images: no coarse pixel halftone; high-contrast grayscale with a very fine screentone, object recognisable.
+- "ALL PROJECTS" no longer leads to `/lab`: browsable deck of all projects below the 3 featured cards (fan/carousel; drag, wheel, arrow keys; selected card lifts and flips to specs + repo link). Rack Configurator is one card. `/lab` redirects to `/#arcana`.
+- Game-card style with roman numerals, no occult symbols. No slogan headlines or ad copy.
+
+**Skill**
+- No "not rated" column and no ratings. Short "used for / where" tags instead.
+
+**Record**
+- Visual rework, reference `design/refs/lovable/career.png`: big year numerals flipping on scroll, slanted role bars with roman rank, KEY ITEMS grid + item description panel.
+- Data fix: the entry "IT Specialist in System Integration" is wrong and gets replaced. The replacement title, company and period are still open (TASKS.md, Needs the owner). No other entries change.
+
+**Bonfire** (owner: antigravity)
+- No cable. Recognisable soldering iron: conical chrome tip, thin shaft, heat-sink sleeve, ribbed rubber grip, stuck diagonally into the pile.
+- More detailed campfire: varied stones, charred PCB pile with glowing traces, a few logs, layered flame shader, sparks, thin smoke, flickering light on stones and floor. Reference: `design/refs/lovable/bonfire.png`.
+- Contact list: SEND MAIL · CV (PDF) · GITHUB · LINKEDIN. "Copy email" leaves the list and becomes a small copy box next to the displayed email, checkmark for 2 s.
