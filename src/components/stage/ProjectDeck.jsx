@@ -9,7 +9,7 @@ const WHEEL_COOLDOWN_MS = 180;
 
 export default function ProjectDeck() {
   const { t } = useLanguage();
-  const projects = t.lab.projects.filter((project) => !project.isLiveApp);
+  const projects = t.lab.projects;
   const [selected, setSelected] = useState(() => Math.floor((t.lab.projects.length - 1) / 2));
   const [flipped, setFlipped] = useState(false);
   const frontRefs = useRef([]);
@@ -182,7 +182,11 @@ export default function ProjectDeck() {
                     {project.tags.map((tag) => <li key={tag} className="px-1 border border-ash-600 font-mono text-[10px] text-ash-200">{tag}</li>)}
                   </ul>
                   <div className="deck-actions">
-                    {project.repo && (
+                    {project.liveUrl && (
+                      <a href={project.liveUrl} target="_blank" rel="noreferrer" className="deck-action underline underline-offset-4">{t.lab.launch3d} ↗</a>
+                    )}
+                    {/* The Rack Configurator's repo entry is only the profile link, so it gets no source link. */}
+                    {project.repo && !project.isLiveApp && (
                       <a href={project.repo} target="_blank" rel="noreferrer" className="deck-action underline underline-offset-4">{t.lab.viewCode} ↗</a>
                     )}
                     <button ref={(node) => { backRefs.current[index] = node; }} type="button" onClick={() => setFlipped(false)} className="deck-action text-ash-300">↺ {t.atlus.flipBack}</button>

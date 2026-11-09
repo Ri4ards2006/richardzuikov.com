@@ -152,7 +152,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | Manga panels use 3 px borders | 4.3 |
 | done | Row labels and icons: prompt-style text list instead of Lucide icons | 7.2 |
 | todo | Skip control as a slab with a key cue | 1.5 |
-| todo | Rack link as a slanted chip | 5.5 |
+| superseded | Rack link as a slanted chip (the Rack Configurator is now a deck card) | 5.5 |
 | todo | Sharp binary halftone on panels instead of the soft gradient | 4.5 |
 | todo | Touch or gyro input in place of mouse parallax on mobile | 9.3 |
 | todo | Preloader bar relative to viewport width | 9.5 |
@@ -211,7 +211,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | Browsable deck of all projects (Lab data) below the 3 featured cards: smaller cards in a fan/carousel |
 | done | claude-code | Deck input: drag, wheel, arrow keys |
 | done | claude-code | Selected deck card lifts and flips to specs + repo link |
-| todo | claude-code | Rack Configurator as one card in the deck |
+| done | claude-code | Rack Configurator as one card in the deck |
 | todo | claude-code | "ALL PROJECTS" no longer links to `/lab`; `/lab` redirects to `/#arcana` |
 | todo | claude-code | Game-card style with roman numerals, no occult symbols |
 | todo | claude-code | Remove slogan headlines such as "ENGINEERED WITH INTENT" and any ad copy |
