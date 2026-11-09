@@ -55,7 +55,7 @@ export function buildIron(q) {
   const metalMesh = new THREE.Mesh(metalGeo, metalMat);
 
   // 2. Hex retaining nut at base of metal barrel
-  const hexNutGeo = new THREE.CylinderGeometry(0.046, 0.046, 0.07, 6);
+  const hexNutGeo = new THREE.CylinderGeometry(0.048, 0.048, 0.065, 6);
   hexNutGeo.translate(0, 0.665, 0);
   const hexNutMat = new THREE.MeshStandardMaterial({
     color: 0xcccccc,
@@ -66,11 +66,11 @@ export function buildIron(q) {
 
   // 3. Iconic Finger-Guard Disc (protective flanged rim between barrel and grip)
   const guardProfile = [
-    [0.042, 0.70],
-    [0.125, 0.72],
-    [0.138, 0.745], // outer flange rim
-    [0.138, 0.77],
-    [0.095, 0.79], // step to grip
+    [0.042, 0.69],
+    [0.132, 0.71],
+    [0.148, 0.735], // outer flange rim
+    [0.148, 0.765],
+    [0.096, 0.79], // step to grip
   ];
   const guardGeo = lathe(guardProfile, radial);
   const guardMat = new THREE.MeshStandardMaterial({
@@ -83,9 +83,9 @@ export function buildIron(q) {
   // 4. Thick Ribbed Ergonomic Grip
   // Ribbed rubber sleeve with tactile finger grooves
   const gripProfile = [
-    [0.095, 0.79],
-    [0.108, 0.82],
-    ...ribbed(0.84, 1.42, 0.042, 0.114, 0.098),
+    [0.096, 0.79],
+    [0.110, 0.81],
+    ...ribbed(0.83, 1.42, 0.044, 0.118, 0.096),
     [0.106, 1.44],
     [0.096, 1.50],
     [0.088, 1.54],

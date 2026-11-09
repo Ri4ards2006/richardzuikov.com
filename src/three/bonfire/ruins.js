@@ -139,20 +139,27 @@ export function buildRuins(q) {
   // Broken Watchtower silhouette on the far right
   parts.push(brokenTower(3.2, -6.2, 0.95, 5.2, 101));
 
-  // Secondary crumbling tower stump
-  parts.push(brokenTower(4.6, -7.5, 0.80, 3.8, 102));
+  // Secondary crumbling tower stump (desktop only to preserve mobile draw budget)
+  if (!q.small) {
+    parts.push(brokenTower(4.6, -7.5, 0.80, 3.8, 102));
+  }
 
   // Gothic Arches framing the right horizon
   parts.push(gothicArch(1.8, -4.8, 1.4, 2.8, 0.28, 201));
-  parts.push(gothicArch(3.5, -5.4, 1.2, 2.5, 0.26, 202));
+  if (!q.small) {
+    parts.push(gothicArch(3.5, -5.4, 1.2, 2.5, 0.26, 202));
+  }
 
   // Broken curtain walls connecting and stepping down
   parts.push(curtainWall(1.0, -4.5, 2.5, -5.2, 1.7, 0.32, 301));
   parts.push(curtainWall(2.5, -5.2, 4.2, -6.4, 2.2, 0.35, 302));
-  parts.push(curtainWall(3.8, -6.0, 5.2, -7.2, 1.5, 0.30, 303));
+  if (!q.small) {
+    parts.push(curtainWall(3.8, -6.0, 5.2, -7.2, 1.5, 0.30, 303));
+  }
 
   // Scattered crumbled masonry blocks on the right rear ground
-  for (let i = 0; i < (q.small ? 4 : 8); i += 1) {
+  const rubbleCount = q.small ? 3 : 8;
+  for (let i = 0; i < rubbleCount; i += 1) {
     const rx = 1.4 + hash(i * 7 + 50) * 3.0;
     const rz = -3.8 - hash(i * 11 + 60) * 3.0;
     const block = new THREE.BoxGeometry(0.35 + hash(i) * 0.25, 0.2 + hash(i + 1) * 0.2, 0.35 + hash(i + 2) * 0.25);

@@ -46,13 +46,18 @@ function buildBonfire(emberCount, q) {
     metalness: 0.05,
   });
 
-  const slabs = new THREE.InstancedMesh(new THREE.BoxGeometry(1.62, 0.3, 1.62), stone, 11 * 8);
+  const ixMin = q.small ? -3 : -5;
+  const ixMax = q.small ? 3 : 5;
+  const izMin = q.small ? -4 : -6;
+  const izMax = 1;
+  const slabCount = (ixMax - ixMin + 1) * (izMax - izMin + 1);
+  const slabs = new THREE.InstancedMesh(new THREE.BoxGeometry(1.62, 0.3, 1.62), stone, slabCount);
   const matrix = new THREE.Matrix4();
   const euler = new THREE.Euler();
   const quat = new THREE.Quaternion();
   let n = 0;
-  for (let ix = -5; ix <= 5; ix += 1) {
-    for (let iz = -6; iz <= 1; iz += 1) {
+  for (let ix = ixMin; ix <= ixMax; ix += 1) {
+    for (let iz = izMin; iz <= izMax; iz += 1) {
       const r = hash(ix * 13.7 + iz * 7.3);
       euler.set((r - 0.5) * 0.07, (r - 0.5) * 0.25, (hash(r * 9) - 0.5) * 0.07);
       quat.setFromEuler(euler);

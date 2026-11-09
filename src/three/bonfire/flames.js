@@ -253,21 +253,27 @@ export function buildFlames(q) {
     coreMeshes.push(coreMesh);
   });
 
-  // Subtle convective heat haze quad above the flames
-  const hazeGeo = new THREE.PlaneGeometry(w * 1.15, h * 0.95, 1, 1);
-  hazeGeo.translate(0, h * 0.48, 0);
-  const hazeMat = new THREE.ShaderMaterial({
-    vertexShader: flameVertexShader,
-    fragmentShader: hazeFragmentShader,
-    uniforms: { uTime: uniforms.uTime },
-    transparent: true,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending,
-    side: THREE.DoubleSide,
-  });
-  const hazeMesh = new THREE.Mesh(hazeGeo, hazeMat);
-  hazeMesh.position.set(0, 1.45, 0);
-  group.add(hazeMesh);
+  // Subtle convective heat haze quad above the flames (desktop only for performance budget)
+  let hazeMesh = null;
+  let hazeGeo = null;
+  let hazeMat = null;
+
+  if (!q.small) {
+    hazeGeo = new THREE.PlaneGeometry(w * 1.15, h * 0.95, 1, 1);
+    hazeGeo.translate(0, h * 0.48, 0);
+    hazeMat = new THREE.ShaderMaterial({
+      vertexShader: flameVertexShader,
+      fragmentShader: hazeFragmentShader,
+      uniforms: { uTime: uniforms.uTime },
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide,
+    });
+    hazeMesh = new THREE.Mesh(hazeGeo, hazeMat);
+    hazeMesh.position.set(0, 1.45, -0.05);
+    group.add(hazeMesh);
+  }
 
   return {
     group,
@@ -290,15 +296,17 @@ export function buildFlames(q) {
         cm.scale.y = 0.95 + flicker * 0.12;
         cm.scale.x = 0.96 + flicker * 0.06;
       });
-      hazeMesh.scale.y = 1.0 + flicker * 0.1;
+      if (hazeMesh) {
+        hazeMesh.scale.y = 1.0 + flicker * 0.1;
+      }
     },
     dispose() {
       geo.dispose();
       coreGeo.dispose();
-      hazeGeo.dispose();
+      hazeGeo?.dispose();
       mat.dispose();
       coreMat.dispose();
-      hazeMat.dispose();
+      hazeMat?.dispose();
     },
   };
 }
