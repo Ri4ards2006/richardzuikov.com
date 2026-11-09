@@ -86,8 +86,8 @@ Derived from DESIGN.md §6, §7 and §11. Status: `todo` / `doing` / `done` / `s
 ### Card 05
 | Status | Item |
 |---|---|
-| doing | Low-angle camera on stone floor; pitch 7° vs ≈ 8°; procedural slabs, not Poly Haven PBR |
-| todo | `design/ASSETS.md` |
+| done | Low-angle camera on stone floor with Poly Haven PBR textures (logged in ASSETS.md) |
+| done | `design/ASSETS.md` |
 | todo | Ring of noise-displaced stones |
 | doing | Charred PCB pile: one PCB board exists; fragments with emissive edges missing |
 | superseded | Soldering iron exists; LatheGeometry profile and TubeGeometry cable missing |

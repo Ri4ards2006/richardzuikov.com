@@ -14,7 +14,33 @@ function noise1(t) {
 function buildBonfire(emberCount, q) {
   const group = new THREE.Group();
   const textures = [];
-  const stone = new THREE.MeshStandardMaterial({ color: 0x4a4a48, roughness: 0.95, flatShading: true });
+
+  // Poly Haven CC0 stone floor PBR textures (logged in design/ASSETS.md)
+  const loader = new THREE.TextureLoader();
+  const diffMap = loader.load('/textures/bonfire/stone_floor_diff.jpg');
+  diffMap.wrapS = diffMap.wrapT = THREE.RepeatWrapping;
+  diffMap.repeat.set(1.5, 1.5);
+  textures.push(diffMap);
+
+  const roughMap = loader.load('/textures/bonfire/stone_floor_rough.jpg');
+  roughMap.wrapS = roughMap.wrapT = THREE.RepeatWrapping;
+  roughMap.repeat.set(1.5, 1.5);
+  textures.push(roughMap);
+
+  const norMap = loader.load('/textures/bonfire/stone_floor_nor.jpg');
+  norMap.wrapS = norMap.wrapT = THREE.RepeatWrapping;
+  norMap.repeat.set(1.5, 1.5);
+  textures.push(norMap);
+
+  const stone = new THREE.MeshStandardMaterial({
+    color: 0x6a6a66,
+    map: diffMap,
+    roughnessMap: roughMap,
+    normalMap: norMap,
+    normalScale: new THREE.Vector2(0.85, 0.85),
+    roughness: 0.92,
+    metalness: 0.05,
+  });
 
   const slabs = new THREE.InstancedMesh(new THREE.BoxGeometry(1.62, 0.3, 1.62), stone, 11 * 8);
   const matrix = new THREE.Matrix4();
