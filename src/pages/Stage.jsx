@@ -73,9 +73,12 @@ export default function Stage() {
         canvas: canvasRef.current,
         projects: featuredProjects,
         portraitSrc: portraits.about.large,
+        profileSrc: portraits.profile.large,
         onDiveEnd: () => setPhase('done'),
         anchors: () => ({
           portrait: portraitRef.current,
+          about: aboutRef.current,
+          aboutPortrait: aboutPortraitRef.current,
           fire: fireRef.current,
           abyss: abyssRef.current,
           slots: slotRefs.current.filter(Boolean),

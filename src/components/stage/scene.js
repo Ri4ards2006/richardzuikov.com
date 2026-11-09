@@ -152,7 +152,7 @@ function createPortrait(map) {
   });
 }
 
-export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd }) {
+export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc, onDiveEnd }) {
   const isSmall = window.innerWidth < SMALL_SCREEN;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: !isSmall, powerPreference: 'high-performance' });
   renderer.setClearColor(INK);
@@ -212,6 +212,20 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
     hero.add(figure);
     heroLayers.push({ object: figure, depth: 0.42, base: new THREE.Vector3(0, -0.1, 0) });
   }).catch(() => {});
+
+  // Side-profile figure of the About section.
+  const profile = { mesh: null, map: null, geometry: null, aspect: 1, box: { w: 1, h: 1 }, to: new THREE.Vector3(), top: 0, height: 1 };
+  loadImage(profileSrc).then((img) => {
+    if (state.disposed) return;
+    profile.map = new THREE.Texture(img);
+    profile.map.needsUpdate = true;
+    profile.aspect = img.width / img.height;
+    profile.geometry = new THREE.PlaneGeometry(profile.aspect, 1);
+    profile.mesh = new THREE.Mesh(profile.geometry, createPortrait(profile.map));
+    scene.add(profile.mesh);
+  }).catch(() => {});
+
+  const profileHeight = () => Math.min(profile.box.h, profile.box.w / profile.aspect);
 
   // Inclined screentone panels behind the descent.
   const backPanels = Array.from({ length: 6 }, (_, i) => {
@@ -343,6 +357,13 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
     });
     backPanels.forEach((panel, i) => { panel.visible = i < state.panels.length; });
 
+    const about = worldOf(a.aboutPortrait.getBoundingClientRect());
+    profile.to.set(about.x, about.y, 0);
+    profile.box = about;
+    const aboutRect = a.about.getBoundingClientRect();
+    profile.top = aboutRect.top + state.scroll;
+    profile.height = aboutRect.height;
+
     const fire = worldOf(a.fire.getBoundingClientRect());
     const fireScale = Math.min(fire.h / 4.2, fire.w / 3.4);
     state.fire = { x: fire.x, y: fire.y - fire.h / 2 + 0.2 * fireScale, scale: fireScale, pixel };
@@ -426,6 +447,11 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
         object.position.set(base.x + mouse.x * depth, base.y - mouse.y * depth * 0.6, base.z);
       });
       rings.forEach((ring, i) => { ring.rotation.z = time * (i % 2 ? -0.05 : 0.07); });
+    }
+
+    if (profile.mesh) {
+      profile.mesh.position.copy(profile.to);
+      profile.mesh.scale.setScalar(profileHeight());
     }
 
     if (!dive.active && !state.loadingCard) {
@@ -529,6 +555,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, onDiveEnd 
       window.removeEventListener('pointermove', onPointerMove);
       document.removeEventListener('visibilitychange', onVisibility);
       bonfire.dispose();
+      profile.map?.dispose();
       disposeObject(scene);
       renderer.dispose();
     },
