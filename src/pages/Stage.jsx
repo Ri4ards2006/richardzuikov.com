@@ -11,10 +11,14 @@ import { portraits } from '../data/portraits';
 import { featuredProjects } from '../data/featured-projects';
 import { socialLinks } from '../components/home/SocialLinks';
 import IntroOverlay from '../components/stage/IntroOverlay';
+import { grainTexture } from '../lib/noise-textures';
 
 const INTRO_KEY = 'seen-stage-intro';
 const BOOT_MS = 800;
 const SCENE_TIMEOUT_MS = 4000;
+// Each slab has its own size and offset (design bible, Card 03).
+const SLAB_SIZES = [1, 0.84, 1.12, 0.92, 1.04];
+const SLAB_OFFSETS = [0, 1.1, 0.4, 1.6, 0.7];
 const SCROLL_TARGETS = { work: 'arcana', contact: 'bonfire' };
 
 const delay = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
@@ -165,11 +169,14 @@ export default function Stage() {
   return (
     <div ref={stageRef} className="stage" data-webgl={webgl ? 'on' : 'off'}>
       {webgl && <canvas ref={canvasRef} aria-hidden="true" className="stage-canvas" />}
+      <div aria-hidden="true" className="stage-grain" style={{ backgroundImage: grainTexture() }} />
       {phase !== 'done' && phase !== 'dive' && (
         <IntroOverlay phase={phase} loading={t.atlus.stage.loading} skip={t.atlus.stage.skip} onTearEnd={handleTearEnd} />
       )}
 
       <section aria-labelledby="stage-title" className={`stage-hero ${phase === 'done' ? 'is-settled' : ''}`}>
+        <p className="stage-hud stage-chip">STATUS: {t.telemetry.status} · Flensburg</p>
+        <p aria-hidden="true" className="stage-hud stage-cue">↓ {t.atlus.stage.scroll}</p>
         <div className="relative z-10 flex flex-col justify-center">
           <h1 id="stage-title" className="font-mono text-xs tracking-[0.3em] text-ash-300 uppercase">Richard Zuikov · {t.career.role}</h1>
           <nav aria-label={t.atlus.menuNav} className="has-message stage-menu mt-5">
@@ -182,10 +189,11 @@ export default function Stage() {
                   onMouseEnter: () => select(item.id),
                   onFocus: () => select(item.id),
                   className: `stage-slab ${active === item.id ? 'is-active' : ''}`,
-                  style: { '--i': index },
+                  style: { '--i': index, '--size': SLAB_SIZES[index], '--offset': SLAB_OFFSETS[index] },
                 };
                 return (
-                  <li key={item.id}>
+                  <li key={item.id} className={active === item.id ? 'has-active' : undefined}>
+                    <span aria-hidden="true" className="slab-number">{item.number}</span>
                     {target ? (
                       <a href={`#${target}`} onClick={(event) => scrollTo(event, target)} {...shared}>{t.landing.nav[item.id]}</a>
                     ) : (

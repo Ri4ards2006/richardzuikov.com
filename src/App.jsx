@@ -21,7 +21,7 @@ function AppRoutes() {
     <>
       {transition?.type === 'wipe' && <div key={transition.key} aria-hidden="true" className="wipe-panel" onAnimationEnd={clearTransition} />}
       {transition?.type === 'fog' && <FogGate key={transition.key} onDone={clearTransition} />}
-      <Suspense fallback={null}>
+      <Suspense fallback={<div className="min-h-screen" />}>
         <Routes location={displayed}>
           <Route path="/" element={<Stage />} />
           <Route path="/quick" element={<Quick />} />

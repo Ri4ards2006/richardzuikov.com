@@ -19,3 +19,6 @@ yarn-error.log*
 # Portrait source photos stay local
 src/assets/portraits/raw/*
 !src/assets/portraits/raw/README.md
+
+# Third-party game references stay local
+design/refs/

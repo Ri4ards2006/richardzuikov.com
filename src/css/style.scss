@@ -331,7 +331,7 @@ html.dark .ground-message {
   grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
   gap: 1.5rem;
   align-items: stretch;
-  padding-block: 2rem;
+  padding-block: 3.75rem 3.5rem;
 }
 
 .stage-portrait {
@@ -350,19 +350,79 @@ html.dark .ground-message {
   gap: 0.35rem;
 }
 
+.stage-menu li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transform-style: preserve-3d;
+}
+
+.slab-number {
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: rgb(var(--ash-300));
+  min-width: 1.5rem;
+}
+
+/* Paper wedge that shoots out behind the active slab. */
+.stage-menu li::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 2rem;
+  top: 12%;
+  width: 72%;
+  height: 76%;
+  background: rgb(var(--ash-100) / 0.22);
+  clip-path: polygon(0 40%, 100% 0, 70% 100%);
+  transform: scaleX(0) rotate(-8deg);
+  transform-origin: left center;
+  transition: transform 120ms cubic-bezier(0.2, 0.9, 0.1, 1);
+}
+
+.stage-menu li.has-active::before {
+  transform: scaleX(1.25) rotate(-8deg);
+}
+
+.stage-hud {
+  position: absolute;
+  z-index: 10;
+  font-family: ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgb(var(--ash-200));
+}
+
+.stage-chip {
+  top: 1rem;
+  left: 1.25rem;
+  padding: 0.35rem 1.1rem 0.35rem 0.6rem;
+  background: rgb(var(--ash-800));
+  clip-path: polygon(0 0, 100% 0, calc(100% - 0.6rem) 100%, 0 100%);
+}
+
+.stage-cue {
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
 .stage-slab {
   display: inline-block;
   min-height: 2.75rem;
   padding: 0.15rem 3rem 0.15rem 1rem;
   font-family: Anton, Impact, sans-serif;
-  font-size: clamp(2.75rem, 7vw, 4.75rem);
   line-height: 1.15;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   color: rgb(var(--ash-200));
   clip-path: polygon(0 0, 100% 0, calc(100% - 1.75rem) 100%, 0 100%);
   transform-origin: left center;
-  transform: rotateY(calc(16deg + var(--mx, 0) * 5deg)) skewY(-3deg);
+  transform: rotateY(-18deg) rotateZ(calc(-6deg - var(--i) * 0.9deg));
+  margin-inline-start: calc(var(--offset) * 1rem);
+  font-size: calc(clamp(2.5rem, 6.4vw, 4.5rem) * var(--size));
   opacity: 0;
   translate: -3.5rem 0;
 }
@@ -455,11 +515,36 @@ html.dark .ground-message {
   transition: color 260ms ease, text-shadow 260ms ease, padding-inline-start 200ms ease;
 }
 
+.abyss-row::before {
+  content: '>';
+  opacity: 0.35;
+  transition: opacity 200ms;
+}
+
+.abyss-row:hover::before,
+.abyss-row:focus-visible::before {
+  opacity: 1;
+}
+
 .abyss-row:hover,
 .abyss-row:focus-visible {
-  color: rgb(var(--ember-gold));
-  text-shadow: 0 0 12px rgb(var(--ember-gold) / 0.55);
+  color: rgb(var(--ember-glow));
+  text-shadow: 0 0 12px rgb(var(--ember-glow) / 0.5);
   padding-inline-start: 1.25rem;
+}
+
+.stage-grain {
+  position: fixed;
+  inset: -64px;
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0.08;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .stage-grain {
+    animation: grain-jitter 800ms steps(1) infinite;
+  }
 }
 
 .stage-intro {
@@ -502,6 +587,7 @@ html.dark .ground-message {
 
 @media (max-width: 760px) {
   .stage-hero {
+    padding-block: 5.5rem 3.5rem;
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto minmax(16rem, 1fr);
   }

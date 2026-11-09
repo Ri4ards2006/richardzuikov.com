@@ -265,10 +265,10 @@ function createBonfire(emberCount) {
   pcb.rotation.set(-0.3, 0.5, 0.28);
   group.add(pcb);
 
-  const flames = [0xff5500, 0xff7a00, 0xff9900, 0xff5500, 0xff9900].map((color, i) => {
+  const flames = [0xff6a00, 0xff8218, 0xff9a2e, 0xff6a00, 0xff9a2e].map((color, i) => {
     const flame = new THREE.Mesh(
       new THREE.ConeGeometry(0.3 + i * 0.03, 1 + hash(i) * 0.7, 5),
-      new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.72, blending: THREE.AdditiveBlending, depthWrite: false }),
+      new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false }),
     );
     const a = i * 1.26;
     flame.position.set(Math.cos(a) * 0.26, 0.82, Math.sin(a) * 0.26);
@@ -276,7 +276,7 @@ function createBonfire(emberCount) {
     return flame;
   });
 
-  const light = new THREE.PointLight(0xff7a1a, 60, 26, 1.7);
+  const light = new THREE.PointLight(0xff6600, 60, 26, 1.7);
   light.position.set(0, 1.25, 0.25);
   group.add(light);
   group.add(new THREE.HemisphereLight(0x3a3a3a, 0x050505, 0.32));
@@ -294,7 +294,7 @@ function createBonfire(emberCount) {
     `varying float vLife;
      void main(){
        float d=length(gl_PointCoord-.5); if(d>.5)discard;
-       vec3 c=mix(vec3(.55,.55,.53),vec3(1.,.6,0.),smoothstep(.08,.45,vLife));
+       vec3 c=mix(vec3(.55,.55,.53),vec3(1.,.416,0.),smoothstep(.08,.45,vLife));
        gl_FragColor=vec4(c,(1.-smoothstep(.1,.5,d))*(1.-vLife)*min(1.,vLife*8.));
      }`,
     emberUniforms,
