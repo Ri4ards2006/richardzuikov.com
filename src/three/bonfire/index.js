@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { disposeObject, hash, makeCanvas, pointsMaterial, seededPoints, smooth, texture } from '../utils';
+import { buildIron } from './iron';
+import { bonfireQuality } from './quality';
 
 function noise1(t) {
   const i = Math.floor(t);
@@ -28,11 +30,11 @@ function pcbTexture() {
   return texture(canvas);
 }
 
-function buildBonfire(emberCount) {
+function buildBonfire(emberCount, q) {
   const group = new THREE.Group();
+  const textures = [];
   const stone = new THREE.MeshStandardMaterial({ color: 0x4a4a48, roughness: 0.95, flatShading: true });
   const char = new THREE.MeshStandardMaterial({ color: 0x1a1a19, roughness: 1, flatShading: true });
-  const metal = new THREE.MeshStandardMaterial({ color: 0xbdbdb8, roughness: 0.35, metalness: 0.85 });
 
   const slabs = new THREE.InstancedMesh(new THREE.BoxGeometry(1.62, 0.3, 1.62), stone, 11 * 8);
   const matrix = new THREE.Matrix4();
@@ -64,18 +66,9 @@ function buildBonfire(emberCount) {
     group.add(log);
   }
 
-  // Soldering iron driven tip-first into the ash.
-  const iron = new THREE.Group();
-  const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.085, 1.05, 10), new THREE.MeshStandardMaterial({ color: 0x151515, roughness: 0.6 }));
-  handle.position.y = 2.25;
-  const grip = new THREE.Mesh(new THREE.CylinderGeometry(0.115, 0.115, 0.1, 10), metal);
-  grip.position.y = 1.7;
-  const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.05, 1.5, 8), metal);
-  shaft.position.y = 0.92;
-  iron.add(handle, grip, shaft);
-  iron.position.set(0, 0.04, 0.05);
-  iron.rotation.set(0.1, 0.4, -0.13);
+  const { iron, matcap } = buildIron(q);
   group.add(iron);
+  textures.push(matcap);
 
   const pcb = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.86, 0.035), new THREE.MeshStandardMaterial({ map: pcbTexture(), roughness: 0.55, metalness: 0.2 }));
   pcb.position.set(-0.86, 0.48, 0.55);
@@ -119,12 +112,13 @@ function buildBonfire(emberCount) {
   ));
   group.add(embers);
 
-  return { group, light, flames, emberUniforms };
+  return { group, light, flames, emberUniforms, textures };
 }
 
 // getLayout() returns the world placement { x, y, scale, pixel } measured by the stage.
 export function createBonfire({ emberCount, getLayout }) {
-  const { group, light, flames, emberUniforms } = buildBonfire(emberCount);
+  const q = bonfireQuality();
+  const { group, light, flames, emberUniforms, textures } = buildBonfire(emberCount, q);
   group.visible = false;
   let parent = null;
   let time = 0;
@@ -159,6 +153,7 @@ export function createBonfire({ emberCount, getLayout }) {
       parent?.remove(group);
       parent = null;
       disposeObject(group);
+      textures.forEach((map) => map.dispose());
     },
   };
 }
