@@ -214,7 +214,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | Rack Configurator as one card in the deck |
 | done | claude-code | "ALL PROJECTS" no longer links to `/lab`; `/lab` redirects to `/#arcana` |
 | done | claude-code | Game-card style with roman numerals, no occult symbols |
-| todo | claude-code | Remove slogan headlines such as "ENGINEERED WITH INTENT" and any ad copy |
+| done | claude-code | Remove slogan headlines such as "ENGINEERED WITH INTENT" and any ad copy |
 
 ### Skill
 | Status | Owner | Item |
