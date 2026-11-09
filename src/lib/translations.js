@@ -44,6 +44,7 @@ export const translations = {
       overview: "Übersicht"
     },
     atlus: {
+      "about": {"title":"WER BIN ICH","who":"WER","what":"WAS ICH MACHE","into":"WOFÜR ICH MICH BEGEISTERE","todoInto":"TODO: ergänzen, wofür Richard sich begeistert."},
       "stage": {"loading":"SYSTEM WIRD GELADEN","skip":"Beliebige Taste zum Überspringen","descent":"ABSTIEG / SYSTEME","descentTitle":"VOM REGISTER ZUM NETZ","works":"AUSGEWÄHLTE ARBEITEN","rack":"19\" Rack Configurator","abyssLabel":"TIEFE / 100 %","scroll":"Nach unten scrollen","portrait":"Porträt"},
       "contact": {"headline":"RASTE HIER, WANDERER","kindled":"VERBINDUNG ENTFACHT"},
       "notFound": {"title":"SIGNAL VERLOREN","subtitle":"unter dieser adresse antwortet niemand","button":"ZURÜCK ZUM MENÜ"},
@@ -400,6 +401,7 @@ export const translations = {
       overview: "Overview"
     },
     atlus: {
+      "about": {"title":"WHO AM I","who":"WHO","what":"WHAT I DO","into":"WHAT I'M INTO","todoInto":"TODO: add what Richard is into."},
       "stage": {"loading":"LOADING SYSTEM","skip":"Press any key to skip","descent":"DESCENT / SYSTEMS","descentTitle":"FROM REGISTER TO NETWORK","works":"SELECTED WORKS","rack":"19\" Rack Configurator","abyssLabel":"DEPTH / 100 %","scroll":"Scroll down","portrait":"Portrait"},
       "contact": {"headline":"REST HERE, TRAVELLER","kindled":"CONNECTION KINDLED"},
       "notFound": {"title":"SIGNAL LOST","subtitle":"nothing answers at this address","button":"RETURN TO MENU"},

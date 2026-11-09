@@ -12,4 +12,4 @@ const portraitPair = (id) => {
 };
 
 // Menu id -> { large, small, isPlaceholder }. Missing photos use the silhouette.
-export const portraits = Object.fromEntries(menuIds.map((id) => [id, portraitPair(id)]));
+export const portraits = { ...Object.fromEntries(menuIds.map((id) => [id, portraitPair(id)])), profile: portraitPair('profile') };

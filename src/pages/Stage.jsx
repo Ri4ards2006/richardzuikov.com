@@ -8,6 +8,7 @@ import { QUICK_PATH } from '../lib/sections';
 import { portraits } from '../data/portraits';
 import { featuredProjects } from '../data/featured-projects';
 import IntroOverlay from '../components/stage/IntroOverlay';
+import AboutSection from '../components/stage/AboutSection';
 import ContactList from '../three/bonfire/ContactList';
 import { grainTexture } from '../lib/noise-textures';
 
@@ -17,7 +18,7 @@ const SCENE_TIMEOUT_MS = 4000;
 // Each slab has its own size and offset (design bible, Card 03).
 const SLAB_SIZES = [1, 0.84, 1.12, 0.92, 1.04];
 const SLAB_OFFSETS = [0, 1.1, 0.4, 1.6, 0.7];
-const SCROLL_TARGETS = { work: 'arcana', contact: 'bonfire' };
+const SCROLL_TARGETS = { about: 'about', work: 'arcana', contact: 'bonfire' };
 
 const delay = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
 
@@ -49,6 +50,8 @@ export default function Stage() {
   const canvasRef = useRef(null);
   const stageRef = useRef(null);
   const portraitRef = useRef(null);
+  const aboutRef = useRef(null);
+  const aboutPortraitRef = useRef(null);
   const fireRef = useRef(null);
   const abyssRef = useRef(null);
   const slotRefs = useRef([]);
@@ -207,6 +210,8 @@ export default function Stage() {
           {!webgl && <img src={portraits.about.large} alt="" className="h-full w-full object-contain grayscale" />}
         </div>
       </section>
+
+      <AboutSection ref={aboutRef} portraitRef={aboutPortraitRef} webgl={webgl} />
 
       <section aria-labelledby="descent-title" className="stage-descent">
         <p className="font-mono text-xs tracking-widest text-ash-300">{t.atlus.stage.descent}</p>
