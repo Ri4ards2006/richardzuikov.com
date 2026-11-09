@@ -169,9 +169,13 @@ export default function Stage() {
       )}
 
       <section aria-labelledby="stage-title" className={`stage-hero ${phase === 'done' ? 'is-settled' : ''}`}>
+        <div className="stage-name">
+          <h1 id="stage-title" className="stage-name-block"><span>Richard</span> <span>Zuikov</span></h1>
+          <p className="stage-role">{t.career.role}</p>
+        </div>
         <p aria-hidden="true" className="stage-hud stage-cue">↓ {t.atlus.stage.scroll}</p>
         <div className="relative z-10 flex flex-col justify-center">
-          <h1 id="stage-title" className="font-mono text-xs tracking-[0.3em] text-ash-300 uppercase">Richard Zuikov · {t.career.role}</h1>
+          <p className="font-mono text-xs tracking-[0.3em] text-ash-300 uppercase">Richard Zuikov · {t.career.role}</p>
           <nav aria-label={t.atlus.menuNav} className="has-message stage-menu mt-5">
             <ul onKeyDown={handleMenuKey}>
               {menuItems.map((item, index) => {
