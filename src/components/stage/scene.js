@@ -218,7 +218,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   }).catch(() => {});
 
   // Side-profile figure of the About section.
-  const profile = { ghosts: [], mesh: null, map: null, geometry: null, aspect: 1, box: { w: 1, h: 1 }, to: new THREE.Vector3(), top: 0, height: 1 };
+  const profile = { ghosts: [], mesh: null, map: null, geometry: null, aspect: 1, box: { w: 1, h: 1 }, to: new THREE.Vector3(), top: 0, settle: 1, height: 1 };
   loadImage(profileSrc).then((img) => {
     if (state.disposed) return;
     profile.map = new THREE.Texture(img);
@@ -368,6 +368,8 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     profile.box = about;
     const aboutRect = a.about.getBoundingClientRect();
     profile.top = aboutRect.top + state.scroll;
+    // The scroll position a menu jump lands on, so the figure is fully turned exactly there.
+    profile.settle = Math.max(1, profile.top - parseFloat(getComputedStyle(a.about).scrollMarginTop || 0));
     profile.height = aboutRect.height;
 
     const fire = worldOf(a.fire.getBoundingClientRect());
@@ -455,7 +457,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       rings.forEach((ring, i) => { ring.rotation.z = time * (i % 2 ? -0.05 : 0.07); });
     }
 
-    const aboutEnter = smooth(clamp01(state.scroll / Math.max(1, profile.top * 0.95)));
+    const aboutEnter = smooth(clamp01(state.scroll / profile.settle));
     if (heroFigure) heroFigure.rotation.y = rad(90) * smooth(clamp01(aboutEnter / 0.5));
     if (profile.mesh) {
       placeProfile(profile.mesh, aboutEnter);

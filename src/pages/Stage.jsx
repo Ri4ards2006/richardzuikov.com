@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useDocumentTitle } from '../hooks/use-document-title';
 import { useLanguage } from '../hooks/use-language';
 import { useReducedMotion } from '../hooks/use-reduced-motion';
-import { getActiveMenuId, menuItems, setActiveMenuId } from '../lib/atlus';
+import { getActiveMenuId, landOnSection, menuItems, scrollTargets, setActiveMenuId } from '../lib/atlus';
 import { QUICK_PATH } from '../lib/sections';
 import { portraits } from '../data/portraits';
 import { featuredProjects } from '../data/featured-projects';
@@ -20,9 +20,10 @@ const SCENE_TIMEOUT_MS = 4000;
 // Each slab has its own size and offset (design bible, Card 03).
 const SLAB_SIZES = [1, 0.84, 1.12, 0.92, 1.04];
 const SLAB_OFFSETS = [0, 1.1, 0.4, 1.6, 0.7];
-const SCROLL_TARGETS = { about: 'about', work: 'arcana', contact: 'bonfire' };
 // Depth layer per descent panel: near panels move against the scroll, far ones trail it.
 const PANEL_LAYERS = ['near', 'far', 'mid', 'near'];
+const LAND_PIN_MS = 1500;
+const LAND_RELEASE_EVENTS = ['wheel', 'touchstart', 'keydown', 'pointerdown'];
 
 const delay = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
 
@@ -137,8 +138,30 @@ export default function Stage() {
   }, [phase]);
 
   useEffect(() => {
-    if (hash) document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'instant' });
+    if (!hash) return undefined;
+    const id = hash.slice(1);
+    landOnSection(id, 'instant');
+    // Fonts and images still change the page height after a deep link, until the visitor takes over.
+    const observer = new ResizeObserver(() => landOnSection(id, 'instant'));
+    observer.observe(document.documentElement);
+    const release = () => {
+      observer.disconnect();
+      clearTimeout(timer);
+      LAND_RELEASE_EVENTS.forEach((type) => window.removeEventListener(type, release));
+    };
+    const timer = setTimeout(release, LAND_PIN_MS);
+    LAND_RELEASE_EVENTS.forEach((type) => window.addEventListener(type, release, { passive: true }));
+    return release;
   }, [hash]);
+
+  // A hash change on this page never reaches the router's displayed location.
+  useEffect(() => {
+    const onHashChange = () => {
+      if (window.location.hash) landOnSection(window.location.hash.slice(1), 'instant');
+    };
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
 
   useEffect(() => {
     if (phase === 'done' && !window.location.hash) linkRefs.current[getActiveMenuId()]?.focus({ preventScroll: true });
@@ -192,7 +215,7 @@ export default function Stage() {
 
   const scrollTo = (event, id) => {
     event.preventDefault();
-    document.getElementById(id)?.scrollIntoView();
+    landOnSection(id);
   };
 
   return (
@@ -214,7 +237,7 @@ export default function Stage() {
           <nav aria-label={t.atlus.menuNav} className="has-message stage-menu">
             <ul onKeyDown={handleMenuKey}>
               {menuItems.map((item, index) => {
-                const target = SCROLL_TARGETS[item.id];
+                const target = scrollTargets[item.id];
                 const shared = {
                   ref: (node) => { linkRefs.current[item.id] = node; },
                   'aria-current': active === item.id ? 'true' : undefined,
