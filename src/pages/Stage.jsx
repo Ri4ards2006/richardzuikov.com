@@ -77,8 +77,8 @@ export default function Stage() {
       const stage = createStage({
         canvas: canvasRef.current,
         projects: featuredProjects,
-        portraitSrc: portraits.about.large,
-        profileSrc: portraits.profile.large,
+        portraitSrc: portraits.stage.large,
+        profileSrc: portraits.about.large,
         onDiveEnd: () => setPhase('done'),
         anchors: () => ({
           portrait: portraitRef.current,
@@ -262,7 +262,7 @@ export default function Stage() {
           </nav>
         </div>
         <div ref={portraitRef} className="stage-portrait">
-          {!webgl && <img src={portraits.about.large} alt="" className="h-full w-full object-contain grayscale" />}
+          {!webgl && <img src={portraits.stage.large} alt="" className="h-full w-full object-contain grayscale" />}
         </div>
       </section>
 

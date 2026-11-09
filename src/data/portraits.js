@@ -1,5 +1,6 @@
 import silhouette from '../assets/portraits/silhouette.svg';
 import profileSilhouette from '../assets/portraits/profile-silhouette.svg';
+import frontSilhouette from '../assets/portraits/front-silhouette.svg';
 
 const files = import.meta.glob('../assets/portraits/*.webp', { eager: true, query: '?url', import: 'default' });
 
@@ -12,5 +13,10 @@ const portraitPair = (id, placeholder = silhouette) => {
   return { large: placeholder, small: placeholder, isPlaceholder: true };
 };
 
-// Menu id -> { large, small, isPlaceholder }. Missing photos use the silhouette.
-export const portraits = { ...Object.fromEntries(menuIds.map((id) => [id, portraitPair(id)])), profile: portraitPair('profile', profileSilhouette) };
+// Menu id -> { large, small, isPlaceholder }. Missing photos use a silhouette.
+// `stage` looks into the camera, `about` is the side profile.
+export const portraits = {
+  ...Object.fromEntries(menuIds.map((id) => [id, portraitPair(id)])),
+  stage: portraitPair('stage', frontSilhouette),
+  about: portraitPair('about', profileSilhouette),
+};

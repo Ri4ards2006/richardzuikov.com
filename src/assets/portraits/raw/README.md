@@ -1,6 +1,6 @@
 # Portrait source photos
 
-Drop photos here named `about.*`, `work.*`, `stack.*`, `career.*` or `contact.*`, one per name. This folder is gitignored, only this README is tracked.
+Drop photos here named `stage.*` (front-facing, looking into the camera), `about.*` (side profile), `work.*`, `stack.*`, `career.*` or `contact.*`, one per name. This folder is gitignored, only this README is tracked.
 
 ## Install on Arch
 
@@ -19,4 +19,4 @@ For each photo the script removes the background with `rembg`, strips metadata, 
 
 Photos are processed locally and never uploaded. On its first run `rembg` downloads its model file once to `~/.u2net/`.
 
-A menu id without a photo falls back to `../silhouette.svg` (see `src/data/portraits.js`).
+An id without a photo falls back to a silhouette: `../front-silhouette.svg` for `stage`, `../profile-silhouette.svg` for `about`, `../silhouette.svg` for the rest (see `src/data/portraits.js`).
