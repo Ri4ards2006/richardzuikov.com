@@ -4,7 +4,8 @@
 **Reviewer**: AntiGravity (Jarvis Fleet Design Reviewer)  
 **Target Branch**: `feat/atlus-menu`  
 **Reference Specs**: `design/DESIGN.md` (Design Bible §0–§11) & Storyboard Cards 01–05  
-**Audit Viewports**: Desktop 1440×900, Mobile 390×844 (Playwright headless Chromium)
+**Audit Viewports**: Desktop 1440×900, Mobile 390×844 (Playwright headless Chromium)  
+**Execution Environment**: Local Vite Preview (:4173), WebGL SwiftShader on Linux
 
 ---
 
