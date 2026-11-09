@@ -11,6 +11,10 @@ export default function ProjectDeck() {
   const { t } = useLanguage();
   const projects = t.lab.projects.filter((project) => !project.isLiveApp);
   const [selected, setSelected] = useState(() => Math.floor((t.lab.projects.length - 1) / 2));
+  const [flipped, setFlipped] = useState(false);
+  const frontRefs = useRef([]);
+  const backRefs = useRef([]);
+  const flipSettled = useRef(false);
   const cardRefs = useRef([]);
 
   const layout = (position) => {
@@ -26,6 +30,17 @@ export default function ProjectDeck() {
   };
 
   useLayoutEffect(() => layout(selected), [selected, projects.length]);
+
+  useEffect(() => setFlipped(false), [selected]);
+
+  useEffect(() => {
+    // Skip the first run so that mounting the deck never steals focus.
+    if (!flipSettled.current) {
+      flipSettled.current = true;
+      return;
+    }
+    (flipped ? backRefs : frontRefs).current[selected]?.focus({ preventScroll: true });
+  }, [flipped]);
 
   const clampIndex = (index) => Math.max(0, Math.min(projects.length - 1, index));
   const step = (delta) => setSelected((current) => clampIndex(current + delta));
@@ -74,6 +89,10 @@ export default function ProjectDeck() {
     } else if (event.key === 'Home' || event.key === 'End') {
       event.preventDefault();
       setSelected(event.key === 'Home' ? 0 : projects.length - 1);
+    } else if (event.key === 'Escape') {
+      setFlipped(false);
+    } else if (event.key === 'Enter' && event.target === deckRef.current) {
+      setFlipped(true);
     }
   };
 
@@ -100,12 +119,17 @@ export default function ProjectDeck() {
     return () => deck.removeEventListener('wheel', onWheel);
   }, [projects.length]);
 
+  // A drag that ends on a card or link must not also count as a click on it.
+  const onClickCapture = (event) => {
+    if (!suppressClick.current) return;
+    suppressClick.current = false;
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
   const onCardClick = (index) => {
-    if (suppressClick.current) {
-      suppressClick.current = false;
-      return;
-    }
-    setSelected(index);
+    if (index === selected) setFlipped(true);
+    else setSelected(index);
   };
 
   return (
@@ -124,19 +148,50 @@ export default function ProjectDeck() {
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
+        onClickCapture={onClickCapture}
         onKeyDown={onKeyDown}
       >
-        {projects.map((project, index) => (
-          <div key={project.id} ref={(node) => { cardRefs.current[index] = node; }} className={`deck-card ${index === selected ? 'is-selected' : ''}`}>
-            <button type="button" onClick={() => onCardClick(index)} aria-pressed={index === selected} aria-label={project.title} className="deck-face">
-              <span aria-hidden="true" className="deck-roman">{ROMAN[index] ?? index + 1}</span>
-              <span className="deck-image">
-                <img src={projectImages[project.id]} alt="" loading="lazy" decoding="async" draggable="false" />
-              </span>
-              <span className="deck-title">{project.title}</span>
-            </button>
-          </div>
-        ))}
+        {projects.map((project, index) => {
+          const isFlipped = flipped && index === selected;
+          return (
+            <div key={project.id} ref={(node) => { cardRefs.current[index] = node; }} className={`deck-card ${index === selected ? 'is-selected' : ''}`}>
+              <div className={`deck-inner ${isFlipped ? 'is-flipped' : ''}`}>
+                <button
+                  ref={(node) => { frontRefs.current[index] = node; }}
+                  type="button"
+                  onClick={() => onCardClick(index)}
+                  aria-pressed={index === selected}
+                  aria-label={index === selected ? `${project.title}: ${t.atlus.flip}` : project.title}
+                  inert={isFlipped ? '' : undefined}
+                  className="deck-face"
+                >
+                  <span aria-hidden="true" className="deck-roman">{ROMAN[index] ?? index + 1}</span>
+                  <span className="deck-image">
+                    <img src={projectImages[project.id]} alt="" loading="lazy" decoding="async" draggable="false" />
+                  </span>
+                  <span className="deck-title">{project.title}</span>
+                </button>
+
+                <div inert={isFlipped ? undefined : ''} className="deck-face deck-back">
+                  <h4 className="font-anton uppercase text-lg tracking-wide">{project.title}</h4>
+                  <p className="deck-copy">
+                    <span className="max-md:hidden">{project.fullText}</span>
+                    <span className="md:hidden">{project.desc}</span>
+                  </p>
+                  <ul className="flex flex-wrap gap-1">
+                    {project.tags.map((tag) => <li key={tag} className="px-1 border border-ash-600 font-mono text-[10px] text-ash-200">{tag}</li>)}
+                  </ul>
+                  <div className="deck-actions">
+                    {project.repo && (
+                      <a href={project.repo} target="_blank" rel="noreferrer" className="deck-action underline underline-offset-4">{t.lab.viewCode} ↗</a>
+                    )}
+                    <button ref={(node) => { backRefs.current[index] = node; }} type="button" onClick={() => setFlipped(false)} className="deck-action text-ash-300">↺ {t.atlus.flipBack}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

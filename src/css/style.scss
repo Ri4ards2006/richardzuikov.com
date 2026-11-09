@@ -802,8 +802,8 @@ html.dark .ground-message {
   --deck-card: 13.5rem;
   --deck-spread: 9.5rem;
   position: relative;
-  height: 28rem;
-  margin-top: 2rem;
+  height: 30rem;
+  margin-top: 1rem;
   perspective: 1400px;
   overflow: hidden;
   mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
@@ -813,7 +813,7 @@ html.dark .ground-message {
 
 .deck-card {
   position: absolute;
-  top: 3rem;
+  top: 4.75rem;
   left: 50%;
   width: var(--deck-card);
   margin-left: calc(var(--deck-card) / -2);
@@ -821,17 +821,63 @@ html.dark .ground-message {
   transition: transform 200ms cubic-bezier(0.2, 0.9, 0.1, 1), opacity 200ms linear;
 }
 
+.deck-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 220ms cubic-bezier(0.2, 0.9, 0.1, 1);
+}
+
+.deck-inner.is-flipped {
+  transform: scale(1.06) rotateY(180deg);
+}
+
 .deck-face {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
+  backface-visibility: hidden;
   padding: 0.5rem;
   background: rgb(var(--ash-900));
   border: 3px double rgb(var(--ash-100));
   color: rgb(var(--ash-100));
   text-align: center;
   cursor: pointer;
+}
+
+.deck-back {
+  gap: 0.5rem;
+  padding: 0.75rem;
+  text-align: left;
+  cursor: default;
+  transform: rotateY(180deg);
+}
+
+.deck-copy {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  font-size: 0.6875rem;
+  line-height: 1.45;
+  color: rgb(var(--ash-200));
+}
+
+.deck-actions {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.deck-action {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 0.6875rem;
 }
 
 .deck-roman {
@@ -889,7 +935,8 @@ html.dark .ground-message {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .deck-card {
+  .deck-card,
+  .deck-inner {
     transition: none;
   }
 }
@@ -898,7 +945,7 @@ html.dark .ground-message {
   .deck {
     --deck-card: 11rem;
     --deck-spread: 5.5rem;
-    height: 24rem;
+    height: 26rem;
   }
 }
 
