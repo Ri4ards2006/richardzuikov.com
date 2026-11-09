@@ -345,7 +345,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 ### Arcana
 | Status | Owner | Item |
 |---|---|---|
-| todo | claude-code | Thinner frame lines, finer screentone, crisper title type |
+| done | claude-code | Thinner frame lines, finer screentone, crisper title type |
 
 ### Bonfire
 | Status | Owner | Item |

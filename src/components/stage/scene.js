@@ -18,6 +18,11 @@ const MIN_DPR = 0.75;
 const SLOW_FRAME_MS = 24;
 // Record ride: a full 90° yaw would face empty space, so the WebGL camera whips (max 28°) while the
 // DOM board makes the full turn; the camera also drifts sideways at a quarter of the timeline speed.
+// Arcana cards (v4: finer): texture 1.5× the v3 size for crisper type, frame strokes at 1.15× their
+// 400-unit width on a 768 px texture, i.e. thinner on screen than v3's 1.4× on 512 px.
+const CARD_W = 768;
+const CARD_H = 1317;
+const FRAME_STROKE = 1.15;
 const RIDE_WHIP = 28 * Math.PI / 180;
 const RIDE_DRIFT = 0.25;
 const IDLE_FRAME_MS = 1000 / 30;
@@ -106,7 +111,8 @@ function drawToned(ctx, img, x, y, w, h) {
     const py = Math.floor(i / 4 / w);
     const lum = clamp01((lumAt(i) - low) / (high - low)) ** gamma;
     const contrast = clamp01((lum - 0.5) * 1.7 + 0.52);
-    const toned = clamp01(contrast + TONE[(py % 3) * 3 + (px % 3)] * 0.11);
+    // Finer screentone (v4): lower amplitude on a texture 1.5× denser than before.
+    const toned = clamp01(contrast + TONE[(py % 3) * 3 + (px % 3)] * 0.075);
     const value = Math.round(toned * 255);
     data[i] = value;
     data[i + 1] = value;
@@ -123,8 +129,8 @@ function cardFrameImage(w, h) {
   const svg = cardFrameSvg
     .replace('<svg ', `<svg width="${w}" height="${h}" preserveAspectRatio="none" `)
     .replace(/currentColor/g, '#f4f4f0')
-    .replace(/stroke-width="([\d.]+)"/g, (m, v) => `stroke-width="${(+v * 1.4).toFixed(2)}"`)
-    .replace('stroke="currentColor"', 'stroke="#f4f4f0" stroke-width="1.4"');
+    .replace(/stroke-width="([\d.]+)"/g, (m, v) => `stroke-width="${(+v * FRAME_STROKE).toFixed(2)}"`)
+    .replace('stroke="currentColor"', `stroke="#f4f4f0" stroke-width="${FRAME_STROKE}"`);
   frameImage = new Image(w, h);
   frameImage.src = `data:image/svg+xml,${encodeURIComponent(svg)}`;
   return frameImage;
@@ -154,10 +160,13 @@ function drawCard(canvas, project, index, img) {
   ctx.fillStyle = '#f4f4f0';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.font = '700 30px Cinzel, serif';
-  ctx.fillText(ROMAN[index] ?? String(index + 1), w / 2, h * 0.12 + 2);
-  ctx.font = '46px Anton, Impact, sans-serif';
-  ctx.fillText(project.title.toUpperCase(), w / 2, h * 0.925, w * 0.7);
+  const u = w / 512;
+  ctx.font = `700 ${30 * u}px Cinzel, serif`;
+  ctx.fillText(ROMAN[index] ?? String(index + 1), w / 2, h * 0.12 + 2 * u);
+  ctx.font = `${42 * u}px Anton, Impact, sans-serif`;
+  ctx.letterSpacing = `${1.5 * u}px`;
+  ctx.fillText(project.title.toUpperCase(), w / 2, h * 0.925, w * 0.62);
+  ctx.letterSpacing = '0px';
   ctx.textBaseline = 'alphabetic';
 }
 
@@ -304,16 +313,17 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
 
   // Tarot cards positioned over measured DOM slots.
   const cards = projects.map((project, index) => {
-    const face = makeCanvas(512, 878);
+    const face = makeCanvas(CARD_W, CARD_H);
     drawCard(face, project, index, null);
     const map = texture(face);
+    map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
     const side = new THREE.MeshBasicMaterial({ color: CHARCOAL });
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), [side, side, side, side, new THREE.MeshBasicMaterial({ map }), side]);
     const tilt = TILTS[index % TILTS.length];
     const group = new THREE.Group();
     group.add(mesh);
     scene.add(group);
-    Promise.all([document.fonts?.load('46px Anton'), document.fonts?.load('700 30px Cinzel'), cardFrameImage(512, 878).decode().catch(() => {})]).then(() => {
+    Promise.all([document.fonts?.load('46px Anton'), document.fonts?.load('700 30px Cinzel'), cardFrameImage(CARD_W, CARD_H).decode().catch(() => {})]).then(() => {
       if (state.disposed) return;
       drawCard(face, project, index, null);
       map.needsUpdate = true;
@@ -448,7 +458,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
 
   async function loadCardImage(card) {
     const img = await loadImage(card.project.image);
-    const bitmap = await createImageBitmap(img, { resizeWidth: 512, resizeQuality: 'medium' });
+    const bitmap = await createImageBitmap(img, { resizeWidth: CARD_W, resizeQuality: 'medium' });
     await new Promise((resolve) => { requestAnimationFrame(resolve); });
     if (state.disposed) return;
     drawCard(card.face, card.project, card.index, bitmap);

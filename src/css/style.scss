@@ -136,8 +136,9 @@ html {
 .arcana-halftone {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle, rgb(var(--ash-900)) 32%, transparent 36%) 0 0 / 2px 2px;
-  opacity: 0.22;
+  /* v4: finer screentone. */
+  background: radial-gradient(circle, rgb(var(--ash-900)) 30%, transparent 34%) 0 0 / 1.5px 1.5px;
+  opacity: 0.16;
   mix-blend-mode: multiply;
 }
 
@@ -2303,6 +2304,13 @@ html.dark .ground-message {
   color: rgb(var(--ash-100));
 }
 
+/* v4: finer lines on the deck and inspect cards. */
+.deck-face .card-frame svg,
+.inspect-face .card-frame svg {
+  opacity: 0.82;
+  stroke-width: 0.85;
+}
+
 .card-frame svg * {
   vector-effect: non-scaling-stroke;
 }
@@ -2362,6 +2370,9 @@ html.dark .ground-message {
 .deck-face > .deck-title {
   font-size: 0.9375rem;
   line-height: 1.05;
+  letter-spacing: 0.045em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
 }
 
 /* Bottom band below the title: the corner traces live here. */
