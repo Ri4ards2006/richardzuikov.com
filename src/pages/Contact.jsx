@@ -5,6 +5,7 @@ import { useLanguage } from '../hooks/use-language';
 import { useTheme } from '../hooks/use-theme';
 import { useReducedMotion } from '../hooks/use-reduced-motion';
 import { useContactEmail } from '../hooks/use-contact-email';
+import { grainTexture } from '../lib/noise-textures';
 import { useScreen } from '../components/atlus/Screen';
 import { socialLinks } from '../components/home/SocialLinks';
 import EmberCanvas from '../components/home/EmberCanvas';
@@ -28,11 +29,11 @@ export default function Contact() {
           <div aria-hidden="true" className="ember-glow" />
           {motion && <EmberCanvas glow={false} />}
           <div aria-hidden="true" className="ember-vignette" />
-          <div aria-hidden="true" className="ember-grain" />
+          <div aria-hidden="true" className="ember-grain" style={{ backgroundImage: grainTexture() }} />
         </>
       )}
       {motion && (
-        <Checkpoint text={t.atlus.contact.kindled} storageKey="seen-kindled" textClassName="font-cinzel font-bold text-xl sm:text-3xl tracking-[0.25em] text-center text-accent" />
+        <Checkpoint text={t.atlus.contact.kindled} storageKey="seen-kindled" textClassName="font-cinzel font-bold text-xl sm:text-3xl tracking-[0.25em] text-center text-accent bg-ash-900/90 px-8 py-4" />
       )}
 
       <div className="relative z-10 w-full max-w-3xl mx-auto px-5 sm:px-12 pt-8">

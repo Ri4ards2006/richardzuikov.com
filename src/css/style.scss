@@ -166,7 +166,7 @@ h1[tabindex='-1']:focus-visible {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse 55% 65% at 50% 105%, rgb(var(--accent) / 0.34), rgb(var(--accent-dim) / 0.16) 45%, transparent 72%);
+  background: radial-gradient(ellipse 55% 65% at 50% 105%, rgb(var(--accent) / 0.5), rgb(var(--accent-dim) / 0.28) 45%, transparent 72%);
 }
 
 .ember-vignette {
@@ -180,8 +180,7 @@ h1[tabindex='-1']:focus-visible {
   position: absolute;
   inset: -64px;
   pointer-events: none;
-  opacity: 0.16;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.2;
 }
 
 @media (prefers-reduced-motion: no-preference) {
