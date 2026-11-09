@@ -11,6 +11,7 @@ import IntroOverlay from '../components/stage/IntroOverlay';
 import AboutSection from '../components/stage/AboutSection';
 import PanelIllustration from '../components/stage/PanelIllustration';
 import ProjectDeck from '../components/stage/ProjectDeck';
+import NowSection from '../components/stage/NowSection';
 import CardInspect from '../components/stage/CardInspect';
 import SkillBoard from '../components/atlus/SkillBoard';
 import RecordBoard from '../components/atlus/RecordBoard';
@@ -336,6 +337,8 @@ export default function Stage() {
           ))}
         </div>
       </section>
+
+      <NowSection />
 
       <section id="arcana" aria-labelledby="works-title" className="stage-works scroll-mt-16">
         <ImpactInk variant={3} />

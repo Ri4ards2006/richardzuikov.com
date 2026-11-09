@@ -329,7 +329,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 ### Now
 | Status | Owner | Item |
 |---|---|---|
-| todo | claude-code | Section "NOW / IN PROGRESS" with 3 slanted panels, quest-log progress bars, animated line illustrations, data file + TODO keys |
+| done | claude-code | Section "NOW / IN PROGRESS" with 3 slanted panels, quest-log progress bars, animated line illustrations, data file + TODO keys |
 
 ### Camera turn + Record
 | Status | Owner | Item |
