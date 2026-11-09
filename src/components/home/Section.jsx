@@ -14,7 +14,7 @@ export default function Section({ id, number, title, tone = 'base', background, 
       {background}
       <div ref={contentRef} className="relative z-10 max-w-6xl mx-auto px-6 sm:px-12 py-20 md:py-28">
         <div className="flex items-end gap-4 sm:gap-6 mb-12 md:mb-16">
-          <span aria-hidden="true" className="font-black leading-none text-7xl md:text-9xl text-zinc-200 dark:text-white/20 select-none">
+          <span aria-hidden="true" className="font-black leading-none text-7xl md:text-9xl text-zinc-200 dark:text-white/40 select-none">
             {number}
           </span>
           <h2 id={`${id}-title`} className="heading-skew text-3xl md:text-5xl font-light tracking-tight text-zinc-950 dark:text-white pb-1">

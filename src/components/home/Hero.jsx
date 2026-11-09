@@ -12,7 +12,7 @@ export default function Hero() {
     <section id="top" aria-labelledby="top-title" className="relative scroll-mt-16 bg-white dark:bg-[#09090b]">
       <div className="max-w-6xl mx-auto px-6 sm:px-12 pt-12 pb-28 md:pt-16 md:pb-36 md:min-h-[calc(100vh-4rem)] grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14 items-center">
         <div className="space-y-6">
-          <span aria-hidden="true" className="block font-black leading-none text-7xl md:text-9xl text-zinc-200 dark:text-white/20 select-none">
+          <span aria-hidden="true" className="block font-black leading-none text-7xl md:text-9xl text-zinc-200 dark:text-white/40 select-none">
             00
           </span>
           <h1 id="top-title" className="heading-skew text-5xl sm:text-7xl font-light tracking-tight text-zinc-950 dark:text-white">

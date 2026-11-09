@@ -1,16 +1,16 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
-import Stage from './pages/Stage';
 import Quick from './pages/Quick';
 import NotFound from './pages/NotFound';
-import About from './pages/About';
-import Career from './pages/Career';
-import Stack from './pages/Stack';
-import Work from './pages/Work';
 import { useWipeLocation } from './hooks/use-wipe-location';
 import FogGate from './components/atlus/FogGate';
 
+const Stage = lazy(() => import('./pages/Stage'));
+const About = lazy(() => import('./pages/About'));
+const Work = lazy(() => import('./pages/Work'));
+const Stack = lazy(() => import('./pages/Stack'));
+const Career = lazy(() => import('./pages/Career'));
 const Lab = lazy(() => import('./pages/Lab'));
 const Impressum = lazy(() => import('./pages/Impressum'));
 
