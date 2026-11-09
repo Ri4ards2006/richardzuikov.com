@@ -90,13 +90,13 @@ function buildBonfire(emberCount, q) {
   const particles = buildParticles(emberCount, q);
   group.add(particles.group);
 
-  return { group, light, flames, particles, textures, pcbMaterial };
+  return { group, light, flames, particles, textures, pcbMaterial, iron };
 }
 
 // getLayout() returns the world placement { x, y, scale, pixel } measured by the stage.
 export function createBonfire({ emberCount, getLayout }) {
   const q = bonfireQuality();
-  const { group, light, flames, particles, textures, pcbMaterial } = buildBonfire(emberCount, q);
+  const { group, light, flames, particles, textures, pcbMaterial, iron } = buildBonfire(emberCount, q);
   group.visible = false;
   let parent = null;
   let time = 0;
@@ -106,6 +106,9 @@ export function createBonfire({ emberCount, getLayout }) {
     mount(scene, camera) {
       parent = scene;
       scene.add(group);
+      if (typeof window !== 'undefined') {
+        window.__bonfire = { scene, camera, group, iron, THREE };
+      }
     },
     // progress: 0 while out of range, rising to 1 at the end of the page.
     update(dt, progress) {
@@ -134,6 +137,9 @@ export function createBonfire({ emberCount, getLayout }) {
       particles.update(time, pixel);
     },
     dispose() {
+      if (typeof window !== 'undefined' && window.__bonfire?.group === group) {
+        delete window.__bonfire;
+      }
       parent?.remove(group);
       parent = null;
       disposeObject(group);
