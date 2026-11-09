@@ -339,7 +339,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 ### Skill
 | Status | Owner | Item |
 |---|---|---|
-| todo | claude-code | 3D prop per category with a quick spin on change |
+| done | claude-code | 3D prop per category with a quick spin on change |
 | done | claude-code | Certificates as KEY ITEM cards (v3b) |
 
 ### Arcana

@@ -3,6 +3,7 @@ import { createBonfire } from '../../three/bonfire';
 import { createFloatingShards } from './floating-shards';
 import { createInkWater } from './ink-water';
 import { createDescentProps } from './descent-props';
+import { createSkillProp } from './skill-props';
 import { disposeObject, hash, makeCanvas, pointsMaterial, seededPoints, smooth, texture } from '../../three/utils';
 import cardFrameSvg from '../../assets/svg/card-frame.svg?raw';
 
@@ -323,6 +324,8 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   const floating = createFloatingShards(isSmall ? 30 : 38);
   scene.add(floating.mesh);
   const props = createDescentProps();
+  const skillProp = createSkillProp();
+  scene.add(skillProp.group);
   const propAim = new THREE.Vector3();
   scene.add(props.group);
   const pointer = new THREE.Vector2();
@@ -423,6 +426,9 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       const r = el.getBoundingClientRect();
       return { left: r.left, width: r.width, top: r.top + state.scroll, height: r.height };
     }), state.w, (x, y) => ({ x: (x - state.w / 2) * state.k, y: -(y - state.h / 2) * state.k }));
+
+    const skillRect = a.skillProp?.getBoundingClientRect();
+    skillProp.layout(skillRect && { left: skillRect.left, width: skillRect.width, top: skillRect.top + state.scroll, height: skillRect.height }, (x, y) => ({ x: (x - state.w / 2) * state.k, y: -(y - state.h / 2) * state.k }));
 
     const about = worldOf(a.aboutPortrait.getBoundingClientRect());
     profile.to.set(about.x, about.y, 0);
@@ -579,6 +585,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       );
     });
 
+    skillProp.update(time, now, state.camY);
     // The cursor as a world point in front of the props, for the dome camera's lens.
     props.update(time, state.camY, pointerSeen ? propAim.set(mouse.x * state.w * 0.5 * state.k, state.camY - mouse.y * state.h * 0.5 * state.k, 3) : null);
 
@@ -651,6 +658,10 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     },
     travel() {
       state.travelStart = performance.now();
+    },
+    setSkillCategory(index) {
+      skillProp.select(index);
+      state.lastInput = performance.now();
     },
     // yaw −1…1 from the Record ride (in / out turn), shift: px along the timeline, out: 0…1 of the turn back.
     setRide({ yaw, shift, out }) {

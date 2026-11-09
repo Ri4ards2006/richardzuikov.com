@@ -7,7 +7,8 @@ import KeyItems from './KeyItems';
 
 const pad = (value) => String(value).padStart(2, '0');
 
-export default function SkillBoard() {
+// onCategory(index): the home page spins its 3D prop for the category; /stack has none.
+export default function SkillBoard({ onCategory }) {
   const { t } = useLanguage();
   const domains = Object.entries(t.career.domains);
   const [selected, setSelected] = useState(domains[0][0]);
@@ -23,7 +24,7 @@ export default function SkillBoard() {
         <ul className="skill-slabs">
           {domains.map(([key, item], index) => (
             <li key={key} style={{ '--i': index }}>
-              <button type="button" onClick={() => setSelected(key)} aria-pressed={selected === key} className={`skill-slab ${selected === key ? 'is-active' : ''}`}>
+              <button type="button" onClick={() => { setSelected(key); onCategory?.(index); }} aria-pressed={selected === key} className={`skill-slab ${selected === key ? 'is-active' : ''}`}>
                 <span aria-hidden="true" className="font-anton text-5xl leading-none">{pad(index + 1)}</span>
                 <span className="block font-anton uppercase text-xl tracking-wide">{item.name}</span>
               </button>
@@ -31,6 +32,8 @@ export default function SkillBoard() {
           ))}
         </ul>
         <span aria-hidden="true" className="ground-message mt-2">{t.atlus.hints.stack}</span>
+        {/* Anchor for the WebGL prop of the selected category. */}
+        {onCategory && <div aria-hidden="true" className="skill-prop" />}
       </div>
 
       {/* The key replays the slash wipe and the row reveal on every category change. */}

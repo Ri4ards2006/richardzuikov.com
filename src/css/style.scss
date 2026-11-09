@@ -2811,3 +2811,16 @@ html.dark .ground-message {
 .record-ride .stage-more {
   margin-top: 1.5rem;
 }
+
+/* Skill prop anchor: the WebGL prop sits here, below the category slabs. */
+.skill-prop {
+  height: 15rem;
+  margin-top: 1.5rem;
+  pointer-events: none;
+}
+
+@media (max-width: 1023px) {
+  .skill-prop {
+    display: none;
+  }
+}

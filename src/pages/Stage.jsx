@@ -95,6 +95,7 @@ export default function Stage() {
           abyss: abyssRef.current,
           slots: slotRefs.current.filter(Boolean),
           panels: panelRefs.current.filter(Boolean),
+          skillProp: stageRef.current?.querySelector('.skill-prop'),
         }),
       });
       sceneRef.current = stage;
@@ -370,7 +371,7 @@ export default function Stage() {
         <ImpactInk variant={4} />
         <p className="font-mono text-xs tracking-widest text-ash-300">03 / {t.atlus.hud.stack}</p>
         <h2 id="skill-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight mt-2">{t.landing.nav.stack}</h2>
-        <SkillBoard />
+        <SkillBoard onCategory={webgl ? (index) => sceneRef.current?.setSkillCategory(index) : undefined} />
         <Link to="/stack" className="stage-more">{t.atlus.boards.fullIndex} →</Link>
       </section>
 

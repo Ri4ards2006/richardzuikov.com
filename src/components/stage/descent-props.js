@@ -10,7 +10,7 @@ const CULL_DISTANCE = 9;
 // Without a mouse the dome camera pans slowly on its own.
 const fallbackAim = new THREE.Vector3();
 
-const material = new THREE.ShaderMaterial({
+export const material = new THREE.ShaderMaterial({
   vertexShader: 'varying vec3 vPos; void main(){vec4 mv=modelViewMatrix*vec4(position,1.);vPos=mv.xyz;gl_Position=projectionMatrix*mv;}',
   // The same three hard ink bands as the floating shards.
   fragmentShader: `
@@ -22,15 +22,15 @@ const material = new THREE.ShaderMaterial({
     }`,
 });
 
-const box = (w, h, d, x = 0, y = 0, z = 0) => new THREE.BoxGeometry(w, h, d).translate(x, y, z);
-const flat = (geometry) => {
+export const box = (w, h, d, x = 0, y = 0, z = 0) => new THREE.BoxGeometry(w, h, d).translate(x, y, z);
+export const flat = (geometry) => {
   const merged = mergeGeometries(geometry.map((g) => g.toNonIndexed()));
   geometry.forEach((g) => g.dispose());
   return merged;
 };
 
 // A QFP package: flat body with gull-wing pins along four sides.
-function chip() {
+export function chip() {
   const parts = [box(0.72, 0.1, 0.72)];
   for (let i = 0; i < 10; i += 1) {
     const at = -0.3 + i * (0.6 / 9);
@@ -94,7 +94,7 @@ function monitor() {
 }
 
 // A 1U rack unit: drive-bay front, vent ribs on top, status LEDs that blink on their own clocks.
-function rackUnit() {
+export function rackUnit() {
   const parts = [box(1.2, 0.16, 0.8), box(1.24, 0.2, 0.04, 0, 0, 0.41)];
   for (let i = 0; i < 5; i += 1) parts.push(box(0.14, 0.11, 0.02, -0.5 + i * 0.16, 0, 0.435));
   for (let i = 0; i < 7; i += 1) parts.push(box(0.05, 0.02, 0.5, -0.42 + i * 0.14, 0.09, -0.1));
