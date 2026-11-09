@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../hooks/use-language';
+import { stackUses } from '../data/stack-uses';
 import Screen from '../components/atlus/Screen';
 
 const pad = (value) => String(value).padStart(2, '0');
@@ -40,12 +41,24 @@ export default function Stack() {
           <h2 className="font-anton uppercase text-3xl tracking-wide mt-2">{domain.name}</h2>
           <p className="mt-1 text-sm text-ash-300">{domain.desc}</p>
           <ol className="mt-5 divide-y divide-ash-700">
-            {domain.items.map((item, index) => (
-              <li key={item} className="grid grid-cols-[2rem_minmax(0,1fr)] items-baseline gap-3 py-3">
-                <span aria-hidden="true" className="font-mono text-xs text-ash-400">{pad(index + 1)}</span>
-                <span className="text-sm text-ash-100">{item}</span>
-              </li>
-            ))}
+            {domain.items.map((item, index) => {
+              const uses = stackUses[selected]?.[index];
+              return (
+                <li key={item} className="grid grid-cols-[2rem_minmax(0,1fr)] items-baseline gap-3 py-3">
+                  <span aria-hidden="true" className="font-mono text-xs text-ash-400">{pad(index + 1)}</span>
+                  <div className="min-w-0">
+                    <span className="text-sm text-ash-100">{item}</span>
+                    {uses && (
+                      <ul aria-label={t.atlus.usedIn} className="mt-1.5 flex flex-wrap gap-1.5">
+                        {uses.map((use) => <li key={use} className="stack-use">{use}</li>)}
+                      </ul>
+                    )}
+                    {/* TODO strings are placeholders for facts still to be supplied, so visitors never see them. */}
+                    {!uses && import.meta.env.DEV && <p className="mt-1.5 font-mono text-[11px] text-ash-300">{t.atlus.todoStackUse}</p>}
+                  </div>
+                </li>
+              );
+            })}
           </ol>
         </section>
       </div>

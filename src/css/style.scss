@@ -793,6 +793,16 @@ html.dark .ground-message {
   margin-inline: auto;
 }
 
+.stack-use {
+  padding: 0.125rem 0.625rem 0.125rem 0.375rem;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  color: rgb(var(--ash-900));
+  background: rgb(var(--ash-200));
+  clip-path: polygon(0 0, 100% 0, calc(100% - 0.375rem) 100%, 0 100%);
+}
+
 .deck-wrap {
   margin-top: 5rem;
   scroll-margin-top: 6rem;
