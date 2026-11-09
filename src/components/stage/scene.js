@@ -184,19 +184,29 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 80);
   camera.position.z = CAM_Z;
 
-  const state = { lastInput: 0, w: 1, h: 1, k: 0.01, scroll: window.scrollY, camY: 0, frame: 0, last: 0, time: 0, slow: 0, count: 0, spent: 0, hover: -1, abyssTop: 1e9, panels: [], fireProgress: 0, fire: { x: 0, y: 0, scale: 1, pixel: 1 } };
+  const state = { lastInput: 0, w: 1, h: 1, k: 0.01, scroll: window.scrollY, camY: 0, frame: 0, last: 0, time: 0, rise: 0, story: 0, slow: 0, count: 0, spent: 0, hover: -1, abyssTop: 1e9, panels: [], fireProgress: 0, fire: { x: 0, y: 0, scale: 1, pixel: 1 } };
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
 
-  const dust = seededPoints(isSmall ? 70 : 180, pointsMaterial(
-    `attribute vec3 aSeed; uniform float uTime,uPixel;
+  // Screentone dust on the stage, rising ash through the descent, embers at the bonfire.
+  const dust = seededPoints(isSmall ? 90 : 220, pointsMaterial(
+    `attribute vec3 aSeed; uniform float uTime,uRise,uStory,uEmber,uPixel; varying float vShow,vHeat;
      void main(){
-       vec3 p=vec3((aSeed.x-.5)*20.,mod(aSeed.y*16.+uTime*.18,16.)-8.,(aSeed.z-.5)*10.);
+       float y=mod(aSeed.y*16.+uRise,16.)-8.;
+       vec3 p=vec3((aSeed.x-.5)*20.+sin(uTime*.6+aSeed.y*40.)*.35*uStory,y,(aSeed.z-.5)*10.);
+       vShow=smoothstep(-.03,.03,.4+uStory*.7-fract(aSeed.x*7.3));
+       vHeat=smoothstep(fract(aSeed.z*5.1)*.7,fract(aSeed.z*5.1)*.7+.3,uEmber);
        vec4 mv=modelViewMatrix*vec4(p,1.);
        gl_Position=projectionMatrix*mv;
-       gl_PointSize=uPixel*(16.+aSeed.z*24.)/-mv.z;
+       gl_PointSize=uPixel*(16.+aSeed.z*24.)*(1.+uStory*.35)/-mv.z;
      }`,
-    'void main(){float d=length(gl_PointCoord-.5);if(d>.5)discard;gl_FragColor=vec4(.957,.957,.941,(1.-d*2.)*.7);}',
-    { uTime: { value: 0 }, uPixel: { value: 1 } },
+    `uniform float uStory; varying float vShow,vHeat;
+     void main(){
+       float d=length(gl_PointCoord-.5);
+       if(d>.5||vShow<.01)discard;
+       vec3 ash=mix(vec3(.957,.957,.941),vec3(.56,.56,.54),uStory);
+       gl_FragColor=vec4(mix(ash,vec3(1.,.42,0.),vHeat),(1.-d*2.)*.7*vShow);
+     }`,
+    { uTime: { value: 0 }, uRise: { value: 0 }, uStory: { value: 0 }, uEmber: { value: 0 }, uPixel: { value: 1 } },
   ));
   scene.add(dust);
 
@@ -284,7 +294,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     return { project, index, face, map, mesh, group, tilt, lift: 0, base: new THREE.Vector3() };
   });
 
-  const floating = createFloatingShards(isSmall ? 40 : 56);
+  const floating = createFloatingShards(isSmall ? 30 : 38);
   scene.add(floating.mesh);
   const pointer = new THREE.Vector2();
   let pointerSeen = false;
@@ -461,14 +471,24 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     }
 
     dust.position.y = state.camY;
+    // The rest of the story runs on scroll: shards thin out and the ash thickens and heats up.
+    const ashEnd = Math.max(1, state.abyssTop - state.h);
+    const story = clamp01((state.scroll - state.h * 0.3) / Math.max(1, ashEnd - state.h * 0.3));
+    const emberStart = state.abyssTop - state.h * 0.8;
+    const ember = smooth(clamp01((state.scroll - emberStart) / Math.max(1, state.maxScroll - emberStart)));
+    state.rise += dt * (0.18 + story * 0.42);
+    Object.assign(dust.material.uniforms.uStory, { value: story });
+    dust.material.uniforms.uEmber.value = ember;
+    dust.material.uniforms.uRise.value = state.rise;
     dust.material.uniforms.uTime.value = time;
 
     hero.visible = state.scroll < state.h * 1.4;
-    floating.mesh.visible = hero.visible;
+    floating.mesh.position.y = state.camY;
+    floating.mesh.visible = story < 1;
+    if (floating.mesh.visible) floating.update(dt, time, pointerSeen ? pointer.set(mouse.x, -mouse.y) : null, story);
     water.mesh.visible = hero.visible;
     if (hero.visible) {
       water.update(time, clamp01(state.scroll / (state.h * 0.55)) * 1.2);
-      floating.update(dt, time, pointerSeen ? pointer.set(mouse.x, -mouse.y) : null);
       heroLayers.forEach(({ object, depth, base }) => {
         object.position.set(base.x + mouse.x * depth, base.y - mouse.y * depth * 0.6, base.z);
       });
