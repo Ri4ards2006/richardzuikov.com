@@ -377,7 +377,7 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | "OPEN SCREEN →" slabs with shard wipe; ESC / BACK returns to the scroll position |
 | done | claude-code | Screen layout: title slab, sub-menu, detail panel, 3D prop, idle motion on /about, /work, /stack, /career |
 | done | claude-code | Career detail screen with rank, role, company, period, bullets, skills gained, ←/→, ESC |
-| todo | claude-code | Stack detail screen: what it is, where used (project cards into Work), experience in words |
+| done | claude-code | Stack detail screen: what it is, where used (project cards into Work), experience in words |
 
 ### Portrait
 | Status | Owner | Item |

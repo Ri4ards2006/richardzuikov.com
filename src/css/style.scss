@@ -3237,8 +3237,78 @@ html.gm-open .menu-dots {
   .dts-nav .inspect-btn {
     flex: 1 1 40%;
   }
+
 }
 
 .dts-nav .inspect-btn {
   padding-inline: 1.25rem;
+}
+
+/* Skill rows open the detail screen; the button covers the whole row. */
+.skill-row {
+  position: relative;
+}
+
+.skill-row-open {
+  text-align: left;
+}
+
+.skill-row-open::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.skill-row-open > span {
+  display: inline-block;
+  opacity: 0;
+  translate: -0.25rem 0;
+  transition: opacity 90ms linear, translate 120ms cubic-bezier(0.2, 0.9, 0.1, 1);
+}
+
+.skill-row:hover,
+.skill-row:focus-within {
+  background: rgb(var(--ash-700) / 0.5);
+}
+
+.skill-row:hover .skill-row-open > span,
+.skill-row-open:focus-visible > span {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.skill-row-open:focus-visible {
+  outline: none;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.dts-uses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.dts-card {
+  position: relative;
+  display: flex;
+  width: 9rem;
+  aspect-ratio: 7 / 11;
+  transition: transform 140ms cubic-bezier(0.2, 0.9, 0.1, 1.2);
+}
+
+.dts-card .deck-title {
+  font-size: 0.75rem;
+}
+
+.dts-card:hover,
+.dts-card:focus-visible {
+  outline: none;
+  transform: translateY(-0.4rem) rotate(-2deg);
+}
+
+@media (max-width: 639px) {
+  .dts-card {
+    width: 6.75rem;
+  }
 }
