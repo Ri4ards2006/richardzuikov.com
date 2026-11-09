@@ -142,6 +142,23 @@ export default function Stage() {
     if (phase === 'done' && !window.location.hash) linkRefs.current[getActiveMenuId()]?.focus({ preventScroll: true });
   }, [phase]);
 
+  useEffect(() => {
+    if (!('IntersectionObserver' in window)) return undefined;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        // A panel already above the viewport (deep link, fast scroll) must not stay hidden.
+        if (!entry.isIntersecting && entry.boundingClientRect.top > 0) return;
+        entry.target.classList.add('is-in');
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.15 });
+    panelRefs.current.filter(Boolean).forEach((panel) => {
+      panel.classList.add('is-armed');
+      observer.observe(panel);
+    });
+    return () => observer.disconnect();
+  }, []);
+
   const handleTearEnd = () => {
     if (phaseRef.current !== 'tear') return;
     sceneRef.current?.playDive();
