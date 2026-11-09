@@ -1515,3 +1515,20 @@ html.dark .ground-message {
     transition: none;
   }
 }
+
+/* The original colour photo exists only here; the table stays grayscale. */
+.inspect .deck-image img {
+  transition: filter 360ms linear 120ms;
+}
+
+.inspect.is-open .deck-image img {
+  filter: brightness(var(--image-lift, 1));
+}
+
+.inspect .deck-image::after {
+  transition: opacity 360ms linear 120ms;
+}
+
+.inspect.is-open .deck-image::after {
+  opacity: 0;
+}
