@@ -3,6 +3,7 @@ import { useLanguage } from '../../hooks/use-language';
 import { useSectionEnter } from '../../hooks/use-section-enter';
 import { stackUses } from '../../data/stack-uses';
 import SkillVignette from './SkillVignette';
+import KeyItems from './KeyItems';
 
 const pad = (value) => String(value).padStart(2, '0');
 
@@ -13,8 +14,10 @@ export default function SkillBoard() {
   const selectedIndex = domains.findIndex(([key]) => key === selected);
   const domain = t.career.domains[selected];
   const boardRef = useSectionEnter();
+  const itemsRef = useSectionEnter();
 
   return (
+    <>
     <div ref={boardRef} className="skill-board">
       <div className="has-message">
         <ul className="skill-slabs">
@@ -58,5 +61,7 @@ export default function SkillBoard() {
         </ol>
       </section>
     </div>
+    <div ref={itemsRef}><KeyItems /></div>
+    </>
   );
 }

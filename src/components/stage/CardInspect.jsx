@@ -9,7 +9,7 @@ const FLIP_MS = 380;
 const RETURN_MS = 300;
 const OVERSHOOT = 'cubic-bezier(0.2, 1.3, 0.35, 1)';
 
-// card: { numeral, title, image, imageLift, lines, details, tags, link: { href, label } }
+// card: { numeral, title, image or icon, imageLift, lines, details, tags, link: { href, label } or null }
 export default function CardInspect({ card, sourceEl, onClosed }) {
   const { t } = useLanguage();
   const reducedMotion = useReducedMotion();
@@ -91,7 +91,7 @@ export default function CardInspect({ card, sourceEl, onClosed }) {
     };
   }, []);
 
-  const photo = (
+  const photo = card.icon ? <span aria-hidden="true" className="inspect-icon">{card.icon}</span> : (
     <span className="deck-image" style={card.imageLift ? { '--image-lift': card.imageLift } : undefined}>
       <img src={card.image} alt="" draggable="false" />
     </span>
@@ -125,7 +125,7 @@ export default function CardInspect({ card, sourceEl, onClosed }) {
                 </>
               )}
             </div>
-            <div className="inspect-actions">
+            <div className={`inspect-actions ${card.link ? '' : 'is-single'}`}>
               {card.link && (
                 <a ref={firstActionRef} href={card.link.href} target="_blank" rel="noreferrer" className="inspect-btn is-primary">{card.link.label} ↗</a>
               )}

@@ -1,5 +1,4 @@
 import React from 'react';
-import { ExternalLink } from 'lucide-react';
 import { useLanguage } from '../hooks/use-language';
 import Screen from '../components/atlus/Screen';
 
@@ -25,22 +24,6 @@ export default function Career() {
         })}
       </ol>
 
-      <h2 className="font-mono text-xs tracking-widest text-ash-300 mt-12 mb-4">{t.atlus.certificates}</h2>
-      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {t.career.certificates.map((cert) => (
-          <li key={cert.id} className="flex flex-col gap-1 p-3 border border-ash-600">
-            <p className="text-sm text-ash-100">{cert.title}</p>
-            <p className="font-mono text-[11px] text-ash-300">{cert.issuer} · {cert.date}</p>
-            {/* verifyUrl is only set when it points at this exact credential. */}
-            {cert.verifyUrl && (
-              <a href={cert.verifyUrl} target="_blank" rel="noreferrer" aria-label={`${t.telemetry.verifyOnPortal}: ${cert.title}`} className="mt-auto inline-flex items-center gap-1.5 min-h-11 text-xs text-accent underline underline-offset-4">
-                {t.telemetry.verifyOnPortal}
-                <ExternalLink aria-hidden="true" className="w-3.5 h-3.5" />
-              </a>
-            )}
-          </li>
-        ))}
-      </ul>
     </Screen>
   );
 }
