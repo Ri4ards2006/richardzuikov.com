@@ -1,36 +1,20 @@
 import React from 'react';
 import { Check, Copy, Download, Mail } from 'lucide-react';
 import { useLanguage } from '../../hooks/use-language';
-import { useTheme } from '../../hooks/use-theme';
-import { useReducedMotion } from '../../hooks/use-reduced-motion';
 import { useContactEmail } from '../../hooks/use-contact-email';
 import Section from './Section';
 import SocialLinks from './SocialLinks';
-import EmberCanvas from './EmberCanvas';
-import Checkpoint from './Checkpoint';
-
-const canAnimate = () => typeof IntersectionObserver !== 'undefined' && typeof ResizeObserver !== 'undefined';
 
 export default function ContactSection({ number }) {
   const { t } = useLanguage();
-  const [theme] = useTheme();
-  const reducedMotion = useReducedMotion();
   const { email, copied, copy } = useContactEmail();
 
-  const showEffects = theme === 'dark' && !reducedMotion && canAnimate();
-  const background = showEffects ? (
-    <>
-      <EmberCanvas />
-      <Checkpoint text={t.landing.checkpoint} />
-    </>
-  ) : null;
-
   return (
-    <Section id="contact" number={number} title={t.landing.nav.contact} background={background}>
+    <Section id="contact" number={number} title={t.landing.nav.contact}>
       <div className="space-y-8 max-w-2xl min-h-[40vh]">
         <p className="text-lg font-light leading-relaxed text-zinc-800 dark:text-zinc-200">{t.contact.subtitle}</p>
         <div className="flex flex-wrap items-center gap-3">
-          <a href={email ? `mailto:${email}` : undefined} className="inline-flex items-center gap-2 min-h-11 px-5 py-3 rounded-lg bg-[#FFB000] text-[#09090b] text-sm font-semibold hover:bg-[#ffc233] transition-colors duration-200 break-all">
+          <a href={email ? `mailto:${email}` : undefined} className="inline-flex items-center gap-2 min-h-11 px-5 py-3 rounded-lg bg-zinc-950 text-white dark:bg-[#f4f4f0] dark:text-[#050505] text-sm font-semibold hover:bg-zinc-700 dark:hover:bg-white transition-colors duration-200 break-all">
             <Mail aria-hidden="true" className="w-4 h-4 shrink-0" />
             {email}
           </a>

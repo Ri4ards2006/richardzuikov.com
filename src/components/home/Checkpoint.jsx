@@ -8,7 +8,7 @@ const readSeen = (storageKey) => {
   }
 };
 
-const DEFAULT_TEXT_CLASS = 'px-6 py-2 bg-[#09090b]/80 font-mono text-sm sm:text-lg tracking-[0.4em] text-[#FFB000]';
+const DEFAULT_TEXT_CLASS = 'px-6 py-2 bg-[#09090b]/80 font-mono text-sm sm:text-lg tracking-[0.4em] text-zinc-900 dark:text-zinc-100';
 
 export default function Checkpoint({ text, storageKey = 'seen-checkpoint', textClassName = DEFAULT_TEXT_CLASS }) {
   const ref = useRef(null);

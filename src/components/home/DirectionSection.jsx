@@ -18,13 +18,13 @@ export default function DirectionSection({ number }) {
           </li>
         ))}
       </ul>
-      <div className="mt-12 border-l-2 border-[#FFB000] pl-6 space-y-3">
+      <div className="mt-12 border-l-2 border-zinc-950 dark:border-white pl-6 space-y-3">
         <h3 className="text-sm font-mono tracking-wider text-zinc-600 dark:text-zinc-400">{t.about.philosophyTitle}</h3>
         <p className="text-xl font-light text-zinc-900 dark:text-zinc-100">{t.about.philosophyQuote}</p>
         <p className="text-xs font-mono text-zinc-600 dark:text-zinc-400">{t.about.statusNote}</p>
       </div>
       {todos.map((todo) => (
-        <p key={todo} className="mt-4 text-sm font-mono text-red-700 dark:text-red-400">{todo}</p>
+        <p key={todo} className="mt-4 text-sm font-mono text-zinc-600 dark:text-zinc-400">{todo}</p>
       ))}
     </Section>
   );

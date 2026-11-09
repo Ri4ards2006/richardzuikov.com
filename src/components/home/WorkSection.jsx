@@ -27,7 +27,7 @@ export default function WorkSection({ number }) {
               <div className="flex flex-col gap-4">
                 <h3 className="text-2xl font-light text-zinc-950 dark:text-white">{project.title}</h3>
                 <p className="text-zinc-700 dark:text-zinc-300">{summary}</p>
-                <ul className="list-disc pl-5 space-y-1 text-sm text-zinc-700 dark:text-zinc-300 marker:text-[#FFB000]">
+                <ul className="list-disc pl-5 space-y-1 text-sm text-zinc-700 dark:text-zinc-300 marker:text-zinc-500">
                   {specs.map((spec) => <li key={spec}>{spec}</li>)}
                 </ul>
                 <ul className="flex flex-wrap gap-2">
@@ -35,7 +35,7 @@ export default function WorkSection({ number }) {
                     <li key={tag} className="px-2.5 py-1 rounded-md border border-zinc-200 dark:border-zinc-800 font-mono text-xs text-zinc-700 dark:text-zinc-300">{tag}</li>
                   ))}
                 </ul>
-                <a href={project.href} target="_blank" rel="noreferrer" aria-label={`${t.lab.viewCode}: ${project.title}`} className="mt-auto inline-flex items-center gap-2 min-h-11 text-sm font-medium text-zinc-900 dark:text-[#FFB000] underline underline-offset-4">
+                <a href={project.href} target="_blank" rel="noreferrer" aria-label={`${t.lab.viewCode}: ${project.title}`} className="mt-auto inline-flex items-center gap-2 min-h-11 text-sm font-medium text-zinc-900 dark:text-white underline underline-offset-4">
                   {t.lab.viewCode}
                   <ExternalLink aria-hidden="true" className="w-4 h-4" />
                 </a>
@@ -44,7 +44,7 @@ export default function WorkSection({ number }) {
           );
         })}
       </div>
-      <Link to="/lab" className="mt-10 inline-flex items-center gap-2 min-h-11 text-base font-medium text-zinc-900 dark:text-[#FFB000] underline underline-offset-4">
+      <Link to="/lab" className="mt-10 inline-flex items-center gap-2 min-h-11 text-base font-medium text-zinc-900 dark:text-white underline underline-offset-4">
         {t.landing.allProjects}
         <ArrowRight aria-hidden="true" className="w-4 h-4" />
       </Link>

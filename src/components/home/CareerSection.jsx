@@ -12,7 +12,7 @@ export default function CareerSection({ number }) {
       <ol className="border-l border-zinc-300 dark:border-zinc-700 space-y-6">
         {t.career.timeline.map((entry) => (
           <li key={entry.title} className="relative pl-6">
-            <span aria-hidden="true" className="absolute -left-[4.5px] top-2 w-2 h-2 rounded-full bg-[#FFB000]" />
+            <span aria-hidden="true" className="absolute -left-[4.5px] top-2 w-2 h-2 rounded-full bg-zinc-950 dark:bg-white" />
             <p className="font-mono text-xs text-zinc-600 dark:text-zinc-400">{entry.year} · {entry.type}</p>
             <p className="mt-1 text-base text-zinc-950 dark:text-zinc-100">{entry.title}</p>
           </li>
@@ -27,7 +27,7 @@ export default function CareerSection({ number }) {
             <p className="font-mono text-xs text-zinc-600 dark:text-zinc-400">{cert.issuer} · {cert.date}</p>
             {/* verifyUrl is only set when it points at this exact credential. */}
             {cert.verifyUrl && (
-              <a href={cert.verifyUrl} target="_blank" rel="noreferrer" aria-label={`${t.telemetry.verifyOnPortal}: ${cert.title}`} className="mt-auto inline-flex items-center gap-1.5 min-h-11 text-xs text-zinc-900 dark:text-[#FFB000] underline underline-offset-4">
+              <a href={cert.verifyUrl} target="_blank" rel="noreferrer" aria-label={`${t.telemetry.verifyOnPortal}: ${cert.title}`} className="mt-auto inline-flex items-center gap-1.5 min-h-11 text-xs text-zinc-900 dark:text-white underline underline-offset-4">
                 {t.telemetry.verifyOnPortal}
                 <ExternalLink aria-hidden="true" className="w-3.5 h-3.5" />
               </a>

@@ -56,7 +56,7 @@ export default function Lab() {
   const currentBgImage = active ? projectImages[active.id] || bossImg : (hoveredCard ? projectImages[hoveredCard.id] || bossImg : bossImg);
 
   return (
-    <div className="relative min-h-screen bg-white text-zinc-900 dark:bg-[#09090b] dark:text-[#f4f4f5] overflow-x-hidden selection:bg-[#FFB000]/30 font-sans transition-colors duration-300">
+    <div className="relative min-h-screen bg-white text-zinc-900 dark:bg-[#09090b] dark:text-[#f4f4f5] overflow-x-hidden selection:bg-zinc-500/40 font-sans transition-colors duration-300">
       
       {/* ─── TOP NAVIGATION ─── */}
       <div className="pt-12 px-6 sm:px-12 md:px-24 max-w-6xl mx-auto flex items-center justify-between relative z-50">
@@ -96,7 +96,7 @@ export default function Lab() {
         {/* Header */}
         <header className="space-y-3">
           <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-100/80 dark:bg-zinc-900/60 font-mono text-[10px] text-zinc-600 dark:text-zinc-400 tracking-wider">
-            <Cpu className="w-3.5 h-3.5 text-[#FFB000]" />
+            <Cpu className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100" />
             <span>// R&D DIRECTORY</span>
           </div>
 
@@ -121,17 +121,17 @@ export default function Lab() {
                 >
                   {/* Left: ID & Title & Summary */}
                   <div className="flex items-start sm:items-center gap-6 sm:gap-10 z-10">
-                    <span className="text-3xl sm:text-5xl font-mono font-extralight text-zinc-300 dark:text-zinc-700 group-hover:text-[#FFB000] transition-colors duration-300 tracking-tighter shrink-0">
+                    <span className="text-3xl sm:text-5xl font-mono font-extralight text-zinc-300 dark:text-zinc-700 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors duration-300 tracking-tighter shrink-0">
                       {project?.id}
                     </span>
                     
                     <div className="space-y-1">
                       <div className="flex items-center gap-3">
-                        <h2 className="text-xl sm:text-3xl font-light text-zinc-900 dark:text-zinc-100 group-hover:text-[#FFB000] transition-colors duration-300 tracking-tight">
+                        <h2 className="text-xl sm:text-3xl font-light text-zinc-900 dark:text-zinc-100 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors duration-300 tracking-tight">
                           {project?.title}
                         </h2>
                         {project?.isLiveApp && (
-                          <span className="px-2 py-0.5 rounded border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 font-mono text-[9px] uppercase tracking-wider">
+                          <span className="px-2 py-0.5 rounded border border-zinc-400/40 bg-zinc-500/10 text-zinc-700 dark:text-zinc-300 font-mono text-[9px] uppercase tracking-wider">
                             3D APP
                           </span>
                         )}
@@ -207,7 +207,7 @@ export default function Lab() {
                 <div className="overflow-y-auto p-6 sm:p-8 space-y-6">
                   
                   <div className="space-y-1 border-b border-zinc-200 dark:border-zinc-800/80 pb-4">
-                    <span className="text-[10px] font-mono text-[#FFB000] uppercase tracking-wider block">
+                    <span className="text-[10px] font-mono text-zinc-900 dark:text-zinc-100 uppercase tracking-wider block">
                       // PROJECT_ID_{active?.id}
                     </span>
                     <h2 className="text-2xl sm:text-3xl font-light text-zinc-950 dark:text-white tracking-tight">

@@ -52,7 +52,7 @@ export default function Header() {
                       aria-current={active === id ? 'true' : undefined}
                       className={`inline-block py-2 font-mono text-xs uppercase tracking-wider border-b-2 transition-colors duration-150 ${
                         active === id
-                          ? 'border-[#FFB000] text-zinc-950 dark:text-white'
+                          ? 'border-zinc-950 dark:border-white text-zinc-950 dark:text-white'
                           : 'border-transparent text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white'
                       }`}
                     >

@@ -31,7 +31,7 @@ function ProtectedEmail() {
       {emailString ? (
         <a
           href={`mailto:${emailString}`}
-          className="text-zinc-900 dark:text-zinc-100 hover:text-[#FFB000] dark:hover:text-[#FFB000] font-mono text-sm transition-colors duration-200 underline decoration-zinc-300 dark:decoration-zinc-700 underline-offset-4 hover:decoration-[#FFB000]"
+          className="text-zinc-900 dark:text-zinc-100 hover:underline font-mono text-sm transition-colors duration-200 underline decoration-zinc-300 dark:decoration-zinc-700 underline-offset-4 hover:decoration-[#FFB000]"
         >
           {emailString}
         </a>
@@ -47,7 +47,7 @@ function ProtectedEmail() {
         className="p-1.5 rounded border border-zinc-200 dark:border-zinc-800 bg-zinc-100/70 dark:bg-zinc-900/70 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 hover:border-zinc-400 dark:hover:border-zinc-600 transition-all duration-200 cursor-pointer"
       >
         {copied ? (
-          <Check className="w-3.5 h-3.5 text-emerald-500" />
+          <Check className="w-3.5 h-3.5 text-zinc-500" />
         ) : (
           <Copy className="w-3.5 h-3.5" />
         )}
@@ -191,7 +191,7 @@ export default function Impressum() {
   const content = t[language] || t.de;
 
   return (
-    <div className="relative min-h-screen bg-white text-zinc-900 dark:bg-[#09090b] dark:text-[#f4f4f5] selection:bg-[#FFB000]/30 font-sans antialiased transition-colors duration-300">
+    <div className="relative min-h-screen bg-white text-zinc-900 dark:bg-[#09090b] dark:text-[#f4f4f5] selection:bg-zinc-500/40 font-sans antialiased transition-colors duration-300">
       
       {/* ─── TOP NAVIGATION ─── */}
       <div className="pt-12 px-6 sm:px-12 md:px-24 max-w-5xl mx-auto flex items-center justify-between">
@@ -214,7 +214,7 @@ export default function Impressum() {
         {/* Header Title Section */}
         <header className="space-y-4 border-b border-zinc-200 dark:border-zinc-800/80 pb-8">
           <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-100/80 dark:bg-zinc-900/60 font-mono text-[10px] text-zinc-600 dark:text-zinc-400 tracking-wider">
-            <Scale className="w-3 h-3 text-[#FFB000]" />
+            <Scale className="w-3 h-3 text-zinc-900 dark:text-zinc-100" />
             <span>{content.tag}</span>
           </div>
 
@@ -256,7 +256,7 @@ export default function Impressum() {
             className="space-y-8"
           >
             <div className="flex items-center gap-3">
-              <Scale className="w-5 h-5 text-[#FFB000]" />
+              <Scale className="w-5 h-5 text-zinc-900 dark:text-zinc-100" />
               <h2 className="text-xl sm:text-2xl font-light tracking-tight text-zinc-900 dark:text-zinc-100">
                 {language === 'de' ? 'Impressum (§ 5 DDG)' : 'Legal Notice (§ 5 DDG)'}
               </h2>
@@ -268,7 +268,7 @@ export default function Impressum() {
               {/* Card 1: Provider Details */}
               <div className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/70 dark:bg-[#121212]/70 backdrop-blur-sm space-y-4 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors">
                 <div className="flex items-center gap-2 text-zinc-400 dark:text-zinc-500 font-mono text-xs uppercase tracking-wider">
-                  <MapPin className="w-3.5 h-3.5 text-[#FFB000]" />
+                  <MapPin className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100" />
                   <span>{content.secProvider}</span>
                 </div>
                 <ProtectedAddress />
@@ -277,7 +277,7 @@ export default function Impressum() {
               {/* Card 2: Contact & Editor Details */}
               <div className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/70 dark:bg-[#121212]/70 backdrop-blur-sm space-y-4 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors">
                 <div className="flex items-center gap-2 text-zinc-400 dark:text-zinc-500 font-mono text-xs uppercase tracking-wider">
-                  <Mail className="w-3.5 h-3.5 text-[#FFB000]" />
+                  <Mail className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100" />
                   <span>{content.secContact}</span>
                 </div>
                 
@@ -335,14 +335,14 @@ export default function Impressum() {
             className="space-y-8"
           >
             <div className="flex items-center gap-3">
-              <Shield className="w-5 h-5 text-emerald-500" />
+              <Shield className="w-5 h-5 text-zinc-500" />
               <h2 className="text-xl sm:text-2xl font-light tracking-tight text-zinc-900 dark:text-zinc-100">
                 {content.privacyTitle}
               </h2>
             </div>
 
             {/* Highlight Banner: No-Tracking */}
-            <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 dark:bg-emerald-950/20 text-xs font-mono text-emerald-700 dark:text-emerald-300 flex items-start gap-3">
+            <div className="p-4 rounded-xl border border-zinc-500/30 bg-zinc-500/5 dark:bg-zinc-950/20 text-xs font-mono text-zinc-700 dark:text-zinc-300 flex items-start gap-3">
               <span className="font-bold text-sm leading-none">✓</span>
               <div>
                 <span className="font-semibold block uppercase tracking-wider mb-0.5">Privacy First // Zero Tracking</span>

@@ -17,7 +17,7 @@ export default function StackSection({ number }) {
             <div key={key} className="p-6 sm:p-7 rounded-2xl border border-zinc-200 dark:border-zinc-800 space-y-4">
               <div className="flex items-center gap-3">
                 <span className="p-2 rounded-lg border border-zinc-200 dark:border-zinc-800">
-                  <Icon aria-hidden="true" className="w-4 h-4 text-[#FFB000]" />
+                  <Icon aria-hidden="true" className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
                 </span>
                 <div>
                   <h3 className="text-base font-medium text-zinc-950 dark:text-zinc-100">{domain.name}</h3>
