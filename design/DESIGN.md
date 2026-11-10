@@ -377,3 +377,27 @@ Owner decisions of 2026-11-10. Open work is in TASKS.md. CI must be green before
 
 **Portrait**
 - `npm run portraits` accepts cream-on-black ink art: luminance becomes alpha (black → transparent), no manual cutout. Slots `stage.png` and `about.png`; placeholders stay until the files exist.
+
+---
+
+## §17 Changelog v6
+
+Owner review of v5, 2026-11-10. Open work is in TASKS.md.
+
+**Global menu**
+- Exactly one list. The vertical MENU sits upright in its own fixed-width column with even leading; the list starts ≥ 32 px to its right. One Quick Read, in the bottom utility row. Name block and portrait are part of the overlay; the giant echo shows only the selected item (≤ 15 % opacity, enters with a 12 px offset). Stage slabs are `visibility: hidden` and `inert` while the overlay is open; legal links sit above the wipe shards.
+
+**Floating props**
+- Positions are stateless: `pos = anchor(layout) + parallax(scrollY) + idle(t) + kick`. Anchors come from layout boxes (transforms ignored), never from a prop's current position; `kick` is a critically damped spring (target 0) driven by clamped scroll velocity. The collision check sweeps every on-screen depth on each layout change. Each prop has a `data-prop` DOM proxy (position, `data-rest`, `data-kick`).
+
+**Colour** — see §2 (rest state monochrome; real photo colour only while interacting).
+
+**KEY ITEMS** — see §7 (exam code emblem on the front, official badge on the back).
+
+**NOW** — Helm (AI agent project) replaces the apprenticeship, which lives in Career. Helmet line icon (Gjermundbu, no horns). Texts beyond the name are TODO keys until Richard supplies them.
+
+**Record ride**
+- Persona speedlines (tapered wedges, irregular, −8°, opacity ≤ 0.25) streaming with the ride. The year counter owns a column on solid ink; the ride viewport starts to its right. After the last role the camera rolls 90° while the section scrolls out and hands over to the next section; reversible; reduced motion = vertical list (plain cut).
+
+**Stack** — Hardware vignette: Fourier square-wave build-up (odd harmonics 1 … 15, Gibbs overshoot), label "Σ sin(nωt)/n".
+

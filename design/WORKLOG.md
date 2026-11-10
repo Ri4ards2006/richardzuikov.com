@@ -244,3 +244,53 @@ https://richardzuikov-com-git-feat-atlus-v5-ri4ards2006s-projects.vercel.app/ (b
 
 **Files touched**
 `design/{DESIGN,TASKS,WORKLOG}.md`, `design/screenshots/v5/*`, `scripts/portraits.sh`, `src/App.jsx`, `src/css/style.scss`, `src/lib/translations.js`, `src/data/stack-details.js`, `src/assets/portraits/raw/README.md`, `src/pages/{Stage,About,Work,Stack,Career}.jsx`, `src/components/MenuOverlay.jsx`, `src/components/atlus/{Screen,OpenScreen,PropViewer,DetailScreen,CareerDetail,StackDetail,SkillBoard,RecordBoard}.jsx` (deleted `ArcanaCard.jsx`), `src/components/stage/{AboutSection,ProjectDeck}.jsx`, `src/components/stage/{scene,descent-props,skill-props,prop-viewer}.js`
+
+## 2026-11-10 · Claude Code (Opus 5.5) · merges and changelog v6
+
+**Merges** (GitHub checks green; Vercel not required for `feat/atlus-menu`, as asked)
+- PR #15 (agy e2e v4) into `feat/atlus-menu`.
+- PR #16 (v5): asked to rebase onto #15, but `feat/atlus-v5` was already pushed and a rebase needs a force-push, which is forbidden. Merged `feat/atlus-menu` into `feat/atlus-v5` instead (same result, no rewrite), then merged #16.
+- One test changed on the way, because the behaviour change was intentional: agy's "stage nav is occluded" test expected the blocked click to fail with "intercepts pointer events" or "hidden"; since v5 the stage nav is `visibility: hidden` while the overlay is open, so Playwright reports "not visible". The assertion now accepts that too.
+- That push of v5 was the only extra push; v6 is pushed once at the end.
+
+**Worktree**: `../rz-atlus-v6`, branch `feat/atlus-v6` from `origin/feat/atlus-menu`, upstream unset.
+
+**Done** (DESIGN.md §17, one commit per task, two review rounds each)
+1. Menu: in the merged v5 the overlay already had one list; Richard's screenshot (two lists ~120 px apart, Quick Read twice) matches v4, where the stage slabs and the stage Quick Read showed through. What v5 still got wrong and is fixed now: the MENU letters overlapped the list (letters to x = 222, list from x = 216 at 1440), stage slabs were hidden but focusable, name and portrait were gone. Now: MENU column, list 40 px right of it (32 px on phones), stage slabs hidden + `inert`, one Quick Read in the utility row, name block + portrait inside the overlay (so they also appear on deep pages), echo enters with 12 px, legal links above the shards. Checked at 1024, 1280, 1440, 1920 and 390 (one list, one Quick Read, even leading, no overlap, legal never under a shard) on `/` and `/career`. e2e: stage nav inert, five items, one Quick Read.
+2. Prop drift, root cause: `measure()` (ResizeObserver on `<html>`) read the descent panels with `getBoundingClientRect`, which includes their scroll-dependent parallax transform. A re-measure mid-scroll baked the current offset into the prop anchors and into the panel tops that drive `--depth`, which feeds the same transform (feedback loop); `--depth` also froze outside |1.6|. Measured: one re-measure moved panel tops by up to 190 px. Fix: layout rects (offset chain), `pos = anchor + parallax(scroll) + idle(t) + kick`, kick = critically damped spring (ω = 10, back within ~0.6 s), `--depth` a clamped pure function of scroll. Near and far panels drift ~280 px apart, so a prop no longer copies its panel's parallax blindly: each takes the first constant parallax that stays clear of every obstacle across all on-screen depths. `data-prop` proxies (`chip`, `pcb`, `monitor`, `rack`, `dome`) carry the drawn position, `data-rest` and `data-kick`. No GSAP is involved in the props. Acceptance: 5× top→bottom→top with accelerating wheel bursts plus forced re-measures, then 1 s: rest drift ≤ 1 px, kick ≤ 1 px for every prop; a scroll sweep at 1280 / 1440 / 1920 found no prop over text.
+3. Colour: the images were never baked to grayscale (all runtime filters). Deck, Work and Stack cards: colour on hover / focus-visible, 250 ms ease-out, screentone fades with it; touch: centred deck card; inspect view stays in colour; reduced motion instant. WebGL tarot cards: a second face (colour photo, same mono frame and title) fades in on hover / focus. Measured saturation: 0 at rest, 17–30 on hover; non-selected cards stay 0.
+4. KEY ITEMS: front emblem = exam code in Anton (sized to its length) + one small glyph; back shows `src/assets/badges/<id>.png` unmodified and in colour when present, linked only via `verifyUrl`; README in that folder. Tested with a throwaway badge (removed). DESIGN.md §7 / §9 updated.
+5. NOW: Helm replaces the apprenticeship; helmet icon `design/assets-src/icons/viking-helmet.svg` (svgo 3.3.2 → `src/assets/svg/icons/`). Title "Helm" and kicker "KI-Agent / AI agent" in translations; summary and progress are TODO keys, visible in development only (production shows title, kicker, icon and a scanning bar).
+6. Record ride: hairlines → 15 tapered wedges at −8°, irregular, opacity ≤ 0.25, moving with the ride (×1.6). Year counter on a solid-ink column, track starts right of it, first role fully readable on landing. The old exit (rotateY away, then ~1.5 screens of empty pin) is replaced by a 90° roll while the pin scrolls out, so the bonfire rises in as the timeline turns; WebGL camera rolls 12° and back. Scroll-driven, so reversible. Reduced motion keeps the vertical list.
+7. Fourier vignette (P3): odd harmonics 1 … 15, one per 2 s, ghosts stay, Gibbs overshoot visible, "Σ sin(nωt)/n". The "pick one" hint under the skill list no longer exists (removed in v5; searched source and rendered `/`, `/stack`, 390).
+
+**Review (§10)**
+- Menu 1: echo half under KONTAKT at 1024. Smaller, lower. Menu 2: page title counted as a second list on `/career` → false positive (hidden under the overlay); the check is occlusion-aware now.
+- Props 1: no prop visible at all: the sweep counted overlaps off screen. On-screen only. Props 2: real on-screen collisions with the opposite column. Parallax candidates.
+- Colour 1/2: nothing to fix beyond checks.
+- Key items 1: glyph huge (a general glyph rule won), code pushed into the numeral. Fixed; badge centred.
+- NOW 1: spectacles read as "w", side lines as legs. Closed eye openings, longer nose guard, no side lines.
+- Ride 1: board vanished with an empty pinned screen after it. Roll hand-over. Ride 2: fine at rest; a leaving bar is clipped at the column edge, which is intended.
+- Fourier 1: fine.
+
+**Checks**: `npx playwright test` 23 passed, 1 skipped (ride on mobile, by design). Own scripts (menu at 5 widths on `/` and `/career`, drift, prop-over-text sweep, colour saturation, key items, NOW, ride frames, Fourier frames) all pass.
+
+**Decisions**
+- Emblems without an official exam code use a title keyword: POWER (IBM Power Linux), PYTHON (Google IT Automation), ARCHITECT (IBM Systems and Solutions Architect). Change in `translations.js` (`emblem`).
+- Badge file name = certificate `id` (e.g. `7Y5OLV313LZX.png` for AZ-900).
+- "Echo ≤ 12 px offset" read as the entrance offset of the giant echo; there is no second echo list.
+- Helm title is the project name; only summary and progress are TODO keys. Nothing about what Helm does is on the site.
+- The roll hand-over turns the timeline clockwise (left becomes up, matching the scroll).
+
+**Open questions for Richard**
+- Badge PNGs and verify URLs per certificate (only Google IT Automation has one now).
+- Helm: one or two sentences and the steps for the progress bar.
+- Codes for POWER / PYTHON / ARCHITECT, if you prefer something else.
+- `feat/portrait-poster`: no branch or task text in the repo, so it was not run; the colour cutout and the `colorReveal` toggle wait for that task's description.
+- Earlier ones still open: internship and non-R2P bullets, experience per skill, TRICH-1 / cluster progress, panel 05 / NOW drafts.
+
+**Preview**
+https://richardzuikov-com-git-feat-atlus-v6-ri4ards2006s-projects.vercel.app/ (behind the Vercel login; built after the single push, unless the daily limit is hit again).
+
+**Files touched**
+`.github/tests/e2e.spec.js`, `design/{DESIGN,TASKS,WORKLOG}.md`, `design/assets-src/icons/viking-helmet.svg`, `design/screenshots/v6/*`, `src/assets/badges/README.md`, `src/assets/svg/icons/viking-helmet.svg`, `src/css/style.scss`, `src/data/now.js`, `src/lib/translations.js`, `src/pages/Stage.jsx`, `src/components/MenuOverlay.jsx`, `src/components/atlus/{glyphs,KeyItems,RecordBoard,SkillVignette}.jsx`, `src/components/stage/{CardInspect,NowSection}.jsx`, `src/components/stage/{scene,descent-props,prop-ids}.js`

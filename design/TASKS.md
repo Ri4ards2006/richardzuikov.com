@@ -383,3 +383,19 @@ Reviewer items already listed above are not repeated. The review was written bef
 | Status | Owner | Item |
 |---|---|---|
 | done | claude-code | Pipeline: luminance → alpha for cream-on-black ink art; slots stage.png / about.png |
+
+## Changelog v6 (DESIGN.md §17)
+
+| Status | Owner | Item |
+|---|---|---|
+| done | claude-code | Merge PR #15 (agy e2e v4) and PR #16 (v5) into `feat/atlus-menu`, GitHub checks green (Vercel not required) |
+| done | claude-code | Global menu: one list, MENU in its own column (list ≥ 32 px right of it), one Quick Read in the utility row, name and portrait in the overlay, stage slabs hidden + inert, legal links above the shards; no overlap at 1024 / 1280 / 1440 / 1920 / 390 |
+| done | claude-code | Prop drift: stateless positions (layout anchors, parallax(scroll), idle(t), damped kick), `data-prop` proxies; 5× fast top→bottom→top within 1 px |
+| done | claude-code | Colour rule (§2): photos grayscale at rest, real colour on hover / focus (250 ms), centred deck card on touch |
+| done | claude-code | KEY ITEMS: exam-code emblem on the front, official badge slot on the back (§7) |
+| todo | Richard | Badge files `src/assets/badges/<id>.png` and verify URLs for the exact credentials |
+| done | claude-code | NOW: Helm replaces the apprenticeship, Gjermundbu helmet icon |
+| todo | Richard | Helm: summary and progress (TODO keys `atlus.now.helm.summary` / `.progress`) |
+| done | claude-code | Record ride: speedlines, own year column on ink, 90° roll hand-over (reversible) |
+| done | claude-code | Stack → Hardware: Fourier square-wave build-up (P3) |
+| todo | owner | `feat/portrait-poster` (+ colour cutout, `colorReveal` toggle): task text not in the repo, not run |
