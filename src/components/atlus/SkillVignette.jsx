@@ -37,15 +37,28 @@ function Systems() {
   );
 }
 
-const WAVE = Array.from({ length: 121 }, (_, i) => `${i ? 'L' : 'M'}${i * 2} ${36 + Math.sin(i * 0.26) * (14 + Math.sin(i * 0.05) * 10)}`).join(' ');
+// Fourier square wave: partial sums of the odd harmonics 1, 3 … 15, drawn one after another.
+// S_N(t) = 4/π · Σ sin(nωt)/n; the overshoot at each edge (Gibbs, ~9 %) stays as N grows.
+const HARMONICS = [1, 3, 5, 7, 9, 11, 13, 15];
+const AMPLITUDE = 22;
+const partialSum = (count) => Array.from({ length: 241 }, (_, x) => {
+  const t = (x / 240) * 2 * (2 * Math.PI);
+  let sum = 0;
+  for (let n = 1; n <= count; n += 2) sum += Math.sin(n * t) / n;
+  return `${x ? 'L' : 'M'}${x} ${(36 - AMPLITUDE * (4 / Math.PI) * sum).toFixed(2)}`;
+}).join(' ');
+const PARTIAL_SUMS = HARMONICS.map(partialSum);
 
 function Hardware() {
   return (
-    <svg viewBox="0 0 240 72" role="presentation" preserveAspectRatio="none" className="vg-svg">
-      {[40, 80, 120, 160, 200].map((x) => <path key={x} className="vg-faint" d={`M${x} 0 V72`} />)}
-      {[18, 36, 54].map((y) => <path key={y} className="vg-faint" d={`M0 ${y} H240`} />)}
-      <path className="vg-scope" d={WAVE} pathLength="100" />
-    </svg>
+    <div className="vg-fourier">
+      <svg viewBox="0 0 240 72" role="presentation" preserveAspectRatio="none" className="vg-svg">
+        {[40, 80, 120, 160, 200].map((x) => <path key={x} className="vg-faint" d={`M${x} 0 V72`} />)}
+        {[14, 36, 58].map((y) => <path key={y} className="vg-faint" d={`M0 ${y} H240`} />)}
+        {PARTIAL_SUMS.map((d, k) => <path key={HARMONICS[k]} className={`vg-sum vg-sum-${k}`} d={d} pathLength="100" />)}
+      </svg>
+      <span className="vg-label">Σ sin(nωt)/n</span>
+    </div>
   );
 }
 

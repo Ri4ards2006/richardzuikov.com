@@ -1945,7 +1945,7 @@ html.gm-open .menu-dots {
 
 .vg-line,
 .vg-wire,
-.vg-scope {
+.vg-sum {
   fill: none;
   stroke: currentColor;
   stroke-width: 1.5;
@@ -1996,9 +1996,14 @@ html.gm-open .menu-dots {
     animation: vg-blink var(--period) steps(1) infinite;
   }
 
-  .vg-scope {
+  /* Fourier build-up: one 2 s slot per partial sum, 16 s loop. */
+  .vg-sum {
     stroke-dasharray: 100;
-    animation: vg-sweep 2.8s linear infinite;
+    animation: 16s linear infinite both;
+  }
+
+  @for $k from 0 through 7 {
+    .vg-sum-#{$k} { animation-name: vg-fourier-#{$k}; }
   }
 
   .vg-wire {
@@ -2021,11 +2026,6 @@ html.gm-open .menu-dots {
   @keyframes vg-blink {
     0%, 49.99% { opacity: 1; }
     50%, 100% { opacity: 0.15; }
-  }
-
-  @keyframes vg-sweep {
-    from { stroke-dashoffset: 100; }
-    to { stroke-dashoffset: 0; }
   }
 
   @keyframes vg-assemble {
@@ -3501,4 +3501,45 @@ html.gm-open .menu-dots {
 
 .prop-proxy[data-visible='false'] {
   display: none;
+}
+
+/* Partial sum k appears at k/8 of the loop, draws in, then dims to a ghost when the next one starts. */
+@for $k from 0 through 7 {
+  $s: $k * 12.5%;
+  @keyframes vg-fourier-#{$k} {
+    0% { opacity: 0; stroke-dashoffset: 100; }
+    @if $k > 0 { #{$s} { opacity: 0; stroke-dashoffset: 100; } }
+    #{$s + 0.1%} { opacity: 1; stroke-dashoffset: 100; }
+    #{$s + 4%} { opacity: 1; stroke-dashoffset: 0; }
+    @if $k < 7 {
+      #{$s + 12.5%} { opacity: 1; }
+      #{$s + 14%} { opacity: 0.18; }
+    }
+    96% { opacity: if($k < 7, 0.18, 1); stroke-dashoffset: 0; }
+    100% { opacity: 0; stroke-dashoffset: 0; }
+  }
+}
+
+.vg-fourier {
+  position: relative;
+  height: 100%;
+}
+
+/* Reduced motion / paused: earlier sums as ghosts, the last one (N = 15) solid. */
+.vg-sum {
+  opacity: 0.18;
+}
+
+.vg-sum-7 {
+  opacity: 1;
+}
+
+.vg-label {
+  position: absolute;
+  right: 0;
+  bottom: -0.25rem;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  color: rgb(var(--ash-300));
 }
