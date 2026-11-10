@@ -18,10 +18,13 @@ import orchestrationWheel from '../../assets/svg/icons/orchestration-wheel.svg?r
 import scriptScroll from '../../assets/svg/icons/script-scroll.svg?raw';
 import terminalPrompt from '../../assets/svg/icons/terminal-prompt.svg?raw';
 import vikingHelmet from '../../assets/svg/icons/viking-helmet.svg?raw';
+import barbell from '../../assets/svg/icons/barbell.svg?raw';
+import rack from '../../assets/svg/icons/rack.svg?raw';
+import slot from '../../assets/svg/icons/slot.svg?raw';
 
 const INK = [ink1, ink2, ink3, ink4, ink5];
 
-export const ICONS = { certificate, circuitBoard, cloudServer, microchip, networkTopology, orchestrationWheel, scriptScroll, terminalPrompt, vikingHelmet };
+export const ICONS = { certificate, circuitBoard, cloudServer, microchip, networkTopology, orchestrationWheel, scriptScroll, terminalPrompt, vikingHelmet, barbell, rack, slot };
 
 // Card frame stretched to its box; strokes keep their width (CSS: vector-effect).
 export const CARD_FRAME_SVG = cardFrame.replace('<svg ', '<svg preserveAspectRatio="none" ');

@@ -5,6 +5,7 @@ import path from 'path';
 const ROUTES = [
   { path: '/', name: 'home' },
   { path: '/quick', name: 'quick' },
+  { path: '/about', name: 'about' },
   { path: '/stack', name: 'stack' },
   { path: '/career', name: 'career' },
   { path: '/impressum', name: 'impressum' },
@@ -340,5 +341,25 @@ test.describe('Pause menu (v7)', () => {
     await expect(page.locator('.gm')).toHaveCount(0);
     const after = await page.evaluate(() => ({ y: window.scrollY, inert: document.querySelector('main').inert }));
     expect(after).toEqual({ y: before, inert: false });
+  });
+});
+
+test.describe('/about status screen (v7)', () => {
+  test('person, not skills: status sub-menu, arrow keys, no TODO or skill panels in production', async ({ page }) => {
+    await page.goto('/about');
+    const tabs = page.locator('.scr-tab');
+    await expect(tabs.first()).toContainText(/STATUS/);
+    await expect(tabs.last()).toContainText(/JETZT|NOW/);
+    await expect(page.locator('.prof-detail')).toContainText('Richard Zuikov');
+    await expect(page.locator('body')).not.toContainText('Register-Level');
+    await expect(page.locator('body')).not.toContainText('TODO');
+    const words = (await page.locator('.prof-intro p').first().innerText()).trim().split(/\s+/).length;
+    expect(words).toBeLessThanOrEqual(90);
+    await tabs.first().focus();
+    await page.keyboard.press('ArrowDown');
+    await expect(tabs.nth(1)).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('a[href="/stack"].prof-skills')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page).toHaveURL(/\/$/);
   });
 });
