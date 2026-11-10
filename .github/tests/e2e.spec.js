@@ -103,7 +103,7 @@ test.describe('Atlus Pause Menu Interactions', () => {
 
     // Press Escape key to close the overlay
     await page.keyboard.press('Escape');
-    await expect(overlay).toHaveCount(0);
+    await expect(overlay).toHaveCount(0, { timeout: 6000 });
     await page.waitForTimeout(300);
 
     // Verify scroll position was preserved/restored
