@@ -2706,15 +2706,20 @@ html.gm-open .menu-dots {
   50% { opacity: 0.15; }
 }
 
-.now-cone {
-  stroke-dasharray: 4 4;
-  animation: now-cone 3s ease-in-out infinite alternate;
-  transform-origin: 38px 24px;
+/* Helm: the helmet line icon, square, at the right like the other illustrations. */
+.now-helm {
+  display: flex;
+  justify-content: flex-end;
 }
 
-@keyframes now-cone {
-  from { transform: rotate(-8deg); }
-  to { transform: rotate(10deg); }
+.now-helm svg {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.now-ill.now-helm circle {
+  fill: currentColor;
+  stroke: none;
 }
 
 /* Quest-log progress: one slanted segment per step. */
