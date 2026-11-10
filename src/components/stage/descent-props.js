@@ -277,6 +277,20 @@ export function createDescentProps() {
         this.sync(item, camera, worldX(item.anchor.x), worldY(rest));
       });
     },
+    // Test hook only (scene.js, ?e2e=1 or dev): each mesh's world position projected with the camera
+    // that just rendered it, in viewport px. Independent of the DOM proxies.
+    screenPositions(camera) {
+      const world = new THREE.Vector3();
+      return items.map((item) => {
+        item.root.getWorldPosition(world).project(camera);
+        return {
+          id: item.id,
+          visible: item.root.visible,
+          x: Number(((world.x + 1) / 2 * view.w).toFixed(1)),
+          y: Number(((1 - world.y) / 2 * view.h).toFixed(1)),
+        };
+      });
+    },
     // Mirrors a prop onto its DOM proxy in viewport px: transform = where it is drawn now,
     // data-rest = its rest position (anchor + parallax), data-kick = the spring offset.
     sync(item, camera, restX, restY) {

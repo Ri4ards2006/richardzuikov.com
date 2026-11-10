@@ -668,6 +668,10 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     bonfire.update(dt, state.fireProgress);
 
     renderer.render(scene, camera);
+    if (testHook) {
+      testHook.frame += 1;
+      testHook.props = props.screenPositions(camera);
+    }
   }
 
   const onPointerMove = (event) => {
@@ -685,6 +689,13 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       state.frame = requestAnimationFrame(tick);
     }
   };
+
+  // Test-only: window.__propScreenPos() returns the props' projected mesh positions of the last rendered
+  // frame (agy's drift test). Never in a production page view without ?e2e=1.
+  const testHook = (import.meta.env.DEV || new URLSearchParams(window.location.search).get('e2e') === '1')
+    ? { frame: 0, props: [] }
+    : null;
+  if (testHook) window.__propScreenPos = () => ({ frame: testHook.frame, props: testHook.props });
 
   measure();
   state.camY = -state.scroll * state.k;
@@ -748,6 +759,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     },
     dispose() {
       state.disposed = true;
+      if (testHook) delete window.__propScreenPos;
       cancelAnimationFrame(state.frame);
       observer.disconnect();
       window.removeEventListener('pointermove', onPointerMove);

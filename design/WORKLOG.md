@@ -294,3 +294,15 @@ https://richardzuikov-com-git-feat-atlus-v6-ri4ards2006s-projects.vercel.app/ (b
 
 **Files touched**
 `.github/tests/e2e.spec.js`, `design/{DESIGN,TASKS,WORKLOG}.md`, `design/assets-src/icons/viking-helmet.svg`, `design/screenshots/v6/*`, `src/assets/badges/README.md`, `src/assets/svg/icons/viking-helmet.svg`, `src/css/style.scss`, `src/data/now.js`, `src/lib/translations.js`, `src/pages/Stage.jsx`, `src/components/MenuOverlay.jsx`, `src/components/atlus/{glyphs,KeyItems,RecordBoard,SkillVignette}.jsx`, `src/components/stage/{CardInspect,NowSection}.jsx`, `src/components/stage/{scene,descent-props,prop-ids}.js`
+
+## 2026-11-10 · Claude Code (Opus 5.5) · prop test hook (follow-up to v6)
+
+The v6 report in the chat was cut off after task 1. The task 2–7 summary was already in this WORKLOG (entry above), so it was not added a second time.
+
+**Prop drift, root cause with lines (before `6088375`)**: `src/components/stage/scene.js:435` (`measure()`, run by the ResizeObserver on `<html>`) read the panels with `getBoundingClientRect()`. That rect includes the scroll-dependent parallax transform (`--depth`). From it came the prop anchors (`props.layout(...)`, :442) and the panel tops, and those tops drive `--depth` in the frame loop (:606–608). The result was a feedback loop: every re-measure mid-scroll baked the current offset in, up to 190 px. In addition, :608 wrote `--depth` only while |depth| < 1.6, so depth froze at the last value.
+
+**Answer to agy**: `[data-prop]` are DOM proxies (`.prop-proxies` in `Stage.jsx`). `sync()` (`descent-props.js`) writes their transform every frame from the projected `root.position` of the mesh, before `renderer.render`; so they are coupled, not independent. Because they are still proxies, the test hook below was added.
+
+**Test hook**: `window.__propScreenPos()` → `{ frame, props: [{ id, visible, x, y }] }`. It holds the world position of each prop mesh (`getWorldPosition`), projected with the camera of the frame that was just rendered, in viewport px. It is only set in dev or with `?e2e=1` (`scene.js`) and removed on dispose. `screenPositions(camera)` in `descent-props.js` reads only the meshes and never the DOM.
+
+**Test**: `.github/tests/e2e.spec.js` › "Prop screen positions (test hook)" checks four things: no hook without `?e2e=1`; 5 ids; `frame` increases; hook and proxy centre differ by < 1.5 px. Desktop only, because props are hidden below 1024 px. Full suite: 24 passed, 2 skipped (both mobile, by design). `test:security` green.
