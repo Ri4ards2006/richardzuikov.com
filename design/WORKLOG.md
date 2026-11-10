@@ -335,3 +335,9 @@ e2e: the hook test now also checks the fixed slot order, all five `visible` in s
 - Review (§10): round 1: MENU showed only "M E" (container-query units in the container's own font-size fall back to the viewport → moved to the spans); at 1024 the legal links ran under GITHUB (footer tracks `auto auto auto` + space-between, compact chips below 1280). Round 2: at 360 the numbers broke into two lines ("01" / "/") → nowrap; umlaut dots of "Ü" clipped in the label and the slab → line height / padding.
 - e2e: new test "Pause menu (v7)": wheel + PageUp don't move the page, `main` inert + aria-hidden, letters = list height, no footer chip overlap, Escape restores the exact position and releases `main`. 26 passed, 2 skipped.
 - Screenshots: `design/screenshots/v7/menu-{1024,1280,1440,1920,390,360}.png`.
+
+**Stopped after task 2** (brief: "if the session gets long, finish the current task, push, report, stop"). Tasks 3–6 are open in TASKS.md.
+- `design/ABOUT.md`: Richard's ABOUT template taken over as the source for `/about`, plus a section for the requested world map (countries filled white). Richard's chat note "erfinde vorerst die about seite grob" conflicts with the brief's "never invent hobbies, ages, numbers or levels". Planned for task 3: build the screen structure roughly, but with TODO keys instead of invented facts (hidden in production).
+- Task 6 blocker: `src/assets/portraits/raw/about.png` does not exist, not in this worktree and not in the main checkout (`raw/` is gitignored, so it doesn't travel with git).
+
+**Checks**: `npm run build` ok, `npm run test:security` ok, `npx playwright test` 26 passed, 2 skipped (both mobile, by design).

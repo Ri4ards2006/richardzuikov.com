@@ -399,3 +399,17 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | Record ride: speedlines, own year column on ink, 90° roll hand-over (reversible) |
 | done | claude-code | Stack → Hardware: Fourier square-wave build-up (P3) |
 | todo | owner | `feat/portrait-poster` (+ colour cutout, `colorReveal` toggle): task text not in the repo, not run |
+
+## Changelog v7 (DESIGN.md §18)
+
+| Status | Owner | Item |
+|---|---|---|
+| done | claude-code | Merge PR #19 (v6 + test hook) into `feat/atlus-menu`, checks green |
+| done | claude-code | P0 descent props: cause proven (time-dependent runtime collision hiding + per-prop parallax); reserved gutter slots, fixed map 01 PCB · 02 chip · 03 monitor · 04 rack · 05 camera, visibility by breakpoint only, hook with `inFrustum` / `scene` / `rest` |
+| done | claude-code | P0 pause menu: scroll lock + inert page + exact restore, 12-column layout, one-row footer, mobile stack, close button at ≤ 375 px |
+| todo | Richard | Fill `design/ABOUT.md` (status, languages + levels, week, hobbies, now, travel, what you're looking for) |
+| todo | Richard | World map on `/about`: list of countries to fill white (`design/ABOUT.md`) |
+| todo | claude-code | Task 3: `/about` rework (status screen: portrait, STATUS, WEEK, INVENTORY, NOW, intro; own camera instance; world map), content only from `design/ABOUT.md`, rest TODO keys |
+| todo | claude-code | Task 4: Career: no hairlines, ink wedges + outline year, role 0 ≥ 120 px right of the year column (REVIEW-v6 P1), slanted slabs with rank pips |
+| todo | claude-code | Task 5: 90° turn as its own pinned 60 vh beat (scrubbed, reversible; reduced motion = cut; mobile = slab wipe), screenshot strip |
+| todo | claude-code | Task 6: poster pipeline for `about.png` (chroma key, CLAHE, 5-tone shader, AVIF/WebP, `/?portrait-lab` with `colorReveal`) |
