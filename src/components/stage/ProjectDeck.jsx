@@ -139,7 +139,6 @@ export default function ProjectDeck({ onInspect }) {
     <div className="deck-wrap">
       <h3 className="flex flex-wrap justify-between gap-x-6 font-mono text-xs tracking-widest text-ash-300">
         <span>{t.atlus.deck.label}</span>
-        <span aria-hidden="true">{t.atlus.deck.hint}</span>
       </h3>
       <div
         ref={deckRef}

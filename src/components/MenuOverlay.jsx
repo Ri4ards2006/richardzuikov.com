@@ -28,6 +28,9 @@ function Panel({ closing, onClose, onExited }) {
     slabRefs.current[active]?.focus();
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    // Only the overlay may show: the stage menu, name and portrait hide at once (no second menu
+    // peeking through the wipe) and come back when the overlay has fully closed.
+    document.documentElement.classList.add('gm-open');
     const onKeyDown = (event) => {
       if (event.key === 'Escape') {
         // Deep pages also use Escape to go back; while the menu is open it only closes the menu.
@@ -50,6 +53,7 @@ function Panel({ closing, onClose, onExited }) {
     window.addEventListener('keydown', onKeyDown, true);
     return () => {
       document.body.style.overflow = previousOverflow;
+      document.documentElement.classList.remove('gm-open');
       window.removeEventListener('keydown', onKeyDown, true);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,6 +88,8 @@ function Panel({ closing, onClose, onExited }) {
   const activeItem = menuItems[active] ?? menuItems[0];
 
   return (
+    <>
+    <div aria-hidden="true" className={`gm-dim ${closing ? 'is-closing' : ''}`} />
     <div
       ref={panelRef}
       role="dialog"
@@ -151,6 +157,7 @@ function Panel({ closing, onClose, onExited }) {
         <button type="button" onClick={() => goLegal('/datenschutz')}>{t.nav.datenschutz}</button>
       </p>
     </div>
+    </>
   );
 }
 

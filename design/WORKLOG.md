@@ -197,3 +197,50 @@ https://richardzuikov-com-git-feat-atlus-v4-ri4ards2006s-projects.vercel.app/ (b
 
 **Files touched**
 `design/{ASSETS,DESIGN,TASKS,WORKLOG}.md`, `src/assets/svg/**`, `src/data/now.js`, `src/lib/{atlus,translations}.js`, `src/pages/Stage.jsx`, `src/css/style.scss`, `src/components/MenuOverlay.jsx`, `src/components/atlus/{glyphs,KeyItems,RecordBoard,SkillBoard}.jsx`, `src/components/stage/{AboutSection,CardInspect,NowSection,ProjectDeck}.jsx`, `src/components/stage/{scene,descent-props,skill-props}.js`, `src/three/bonfire/ruins.js`
+
+## 2026-11-10 · Claude Code (Opus 5.5) · merges and changelog v5
+
+**Merges**
+- PR #13 (`chore/ci-docs`) into `feat/atlus-menu`: all CI checks green. From now on CI must be green before any merge (AGENTS.md otherwise forbids merging; the owner asked for these two).
+- PR #14 (v4): `feat/atlus-menu` (with the new CI) merged into `feat/atlus-v4` first so the new workflows ran on it; all green (Build, Playwright E2E, Lighthouse, Gitleaks, dependency / EXIF audit, Vercel), then merged.
+
+**Worktree**: `../rz-atlus-v5` (outside the main checkout, as AGENTS.md asks), branch `feat/atlus-v5` from `origin/feat/atlus-menu`, upstream unset so a bare push never targets `feat/atlus-menu`. It was first created inside the main checkout by mistake and moved with `git worktree move`.
+
+**Done** (DESIGN.md §16, one commit per task)
+- Global menu: v4 showed the stage menu, name and portrait through the opening wipe ("two menus"). Now a near-black screentone dimmer covers the page and the stage hero, canvas and dots button hide while the overlay is mounted. Screenshots: `design/screenshots/v5/menu-open-1440x900.png`, `menu-open-390x844.png`. No settings box anywhere (checked on `/` and `/career`).
+- Props: placed in the centre of the free gutter beside their panel, hidden below 1024 px, hidden when the gutter is narrower than the rotating footprint or when that footprint touches any panel, heading or NOW panel. The capacitor was already gone in v4; the chip sits right of panel 01 and clear of panel 02.
+- Hints: "versuch ↑↓", "wähl eine aus", "dreh sie um" and the visible deck hint removed (the deck keeps it in its aria-label). HUD bottom-right shows "↑↓ SELECT · ⏎ OPEN · ESC BACK" above Quick Read, hidden on touch screens.
+- Ink: no permanent splatter behind the stage menu; each item has its own, shown on hover or arrow-key selection only.
+- OPEN SCREEN slabs on about, arcana, skill, record → `/about`, `/work`, `/stack`, `/career` through the route wipe, now an ink panel with paper shards. ESC / BACK steps back in history and the stage lands on the saved scroll position (tested on all four, exact to the pixel at 1440 and 390).
+- Screens: title slab, prop (own small lazy three.js canvas, 30 fps, paused off screen, still under reduced motion), sub-menu left, sticky detail right, screentone drift. `/about`: profile + the five descent entries; `/work`: one tab per project, framed card → CardInspect; `/stack`: SkillBoard + KeyItems, prop follows the category; `/career`: RecordBoard + entry panel. ArcanaCard (the old Work layout) and its CSS are deleted.
+- Career detail: overlay with slash transition, rank, role, company, period, bullets, skills gained, ←/→ (wraps), ESC back without leaving the screen. Used on "/" and `/career`; it replaces the inline expand.
+- Stack detail: same overlay; "what it is" (general tool descriptions in `src/data/stack-details.js`), framed project cards that open `/work` on that project (ESC returns to `/stack`), experience as a TODO key in development only. No ratings.
+- Portraits: `<slot>.png` is treated as cream-on-black ink art, alpha from luminance (levels 6–70 %, `INK_LOW` / `INK_HIGH`), only ImageMagick needed; photos still use rembg. Tested on a synthetic cream-on-black image: corner alpha 0, cream alpha 1. Placeholders stay until a file exists.
+- Fixed on the way: the stage measured after its DOM was gone when a route change raced a resize callback (TypeError); v4's "finer screentone" for deck cards had landed on the dead `.arcana-halftone` rule and now applies to the deck cards.
+
+**Review (§10), two rounds per group**
+- Menu 1: stage visible mid-wipe. Fixed. Menu 2: nothing further.
+- Floating 1: ink on the auto-focused first item at load; ink hidden behind the paper slab. Fixed (pointer / arrow keys only, offset past the slab). Floating 2: nothing further.
+- Screens 1: career board squeezed (year beside the list in a narrow column). Year above the list. Screens 2: prop column inflated the header; detail panel scrolled away. Prop height capped, detail sticky.
+- Career detail 1: overlay text dark on dark (portalled outside the forced-dark wrapper). Fixed. 2: nothing further.
+- Stack detail 1: empty EXPERIENCE heading in production. Hidden until the text exists. 2: project cards too big on phones. Fixed.
+
+**Checks**: repo suite `npx playwright test` 18/18; own Playwright scripts for menu, open/return, screens, career and stack detail, ride, reduced motion and deep pages all pass.
+
+**Decisions**
+- "Ink only on hover/active": a stage menu item is always active, so ink follows hover and arrow-key selection, not the resting active item.
+- Career detail replaced the inline expand everywhere, including the home ride.
+- Screens opened from a Stack detail card use history back, so ESC on `/work` returns to `/stack`.
+- `<slot>.png` = ink art, other formats = photo. A PNG photo would need converting to JPEG first.
+
+**Open questions for Richard**
+- Bullets for the internship and the non-R2P entries, and "experience in words" per skill.
+- Should the descent props also show between 768 and 1023 px if a smaller size fits the gutter? Hidden now.
+- The stage portrait shader drops pixels with alpha < 0.5; very faint ink strokes may vanish. Check with the real art and adjust `INK_HIGH` if needed.
+- Earlier questions still open: TRICH-1 / cluster progress, apprenticeship months, panel 05 and NOW drafts.
+
+**Preview**
+https://richardzuikov-com-git-feat-atlus-v5-ri4ards2006s-projects.vercel.app/ (behind the Vercel login). Not built yet: all four Vercel projects answered "Deployment rate limited — retry in 24 hours" on PR #16, so the Vercel checks are red for that reason only. The GitHub checks (build, Playwright E2E, Lighthouse, Gitleaks, dependency / EXIF audit) are green. Re-run the Vercel deployment after the limit resets; do not merge before it is green.
+
+**Files touched**
+`design/{DESIGN,TASKS,WORKLOG}.md`, `design/screenshots/v5/*`, `scripts/portraits.sh`, `src/App.jsx`, `src/css/style.scss`, `src/lib/translations.js`, `src/data/stack-details.js`, `src/assets/portraits/raw/README.md`, `src/pages/{Stage,About,Work,Stack,Career}.jsx`, `src/components/MenuOverlay.jsx`, `src/components/atlus/{Screen,OpenScreen,PropViewer,DetailScreen,CareerDetail,StackDetail,SkillBoard,RecordBoard}.jsx` (deleted `ArcanaCard.jsx`), `src/components/stage/{AboutSection,ProjectDeck}.jsx`, `src/components/stage/{scene,descent-props,skill-props,prop-viewer}.js`

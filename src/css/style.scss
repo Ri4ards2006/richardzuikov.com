@@ -79,84 +79,28 @@ html {
   inset: 0 -30%;
   z-index: 60;
   pointer-events: none;
-  background: rgb(var(--ash-800));
-  border-inline: 3px solid rgb(var(--accent));
+  background: rgb(var(--ash-900));
   animation: wipe 350ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
+
+/* Diagonal shard wipe between "/" and the screens: paper shards ride both edges of the ink panel. */
+.wipe-panel span {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: rgb(var(--ash-100));
+}
+
+.wipe-panel span:nth-child(1) { left: -3%; width: 4%; clip-path: polygon(40% 0, 100% 0, 60% 100%, 0 100%); }
+.wipe-panel span:nth-child(2) { left: -7%; width: 2%; opacity: 0.6; }
+.wipe-panel span:nth-child(3) { right: -4%; width: 5%; clip-path: polygon(0 0, 70% 0, 100% 100%, 30% 100%); }
 
 @keyframes wipe {
   from { transform: translateX(-140%) skewX(-14deg); }
   to { transform: translateX(140%) skewX(-14deg); }
 }
 
-.arcana {
-  width: min(17.5rem, 100%);
-  aspect-ratio: 7 / 12;
-  perspective: 1200px;
-  transform: rotate(var(--fan));
-  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
-}
 
-.arcana:hover,
-.arcana:focus-within {
-  transform: translateY(-16px) rotate(0deg);
-}
-
-.arcana-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.arcana-inner.is-flipped {
-  transform: rotateY(180deg);
-}
-
-.arcana-face {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  background: rgb(var(--ash-900));
-  border: 4px double rgb(var(--ash-300));
-}
-
-.arcana-back {
-  transform: rotateY(180deg);
-}
-
-.arcana-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(1) contrast(1.4) brightness(var(--image-lift, 1.2));
-}
-
-.arcana-halftone {
-  position: absolute;
-  inset: 0;
-  /* v4: finer screentone. */
-  background: radial-gradient(circle, rgb(var(--ash-900)) 30%, transparent 34%) 0 0 / 1.5px 1.5px;
-  opacity: 0.16;
-  mix-blend-mode: multiply;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .arcana {
-    animation: fan-out 500ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
-  }
-}
-
-@media (max-width: 640px) {
-  .arcana {
-    --fan: 0deg !important;
-  }
-}
-
-@keyframes fan-out {
-  from { transform: rotate(0deg) translateY(24px); opacity: 0; }
-}
 
 /* Headings only receive focus programmatically after a route change. */
 h1[tabindex='-1']:focus-visible {
@@ -265,35 +209,6 @@ h1[tabindex='-1']:focus-visible {
   to { transform: translateX(8%); }
 }
 
-/* Hover hints. Reserved space and absolute placement avoid any layout shift. */
-.ground-message {
-  display: block;
-  opacity: 0;
-  font-style: italic;
-  font-size: 0.8125rem;
-  color: rgb(var(--accent));
-  pointer-events: none;
-  transition: opacity 200ms;
-}
-
-.dark .ground-message,
-html.dark .ground-message {
-  text-shadow: 0 0 8px rgb(var(--accent) / 0.75), 0 0 20px rgb(var(--accent-dim) / 0.8);
-}
-
-.has-message:hover .ground-message,
-.has-message:focus-within .ground-message,
-.arcana:hover .ground-message,
-.arcana:focus-within .ground-message {
-  opacity: 1;
-}
-
-.arcana .ground-message {
-  position: absolute;
-  inset-inline: 0;
-  bottom: 0.5rem;
-  text-align: center;
-}
 
 /* ---- Cinematic stage on "/" (see design/DESIGN.md) ---- */
 .stage {
@@ -438,9 +353,31 @@ html.dark .ground-message {
   color: rgb(var(--ash-200));
 }
 
-.stage-quick {
+/* HUD bottom-right: the only place for control hints (DESIGN.md §16). */
+.stage-hud-br {
   right: 1.25rem;
   bottom: 0.625rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.125rem;
+}
+
+.stage-controls {
+  padding: 0.2rem 0.75rem;
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  color: rgb(var(--ash-300));
+  background: rgb(var(--ash-900));
+}
+
+@media (hover: none), (max-width: 767px) {
+  .stage-controls {
+    display: none;
+  }
+}
+
+.stage-quick {
   display: inline-flex;
   align-items: center;
   min-height: 2.75rem;
@@ -930,8 +867,9 @@ html.dark .ground-message {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle, rgb(var(--ash-900)) 32%, transparent 36%) 0 0 / 2px 2px;
-  opacity: 0.22;
+  /* Finer screentone (v4). */
+  background: radial-gradient(circle, rgb(var(--ash-900)) 30%, transparent 34%) 0 0 / 1.5px 1.5px;
+  opacity: 0.16;
   mix-blend-mode: multiply;
 }
 
@@ -1187,6 +1125,32 @@ html.dark .ground-message {
 }
 
 /* ---------- Global menu: Persona-style pause menu (DESIGN.md §15) ---------- */
+
+/* While the overlay is open the page behind is near-black screentone; nothing else shows. */
+.gm-dim {
+  position: fixed;
+  z-index: 79;
+  inset: 0;
+  background:
+    radial-gradient(circle, rgb(var(--ash-700) / 0.35) 30%, transparent 34%) 0 0 / 4px 4px,
+    rgb(5 5 5 / 0.97);
+  animation: gm-dim 90ms linear both;
+}
+
+.gm-dim.is-closing {
+  animation: gm-dim 120ms linear 180ms reverse both;
+}
+
+@keyframes gm-dim {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+html.gm-open .stage-hero > *,
+html.gm-open .stage-canvas,
+html.gm-open .menu-dots {
+  visibility: hidden;
+}
 
 .gm {
   --gm-in: 300ms;
@@ -2438,15 +2402,6 @@ html.dark .ground-message {
   --ink-t: rotate(-6deg);
 }
 
-.ink-stage-menu {
-  left: -4rem;
-  top: 50%;
-  width: clamp(16rem, 36vw, 34rem);
-  aspect-ratio: 1;
-  margin-top: clamp(-17rem, -18vw, -8rem);
-  opacity: 0.09;
-  z-index: 0;
-}
 
 .stage-menu {
   position: relative;
@@ -2833,5 +2788,524 @@ html.dark .ground-message {
 @media (max-width: 1023px) {
   .skill-prop {
     display: none;
+  }
+}
+
+/* Ink behind a stage menu item only while it is hovered or focused (DESIGN.md §16). */
+.slab-ink {
+  /* Peeks out past the right end of the slab, behind the wedge. */
+  left: 62%;
+  top: 50%;
+  width: clamp(7rem, 13vw, 11rem);
+  aspect-ratio: 1;
+  margin-top: clamp(-5.5rem, -6.5vw, -3.5rem);
+  z-index: -1;
+  opacity: 0;
+  scale: 0.4;
+  transition: opacity 120ms linear, scale 160ms cubic-bezier(0.2, 0.9, 0.1, 1.2);
+}
+
+.stage-menu li:hover .slab-ink,
+.stage-menu.is-keyboard li.has-active .slab-ink {
+  opacity: 0.3;
+  scale: 1;
+}
+
+/* "OPEN SCREEN →" slab on the home sections (DESIGN.md §16). */
+.open-screen {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  margin-top: 2rem;
+  padding: 0.25rem 2.5rem 0.25rem 1.25rem;
+  font-family: Anton, Impact, sans-serif;
+  font-size: 1.375rem;
+  letter-spacing: 0.04em;
+  color: rgb(var(--ash-900));
+  background: rgb(var(--ash-100));
+  clip-path: polygon(0.75rem 0, 100% 0, calc(100% - 1.5rem) 100%, 0 100%);
+  transform: rotate(-3deg);
+  transition: transform 120ms cubic-bezier(0.2, 0.9, 0.1, 1.3), background-color 90ms linear;
+}
+
+.open-screen:hover,
+.open-screen:focus-visible {
+  outline: none;
+  transform: rotate(-3deg) translateX(0.5rem) scale(1.04);
+}
+
+.open-screen:focus-visible {
+  box-shadow: inset 0 0 0 3px rgb(var(--ash-900));
+}
+
+/* ---------- Screens: Persona sub-screens (DESIGN.md §16) ---------- */
+
+.scr {
+  position: relative;
+  min-height: calc(100vh - 4rem);
+  overflow-x: clip;
+  color: rgb(var(--ash-100));
+  background: rgb(var(--ash-900));
+}
+
+/* Idle motion: a slow screentone drift behind everything. */
+.scr-tone {
+  position: absolute;
+  inset: -40px;
+  pointer-events: none;
+  background: radial-gradient(circle, rgb(var(--ash-700) / 0.4) 30%, transparent 34%) 0 0 / 5px 5px;
+  -webkit-mask-image: linear-gradient(115deg, #000, transparent 55%);
+  mask-image: linear-gradient(115deg, #000, transparent 55%);
+  animation: scr-drift 40s linear infinite;
+}
+
+@keyframes scr-drift {
+  to { transform: translate(40px, 40px); }
+}
+
+.scr-inner {
+  position: relative;
+  max-width: 76rem;
+  margin-inline: auto;
+  padding: 1.5rem 1.25rem 4rem;
+}
+
+.scr-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  color: rgb(var(--ash-300));
+}
+
+.scr-back:hover,
+.scr-back:focus-visible {
+  color: rgb(var(--ash-100));
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.scr-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(10rem, 22vw, 17rem);
+  align-items: end;
+  gap: 2rem;
+  margin: 1rem 0 2.5rem;
+}
+
+/* Big title slab: paper, skewed, like the active stage slab. */
+.scr-title {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.1rem 3.5rem 0.1rem 1.25rem;
+  font-family: Anton, Impact, sans-serif;
+  font-size: clamp(3.5rem, 9vw, 8rem);
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: rgb(var(--ash-900));
+  background: rgb(var(--ash-100));
+  clip-path: polygon(0 0, 100% 0, calc(100% - 2.5rem) 100%, 0 100%);
+  transform: rotate(-3deg);
+  transform-origin: left bottom;
+  outline: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scr-title {
+    animation: slab-slam 260ms cubic-bezier(0.2, 0.9, 0.1, 1) 120ms both;
+  }
+
+  .scr-tab {
+    animation: slab-slam 220ms cubic-bezier(0.2, 0.9, 0.1, 1) calc(160ms + var(--i, 0) * 50ms) both;
+  }
+}
+
+.scr-prop {
+  width: 100%;
+  height: clamp(6rem, 13vw, 11rem);
+  pointer-events: none;
+}
+
+.scr-body {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.scr-tabs ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  perspective: 1000px;
+}
+
+.scr-tab {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 0.4rem 2rem 0.4rem 0.875rem;
+  text-align: left;
+  color: rgb(var(--ash-200));
+  background: rgb(var(--ash-800));
+  clip-path: polygon(0 0, 100% 0, calc(100% - 1.5rem) 100%, 0 100%);
+  transition: background-color 120ms linear, color 120ms linear, transform 160ms cubic-bezier(0.2, 0.9, 0.1, 1);
+}
+
+.scr-tab:hover,
+.scr-tab:focus-visible {
+  outline: none;
+  transform: translateX(0.5rem) rotateY(-5deg);
+  color: rgb(var(--ash-100));
+}
+
+.scr-tab.is-active {
+  background: rgb(var(--ash-100));
+  color: rgb(var(--ash-900));
+  transform: translateX(1rem) rotateY(-7deg);
+}
+
+.scr-tab-number {
+  min-width: 2.5rem;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.scr-tab-label {
+  font-family: Anton, Impact, sans-serif;
+  font-size: 1.25rem;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.scr-detail {
+  position: sticky;
+  top: 5.5rem;
+  min-width: 0;
+  padding: 1.5rem;
+  background: rgb(var(--ash-800) / 0.94);
+  border: 3px solid rgb(var(--ash-100));
+}
+
+.scr-stat {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  padding: 0.45rem 0.9rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  background: rgb(var(--ash-900));
+  clip-path: polygon(0.5rem 0, 100% 0, calc(100% - 0.5rem) 100%, 0 100%);
+}
+
+.scr-stat dt {
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(var(--ash-300));
+}
+
+.scr-work {
+  display: grid;
+  grid-template-columns: minmax(0, 13rem) minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: start;
+}
+
+.scr-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 7 / 11;
+}
+
+.scr-card:hover,
+.scr-card:focus-visible {
+  outline: none;
+  transform: translateY(-0.4rem) rotate(-1.5deg);
+}
+
+.scr-rank {
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  font-size: clamp(3.5rem, 7vw, 6rem);
+  line-height: 1;
+  color: rgb(var(--ash-600));
+}
+
+.scr-body.is-career {
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+}
+
+.scr-body.is-career .record-board {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  margin-top: 0;
+}
+
+.scr-body.is-career .record-year {
+  position: relative;
+  top: auto;
+  font-size: clamp(3.5rem, 6vw, 5.5rem);
+}
+
+.scr-body.is-career .record-bar {
+  grid-template-columns: 3rem minmax(0, 1fr);
+}
+
+.scr-body.is-career .record-meta {
+  grid-column: 2;
+  white-space: normal;
+}
+
+@media (max-width: 1023px) {
+  .scr-body,
+  .scr-body.is-career {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .scr-head {
+    grid-template-columns: minmax(0, 1fr) 8rem;
+  }
+
+  .scr-tab.is-active {
+    transform: translateX(0.25rem) rotateY(-4deg);
+  }
+
+  .scr-detail {
+    position: relative;
+    top: auto;
+  }
+}
+
+@media (max-width: 639px) {
+  .scr-head {
+    grid-template-columns: minmax(0, 1fr) 5.5rem;
+    gap: 0.75rem;
+  }
+
+  .scr-title {
+    padding-right: 2.25rem;
+    font-size: clamp(2.5rem, 13vw, 3.5rem);
+  }
+
+  .scr-work {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .scr-card {
+    max-width: 13rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scr-tone {
+    animation: none;
+  }
+}
+
+/* ---------- Detail screen: Career entries and Stack skills (DESIGN.md §16) ---------- */
+
+.dts {
+  position: fixed;
+  z-index: 70;
+  inset: 0;
+  /* Portalled to <body>, outside the forced-dark wrapper: set the ink colours here. */
+  color: rgb(var(--ash-100));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4.5rem 1.25rem 1.25rem;
+}
+
+.dts-dim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle, rgb(var(--ash-700) / 0.35) 30%, transparent 34%) 0 0 / 4px 4px,
+    rgb(5 5 5 / 0.94);
+  animation: gm-dim 120ms linear both;
+}
+
+.dts-panel {
+  position: relative;
+  width: min(62rem, 100%);
+  max-height: 100%;
+  overflow-y: auto;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  background: rgb(var(--ash-800));
+  border: 3px solid rgb(var(--ash-100));
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2.5rem), calc(100% - 2.5rem) 100%, 0 100%);
+}
+
+.dts-grid {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(1.25rem, 4vw, 3rem);
+  align-items: start;
+}
+
+.dts-rank {
+  min-width: 1.2em;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  font-size: clamp(5rem, 14vw, 11rem);
+  line-height: 0.9;
+  text-align: center;
+  color: rgb(var(--ash-900));
+  background: rgb(var(--ash-100));
+  padding: 0.1em 0.15em 0.15em;
+  transform: rotate(-4deg);
+}
+
+.dts-title {
+  margin-top: 0.25rem;
+  font-family: Anton, Impact, sans-serif;
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.dts-bullets {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.dts-bullets li {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr);
+  gap: 0.6rem;
+  align-items: baseline;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: rgb(var(--ash-100));
+}
+
+.dts-bullets .trace-star {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.dts-label {
+  margin: 1.75rem 0 0.6rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: rgb(var(--ash-300));
+}
+
+.dts-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.dts-keys {
+  margin-top: 0.75rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  color: rgb(var(--ash-300));
+  text-align: center;
+}
+
+@media (max-width: 639px) {
+  .dts-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dts-rank {
+    justify-self: start;
+    font-size: 4.5rem;
+  }
+
+  .dts-nav .inspect-btn {
+    flex: 1 1 40%;
+  }
+
+}
+
+.dts-nav .inspect-btn {
+  padding-inline: 1.25rem;
+}
+
+/* Skill rows open the detail screen; the button covers the whole row. */
+.skill-row {
+  position: relative;
+}
+
+.skill-row-open {
+  text-align: left;
+}
+
+.skill-row-open::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.skill-row-open > span {
+  display: inline-block;
+  opacity: 0;
+  translate: -0.25rem 0;
+  transition: opacity 90ms linear, translate 120ms cubic-bezier(0.2, 0.9, 0.1, 1);
+}
+
+.skill-row:hover,
+.skill-row:focus-within {
+  background: rgb(var(--ash-700) / 0.5);
+}
+
+.skill-row:hover .skill-row-open > span,
+.skill-row-open:focus-visible > span {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.skill-row-open:focus-visible {
+  outline: none;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.dts-uses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.dts-card {
+  position: relative;
+  display: flex;
+  width: 9rem;
+  aspect-ratio: 7 / 11;
+  transition: transform 140ms cubic-bezier(0.2, 0.9, 0.1, 1.2);
+}
+
+.dts-card .deck-title {
+  font-size: 0.75rem;
+}
+
+.dts-card:hover,
+.dts-card:focus-visible {
+  outline: none;
+  transform: translateY(-0.4rem) rotate(-2deg);
+}
+
+@media (max-width: 639px) {
+  .dts-card {
+    width: 6.75rem;
   }
 }

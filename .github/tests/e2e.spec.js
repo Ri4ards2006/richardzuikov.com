@@ -78,8 +78,9 @@ test.describe('Atlus Pause Menu Interactions', () => {
     expect(isOccluded).toBe(true);
 
     // Direct clicks on stage menu links must be intercepted by the overlay
+    // v5+: the stage nav is visibility:hidden while the overlay is open, so Playwright reports "not visible".
     const clickBlocked = await stageMenu.locator('a').first().click({ timeout: 500 }).then(() => false).catch((err) => {
-      return err.message.includes('intercepts pointer events') || err.message.includes('hidden');
+      return /intercepts pointer events|hidden|not visible/.test(err.message);
     });
     expect(clickBlocked).toBe(true);
   });

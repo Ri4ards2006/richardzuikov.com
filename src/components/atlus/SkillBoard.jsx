@@ -4,23 +4,25 @@ import { useSectionEnter } from '../../hooks/use-section-enter';
 import { stackUses } from '../../data/stack-uses';
 import SkillVignette from './SkillVignette';
 import KeyItems from './KeyItems';
+import StackDetail from './StackDetail';
 
 const pad = (value) => String(value).padStart(2, '0');
 
 // onCategory(index): the home page spins its 3D prop for the category; /stack has none.
-export default function SkillBoard({ onCategory }) {
+export default function SkillBoard({ onCategory, showProp = true }) {
   const { t } = useLanguage();
   const domains = Object.entries(t.career.domains);
   const [selected, setSelected] = useState(domains[0][0]);
   const selectedIndex = domains.findIndex(([key]) => key === selected);
   const domain = t.career.domains[selected];
   const boardRef = useSectionEnter();
+  const [detail, setDetail] = useState(null);
   const itemsRef = useSectionEnter();
 
   return (
     <>
     <div ref={boardRef} className="skill-board">
-      <div className="has-message">
+      <div>
         <ul className="skill-slabs">
           {domains.map(([key, item], index) => (
             <li key={key} style={{ '--i': index }}>
@@ -31,9 +33,8 @@ export default function SkillBoard({ onCategory }) {
             </li>
           ))}
         </ul>
-        <span aria-hidden="true" className="ground-message mt-2">{t.atlus.hints.stack}</span>
         {/* Anchor for the WebGL prop of the selected category. */}
-        {onCategory && <div aria-hidden="true" className="skill-prop" />}
+        {onCategory && showProp && <div aria-hidden="true" className="skill-prop" />}
       </div>
 
       {/* The key replays the slash wipe and the row reveal on every category change. */}
@@ -49,7 +50,7 @@ export default function SkillBoard({ onCategory }) {
               <li key={item} style={{ '--i': index }} className="skill-row grid grid-cols-[2rem_minmax(0,1fr)] items-baseline gap-3 py-3">
                 <span aria-hidden="true" className="font-mono text-xs text-ash-400">{pad(index + 1)}</span>
                 <div className="min-w-0">
-                  <span className="text-sm text-ash-100">{item}</span>
+                  <button type="button" aria-haspopup="dialog" onClick={() => setDetail(index)} className="skill-row-open text-sm text-ash-100">{item} <span aria-hidden="true">→</span></button>
                   {uses && (
                     <ul aria-label={t.atlus.usedIn} className="mt-1.5 flex flex-wrap gap-1.5">
                       {uses.map((use) => <li key={use} className="stack-use">{use}</li>)}
@@ -65,6 +66,7 @@ export default function SkillBoard({ onCategory }) {
       </section>
     </div>
     <div ref={itemsRef}><KeyItems /></div>
+    {detail !== null && <StackDetail category={selected} index={detail} onIndex={setDetail} onClose={() => setDetail(null)} />}
     </>
   );
 }

@@ -2,6 +2,7 @@ import React, { forwardRef } from 'react';
 import { useLanguage } from '../../hooks/use-language';
 import { portraits } from '../../data/portraits';
 import { InkSplat } from '../atlus/glyphs';
+import OpenScreen from '../atlus/OpenScreen';
 
 // Fixed so the letters do not shift between renders (DESIGN.md §3).
 const LETTER_TILT = [-5, 3, -2, 6, -4, 2, -6, 4, -3];
@@ -52,6 +53,7 @@ const AboutSection = forwardRef(function AboutSection({ portraitRef, webgl }, re
             </>
           )}
         </div>
+        <OpenScreen to="/about" />
       </div>
       <div ref={portraitRef} className="about-portrait">
         {!webgl && <img src={portraits.about.large} alt="" className="h-full w-full object-contain grayscale" />}

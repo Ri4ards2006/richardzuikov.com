@@ -18,6 +18,7 @@ import RecordBoard from '../components/atlus/RecordBoard';
 import ContactList from '../three/bonfire/ContactList';
 import { grainTexture } from '../lib/noise-textures';
 import { ImpactInk, InkSplat, TraceStar } from '../components/atlus/glyphs';
+import OpenScreen, { RETURN_KEY } from '../components/atlus/OpenScreen';
 
 const INTRO_KEY = 'seen-stage-intro';
 const BOOT_MS = 800;
@@ -96,6 +97,8 @@ export default function Stage() {
           slots: slotRefs.current.filter(Boolean),
           panels: panelRefs.current.filter(Boolean),
           skillProp: stageRef.current?.querySelector('.skill-prop'),
+          // Text the descent props must keep clear of.
+          obstacles: [...(stageRef.current?.querySelectorAll('.manga-panel, .stage-descent h2, .stage-descent > p, .stage-now h2, .now-panel') ?? [])],
         }),
       });
       sceneRef.current = stage;
@@ -156,6 +159,33 @@ export default function Stage() {
       window.removeEventListener('pointerdown', skip);
     };
   }, [phase]);
+
+  // Back from a screen opened with OPEN SCREEN: land on the scroll position it was opened from.
+  useEffect(() => {
+    let saved = null;
+    try {
+      saved = sessionStorage.getItem(RETURN_KEY);
+      sessionStorage.removeItem(RETURN_KEY);
+    } catch {
+      return undefined;
+    }
+    if (saved === null || hash) return undefined;
+    const y = Number(saved);
+    const land = () => window.scrollTo({ top: y, behavior: 'instant' });
+    land();
+    // Fonts, images and the Record ride still change the page height, until the visitor takes over.
+    const observer = new ResizeObserver(land);
+    observer.observe(document.documentElement);
+    const release = () => {
+      observer.disconnect();
+      clearTimeout(timer);
+      LAND_RELEASE_EVENTS.forEach((type) => window.removeEventListener(type, release));
+    };
+    const timer = setTimeout(release, LAND_PIN_MS);
+    LAND_RELEASE_EVENTS.forEach((type) => window.addEventListener(type, release, { passive: true }));
+    return release;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!hash) return undefined;
@@ -251,6 +281,8 @@ export default function Stage() {
 
   const handleMenuKey = (event) => {
     if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+    // Arrow keys show the ink on the selected item, like hover does, until the pointer moves.
+    event.currentTarget.closest('.stage-menu')?.classList.add('is-keyboard');
     event.preventDefault();
     const index = menuItems.findIndex((item) => item.id === active);
     const step = event.key === 'ArrowDown' ? 1 : -1;
@@ -278,11 +310,13 @@ export default function Stage() {
           <h1 id="stage-title" className="stage-name-block"><span>Richard</span> <span>Zuikov</span></h1>
           <p className="stage-role">{t.career.role}</p>
         </div>
-        <Link to={QUICK_PATH} className="stage-hud stage-quick">{t.landing.menuPlaceholder.quickRead} →</Link>
+        <div className="stage-hud stage-hud-br">
+          <p aria-hidden="true" className="stage-controls">{t.atlus.hints.controls}</p>
+          <Link to={QUICK_PATH} className="stage-quick">{t.landing.menuPlaceholder.quickRead} →</Link>
+        </div>
         <p aria-hidden="true" className="stage-hud stage-cue"><TraceStar small /> {t.atlus.stage.scroll}</p>
         <div className="relative z-10 flex flex-col justify-center">
-          <InkSplat variant={0} className="ink-stage-menu" />
-          <nav aria-label={t.atlus.menuNav} className="has-message stage-menu">
+          <nav aria-label={t.atlus.menuNav} className="stage-menu" onPointerMove={(event) => event.currentTarget.classList.remove('is-keyboard')}>
             <ul onKeyDown={handleMenuKey}>
               {menuItems.map((item, index) => {
                 const target = scrollTargets[item.id];
@@ -296,6 +330,7 @@ export default function Stage() {
                 };
                 return (
                   <li key={item.id} className={active === item.id ? 'has-active' : undefined}>
+                    <InkSplat variant={index} className="slab-ink" />
                     <span aria-hidden="true" className="slab-number">{item.number}</span>
                     {target ? (
                       <a href={`#${target}`} onClick={(event) => scrollTo(event, target)} {...shared}>{t.landing.nav[item.id]}</a>
@@ -306,7 +341,6 @@ export default function Stage() {
                 );
               })}
             </ul>
-            <span aria-hidden="true" className="ground-message mt-3">{t.atlus.hints.menu}</span>
           </nav>
         </div>
         <div ref={portraitRef} className="stage-portrait">
@@ -365,6 +399,7 @@ export default function Stage() {
           ))}
         </ul>
         <ProjectDeck onInspect={openInspect} />
+        <OpenScreen to="/work" />
       </section>
 
       <section id="skill" aria-labelledby="skill-title" className="stage-works scroll-mt-16">
@@ -372,7 +407,7 @@ export default function Stage() {
         <p className="font-mono text-xs tracking-widest text-ash-300">03 / {t.atlus.hud.stack}</p>
         <h2 id="skill-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight mt-2">{t.landing.nav.stack}</h2>
         <SkillBoard onCategory={webgl ? (index) => sceneRef.current?.setSkillCategory(index) : undefined} />
-        <Link to="/stack" className="stage-more">{t.atlus.boards.fullIndex} →</Link>
+        <OpenScreen to="/stack" />
       </section>
 
       <section id="record" aria-labelledby="record-title" className="stage-works scroll-mt-16">
@@ -382,7 +417,7 @@ export default function Stage() {
             <p className="font-mono text-xs tracking-widest text-ash-300">04 / {t.atlus.hud.career}</p>
             <h2 id="record-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight mt-2">{t.landing.nav.career}</h2>
             <RecordBoard ride onEnter={() => sceneRef.current?.travel()} onRide={(camera) => sceneRef.current?.setRide(camera)} />
-            <Link to="/career" className="stage-more">{t.atlus.boards.fullRecord} →</Link>
+            <OpenScreen to="/career" />
           </div>
         </div>
       </section>

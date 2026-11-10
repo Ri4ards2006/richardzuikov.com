@@ -7,7 +7,7 @@ const SPIN_MS = 360;
 const SIZE = 1.25;
 
 // A bench oscilloscope: case, screen with a moving trace, knobs.
-function oscilloscope() {
+export function oscilloscope() {
   const parts = [box(1.2, 0.72, 0.6), box(1.24, 0.76, 0.04, 0, 0, 0.3)];
   for (let i = 0; i < 3; i += 1) parts.push(new THREE.CylinderGeometry(0.05, 0.05, 0.05, 8).rotateX(Math.PI / 2).translate(0.4, 0.2 - i * 0.18, 0.34));
   parts.push(box(0.9, 0.06, 0.5, 0, -0.39, 0.02));
@@ -31,7 +31,7 @@ function oscilloscope() {
 }
 
 // A browser frame: window with tab strip, address bar and content blocks.
-function browserFrame() {
+export function browserFrame() {
   const parts = [box(1.3, 0.86, 0.05), box(1.3, 0.1, 0.07, 0, 0.38, 0.01), box(0.34, 0.08, 0.08, -0.4, 0.46, 0)];
   parts.push(box(0.9, 0.05, 0.07, 0.1, 0.26, 0.02));
   parts.push(box(0.5, 0.32, 0.07, -0.3, 0.0, 0.02), box(0.5, 0.06, 0.07, 0.3, 0.12, 0.02), box(0.42, 0.06, 0.07, 0.26, 0.0, 0.02), box(0.46, 0.06, 0.07, 0.28, -0.12, 0.02));

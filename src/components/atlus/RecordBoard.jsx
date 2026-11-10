@@ -3,8 +3,8 @@ import { useLanguage } from '../../hooks/use-language';
 import { useSectionEnter } from '../../hooks/use-section-enter';
 import { ROMAN } from '../../lib/atlus';
 import { useReducedMotion } from '../../hooks/use-reduced-motion';
+import CareerDetail from './CareerDetail';
 
-const DETAIL_SENTENCES = 2;
 const HEADER_PX = 64;
 // Camera turn (DESIGN.md §15): scroll spent on each 90° yaw, as a share of the viewport height.
 const YAW_SHARE = 0.55;
@@ -29,7 +29,6 @@ function useRideEnabled(requested) {
 // Periods such as "Dec 2024 – Aug 2025" flip to their first four-digit year.
 const firstYear = (period) => period.match(/\d{4}/)?.[0] ?? period.slice(0, 4);
 
-const firstSentences = (text) => text.split(/(?<=\.)\s+/).slice(0, DETAIL_SENTENCES).join(' ');
 
 function FlipDigit({ value }) {
   const previous = useRef(value);
@@ -45,7 +44,7 @@ function FlipDigit({ value }) {
 
 // ride: on the home page the section pins and vertical scroll drives a horizontal ride along the timeline.
 // onRide({ yaw, out, shift }) reports the camera state: yaw −1…1 (in / out turn), shift in px.
-export default function RecordBoard({ onEnter, ride: rideRequested = false, onRide }) {
+export default function RecordBoard({ onEnter, ride: rideRequested = false, onRide, onActive }) {
   const ride = useRideEnabled(rideRequested);
   const onRideRef = useRef(onRide);
   onRideRef.current = onRide;
@@ -56,6 +55,9 @@ export default function RecordBoard({ onEnter, ride: rideRequested = false, onRi
   const barRefs = useRef([]);
   const listRef = useRef(null);
   const boardRef = useSectionEnter(onEnter);
+  const onActiveRef = useRef(onActive);
+  onActiveRef.current = onActive;
+  useEffect(() => { onActiveRef.current?.(active); }, [active]);
 
   const scrollToEntry = (index) => {
     const section = boardRef.current.closest('section');
@@ -175,23 +177,17 @@ export default function RecordBoard({ onEnter, ride: rideRequested = false, onRi
                 if (!ride) setActive(index);
                 // Keyboard in the ride: scroll so the focused role sits on the reading line.
                 else if (event.currentTarget.matches(':focus-visible')) scrollToEntry(index);
-              }} aria-expanded={isOpen} onClick={() => setOpen(isOpen ? null : index)} className={`record-bar ${index === active ? 'is-active' : ''} ${isOpen ? 'is-open' : ''}`}>
+              }} aria-haspopup="dialog" onClick={() => setOpen(index)} className={`record-bar ${index === active ? 'is-active' : ''} ${isOpen ? 'is-open' : ''}`}>
                 <span aria-hidden="true" className="record-rank">{ROMAN[index] ?? index + 1}</span>
                 <span className="record-role">{role}</span>
                 <span className="record-meta">{org ?? entry.type} · {entry.year}</span>
               </button>
-              {isOpen && (
-                <div className="record-detail slash-wipe">
-                  {entry.desc && <p>{firstSentences(entry.desc)}</p>}
-                  {/* TODO strings are placeholders for facts still to be supplied, so visitors never see them. */}
-                  {import.meta.env.DEV && <p className="mt-2 font-mono text-[11px] text-ash-300">{t.atlus.todoRecord}</p>}
-                </div>
-              )}
             </li>
           );
         })}
       </ol>
       </div>
+      {open !== null && <CareerDetail index={open} onIndex={setOpen} onClose={() => setOpen(null)} />}
     </div>
   );
 }

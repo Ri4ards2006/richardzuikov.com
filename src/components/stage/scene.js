@@ -403,6 +403,9 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   }
 
   function measure() {
+    // Leaving the route unmounts the DOM before the effect cleanup disposes the stage; a resize
+    // callback in between finds the anchors gone.
+    if (state.disposed || !canvas.isConnected) return;
     state.w = canvas.clientWidth || window.innerWidth;
     state.h = canvas.clientHeight || window.innerHeight;
     state.k = (2 * Math.tan(rad(FOV / 2)) * CAM_Z) / state.h;
@@ -432,10 +435,11 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       const r = el.getBoundingClientRect();
       return { el, top: r.top + state.scroll, height: r.height };
     });
-    props.layout(a.panels.map((el) => {
+    const pageRect = (el) => {
       const r = el.getBoundingClientRect();
       return { left: r.left, width: r.width, top: r.top + state.scroll, height: r.height };
-    }), state.w, (x, y) => ({ x: (x - state.w / 2) * state.k, y: -(y - state.h / 2) * state.k }));
+    };
+    props.layout(a.panels.map(pageRect), state.w, (x, y) => ({ x: (x - state.w / 2) * state.k, y: -(y - state.h / 2) * state.k }), state.k, (a.obstacles ?? []).map(pageRect));
 
     const skillRect = a.skillProp?.getBoundingClientRect();
     skillProp.layout(skillRect && { left: skillRect.left, width: skillRect.width, top: skillRect.top + state.scroll, height: skillRect.height }, (x, y) => ({ x: (x - state.w / 2) * state.k, y: -(y - state.h / 2) * state.k }));

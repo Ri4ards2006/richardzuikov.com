@@ -351,3 +351,26 @@ Bonfire: only the one addition below; everything else in `src/three/bonfire/` st
 
 **Bonfire**
 - One small ruined house / chapel silhouette in the distance behind the fire (low-poly, fog-faded). Nothing else changes.
+
+---
+
+## §16 Changelog v5
+
+Owner decisions of 2026-11-10. Open work is in TASKS.md. CI must be green before any merge.
+
+**Global menu**
+- While the overlay is open, the stage menu, name block and portrait are hidden and the page behind is dimmed to near-black screentone; only the overlay shows, also during the wipe. No settings box anywhere.
+
+**Floating elements**
+- No 3D prop overlaps panel text or a heading: props live in reserved gutters next to their panels and are hidden on narrow screens. No capacitor; the chip never sits on panel 02.
+- No floating helper hints ("pick one", "try ↑↓"). Control hints only in the stage HUD bottom-right: "↑↓ SELECT · ⏎ OPEN · ESC BACK".
+- Ink behind stage menu items only on hover / active.
+
+**Dedicated screens** (Persona sub-screens)
+- Every home section with a screen (about, arcana, skill, record) has an "OPEN SCREEN →" slab; it opens `/about`, `/work`, `/stack`, `/career` with the diagonal shard wipe. ESC / BACK returns to the same scroll position on `/`.
+- Each screen: big title slab, sub-menu on the left (one tab per category or entry), detail panel on the right, one 3D prop, idle motion. Built from the new components (SkillBoard, KeyItems, RecordBoard, CardInspect); no old layouts.
+- Career detail: an entry opens a detail screen (overlay, slash transition): big roman rank, role, company, period, 3–4 bullets, "skills gained" tags, ←/→ for previous / next, ESC back. Bullets from data for the R2P entries, TODO keys for the rest.
+- Stack detail: a skill row opens the same detail screen: what it is, where it was used (project cards that jump into the Work screen), experience in words. No ratings.
+
+**Portrait**
+- `npm run portraits` accepts cream-on-black ink art: luminance becomes alpha (black → transparent), no manual cutout. Slots `stage.png` and `about.png`; placeholders stay until the files exist.
