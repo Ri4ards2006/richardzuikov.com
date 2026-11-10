@@ -363,3 +363,36 @@ test.describe('/about status screen (v7)', () => {
     await expect(page).toHaveURL(/\/$/);
   });
 });
+
+test.describe('Record turn beat (v7)', () => {
+  test('the 90° turn is its own pinned, reversible beat after the last role', async ({ page, viewport }) => {
+    if (viewport.width < 768) test.skip();
+    await page.goto('/');
+    await page.waitForFunction(() => document.querySelector('#record')?.dataset.turnLen);
+    const geo = await page.evaluate(() => {
+      const s = document.querySelector('#record');
+      return { top: s.getBoundingClientRect().top + scrollY - 64, start: Number(s.dataset.turnStart), len: Number(s.dataset.turnLen) };
+    });
+    expect(geo.len).toBeGreaterThanOrEqual(Math.round(viewport.height * 0.6) - 1);
+    const at = async (p) => {
+      await page.evaluate((y) => window.scrollTo(0, y), geo.top + geo.start + geo.len * p);
+      await page.waitForTimeout(300);
+      return page.evaluate(() => {
+        const s = document.querySelector('#record');
+        return {
+          turn: parseFloat(s.style.getPropertyValue('--turn')),
+          pinTop: Math.round(s.querySelector('.record-pin').getBoundingClientRect().top),
+          yearRotate: getComputedStyle(s.querySelector('.record-year')).rotate,
+        };
+      });
+    };
+    const hold = await at(0);
+    expect(hold.turn).toBe(0);
+    const turned = await at(0.75);
+    expect(turned.turn).toBeCloseTo(90, 1);
+    expect(turned.pinTop).toBe(64);
+    expect(turned.yearRotate).toBe('-90deg');
+    const back = await at(0.05);
+    expect(back.turn).toBe(0);
+  });
+});

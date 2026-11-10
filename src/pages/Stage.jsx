@@ -15,7 +15,7 @@ import ProjectDeck from '../components/stage/ProjectDeck';
 import NowSection from '../components/stage/NowSection';
 import CardInspect from '../components/stage/CardInspect';
 import SkillBoard from '../components/atlus/SkillBoard';
-import RecordBoard, { RideWedges } from '../components/atlus/RecordBoard';
+import RecordBoard, { RecordWipe, RideWedges } from '../components/atlus/RecordBoard';
 import ContactList from '../three/bonfire/ContactList';
 import { grainTexture } from '../lib/noise-textures';
 import { ImpactInk, InkSplat, TraceStar } from '../components/atlus/glyphs';
@@ -432,7 +432,10 @@ export default function Stage() {
             <RecordBoard ride onEnter={() => sceneRef.current?.travel()} onRide={(camera) => sceneRef.current?.setRide(camera)} />
             <OpenScreen to="/career" />
           </div>
+          <span aria-hidden="true" className="turn-burst" />
+          <p aria-hidden="true" className="record-next">{t.atlus.contact.headline}</p>
         </div>
+        <RecordWipe />
       </section>
 
       <section id="bonfire" ref={abyssRef} aria-labelledby="abyss-title" className="stage-abyss scroll-mt-16">

@@ -8,15 +8,28 @@ import CareerDetail from './CareerDetail';
 const HEADER_PX = 64;
 // Camera turn in (DESIGN.md §15): scroll spent on the 90° yaw, as a share of the viewport height.
 const YAW_SHARE = 0.55;
-// Hand-over (v6): after the last role the camera rolls 90°, spread over this share of the pin's
-// own scroll-out, so the next section rises in as the timeline turns upward. Reversible on scroll-up.
-const ROLL_SHARE = 0.8;
+// The 90° turn (v7): its own pinned beat after the last role, this share of the viewport height.
+// Scrubbed and reversible: 0 % hold · 0–15 % speedline burst + 3 % scale-up · 15–70 % the board
+// turns 90° around the screen centre (cubic in-out), the year counter-rotates and stays upright ·
+// 70–100 % the next title slides in along the new axis.
+const TURN_SHARE = 0.6;
 // Ink wedges behind the ride move slower than the roles (parallax), each at its own rate.
 const WEDGE_RATES = [0.22, 0.38, 0.55];
 const RIDE_QUERY = '(min-width: 768px)';
 
 const clamp01 = (value) => Math.min(1, Math.max(0, value));
 const ease = (t) => t * t * (3 - 2 * t);
+const cubicInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - ((-2 * t + 2) ** 3) / 2);
+const span = (t, from, to) => clamp01((t - from) / (to - from));
+
+// Turn state for progress p (0…1) of the turn beat.
+export function turnState(p) {
+  const burst = p <= 0.15 ? ease(span(p, 0.02, 0.15)) : 1 - ease(span(p, 0.15, 0.35));
+  const scale = 1 + 0.03 * ease(span(p, 0, 0.15)) * (1 - ease(span(p, 0.7, 1)));
+  const angle = 90 * cubicInOut(span(p, 0.15, 0.7));
+  const next = 1 - (1 - span(p, 0.7, 1)) ** 3;
+  return { burst, scale, angle, next };
+}
 
 // Desktop without reduced motion; phones keep the vertical list.
 function useRideEnabled(requested) {
@@ -42,6 +55,13 @@ export function RideWedges() {
       ))}
     </div>
   );
+}
+
+// Phones (no ride): the hand-over to the bonfire is a 300 ms paper slab wipe when the end of
+// the list comes into view. Nothing under reduced motion (CSS).
+export function RecordWipe() {
+  const ref = useSectionEnter();
+  return <span ref={ref} aria-hidden="true" className="record-wipe"><span /></span>;
 }
 
 // Periods such as "Dec 2024 – Aug 2025" flip to their first four-digit year.
@@ -128,30 +148,36 @@ export default function RecordBoard({ onEnter, ride: rideRequested = false, onRi
       const pin = section.querySelector('.record-pin');
       const yawLen = window.innerHeight * YAW_SHARE;
       const track = bars[bars.length - 1].offsetLeft - bars[0].offsetLeft;
-      // No extra pinned scroll after the last role: the roll happens while the pin scrolls out.
-      section.style.height = `${pin.offsetHeight + yawLen + track}px`;
+      const turnLen = window.innerHeight * TURN_SHARE;
+      // Pinned: turn in, the track, then the turn beat; after that the pin scrolls out.
+      section.style.height = `${pin.offsetHeight + yawLen + track + turnLen}px`;
       section.dataset.landOffset = String(Math.round(yawLen));
-      geometry = { yawLen, track, step: bars.length > 1 ? track / (bars.length - 1) : 1, rollLen: pin.offsetHeight * ROLL_SHARE };
+      section.dataset.turnStart = String(Math.round(yawLen + track));
+      section.dataset.turnLen = String(Math.round(turnLen));
+      geometry = { yawLen, track, step: bars.length > 1 ? track / (bars.length - 1) : 1, turnLen };
     };
     const update = () => {
       frame = 0;
       if (!geometry) return;
-      const { yawLen, track, step, rollLen } = geometry;
+      const { yawLen, track, step, turnLen } = geometry;
       const travelled = HEADER_PX - section.getBoundingClientRect().top;
       const inT = clamp01(travelled / yawLen);
-      const outT = clamp01((travelled - yawLen - track) / rollLen);
+      const outT = clamp01((travelled - yawLen - track) / turnLen);
       const shift = clamp01((travelled - yawLen) / Math.max(1, track)) * track;
       const yaw = 1 - ease(inT);
-      const roll = ease(outT);
+      const turn = turnState(outT);
       section.style.setProperty('--yaw', `${(yaw * 90).toFixed(2)}deg`);
-      section.style.setProperty('--roll', `${(roll * 90).toFixed(2)}deg`);
+      section.style.setProperty('--turn', `${turn.angle.toFixed(2)}deg`);
+      section.style.setProperty('--turn-scale', turn.scale.toFixed(4));
+      section.style.setProperty('--burst', turn.burst.toFixed(3));
+      section.style.setProperty('--next', turn.next.toFixed(3));
       section.style.setProperty('--shift', `${shift.toFixed(1)}px`);
       const next = Math.round(shift / step);
       if (next !== lastActive) {
         lastActive = next;
         setActive(next);
       }
-      onRideRef.current?.({ yaw, out: outT, roll, shift, inside: travelled > -window.innerHeight && outT < 1 });
+      onRideRef.current?.({ yaw, out: outT, roll: turn.angle / 90, shift, inside: travelled > -window.innerHeight && outT < 1 });
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -172,7 +198,9 @@ export default function RecordBoard({ onEnter, ride: rideRequested = false, onRi
       section.style.height = '';
       section.style.removeProperty('--yaw');
       section.style.removeProperty('--shift');
-      section.style.removeProperty('--roll');
+      ['--turn', '--turn-scale', '--burst', '--next'].forEach((name) => section.style.removeProperty(name));
+      delete section.dataset.turnStart;
+      delete section.dataset.turnLen;
       delete section.dataset.landOffset;
       onRideRef.current?.({ yaw: 0, out: 0, roll: 0, shift: 0, inside: false });
     };
