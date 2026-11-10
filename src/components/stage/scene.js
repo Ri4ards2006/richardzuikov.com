@@ -23,6 +23,8 @@ const SLOW_FRAME_MS = 24;
 const CARD_W = 768;
 const CARD_H = 1317;
 const FRAME_STROKE = 1.15;
+// Photo colour reveal on hover / focus (DESIGN.md §2).
+const COLOUR_FADE_S = 0.25;
 const RIDE_WHIP = 28 * Math.PI / 180;
 const RIDE_DRIFT = 0.25;
 const IDLE_FRAME_MS = 1000 / 30;
@@ -136,7 +138,8 @@ function cardFrameImage(w, h) {
   return frameImage;
 }
 
-function drawCard(canvas, project, index, img) {
+// Draws the card face. colour: the photo in its real colour (hover state, DESIGN.md §2); frame and text stay mono.
+function drawCard(canvas, project, index, img, colour = false) {
   const ctx = canvas.getContext('2d');
   const { width: w, height: h } = canvas;
   ctx.fillStyle = '#050505';
@@ -151,7 +154,12 @@ function drawCard(canvas, project, index, img) {
     ctx.beginPath();
     ctx.rect(imageX, imageY, imageW, imageH);
     ctx.clip();
-    drawToned(ctx, img, imageX, imageY, imageW, imageH);
+    if (colour) {
+      const scale = Math.max(imageW / img.width, imageH / img.height);
+      ctx.drawImage(img, imageX + (imageW - img.width * scale) / 2, imageY + (imageH - img.height * scale) / 2, img.width * scale, img.height * scale);
+    } else {
+      drawToned(ctx, img, imageX, imageY, imageW, imageH);
+    }
     ctx.restore();
   }
   const frame = cardFrameImage(w, h);
@@ -319,6 +327,14 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
     const side = new THREE.MeshBasicMaterial({ color: CHARCOAL });
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), [side, side, side, side, new THREE.MeshBasicMaterial({ map }), side]);
+    // Colour face in front of the mono face, faded in while the card is hovered or focused.
+    const colourFace = makeCanvas(CARD_W, CARD_H);
+    const colourMap = texture(colourFace);
+    colourMap.anisotropy = map.anisotropy;
+    const colour = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: colourMap, transparent: true, opacity: 0, depthWrite: false }));
+    colour.position.z = 0.501;
+    colour.visible = false;
+    mesh.add(colour);
     const tilt = TILTS[index % TILTS.length];
     const group = new THREE.Group();
     group.add(mesh);
@@ -328,7 +344,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       drawCard(face, project, index, null);
       map.needsUpdate = true;
     });
-    return { project, index, face, map, mesh, group, tilt, lift: 0, base: new THREE.Vector3() };
+    return { project, index, face, map, colourFace, colourMap, colour, colourT: 0, mesh, group, tilt, lift: 0, base: new THREE.Vector3() };
   });
 
   const floating = createFloatingShards(isSmall ? 30 : 38);
@@ -484,6 +500,9 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     if (state.disposed) return;
     drawCard(card.face, card.project, card.index, bitmap);
     card.map.needsUpdate = true;
+    drawCard(card.colourFace, card.project, card.index, bitmap, true);
+    card.colourMap.needsUpdate = true;
+    card.hasColour = true;
     bitmap.close();
   }
 
@@ -608,6 +627,11 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       if (!visible) return;
       const hovered = state.hover === card.index ? 1 : 0;
       card.lift += (hovered - card.lift) * follow;
+      // 250 ms with an ease-out curve on the way in; the same curve reversed on the way out.
+      card.colourT = clamp01(card.colourT + (hovered && card.hasColour ? dt : -dt) / COLOUR_FADE_S);
+      card.colour.material.opacity = 1 - (1 - card.colourT) ** 3;
+      card.colour.visible = card.colourT > 0;
+      if (card.colourT > 0 && card.colourT < 1) state.lastInput = now;
       card.group.position.set(card.base.x, card.base.y, card.base.z + card.lift * 0.9);
       card.group.scale.setScalar(1 + card.lift * 0.05);
       card.group.rotation.set(

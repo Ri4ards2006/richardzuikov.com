@@ -395,13 +395,13 @@ export default function Stage() {
                 type="button"
                 onClick={(event) => inspectFeatured(project, index, event.currentTarget)}
                 aria-label={`${project.title}: ${t.atlus.flip}`}
-                className="tarot-slot"
+                className="tarot-slot group"
                 onMouseEnter={() => sceneRef.current?.setHover(index)}
                 onMouseLeave={() => sceneRef.current?.setHover(-1)}
                 onFocus={() => sceneRef.current?.setHover(index)}
                 onBlur={() => sceneRef.current?.setHover(-1)}
               >
-                {webgl ? <span className="sr-only">{project.title}</span> : <img src={project.image} alt={project.title} loading="lazy" className="h-full w-full object-cover grayscale" />}
+                {webgl ? <span className="sr-only">{project.title}</span> : <img src={project.image} alt={project.title} loading="lazy" className="h-full w-full object-cover grayscale transition-[filter] duration-[250ms] ease-out group-hover:grayscale-0 group-focus-visible:grayscale-0 motion-reduce:transition-none" />}
               </button>
               <p className="mt-9 text-center font-mono text-xs leading-relaxed text-ash-300">{project[language].summary}</p>
             </li>

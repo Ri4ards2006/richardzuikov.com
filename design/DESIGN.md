@@ -47,7 +47,10 @@ sections, deeper and darker, until it reaches the only warm light on the whole s
 ```
 
 Rules
-- **No hue anywhere except inside the bonfire zone.** Remove `#FFB000` and every amber / pink / rose / red token from the codebase.
+- **Rest state is monochrome. Color appears only (a) in the bonfire and (b) as the real color of real photos while the user interacts with them. UI chrome, text, frames and backgrounds never get color.** (v6)
+  - Works / arcana cards: photo grayscale at rest → original colour on hover / focus, 250 ms ease-out; nothing else changes (no glow, frame stays monochrome). Touch: the centred deck card and the card in the inspect view are in colour. Reduced motion: instant.
+  - Earned certificate badges on the KEY ITEMS back are shown unmodified, in their own colours (§7).
+- No hue in UI tokens: remove `#FFB000` and every amber / pink / rose / red token from the codebase.
 - Accent = **inversion** (paper slab + ink text), halftone, ink splatter, white speedlines.
 - No soft UI gradients. Tonal changes are screentone/halftone or hard edges. Soft light only for fog, water light and the fire.
 
