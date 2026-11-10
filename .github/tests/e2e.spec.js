@@ -14,7 +14,7 @@ const ROUTES = [
 
 test.describe('Routes rendering without console errors', () => {
   for (const route of ROUTES) {
-    test(`renders route ${route.path} without console errors`, async ({ page }, testInfo) => {
+    test(`renders route ${route.path} without console errors`, async ({ page }) => {
       const consoleErrors = [];
       page.on('console', (msg) => {
         if (msg.type() === 'error') {
@@ -31,7 +31,7 @@ test.describe('Routes rendering without console errors', () => {
       // Verify page content rendered
       await expect(page.locator('body')).toBeVisible();
 
-      // Take screenshot for artifacts
+      // Capture screenshot for visual verification artifacts
       const width = page.viewportSize()?.width || 1440;
       const height = page.viewportSize()?.height || 900;
       const screenshotsDir = path.join(process.cwd(), 'screenshots');
@@ -46,50 +46,97 @@ test.describe('Routes rendering without console errors', () => {
   }
 });
 
-test.describe('Atlus Menu interactions', () => {
-  test('opens the "…" menu and closes it with Esc key', async ({ page }) => {
+test.describe('Atlus Pause Menu Interactions', () => {
+  test('with the overlay open the stage nav is not visible and occluded', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(1000);
 
-    // Find the "…" menu trigger button
-    const menuButton = page.locator('button.menu-dots, button[aria-label*="Menu" i], button[aria-label*="Menü" i]').first();
+    const stageMenu = page.locator('.stage-menu');
+    await expect(stageMenu).toBeAttached();
+
+    // Trigger global pause menu overlay
+    const menuButton = page.locator('.menu-dots').first();
     await expect(menuButton).toBeVisible();
-
-    // Click to open menu
     await menuButton.click();
-    await page.waitForTimeout(500);
 
-    // Verify menu overlay is open
-    const menuOverlay = page.locator('.gm-panel, .gm-list, [aria-label*="Menu" i]').first();
-    await expect(menuOverlay).toBeVisible();
+    // Verify modal overlay is open
+    const overlay = page.locator('.gm');
+    await expect(overlay).toBeVisible();
 
-    // Press Escape key to close the menu
-    await page.keyboard.press('Escape');
-    await page.waitForTimeout(500);
+    // Allow diagonal wipe animation (300ms) to settle
+    await page.waitForTimeout(400);
 
-    // Verify menu is closed
-    await expect(page.locator('.gm-panel')).toHaveCount(0);
+    // Verify that the overlay occludes the underlying stage menu:
+    // elementFromPoint at the stage menu position returns the overlay or a child of it
+    const isOccluded = await page.evaluate(() => {
+      const menu = document.querySelector('.stage-menu');
+      if (!menu) return true;
+      const rect = menu.getBoundingClientRect();
+      const topEl = document.elementFromPoint(rect.left + 50, rect.top + 50);
+      return topEl === document.querySelector('.gm') || topEl?.closest('.gm') !== null;
+    });
+    expect(isOccluded).toBe(true);
+
+    // Direct clicks on stage menu links must be intercepted by the overlay
+    const clickBlocked = await stageMenu.locator('a').first().click({ timeout: 500 }).then(() => false).catch((err) => {
+      return err.message.includes('intercepts pointer events') || err.message.includes('hidden');
+    });
+    expect(clickBlocked).toBe(true);
   });
-});
 
-test.describe('Contact navigation to Bonfire', () => {
+  test('ESC closes overlay and restores the scroll position', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(1000);
+
+    // Scroll to a defined offset down the page
+    const targetScrollY = 1200;
+    await page.evaluate((y) => window.scrollTo(0, y), targetScrollY);
+    await page.waitForTimeout(400);
+    const initialScrollY = await page.evaluate(() => window.scrollY);
+
+    // Open pause menu
+    const menuButton = page.locator('.menu-dots').first();
+    await menuButton.click();
+    const overlay = page.locator('.gm');
+    await expect(overlay).toBeVisible();
+
+    // Press Escape key to close the overlay
+    await page.keyboard.press('Escape');
+    await expect(overlay).toHaveCount(0);
+    await page.waitForTimeout(300);
+
+    // Verify scroll position was preserved/restored
+    const finalScrollY = await page.evaluate(() => window.scrollY);
+    expect(Math.abs(finalScrollY - initialScrollY)).toBeLessThanOrEqual(5);
+  });
+
   test('clicking CONTACT lands on the bonfire section', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(1000);
 
-    // Open menu
-    const menuButton = page.locator('button.menu-dots, button[aria-label*="Menu" i], button[aria-label*="Menü" i]').first();
+    // Open global menu
+    const menuButton = page.locator('.menu-dots').first();
     await menuButton.click();
-    await page.waitForTimeout(500);
+    await expect(page.locator('.gm')).toBeVisible();
+    await page.waitForTimeout(300);
 
-    // Find and click CONTACT
-    const contactItem = page.locator('.gm-list a, .gm-list button').filter({ hasText: /contact|kontakt/i }).first();
+    // Click CONTACT slab
+    const contactItem = page.locator('.gm-list a').filter({ hasText: /contact|kontakt/i }).first();
+    await expect(contactItem).toBeVisible();
     await contactItem.click();
-    await page.waitForTimeout(1500);
 
-    // Verify that we land on #bonfire or the bonfire section is reached
+    // Wait for camera flight and scroll landing
+    await page.waitForTimeout(1800);
+
+    // Verify bonfire section is in view
     const bonfireSection = page.locator('#bonfire');
     await expect(bonfireSection).toBeAttached();
+
+    const inViewport = await bonfireSection.evaluate((el) => {
+      const rect = el.getBoundingClientRect();
+      return rect.top < window.innerHeight && rect.bottom > 0;
+    });
+    expect(inViewport).toBe(true);
 
     // Capture screenshot of bonfire landing
     const width = page.viewportSize()?.width || 1440;
@@ -98,5 +145,87 @@ test.describe('Contact navigation to Bonfire', () => {
     await page.screenshot({
       path: path.join(screenshotsDir, `bonfire-landing-${width}x${height}.png`),
     });
+  });
+});
+
+test.describe('Horizontal Record Ride', () => {
+  test('the horizontal record ride reaches the last entry on desktop', async ({ page, viewport }) => {
+    // Pinned horizontal ride is only enabled on viewports >= 768px without reduced motion
+    if ((viewport?.width || 0) < 768) {
+      test.skip();
+    }
+
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(1000);
+
+    const recordSection = page.locator('#record');
+    await expect(recordSection).toBeAttached();
+
+    // Scroll into record section
+    await recordSection.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(600);
+
+    // Confirm that the pinned ride class was applied
+    await expect(recordSection).toHaveClass(/record-ride/);
+
+    const recordItems = recordSection.locator('.record-item');
+    const totalCount = await recordItems.count();
+    expect(totalCount).toBeGreaterThan(0);
+
+    const sectionBox = await recordSection.boundingBox();
+    const startY = await page.evaluate(() => window.scrollY);
+    const scrollStep = 300;
+    const maxScroll = (sectionBox?.height || 3000);
+
+    let lastEntryReached = false;
+
+    for (let offset = 0; offset <= maxScroll; offset += scrollStep) {
+      await page.evaluate((y) => window.scrollTo(0, y), startY + offset);
+      await page.waitForTimeout(60);
+
+      const isLastActive = await recordItems.last().locator('button').evaluate((el) => el.classList.contains('is-active'));
+      if (isLastActive) {
+        lastEntryReached = true;
+        break;
+      }
+    }
+
+    expect(lastEntryReached).toBe(true);
+  });
+});
+
+test.describe('Prefers Reduced Motion', () => {
+  test.use({ reducedMotion: 'reduce' });
+
+  test('prefers-reduced-motion run passes cleanly with disabled WebGL and vertical list fallback', async ({ page }) => {
+    const consoleErrors = [];
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') {
+        consoleErrors.push(msg.text());
+      }
+    });
+
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(1000);
+
+    // Zero console errors
+    expect(consoleErrors).toEqual([]);
+
+    // WebGL canvas disabled when reduced motion is preferred
+    const stage = page.locator('.stage');
+    await expect(stage).toHaveAttribute('data-webgl', 'off');
+
+    // Horizontal ride disabled: #record remains accessible vertical list
+    const recordSection = page.locator('#record');
+    await expect(recordSection).not.toHaveClass(/record-ride/);
+
+    // Global menu opens and closes cleanly without wipe animation delays
+    const menuButton = page.locator('.menu-dots').first();
+    await menuButton.click();
+    const overlay = page.locator('.gm');
+    await expect(overlay).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await expect(overlay).toHaveCount(0);
   });
 });
