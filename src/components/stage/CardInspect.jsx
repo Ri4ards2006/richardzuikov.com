@@ -10,7 +10,8 @@ const FLIP_MS = 380;
 const RETURN_MS = 300;
 const OVERSHOOT = 'cubic-bezier(0.2, 1.3, 0.35, 1)';
 
-// card: { numeral, title, image or icon, imageLift, lines, details, tags, link: { href, label } or null }
+// card: { numeral, title, image or icon, imageLift, lines, details, tags, link: { href, label } or null,
+//         badge: { src, href, alt } or null (official badge on the back, unmodified) }
 export default function CardInspect({ card, sourceEl, onClosed }) {
   const { t } = useLanguage();
   const reducedMotion = useReducedMotion();
@@ -112,7 +113,13 @@ export default function CardInspect({ card, sourceEl, onClosed }) {
           <div className="inspect-face inspect-back">
             <CardFrame className="no-divider" />
             <span aria-hidden="true" className="deck-roman">{card.numeral}</span>
-            <div className="inspect-photo">{photo}</div>
+            <div className="inspect-photo">
+              {card.badge ? (
+                card.badge.href
+                  ? <a href={card.badge.href} target="_blank" rel="noreferrer" className="inspect-badge"><img src={card.badge.src} alt={card.badge.alt} /></a>
+                  : <span className="inspect-badge"><img src={card.badge.src} alt={card.badge.alt} /></span>
+              ) : photo}
+            </div>
             <h3 className="font-anton uppercase text-3xl tracking-wide mt-2">{card.title}</h3>
             <div className="inspect-copy" tabIndex={-1}>
               {showDetails ? (

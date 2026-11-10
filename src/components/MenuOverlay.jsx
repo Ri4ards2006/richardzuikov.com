@@ -8,6 +8,7 @@ import { useReducedMotion } from '../hooks/use-reduced-motion';
 import { getActiveMenuId, landOnSection, menuItems, scrollTargets } from '../lib/atlus';
 import { QUICK_PATH } from '../lib/sections';
 import { socialLinks } from './home/SocialLinks';
+import { portraits } from '../data/portraits';
 
 const LETTERS = ['M', 'E', 'N', 'U'];
 
@@ -31,6 +32,9 @@ function Panel({ closing, onClose, onExited }) {
     // Only the overlay may show: the stage menu, name and portrait hide at once (no second menu
     // peeking through the wipe) and come back when the overlay has fully closed.
     document.documentElement.classList.add('gm-open');
+    // The stage slabs stay in the DOM but are hidden and unreachable (no second menu, no focus bleed).
+    const stageMenus = [...document.querySelectorAll('.stage-menu')];
+    stageMenus.forEach((node) => { node.inert = true; });
     const onKeyDown = (event) => {
       if (event.key === 'Escape') {
         // Deep pages also use Escape to go back; while the menu is open it only closes the menu.
@@ -54,6 +58,7 @@ function Panel({ closing, onClose, onExited }) {
     return () => {
       document.body.style.overflow = previousOverflow;
       document.documentElement.classList.remove('gm-open');
+      stageMenus.forEach((node) => { node.inert = false; });
       window.removeEventListener('keydown', onKeyDown, true);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -106,6 +111,13 @@ function Panel({ closing, onClose, onExited }) {
       </div>
       <p aria-hidden="true" key={activeItem.id} className="gm-echo">{activeItem.number} {t.landing.nav[activeItem.id]}</p>
 
+      {/* Name and portrait as on the stage; the stage itself is hidden while the menu is open. */}
+      <div aria-hidden="true" className="gm-hero">
+        <p className="gm-name"><span>Richard</span> <span>Zuikov</span></p>
+        <p className="gm-role">{t.career.role}</p>
+        <img src={portraits.stage.large} alt="" className="gm-portrait" />
+      </div>
+
       <button type="button" onClick={onClose} aria-label={t.nav.closeMenu} className="gm-close">
         <X aria-hidden="true" size={20} />
       </button>
@@ -134,7 +146,6 @@ function Panel({ closing, onClose, onExited }) {
             })}
           </ul>
         </nav>
-        <Link to={QUICK_PATH} onClick={onClose} className="gm-chip gm-quick">{t.landing.menuPlaceholder.quickRead} →</Link>
       </div>
 
       <div className="gm-corner is-left">
@@ -144,6 +155,7 @@ function Panel({ closing, onClose, onExited }) {
         <button type="button" onClick={toggleTheme} aria-label={t.nav.switchTheme} className="gm-chip">
           <span aria-hidden="true">{theme === 'dark' ? '☾' : '☼'}</span> {t.nav.theme}
         </button>
+        <Link to={QUICK_PATH} onClick={onClose} className="gm-chip gm-quick">{t.landing.menuPlaceholder.quickRead} →</Link>
       </div>
 
       <div className="gm-corner is-right">

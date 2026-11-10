@@ -6,8 +6,13 @@ import { useReducedMotion } from '../../hooks/use-reduced-motion';
 import CareerDetail from './CareerDetail';
 
 const HEADER_PX = 64;
-// Camera turn (DESIGN.md §15): scroll spent on each 90° yaw, as a share of the viewport height.
+// Camera turn in (DESIGN.md §15): scroll spent on the 90° yaw, as a share of the viewport height.
 const YAW_SHARE = 0.55;
+// Hand-over (v6): after the last role the camera rolls 90°, spread over this share of the pin's
+// own scroll-out, so the next section rises in as the timeline turns upward. Reversible on scroll-up.
+const ROLL_SHARE = 0.8;
+// Speedlines move this much faster than the bars.
+const LINE_SPEED = 1.6;
 const RIDE_QUERY = '(min-width: 768px)';
 
 const clamp01 = (value) => Math.min(1, Math.max(0, value));
@@ -24,6 +29,25 @@ function useRideEnabled(requested) {
     return () => media.removeEventListener('change', onChange);
   }, []);
   return requested && wide && !reducedMotion;
+}
+
+// Persona speedlines for the ride: tapered wedges, irregular spacing and thickness, ~-8°.
+// One period of lines, drawn twice side by side so the strip wraps seamlessly.
+const SPEEDLINES = Array.from({ length: 15 }, (_, i) => {
+  const r = (n) => ((Math.sin((i + 1) * 12.9898 + n * 78.233) * 43758.5453) % 1 + 1) % 1;
+  return { top: 6 + r(1) * 88, left: r(2) * 70, width: 12 + r(3) * 34, thick: 1 + Math.round(r(4) * 5), alpha: 0.08 + r(5) * 0.17 };
+});
+
+export function SpeedLines() {
+  const half = (key) => (
+    <span key={key} className="ride-lines-half">
+      {SPEEDLINES.map((line, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <span key={index} style={{ top: `${line.top}%`, left: `${line.left}%`, width: `${line.width}%`, height: `${line.thick}px`, opacity: line.alpha }} />
+      ))}
+    </span>
+  );
+  return <div aria-hidden="true" className="ride-lines"><div className="ride-lines-strip">{[half('a'), half('b')]}</div></div>;
 }
 
 // Periods such as "Dec 2024 – Aug 2025" flip to their first four-digit year.
@@ -43,7 +67,7 @@ function FlipDigit({ value }) {
 }
 
 // ride: on the home page the section pins and vertical scroll drives a horizontal ride along the timeline.
-// onRide({ yaw, out, shift }) reports the camera state: yaw −1…1 (in / out turn), shift in px.
+// onRide({ yaw, out, roll, shift }) reports the camera state: yaw 1…0 (turn in), roll 0…1 (hand-over), shift in px.
 export default function RecordBoard({ onEnter, ride: rideRequested = false, onRide, onActive }) {
   const ride = useRideEnabled(rideRequested);
   const onRideRef = useRef(onRide);
@@ -110,28 +134,32 @@ export default function RecordBoard({ onEnter, ride: rideRequested = false, onRi
       const pin = section.querySelector('.record-pin');
       const yawLen = window.innerHeight * YAW_SHARE;
       const track = bars[bars.length - 1].offsetLeft - bars[0].offsetLeft;
-      section.style.height = `${pin.offsetHeight + yawLen * 2 + track}px`;
+      // No extra pinned scroll after the last role: the roll happens while the pin scrolls out.
+      section.style.height = `${pin.offsetHeight + yawLen + track}px`;
       section.dataset.landOffset = String(Math.round(yawLen));
-      geometry = { yawLen, track, step: bars.length > 1 ? track / (bars.length - 1) : 1 };
+      geometry = { yawLen, track, step: bars.length > 1 ? track / (bars.length - 1) : 1, rollLen: pin.offsetHeight * ROLL_SHARE, period: section.querySelector('.ride-lines')?.offsetWidth || window.innerWidth };
     };
     const update = () => {
       frame = 0;
       if (!geometry) return;
-      const { yawLen, track, step } = geometry;
+      const { yawLen, track, step, rollLen, period } = geometry;
       const travelled = HEADER_PX - section.getBoundingClientRect().top;
       const inT = clamp01(travelled / yawLen);
-      const outT = clamp01((travelled - yawLen - track) / yawLen);
+      const outT = clamp01((travelled - yawLen - track) / rollLen);
       const shift = clamp01((travelled - yawLen) / Math.max(1, track)) * track;
-      const yaw = outT > 0 ? -ease(outT) : 1 - ease(inT);
+      const yaw = 1 - ease(inT);
+      const roll = ease(outT);
       section.style.setProperty('--yaw', `${(yaw * 90).toFixed(2)}deg`);
+      section.style.setProperty('--roll', `${(roll * 90).toFixed(2)}deg`);
       section.style.setProperty('--shift', `${shift.toFixed(1)}px`);
-      section.style.setProperty('--ride-speed', String(inT > 0 && inT < 1 ? 0 : 1));
+      // Lines stream with the ride (and the roll), and rest when it rests.
+      section.style.setProperty('--lines-x', `${(-((shift * LINE_SPEED + outT * period * 0.5) % period)).toFixed(1)}px`);
       const next = Math.round(shift / step);
       if (next !== lastActive) {
         lastActive = next;
         setActive(next);
       }
-      onRideRef.current?.({ yaw, out: outT, shift, inside: travelled > -window.innerHeight && outT < 1 });
+      onRideRef.current?.({ yaw, out: outT, roll, shift, inside: travelled > -window.innerHeight && outT < 1 });
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -152,8 +180,10 @@ export default function RecordBoard({ onEnter, ride: rideRequested = false, onRi
       section.style.height = '';
       section.style.removeProperty('--yaw');
       section.style.removeProperty('--shift');
+      section.style.removeProperty('--roll');
+      section.style.removeProperty('--lines-x');
       delete section.dataset.landOffset;
-      onRideRef.current?.({ yaw: 0, out: 0, shift: 0, inside: false });
+      onRideRef.current?.({ yaw: 0, out: 0, roll: 0, shift: 0, inside: false });
     };
   }, [ride, timeline.length]);
 

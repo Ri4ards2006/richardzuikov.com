@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import { PROP_IDS } from './prop-ids';
 
 const PAPER = 0xf4f4f0;
 // Below this width there is no gutter beside the panels, so the props are hidden.
@@ -146,18 +147,38 @@ export function domeCamera() {
   };
 }
 
-// Each prop belongs to one descent panel, by panel index.
+// Each prop belongs to one descent panel, by panel index. `id` is the data-prop of its DOM proxy.
 const PROPS = [
   { panel: 0, build: chip, tilt: 0.62 },
   { panel: 1, build: pcb, tilt: 0.7 },
   { panel: 2, build: monitor, tilt: 0.12 },
   { panel: 3, build: rackUnit, tilt: 0.42 },
   { panel: 4, build: domeCamera, tilt: -0.38 },
-];
+].map((prop) => ({ ...prop, id: PROP_IDS[prop.panel] }));
+
+// Same clamp as the panels' --depth (scene.js), so a prop moves exactly with its panel.
+export const DEPTH_LIMIT = 1.6;
+const clampDepth = (depth) => Math.max(-DEPTH_LIMIT, Math.min(DEPTH_LIMIT, depth));
+// Idle drift in px: a pure function of time.
+const IDLE_X = 3;
+const IDLE_Y = 6;
+// Kick: critically damped spring (target 0) driven by the clamped scroll velocity; back within ~600 ms.
+const KICK_OMEGA = 10;
+const KICK_GAIN = 0.6;
+const KICK_VELOCITY_LIMIT = 4000;
+// Depths of the prop's panel swept by the collision check (every scroll position where it can be on screen).
+const SWEEP = Array.from({ length: 33 }, (_, i) => -DEPTH_LIMIT + (i * DEPTH_LIMIT) / 16);
+
+const PARALLAX_CANDIDATES = [0, 40, -60, 90, -130, 150];
+
+const overlaps = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+// Overlap that is actually on screen; top/bottom of both boxes are viewport px here.
+const overlapsOnScreen = (a, b, viewportHeight) => overlaps(a, b) && Math.max(a.top, b.top) < viewportHeight && Math.min(a.bottom, b.bottom) > 0;
 
 export function createDescentProps() {
   const group = new THREE.Group();
-  const items = PROPS.map(({ panel, build, tilt }, index) => {
+  const projected = new THREE.Vector3();
+  const items = PROPS.map(({ id, panel, build, tilt }, index) => {
     const { geometry, outline, extras = [], tick, aim, spin = true, scale = 1 } = build();
     const root = new THREE.Group();
     root.add(new THREE.Mesh(geometry, material));
@@ -165,21 +186,32 @@ export function createDescentProps() {
     extras.forEach((extra) => root.add(extra));
     outline.dispose();
     root.rotation.x = tilt;
+    root.visible = false;
     group.add(root);
-    return { root, panel, phase: index * 2.1, tick, aim, spin, scale };
+    return { id, root, panel, phase: index * 2.1, tick, aim, spin, scale, anchor: null, parallax: 0, radius: 0, kick: 0, kickV: 0, proxy: null, shown: null };
   });
+  const view = { w: 1, h: 1, k: 0.01 };
+
+  // Page px -> world units for a camera that sits at scroll (camera y = -scroll * k).
+  const worldX = (x) => (x - view.w / 2) * view.k;
+  const worldY = (y) => -(y - view.h / 2) * view.k;
 
   return {
     group,
-    // rects: viewport-size page rects of the panels. toWorld maps a page point to world units.
-    // rects: page rects of the panels; obstacles: page rects of every text block and heading.
-    // A prop only shows in the free gutter beside its panel and never over text (DESIGN.md §16).
-    layout(rects, viewportWidth, toWorld, k, obstacles = []) {
+    // panels: layout rects (page px, transforms ignored) with their CSS parallax in px.
+    // obstacles: the same for every text block and heading. proxies: DOM nodes with data-prop.
+    // Anchors come only from layout, never from where a prop currently is (DESIGN.md §17).
+    layout({ panels, obstacles = [], viewportWidth, viewportHeight, k, proxies = [] }) {
+      view.w = viewportWidth;
+      view.h = viewportHeight;
+      view.k = k;
       const narrow = viewportWidth < GUTTER_SCREEN;
       items.forEach((item) => {
-        const rect = rects[item.panel];
-        item.root.visible = false;
-        if (!rect || narrow) return;
+        item.proxy = proxies.find((node) => node.dataset.prop === item.id) ?? null;
+        item.anchor = null;
+        const panel = panels[item.panel];
+        if (!panel || narrow) return;
+        const { rect } = panel;
         const radius = (PROP_RADIUS * SIZE * item.scale) / k;
         const onRight = rect.left + rect.width / 2 > viewportWidth / 2;
         const gutterStart = onRight ? 0 : rect.left + rect.width;
@@ -187,26 +219,106 @@ export function createDescentProps() {
         if (gutterEnd - gutterStart < radius * 2 + GUTTER_MARGIN * 2) return;
         const x = (gutterStart + gutterEnd) / 2;
         const y = rect.top + rect.height / 2;
-        const box = { left: x - radius - GUTTER_MARGIN, right: x + radius + GUTTER_MARGIN, top: y - radius - GUTTER_MARGIN, bottom: y + radius + GUTTER_MARGIN };
-        const hit = obstacles.some((o) => o.left < box.right && o.left + o.width > box.left && o.top < box.bottom && o.top + o.height > box.top);
-        if (hit) return;
-        const world = toWorld(x, y);
-        item.root.position.set(world.x, world.y, -0.4);
+        // Collision on the final positions: sweep the panel depths at which the prop is on screen and
+        // shift every obstacle by its parallax relative to the prop's.
+        const reach = radius + GUTTER_MARGIN;
+        // The prop's own parallax: its panel's if that stays clear of the neighbouring column (near and far
+        // panels drift ~280 px apart), else the first clear constant. Still a pure function of scroll.
+        const collides = (parallax) => SWEEP.some((depth) => {
+          // Scroll position at which the prop's panel has this depth; everything below is in viewport px.
+          const scroll = y - viewportHeight / 2 - depth * viewportHeight;
+          const own = depth * parallax;
+          const box = { left: x - reach, right: x + reach, top: y + own - reach - scroll, bottom: y + own + reach - scroll };
+          return obstacles.some((o) => {
+            const dy = clampDepth(depth + (o.rect.top + o.rect.height / 2 - y) / viewportHeight) * o.parallax;
+            const top = o.rect.top + dy - scroll;
+            return overlapsOnScreen(box, { left: o.rect.left, right: o.rect.left + o.rect.width, top, bottom: top + o.rect.height }, viewportHeight);
+          });
+        });
+        const parallax = [panel.parallax, ...PARALLAX_CANDIDATES].find((candidate) => !collides(candidate));
+        if (parallax === undefined) return;
+        item.anchor = { x, y };
+        item.parallax = parallax;
+        item.radius = radius;
         item.root.scale.setScalar(SIZE * item.scale);
-        item.root.visible = true;
       });
     },
-    // aimAt: world point the dome camera's lens looks at (the cursor), or null.
-    update(time, camY, aimAt) {
+    // pos = anchor(layout) + parallax(scroll) + idle(time) + kick. Nothing is read back from the meshes.
+    update({ time, dt, scroll, velocity, camera, camY, aimAt }) {
+      const force = Math.max(-KICK_VELOCITY_LIMIT, Math.min(KICK_VELOCITY_LIMIT, velocity)) * KICK_GAIN;
+      // Semi-implicit Euler in small steps, so long frames stay stable.
+      const steps = Math.max(1, Math.ceil(dt / 0.016));
+      const h = dt / steps;
+      camera?.updateMatrixWorld();
       items.forEach((item) => {
+        for (let i = 0; i < steps; i += 1) {
+          item.kickV += (force - KICK_OMEGA * KICK_OMEGA * item.kick - 2 * KICK_OMEGA * item.kickV) * h;
+          item.kick += item.kickV * h;
+        }
+        if (!item.anchor) {
+          item.root.visible = false;
+          this.sync(item, null);
+          return;
+        }
+        const rest = item.anchor.y + clampDepth((item.anchor.y - scroll - view.h / 2) / view.h) * item.parallax;
+        const x = item.anchor.x + Math.cos(time * 0.7 + item.phase) * IDLE_X;
+        const y = rest + Math.sin(time * 0.9 + item.phase) * IDLE_Y + item.kick;
+        item.root.position.set(worldX(x), worldY(y), -0.4);
         const near = Math.abs(item.root.position.y - camY) < CULL_DISTANCE;
-        item.root.children.forEach((child) => { child.visible = near; });
-        if (!near) return;
+        item.root.visible = near;
+        if (!near) {
+          this.sync(item, null);
+          return;
+        }
         if (item.spin) item.root.rotation.y = item.phase + time * SPIN;
         else item.root.rotation.y = Math.sin(time * 0.3) * 0.2;
         item.tick?.(time);
         if (item.aim) item.aim(aimAt ?? fallbackAim.set(item.root.position.x + Math.sin(time * 0.5) * 2, item.root.position.y - 1, 4));
+        this.sync(item, camera, worldX(item.anchor.x), worldY(rest));
       });
+    },
+    // Test hook only (scene.js, ?e2e=1 or dev): each mesh's world position projected with the camera
+    // that just rendered it, in viewport px. Independent of the DOM proxies.
+    screenPositions(camera) {
+      const world = new THREE.Vector3();
+      return items.map((item) => {
+        item.root.getWorldPosition(world).project(camera);
+        return {
+          id: item.id,
+          visible: item.root.visible,
+          x: Number(((world.x + 1) / 2 * view.w).toFixed(1)),
+          y: Number(((1 - world.y) / 2 * view.h).toFixed(1)),
+        };
+      });
+    },
+    // Mirrors a prop onto its DOM proxy in viewport px: transform = where it is drawn now,
+    // data-rest = its rest position (anchor + parallax), data-kick = the spring offset.
+    sync(item, camera, restX, restY) {
+      const node = item.proxy;
+      if (!node) return;
+      if (!camera) {
+        if (item.shown !== false) {
+          node.dataset.visible = 'false';
+          item.shown = false;
+        }
+        return;
+      }
+      const toScreen = (x, y) => {
+        projected.set(x, y, -0.4).project(camera);
+        return [(projected.x + 1) / 2 * view.w, (1 - projected.y) / 2 * view.h];
+      };
+      const [sx, sy] = toScreen(item.root.position.x, item.root.position.y);
+      const [rx, ry] = toScreen(restX, restY);
+      const size = item.radius * 2;
+      if (item.shown !== true) {
+        node.dataset.visible = 'true';
+        item.shown = true;
+      }
+      node.style.width = `${size}px`;
+      node.style.height = `${size}px`;
+      node.style.transform = `translate(${(sx - size / 2).toFixed(1)}px, ${(sy - size / 2).toFixed(1)}px)`;
+      node.dataset.rest = `${rx.toFixed(1)},${ry.toFixed(1)}`;
+      node.dataset.kick = item.kick.toFixed(2);
     },
   };
 }

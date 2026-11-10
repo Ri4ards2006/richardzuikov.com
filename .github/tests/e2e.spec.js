@@ -77,6 +77,11 @@ test.describe('Atlus Pause Menu Interactions', () => {
     });
     expect(isOccluded).toBe(true);
 
+    // v6: the stage slabs are hidden and inert, and the overlay shows exactly one list and one Quick Read.
+    await expect(stageMenu).toHaveJSProperty('inert', true);
+    await expect(page.locator('.gm-list li')).toHaveCount(5);
+    await expect(page.locator('.gm-quick')).toHaveCount(1);
+
     // Direct clicks on stage menu links must be intercepted by the overlay
     // v5+: the stage nav is visibility:hidden while the overlay is open, so Playwright reports "not visible".
     const clickBlocked = await stageMenu.locator('a').first().click({ timeout: 500 }).then(() => false).catch((err) => {
@@ -228,5 +233,54 @@ test.describe('Prefers Reduced Motion', () => {
 
     await page.keyboard.press('Escape');
     await expect(overlay).toHaveCount(0);
+  });
+});
+
+test.describe('Prop screen positions (test hook)', () => {
+  test('window.__propScreenPos reports projected mesh positions only with ?e2e=1', async ({ page, viewport }) => {
+    // Descent props are hidden below 1024 px.
+    if ((viewport?.width || 0) < 1024) {
+      test.skip();
+    }
+
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(1000);
+    expect(await page.evaluate(() => typeof window.__propScreenPos)).toBe('undefined');
+
+    await page.goto('/?e2e=1', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('.stage')).toHaveAttribute('data-webgl', 'on');
+    await page.waitForFunction(() => typeof window.__propScreenPos === 'function');
+    await page.evaluate(() => {
+      const panel = document.querySelectorAll('.stage-descent .manga-panel')[1];
+      window.scrollTo(0, panel.getBoundingClientRect().top + window.scrollY - 100);
+    });
+    await page.waitForTimeout(800);
+
+    const first = await page.evaluate(() => window.__propScreenPos());
+    expect(first.props.map((p) => p.id).sort()).toEqual(['chip', 'dome', 'monitor', 'pcb', 'rack']);
+    const shown = first.props.filter((p) => p.visible);
+    expect(shown.length).toBeGreaterThan(0);
+    for (const p of shown) {
+      expect(Number.isFinite(p.x) && Number.isFinite(p.y)).toBe(true);
+    }
+
+    // The DOM proxies are written from the same mesh position in the same frame.
+    const pairs = await page.evaluate(() => {
+      const { props } = window.__propScreenPos();
+      return props.filter((p) => p.visible).map((p) => {
+        const node = document.querySelector(`[data-prop="${p.id}"]`);
+        const m = /translate\(([-\d.]+)px, ([-\d.]+)px\)/.exec(node.style.transform);
+        const half = node.offsetWidth / 2;
+        return { hx: p.x, hy: p.y, px: Number(m[1]) + half, py: Number(m[2]) + half };
+      });
+    });
+    for (const p of pairs) {
+      expect(Math.abs(p.hx - p.px)).toBeLessThan(1.5);
+      expect(Math.abs(p.hy - p.py)).toBeLessThan(1.5);
+    }
+
+    await page.waitForTimeout(200);
+    const second = await page.evaluate(() => window.__propScreenPos());
+    expect(second.frame).toBeGreaterThan(first.frame);
   });
 });

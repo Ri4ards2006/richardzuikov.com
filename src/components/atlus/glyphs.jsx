@@ -17,10 +17,11 @@ import networkTopology from '../../assets/svg/icons/network-topology.svg?raw';
 import orchestrationWheel from '../../assets/svg/icons/orchestration-wheel.svg?raw';
 import scriptScroll from '../../assets/svg/icons/script-scroll.svg?raw';
 import terminalPrompt from '../../assets/svg/icons/terminal-prompt.svg?raw';
+import vikingHelmet from '../../assets/svg/icons/viking-helmet.svg?raw';
 
 const INK = [ink1, ink2, ink3, ink4, ink5];
 
-export const ICONS = { certificate, circuitBoard, cloudServer, microchip, networkTopology, orchestrationWheel, scriptScroll, terminalPrompt };
+export const ICONS = { certificate, circuitBoard, cloudServer, microchip, networkTopology, orchestrationWheel, scriptScroll, terminalPrompt, vikingHelmet };
 
 // Card frame stretched to its box; strokes keep their width (CSS: vector-effect).
 export const CARD_FRAME_SVG = cardFrame.replace('<svg ', '<svg preserveAspectRatio="none" ');

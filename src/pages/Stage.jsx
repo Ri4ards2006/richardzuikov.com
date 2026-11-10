@@ -6,6 +6,7 @@ import { useReducedMotion } from '../hooks/use-reduced-motion';
 import { ROMAN, getActiveMenuId, landOnSection, menuItems, scrollTargets, setActiveMenuId } from '../lib/atlus';
 import { QUICK_PATH } from '../lib/sections';
 import { portraits } from '../data/portraits';
+import { PROP_IDS } from '../components/stage/prop-ids';
 import { featuredProjects } from '../data/featured-projects';
 import IntroOverlay from '../components/stage/IntroOverlay';
 import AboutSection from '../components/stage/AboutSection';
@@ -14,7 +15,7 @@ import ProjectDeck from '../components/stage/ProjectDeck';
 import NowSection from '../components/stage/NowSection';
 import CardInspect from '../components/stage/CardInspect';
 import SkillBoard from '../components/atlus/SkillBoard';
-import RecordBoard from '../components/atlus/RecordBoard';
+import RecordBoard, { SpeedLines } from '../components/atlus/RecordBoard';
 import ContactList from '../three/bonfire/ContactList';
 import { grainTexture } from '../lib/noise-textures';
 import { ImpactInk, InkSplat, TraceStar } from '../components/atlus/glyphs';
@@ -99,6 +100,7 @@ export default function Stage() {
           skillProp: stageRef.current?.querySelector('.skill-prop'),
           // Text the descent props must keep clear of.
           obstacles: [...(stageRef.current?.querySelectorAll('.manga-panel, .stage-descent h2, .stage-descent > p, .stage-now h2, .now-panel') ?? [])],
+          propProxies: [...(stageRef.current?.querySelectorAll('[data-prop]') ?? [])],
         }),
       });
       sceneRef.current = stage;
@@ -373,6 +375,13 @@ export default function Stage() {
         </div>
       </section>
 
+      {/* DOM proxies of the WebGL props (position, rest position, kick) for tests and debugging. */}
+      {webgl && (
+        <div aria-hidden="true" className="prop-proxies">
+          {PROP_IDS.map((id) => <span key={id} data-prop={id} data-visible="false" className="prop-proxy" />)}
+        </div>
+      )}
+
       <NowSection />
 
       <section id="arcana" aria-labelledby="works-title" className="stage-works scroll-mt-16">
@@ -386,13 +395,13 @@ export default function Stage() {
                 type="button"
                 onClick={(event) => inspectFeatured(project, index, event.currentTarget)}
                 aria-label={`${project.title}: ${t.atlus.flip}`}
-                className="tarot-slot"
+                className="tarot-slot group"
                 onMouseEnter={() => sceneRef.current?.setHover(index)}
                 onMouseLeave={() => sceneRef.current?.setHover(-1)}
                 onFocus={() => sceneRef.current?.setHover(index)}
                 onBlur={() => sceneRef.current?.setHover(-1)}
               >
-                {webgl ? <span className="sr-only">{project.title}</span> : <img src={project.image} alt={project.title} loading="lazy" className="h-full w-full object-cover grayscale" />}
+                {webgl ? <span className="sr-only">{project.title}</span> : <img src={project.image} alt={project.title} loading="lazy" className="h-full w-full object-cover grayscale transition-[filter] duration-[250ms] ease-out group-hover:grayscale-0 group-focus-visible:grayscale-0 motion-reduce:transition-none" />}
               </button>
               <p className="mt-9 text-center font-mono text-xs leading-relaxed text-ash-300">{project[language].summary}</p>
             </li>
@@ -412,6 +421,7 @@ export default function Stage() {
 
       <section id="record" aria-labelledby="record-title" className="stage-works scroll-mt-16">
         <div className="record-pin">
+          <SpeedLines />
           <div className="record-yaw">
             <ImpactInk variant={2} />
             <p className="font-mono text-xs tracking-widest text-ash-300">04 / {t.atlus.hud.career}</p>

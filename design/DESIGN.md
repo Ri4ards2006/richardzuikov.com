@@ -47,7 +47,10 @@ sections, deeper and darker, until it reaches the only warm light on the whole s
 ```
 
 Rules
-- **No hue anywhere except inside the bonfire zone.** Remove `#FFB000` and every amber / pink / rose / red token from the codebase.
+- **Rest state is monochrome. Color appears only (a) in the bonfire and (b) as the real color of real photos while the user interacts with them. UI chrome, text, frames and backgrounds never get color.** (v6)
+  - Works / arcana cards: photo grayscale at rest → original colour on hover / focus, 250 ms ease-out; nothing else changes (no glow, frame stays monochrome). Touch: the centred deck card and the card in the inspect view are in colour. Reduced motion: instant.
+  - Earned certificate badges on the KEY ITEMS back are shown unmodified, in their own colours (§7).
+- No hue in UI tokens: remove `#FFB000` and every amber / pink / rose / red token from the codebase.
 - Accent = **inversion** (paper slab + ink text), halftone, ink splatter, white speedlines.
 - No soft UI gradients. Tonal changes are screentone/halftone or hard edges. Soft light only for fog, water light and the fire.
 
@@ -162,7 +165,7 @@ Home `/` = one page: one fixed WebGL canvas behind, HTML sections on top.
 - **heading:** panel with ransom-note headline "WHERE I'M HEADING", short text.
 - **arcana:** game-card style with roman numerals, no occult symbols, no slogan headlines. Entering the section deals the 3 cards onto a table (fly in, slam, small bounce, dust puff). Scroll progress rotates the fan. Hover = 3D tilt + silver sheen sweep. Click opens the inspect view (see §14). Front: high-contrast grayscale image with very fine screentone, object recognisable, roman numeral centred at the top, title. Frame drawn as SVG, no image. Below: a browsable deck of all projects (data from Lab) as smaller cards in a fan/carousel (drag, wheel, arrow keys); a click on the selected card opens the same inspect view. Rack Configurator is one card in the deck.
 - **skill:** no ratings; each item shows short "used for / where" tags. List tilted in 3D; active item = asymmetric paper slab. Right panel: animated monochrome mini vignette per category — Low-level: source → asm → hex scrolling; Systems: rack with blinking LEDs; Hardware: oscilloscope trace; Web: browser wireframe assembling itself. The empty space below is filled by a detail panel for the selected item.
-- **record:** years as big Anton numerals that **flip like a calendar** while scrolling; each role slides in as a slanted bar with a roman rank. **KEY ITEMS:** certificates as a Souls-style inventory grid (square tiles, generic line icons — no brand logos). Selected tile → right panel: title (Cinzel), issuer, date, one dry flavor-text line (editable), verify link only when it points at that exact credential.
+- **record:** years as big Anton numerals that **flip like a calendar** while scrolling; each role slides in as a slanted bar with a roman rank. **KEY ITEMS:** certificates as a Souls-style inventory grid. Front: the exam code as the emblem (AZ-900, CCNA, CKA …) in Anton inside the frame plus one small generic line glyph. Flip / inspect back: the **official earned badge**, shown unmodified and in colour (§2), linked to its verification URL only when that URL points at that exact credential; files come from Richard as `src/assets/badges/<id>.png` (never scraped or redrawn), until then the back keeps the line icon. Earned badges are allowed on the back only; **no standalone company logos anywhere.** Selected tile → right panel: title (Cinzel), issuer, date, one dry flavor-text line (editable).
 - One continuous particle story: stage shards continue into the descent, thin out and turn into rising ash, which becomes embers at the bonfire.
 - 55 – 80 %: panels fade, darkness grows, ash particles shift colour into embers.
 
@@ -201,7 +204,7 @@ Home `/` = one page: one fixed WebGL canvas behind, HTML sections on top.
 
 - Portrait: drop photos into `src/assets/portraits/raw/` → `npm run portraits`. Layer split via manual masks; optional depth map generated locally.
 - Textures: Poly Haven CC0 only, logged in `design/ASSETS.md`. Everything else is generated in code.
-- Never: game assets, brand logos for certificates, copyrighted music. No sound for now.
+- Never: game assets, standalone company / brand logos, copyrighted music. No sound for now. Exception: a certificate's official earned badge on the KEY ITEMS back, unmodified (§7).
 
 ---
 
@@ -374,3 +377,27 @@ Owner decisions of 2026-11-10. Open work is in TASKS.md. CI must be green before
 
 **Portrait**
 - `npm run portraits` accepts cream-on-black ink art: luminance becomes alpha (black → transparent), no manual cutout. Slots `stage.png` and `about.png`; placeholders stay until the files exist.
+
+---
+
+## §17 Changelog v6
+
+Owner review of v5, 2026-11-10. Open work is in TASKS.md.
+
+**Global menu**
+- Exactly one list. The vertical MENU sits upright in its own fixed-width column with even leading; the list starts ≥ 32 px to its right. One Quick Read, in the bottom utility row. Name block and portrait are part of the overlay; the giant echo shows only the selected item (≤ 15 % opacity, enters with a 12 px offset). Stage slabs are `visibility: hidden` and `inert` while the overlay is open; legal links sit above the wipe shards.
+
+**Floating props**
+- Positions are stateless: `pos = anchor(layout) + parallax(scrollY) + idle(t) + kick`. Anchors come from layout boxes (transforms ignored), never from a prop's current position; `kick` is a critically damped spring (target 0) driven by clamped scroll velocity. The collision check sweeps every on-screen depth on each layout change. Each prop has a `data-prop` DOM proxy (position, `data-rest`, `data-kick`).
+
+**Colour** — see §2 (rest state monochrome; real photo colour only while interacting).
+
+**KEY ITEMS** — see §7 (exam code emblem on the front, official badge on the back).
+
+**NOW** — Helm (AI agent project) replaces the apprenticeship, which lives in Career. Helmet line icon (Gjermundbu, no horns). Texts beyond the name are TODO keys until Richard supplies them.
+
+**Record ride**
+- Persona speedlines (tapered wedges, irregular, −8°, opacity ≤ 0.25) streaming with the ride. The year counter owns a column on solid ink; the ride viewport starts to its right. After the last role the camera rolls 90° while the section scrolls out and hands over to the next section; reversible; reduced motion = vertical list (plain cut).
+
+**Stack** — Hardware vignette: Fourier square-wave build-up (odd harmonics 1 … 15, Gibbs overshoot), label "Σ sin(nωt)/n".
+

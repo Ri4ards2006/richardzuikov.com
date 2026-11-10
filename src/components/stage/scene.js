@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { createBonfire } from '../../three/bonfire';
 import { createFloatingShards } from './floating-shards';
 import { createInkWater } from './ink-water';
-import { createDescentProps } from './descent-props';
+import { createDescentProps, DEPTH_LIMIT } from './descent-props';
 import { createSkillProp } from './skill-props';
 import { disposeObject, hash, makeCanvas, pointsMaterial, seededPoints, smooth, texture } from '../../three/utils';
 import cardFrameSvg from '../../assets/svg/card-frame.svg?raw';
@@ -23,8 +23,11 @@ const SLOW_FRAME_MS = 24;
 const CARD_W = 768;
 const CARD_H = 1317;
 const FRAME_STROKE = 1.15;
+// Photo colour reveal on hover / focus (DESIGN.md §2).
+const COLOUR_FADE_S = 0.25;
 const RIDE_WHIP = 28 * Math.PI / 180;
 const RIDE_DRIFT = 0.25;
+const RIDE_ROLL = 12 * Math.PI / 180;
 const IDLE_FRAME_MS = 1000 / 30;
 const ACTIVE_WINDOW_MS = 500;
 const SMALL_SCREEN = 768;
@@ -136,7 +139,8 @@ function cardFrameImage(w, h) {
   return frameImage;
 }
 
-function drawCard(canvas, project, index, img) {
+// Draws the card face. colour: the photo in its real colour (hover state, DESIGN.md §2); frame and text stay mono.
+function drawCard(canvas, project, index, img, colour = false) {
   const ctx = canvas.getContext('2d');
   const { width: w, height: h } = canvas;
   ctx.fillStyle = '#050505';
@@ -151,7 +155,12 @@ function drawCard(canvas, project, index, img) {
     ctx.beginPath();
     ctx.rect(imageX, imageY, imageW, imageH);
     ctx.clip();
-    drawToned(ctx, img, imageX, imageY, imageW, imageH);
+    if (colour) {
+      const scale = Math.max(imageW / img.width, imageH / img.height);
+      ctx.drawImage(img, imageX + (imageW - img.width * scale) / 2, imageY + (imageH - img.height * scale) / 2, img.width * scale, img.height * scale);
+    } else {
+      drawToned(ctx, img, imageX, imageY, imageW, imageH);
+    }
     ctx.restore();
   }
   const frame = cardFrameImage(w, h);
@@ -220,7 +229,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 80);
   camera.position.z = CAM_Z;
 
-  const state = { lastInput: 0, w: 1, h: 1, k: 0.01, scroll: window.scrollY, camY: 0, frame: 0, last: 0, time: 0, rise: 0, story: 0, slow: 0, count: 0, spent: 0, hover: -1, hiddenCard: -1, ride: { yaw: 0, yawNow: 0, x: 0, xNow: 0 }, abyssTop: 1e9, panels: [], fireProgress: 0, fire: { x: 0, y: 0, scale: 1, pixel: 1 } };
+  const state = { lastInput: 0, w: 1, h: 1, k: 0.01, scroll: window.scrollY, camY: 0, frame: 0, last: 0, time: 0, rise: 0, story: 0, slow: 0, count: 0, spent: 0, hover: -1, hiddenCard: -1, ride: { yaw: 0, yawNow: 0, roll: 0, rollNow: 0, x: 0, xNow: 0 }, abyssTop: 1e9, panels: [], fireProgress: 0, fire: { x: 0, y: 0, scale: 1, pixel: 1 } };
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
 
   // Screentone dust on the stage, rising ash through the descent, embers at the bonfire.
@@ -319,6 +328,14 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
     const side = new THREE.MeshBasicMaterial({ color: CHARCOAL });
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), [side, side, side, side, new THREE.MeshBasicMaterial({ map }), side]);
+    // Colour face in front of the mono face, faded in while the card is hovered or focused.
+    const colourFace = makeCanvas(CARD_W, CARD_H);
+    const colourMap = texture(colourFace);
+    colourMap.anisotropy = map.anisotropy;
+    const colour = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: colourMap, transparent: true, opacity: 0, depthWrite: false }));
+    colour.position.z = 0.501;
+    colour.visible = false;
+    mesh.add(colour);
     const tilt = TILTS[index % TILTS.length];
     const group = new THREE.Group();
     group.add(mesh);
@@ -328,7 +345,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       drawCard(face, project, index, null);
       map.needsUpdate = true;
     });
-    return { project, index, face, map, mesh, group, tilt, lift: 0, base: new THREE.Vector3() };
+    return { project, index, face, map, colourFace, colourMap, colour, colourT: 0, mesh, group, tilt, lift: 0, base: new THREE.Vector3() };
   });
 
   const floating = createFloatingShards(isSmall ? 30 : 38);
@@ -402,6 +419,17 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     return { x: (cx - state.w / 2) * state.k, y: -(cy - state.h / 2) * state.k, w: rect.width * state.k, h: rect.height * state.k };
   }
 
+  // Page rect from the layout boxes (offset chain): CSS transforms are ignored.
+  function layoutRect(el) {
+    let left = 0;
+    let top = 0;
+    for (let node = el; node; node = node.offsetParent) {
+      left += node.offsetLeft;
+      top += node.offsetTop;
+    }
+    return { left, top, width: el.offsetWidth, height: el.offsetHeight };
+  }
+
   function measure() {
     // Leaving the route unmounts the DOM before the effect cleanup disposes the stage; a resize
     // callback in between finds the anchors gone.
@@ -431,15 +459,21 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       card.mesh.scale.set(rect.w, rect.h, 0.05);
     });
 
+    // Layout rects, not getBoundingClientRect: the panels carry a scroll-dependent parallax transform,
+    // and measuring it mid-scroll used to bake the current offset into every anchor (prop drift, v6).
+    const parallaxOf = (el) => (el.classList.contains('manga-panel') ? parseFloat(getComputedStyle(el).getPropertyValue('--parallax')) || 0 : 0);
     state.panels = a.panels.map((el) => {
-      const r = el.getBoundingClientRect();
-      return { el, top: r.top + state.scroll, height: r.height };
+      const r = layoutRect(el);
+      return { el, top: r.top, height: r.height, depth: '' };
     });
-    const pageRect = (el) => {
-      const r = el.getBoundingClientRect();
-      return { left: r.left, width: r.width, top: r.top + state.scroll, height: r.height };
-    };
-    props.layout(a.panels.map(pageRect), state.w, (x, y) => ({ x: (x - state.w / 2) * state.k, y: -(y - state.h / 2) * state.k }), state.k, (a.obstacles ?? []).map(pageRect));
+    props.layout({
+      panels: a.panels.map((el) => ({ rect: layoutRect(el), parallax: parallaxOf(el) })),
+      obstacles: (a.obstacles ?? []).map((el) => ({ rect: layoutRect(el), parallax: parallaxOf(el) })),
+      viewportWidth: state.w,
+      viewportHeight: state.h,
+      k: state.k,
+      proxies: a.propProxies ?? [],
+    });
 
     const skillRect = a.skillProp?.getBoundingClientRect();
     skillProp.layout(skillRect && { left: skillRect.left, width: skillRect.width, top: skillRect.top + state.scroll, height: skillRect.height }, (x, y) => ({ x: (x - state.w / 2) * state.k, y: -(y - state.h / 2) * state.k }));
@@ -467,6 +501,9 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     if (state.disposed) return;
     drawCard(card.face, card.project, card.index, bitmap);
     card.map.needsUpdate = true;
+    drawCard(card.colourFace, card.project, card.index, bitmap, true);
+    card.colourMap.needsUpdate = true;
+    card.hasColour = true;
     bitmap.close();
   }
 
@@ -495,6 +532,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     }
 
     if (window.scrollY !== state.scroll) state.lastInput = now;
+    const scrollVelocity = dt > 0 ? (window.scrollY - state.scroll) / dt : 0;
     state.scroll = window.scrollY;
     const follow = 1 - Math.exp(-dt * 18);
     state.camY += (-state.scroll * state.k - state.camY) * follow;
@@ -528,9 +566,10 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       // Record ride: the camera whips through its turn and drifts sideways with the timeline.
       const ride = state.ride;
       ride.yawNow += (ride.yaw - ride.yawNow) * follow;
+      ride.rollNow += (ride.roll - ride.rollNow) * follow;
       ride.xNow += (ride.x - ride.xNow) * follow;
       camera.position.x = ride.xNow;
-      camera.rotation.set(abyss * rad(7), ride.yawNow, 0);
+      camera.rotation.set(abyss * rad(7), ride.yawNow, ride.rollNow);
     }
 
     dust.position.y = state.camY;
@@ -590,6 +629,11 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       if (!visible) return;
       const hovered = state.hover === card.index ? 1 : 0;
       card.lift += (hovered - card.lift) * follow;
+      // 250 ms with an ease-out curve on the way in; the same curve reversed on the way out.
+      card.colourT = clamp01(card.colourT + (hovered && card.hasColour ? dt : -dt) / COLOUR_FADE_S);
+      card.colour.material.opacity = 1 - (1 - card.colourT) ** 3;
+      card.colour.visible = card.colourT > 0;
+      if (card.colourT > 0 && card.colourT < 1) state.lastInput = now;
       card.group.position.set(card.base.x, card.base.y, card.base.z + card.lift * 0.9);
       card.group.scale.setScalar(1 + card.lift * 0.05);
       card.group.rotation.set(
@@ -601,11 +645,22 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
 
     skillProp.update(time, now, state.camY);
     // The cursor as a world point in front of the props, for the dome camera's lens.
-    props.update(time, state.camY, pointerSeen ? propAim.set(mouse.x * state.w * 0.5 * state.k, state.camY - mouse.y * state.h * 0.5 * state.k, 3) : null);
-
-    state.panels.forEach(({ el, top, height }) => {
-      const depth = (top + height / 2 - state.scroll - state.h / 2) / state.h;
-      if (Math.abs(depth) < 1.6) el.style.setProperty('--depth', depth.toFixed(3));
+    // Panel depth is a pure function of the scroll position (clamped, never frozen mid-way).
+    state.panels.forEach((panel) => {
+      const depth = Math.max(-DEPTH_LIMIT, Math.min(DEPTH_LIMIT, (panel.top + panel.height / 2 - state.scroll - state.h / 2) / state.h)).toFixed(3);
+      if (depth !== panel.depth) {
+        panel.el.style.setProperty('--depth', depth);
+        panel.depth = depth;
+      }
+    });
+    props.update({
+      time,
+      dt,
+      scroll: state.scroll,
+      velocity: scrollVelocity,
+      camera,
+      camY: state.camY,
+      aimAt: pointerSeen ? propAim.set(mouse.x * state.w * 0.5 * state.k, state.camY - mouse.y * state.h * 0.5 * state.k, 3) : null,
     });
 
     const fireStart = state.abyssTop - state.h * 1.6;
@@ -613,6 +668,10 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     bonfire.update(dt, state.fireProgress);
 
     renderer.render(scene, camera);
+    if (testHook) {
+      testHook.frame += 1;
+      testHook.props = props.screenPositions(camera);
+    }
   }
 
   const onPointerMove = (event) => {
@@ -630,6 +689,13 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       state.frame = requestAnimationFrame(tick);
     }
   };
+
+  // Test-only: window.__propScreenPos() returns the props' projected mesh positions of the last rendered
+  // frame (agy's drift test). Never in a production page view without ?e2e=1.
+  const testHook = (import.meta.env.DEV || new URLSearchParams(window.location.search).get('e2e') === '1')
+    ? { frame: 0, props: [] }
+    : null;
+  if (testHook) window.__propScreenPos = () => ({ frame: testHook.frame, props: testHook.props });
 
   measure();
   state.camY = -state.scroll * state.k;
@@ -678,8 +744,10 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       state.lastInput = performance.now();
     },
     // yaw −1…1 from the Record ride (in / out turn), shift: px along the timeline, out: 0…1 of the turn back.
-    setRide({ yaw, shift, out }) {
+    setRide({ yaw, shift, out, roll = 0 }) {
       state.ride.yaw = Math.sin(yaw * Math.PI) * RIDE_WHIP;
+      // The DOM timeline rolls 90°; the WebGL camera answers with a short roll that returns to level.
+      state.ride.roll = Math.sin(roll * Math.PI) * RIDE_ROLL;
       state.ride.x = shift * state.k * RIDE_DRIFT * (1 - out);
       state.lastInput = performance.now();
     },
@@ -691,6 +759,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     },
     dispose() {
       state.disposed = true;
+      if (testHook) delete window.__propScreenPos;
       cancelAnimationFrame(state.frame);
       observer.disconnect();
       window.removeEventListener('pointermove', onPointerMove);

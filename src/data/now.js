@@ -1,4 +1,4 @@
-// "NOW / IN PROGRESS" (DESIGN.md §15). Facts only; anything not known yet is a TODO string,
+// "NOW / IN PROGRESS" (DESIGN.md §15; v6: the apprenticeship lives in Career, Helm took its slot). Facts only; anything not known yet is a TODO string,
 // shown in development and hidden in production. `done`: steps finished, or null while unknown.
 export const nowEntries = [
   {
@@ -26,17 +26,11 @@ export const nowEntries = [
     todo: { de: 'TODO: Was läuft schon, was ist offen? (Fortschrittsbalken)', en: "TODO: What already runs, what's open? (progress bar)" },
   },
   {
-    id: 'apprenticeship',
-    title: { de: 'Ausbildung', en: 'Apprenticeship' },
-    kicker: { de: 'IT-Systemelektroniker · R2P GmbH', en: 'IT Systems Electronics Technician · R2P GmbH' },
-    lines: {
-      de: 'Netzwerke, Sicherheits- und Kamerasysteme, viel Außendienst. 2025 bis 2027.',
-      en: 'Networks, security and camera systems, a lot of field work. 2025 to 2027.',
-    },
-    steps: ['2025', '2026', '2027'],
-    // Years started so far, from the calendar.
-    done: Math.min(3, Math.max(0, new Date().getFullYear() - 2025 + 1)) - 1,
-    current: true,
-    todo: { de: 'TODO: Genaue Daten für den Fortschritt (Start-/Prüfungsmonat)', en: 'TODO: Exact dates for the progress (start / exam month)' },
+    // Richard's AI agent project. Everything but the name comes from translations (atlus.now.helm);
+    // summary and progress are TODO keys until Richard supplies them, hidden in production.
+    id: 'helm',
+    i18n: 'helm',
+    steps: [],
+    done: null,
   },
 ];
