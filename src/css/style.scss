@@ -3384,3 +3384,16 @@ html.gm-open .menu-dots {
     width: 6.75rem;
   }
 }
+
+/* Invisible DOM stand-ins for the WebGL descent props (data-prop); scene.js moves them. */
+.prop-proxy {
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.prop-proxy[data-visible='false'] {
+  display: none;
+}

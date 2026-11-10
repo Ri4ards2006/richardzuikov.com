@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { createBonfire } from '../../three/bonfire';
 import { createFloatingShards } from './floating-shards';
 import { createInkWater } from './ink-water';
-import { createDescentProps } from './descent-props';
+import { createDescentProps, DEPTH_LIMIT } from './descent-props';
 import { createSkillProp } from './skill-props';
 import { disposeObject, hash, makeCanvas, pointsMaterial, seededPoints, smooth, texture } from '../../three/utils';
 import cardFrameSvg from '../../assets/svg/card-frame.svg?raw';
@@ -402,6 +402,17 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     return { x: (cx - state.w / 2) * state.k, y: -(cy - state.h / 2) * state.k, w: rect.width * state.k, h: rect.height * state.k };
   }
 
+  // Page rect from the layout boxes (offset chain): CSS transforms are ignored.
+  function layoutRect(el) {
+    let left = 0;
+    let top = 0;
+    for (let node = el; node; node = node.offsetParent) {
+      left += node.offsetLeft;
+      top += node.offsetTop;
+    }
+    return { left, top, width: el.offsetWidth, height: el.offsetHeight };
+  }
+
   function measure() {
     // Leaving the route unmounts the DOM before the effect cleanup disposes the stage; a resize
     // callback in between finds the anchors gone.
@@ -431,15 +442,21 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       card.mesh.scale.set(rect.w, rect.h, 0.05);
     });
 
+    // Layout rects, not getBoundingClientRect: the panels carry a scroll-dependent parallax transform,
+    // and measuring it mid-scroll used to bake the current offset into every anchor (prop drift, v6).
+    const parallaxOf = (el) => (el.classList.contains('manga-panel') ? parseFloat(getComputedStyle(el).getPropertyValue('--parallax')) || 0 : 0);
     state.panels = a.panels.map((el) => {
-      const r = el.getBoundingClientRect();
-      return { el, top: r.top + state.scroll, height: r.height };
+      const r = layoutRect(el);
+      return { el, top: r.top, height: r.height, depth: '' };
     });
-    const pageRect = (el) => {
-      const r = el.getBoundingClientRect();
-      return { left: r.left, width: r.width, top: r.top + state.scroll, height: r.height };
-    };
-    props.layout(a.panels.map(pageRect), state.w, (x, y) => ({ x: (x - state.w / 2) * state.k, y: -(y - state.h / 2) * state.k }), state.k, (a.obstacles ?? []).map(pageRect));
+    props.layout({
+      panels: a.panels.map((el) => ({ rect: layoutRect(el), parallax: parallaxOf(el) })),
+      obstacles: (a.obstacles ?? []).map((el) => ({ rect: layoutRect(el), parallax: parallaxOf(el) })),
+      viewportWidth: state.w,
+      viewportHeight: state.h,
+      k: state.k,
+      proxies: a.propProxies ?? [],
+    });
 
     const skillRect = a.skillProp?.getBoundingClientRect();
     skillProp.layout(skillRect && { left: skillRect.left, width: skillRect.width, top: skillRect.top + state.scroll, height: skillRect.height }, (x, y) => ({ x: (x - state.w / 2) * state.k, y: -(y - state.h / 2) * state.k }));
@@ -495,6 +512,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     }
 
     if (window.scrollY !== state.scroll) state.lastInput = now;
+    const scrollVelocity = dt > 0 ? (window.scrollY - state.scroll) / dt : 0;
     state.scroll = window.scrollY;
     const follow = 1 - Math.exp(-dt * 18);
     state.camY += (-state.scroll * state.k - state.camY) * follow;
@@ -601,11 +619,22 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
 
     skillProp.update(time, now, state.camY);
     // The cursor as a world point in front of the props, for the dome camera's lens.
-    props.update(time, state.camY, pointerSeen ? propAim.set(mouse.x * state.w * 0.5 * state.k, state.camY - mouse.y * state.h * 0.5 * state.k, 3) : null);
-
-    state.panels.forEach(({ el, top, height }) => {
-      const depth = (top + height / 2 - state.scroll - state.h / 2) / state.h;
-      if (Math.abs(depth) < 1.6) el.style.setProperty('--depth', depth.toFixed(3));
+    // Panel depth is a pure function of the scroll position (clamped, never frozen mid-way).
+    state.panels.forEach((panel) => {
+      const depth = Math.max(-DEPTH_LIMIT, Math.min(DEPTH_LIMIT, (panel.top + panel.height / 2 - state.scroll - state.h / 2) / state.h)).toFixed(3);
+      if (depth !== panel.depth) {
+        panel.el.style.setProperty('--depth', depth);
+        panel.depth = depth;
+      }
+    });
+    props.update({
+      time,
+      dt,
+      scroll: state.scroll,
+      velocity: scrollVelocity,
+      camera,
+      camY: state.camY,
+      aimAt: pointerSeen ? propAim.set(mouse.x * state.w * 0.5 * state.k, state.camY - mouse.y * state.h * 0.5 * state.k, 3) : null,
     });
 
     const fireStart = state.abyssTop - state.h * 1.6;

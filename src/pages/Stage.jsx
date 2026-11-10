@@ -6,6 +6,7 @@ import { useReducedMotion } from '../hooks/use-reduced-motion';
 import { ROMAN, getActiveMenuId, landOnSection, menuItems, scrollTargets, setActiveMenuId } from '../lib/atlus';
 import { QUICK_PATH } from '../lib/sections';
 import { portraits } from '../data/portraits';
+import { PROP_IDS } from '../components/stage/prop-ids';
 import { featuredProjects } from '../data/featured-projects';
 import IntroOverlay from '../components/stage/IntroOverlay';
 import AboutSection from '../components/stage/AboutSection';
@@ -99,6 +100,7 @@ export default function Stage() {
           skillProp: stageRef.current?.querySelector('.skill-prop'),
           // Text the descent props must keep clear of.
           obstacles: [...(stageRef.current?.querySelectorAll('.manga-panel, .stage-descent h2, .stage-descent > p, .stage-now h2, .now-panel') ?? [])],
+          propProxies: [...(stageRef.current?.querySelectorAll('[data-prop]') ?? [])],
         }),
       });
       sceneRef.current = stage;
@@ -372,6 +374,13 @@ export default function Stage() {
           ))}
         </div>
       </section>
+
+      {/* DOM proxies of the WebGL props (position, rest position, kick) for tests and debugging. */}
+      {webgl && (
+        <div aria-hidden="true" className="prop-proxies">
+          {PROP_IDS.map((id) => <span key={id} data-prop={id} data-visible="false" className="prop-proxy" />)}
+        </div>
+      )}
 
       <NowSection />
 
