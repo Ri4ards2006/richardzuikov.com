@@ -7,7 +7,13 @@ This repository is governed by the unified AI agent rules defined in **[AGENTS.m
 2. **Work exclusively in an isolated Git worktree** (`git worktree add ../rz-<name> -b feat/<name> origin/feat/atlus-menu`).
 3. **Never touch `src/` or `design/` unless explicitly instructed**.
 4. **Never push to `main` and never merge PRs**. Always open a PR against `feat/atlus-menu`.
-5. **Follow the §10 visual review loop**: capture screenshots at `1440×900` and `390×844`, verify against `design/refs/`, iterate and fix.
-6. Verify quality gates before pushing: `npm run build`, `npm run test:security`, `npm run test:e2e`.
+5. **Commit per task, push once per session**: The repo is linked to 4 Vercel projects (100 daily deploy limit = 25 pushes max). Push to origin only once per session when fully verified.
+6. **Branch prefix determines Vercel deployments**:
+   | Branch Prefix | Vercel Deploys? | Usage |
+   | :--- | :---: | :--- |
+   | `feat/*`, `fix/*`, `main` | **YES** | User-facing visual work |
+   | `chore/*`, `test/*`, `docs/*`, `backup/*`, `dependabot/*` | **NO** | Infra, tests, docs, non-visual work |
+7. **Follow the §10 visual review loop**: capture screenshots at `1440×900` and `390×844`, verify against `design/refs/`, iterate and fix.
+8. Verify quality gates before pushing: `npm run build`, `npm run test:security`, `npm run test:e2e`.
 
 Refer to [AGENTS.md](file:///home/richard/Projects/Ongoing/New/rz-ci/AGENTS.md) and [docs/ARCHITECTURE.md](file:///home/richard/Projects/Ongoing/New/rz-ci/docs/ARCHITECTURE.md) for complete details.
