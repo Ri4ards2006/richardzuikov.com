@@ -77,6 +77,11 @@ test.describe('Atlus Pause Menu Interactions', () => {
     });
     expect(isOccluded).toBe(true);
 
+    // v6: the stage slabs are hidden and inert, and the overlay shows exactly one list and one Quick Read.
+    await expect(stageMenu).toHaveJSProperty('inert', true);
+    await expect(page.locator('.gm-list li')).toHaveCount(5);
+    await expect(page.locator('.gm-quick')).toHaveCount(1);
+
     // Direct clicks on stage menu links must be intercepted by the overlay
     // v5+: the stage nav is visibility:hidden while the overlay is open, so Playwright reports "not visible".
     const clickBlocked = await stageMenu.locator('a').first().click({ timeout: 500 }).then(() => false).catch((err) => {
