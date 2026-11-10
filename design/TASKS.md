@@ -409,7 +409,10 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | P0 pause menu: scroll lock + inert page + exact restore, 12-column layout, one-row footer, mobile stack, close button at ≤ 375 px |
 | todo | Richard | Fill `design/ABOUT.md` (status, languages + levels, week, hobbies, now, travel, what you're looking for) |
 | todo | Richard | World map on `/about`: list of countries to fill white (`design/ABOUT.md`) |
-| todo | claude-code | Task 3: `/about` rework (status screen: portrait, STATUS, WEEK, INVENTORY, NOW, intro; own camera instance; world map), content only from `design/ABOUT.md`, rest TODO keys |
-| todo | claude-code | Task 4: Career: no hairlines, ink wedges + outline year, role 0 ≥ 120 px right of the year column (REVIEW-v6 P1), slanted slabs with rank pips |
-| todo | claude-code | Task 5: 90° turn as its own pinned 60 vh beat (scrubbed, reversible; reduced motion = cut; mobile = slab wipe), screenshot strip |
-| todo | claude-code | Task 6: poster pipeline for `about.png` (chroma key, CLAHE, 5-tone shader, AVIF/WebP, `/?portrait-lab` with `colorReveal`) |
+| done | claude-code | Task 3: `/about` rework: portrait + HUD rings, STATUS · WEEK · INVENTORY · NOW, intro draft (DE/EN), own camera instance; content only from `design/ABOUT.md`, the rest TODO keys (hidden in production) |
+| todo | Richard | Review the `/about` intro draft (`src/data/profile.js` → `intro`) |
+| todo | claude-code | World map on `/about` (not in the v7 brief; waits for the country list) |
+| done | claude-code | Task 4: Career: no hairlines, ink wedges + outline year, role 0 ≥ 120 px right of the year column (REVIEW-v6 P1), slanted slabs with rank pips |
+| done | claude-code | Task 5: 90° turn as its own pinned 60 vh beat (scrubbed, reversible; reduced motion = cut; mobile = slab wipe), screenshot strip |
+| done | claude-code | Task 6: poster pipeline (`npm run poster`: chroma key, CLAHE, 5-tone shader, AVIF/WebP, `/?portrait-lab` with `colorReveal`); tested on a synthetic image only |
+| todo | Richard | Put the green-screen `about.png` into `src/assets/portraits/raw/` (it is not on disk), then `npm run poster -- about` and commit `src/assets/portraits/poster/` |

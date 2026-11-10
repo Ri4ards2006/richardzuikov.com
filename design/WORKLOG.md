@@ -341,3 +341,45 @@ e2e: the hook test now also checks the fixed slot order, all five `visible` in s
 - Task 6 blocker: `src/assets/portraits/raw/about.png` does not exist, not in this worktree and not in the main checkout (`raw/` is gitignored, so it doesn't travel with git).
 
 **Checks**: `npm run build` ok, `npm run test:security` ok, `npx playwright test` 26 passed, 2 skipped (both mobile, by design).
+
+## 2026-11-10 · Claude Code (Opus 5.5) · v7 tasks 3–6 (replacement brief)
+
+**Step 0**: PR #19 was already merged into `feat/atlus-menu` (`baa6c22`). The replacement brief's tasks 1 (props) and 2 (pause menu) match what the earlier v7 run did (`fdb2fd3`, `e69a41d`, entry above) and were not redone; the full e2e suite still passes on top of the new work. Continued in `../rz-atlus-v7` on `feat/atlus-v7`.
+
+**Content note**: the ABOUT block in the brief arrived empty ("…"), and `design/ABOUT.md` is still the unfilled template. `/about` therefore uses only what that template names (base Flensburg; languages German, English, Latvian, Russian without levels; hobbies Powerlifting and Home lab without lines) plus the role from the brief and the published NOW entries for "building". Everything else is a TODO key. No age (the old "20 Jahre" quick fact is not in the ABOUT block).
+
+**Task 3: /about rework**
+- Copied descent panels removed; one line "Skills → Stack". New status screen (DESIGN.md §18): portrait with HUD rings, STATUS · WEEK · INVENTORY · NOW, intro, own camera prop instance (`PropViewer`, unchanged), idle motion.
+- **Intro draft for Richard's review** (`src/data/profile.js` → `intro`, DE + EN, 52 / 58 words), built only from the facts above: "Ich bin Richard, Azubi zum IT-Systemelektroniker bei R2P in Flensburg, fertig 2027. Im Außendienst verlege ich Netzwerke und nehme Kamerasysteme beim Kunden in Betrieb. Zu Hause steht mein Home-Lab, und an eigenen Platinen sitze ich auch. Hier geht es nicht um Skills, sondern darum, wer ich daneben bin."
+- In production WEEK is hidden (all seven days are TODO); STATUS, INVENTORY (2 tiles) and NOW (building only) show.
+- Review (§10): round 1: the intro under the title pushed the portrait below the fold → intro moved into the body grid beside the portrait; rings re-centred; on phones the portrait is 12rem. Round 2 (dev, all tabs): TODO text inherited Anton in tiles / NOW → mono; the week staircase wrapped Sunday's text → 0.2rem steps.
+- New icons `barbell`, `rack`, `slot` (design/assets-src/icons, src/assets/svg/icons). e2e: `/about` route + "status screen (v7)" test.
+- Screenshots: `design/screenshots/v7/about-{1440,1024,390}.png`, `about-dev-tab{2,3,4}-1440.png`, `about-dev-week-390.png`.
+
+**Task 4: Career ride**
+- Speedline strip and the conic entrance lines removed. Three ink wedges with their own rates, outline year behind the active role, rank pips, active inverted, others dimmed.
+- REVIEW-v6 P1: at 1440×900 role 0 now lands at x 713 with the year column ending at 561 (152 px). The year column has no ink box any more (it showed as a black rectangle over the wedges).
+- Review: round 1: pips broke the bar grid (role pushed under the rank), the wedges were cut at the content edge (pin is 76rem wide), and the year's ink box showed → explicit grid placement, `overflow: visible clip` on the pin + full-bleed wedges, box removed. Round 2: the leaving role left a dark stub next to the year → mask fades leaving roles out before the column.
+- Screenshots: `design/screenshots/v7/career-ride-{land,y1500,last}.png`, `career-screen-1440.png`, `career-390.png`.
+
+**Task 5: the 90° turn**
+- Own pinned beat of 0.6 × viewport height after the last role (`data-turn-start`, `data-turn-len` on `#record`); phases exactly as the brief (`turnState()` in `RecordBoard.jsx`). Measured: 25 % → 2.1°, 50 % → 72.5°, ≥ 70 % → 90°, scroll back → 0°.
+- Review: round 1: the yaw container became a flex column, which stretched "SCREEN ÖFFNEN" across the board; and at 100 % the turned board covered the incoming title → `align-items: flex-start`; the board leaves upward along its new axis and fades while the title comes in. Round 2: strip fine; mid-turn the board passes under the header, which is intended.
+- The year counter-rotates through the `rotate` property, because its entrance uses a transition on `transform` that would lag the scrub.
+- e2e: "Record turn beat (v7)": hold = 0°, 75 % = 90° with the pin still at 64 px and the year at −90°, back = 0°.
+- Strip: `design/screenshots/v7/turn-{0,25,50,75,100}.png`, `turn-strip.png`.
+
+**Task 6: portrait poster**
+- **Blocker**: `src/assets/portraits/raw/about.png` does not exist (not in this worktree, not in the main checkout, nowhere under ~/Projects, ~/Media, ~/Downloads). The pipeline was built and checked on a synthetic green-screen image in the scratchpad; its output was never committed. `/about` keeps the silhouette until real files exist in `src/assets/portraits/poster/`.
+- Found while testing: `-border` inherited the `copy_opacity` compose and turned the colour cut-out bilevel → compose reset; IM's channel compositing turned the key mask grey → `-fx` for the key and despill (~5 s for 2000×2400). AVIF forced to 8 bit.
+- Found in the lab: React StrictMode runs the effect twice, and `dispose()` called `loseContext()` on the canvas that the second run reuses → white canvas. `loseContext()` removed.
+- The lab's JS is not in the production bundle (DEV guard); its few CSS rules are.
+- Screenshot: `design/screenshots/v7/portrait-lab-synthetic.png` (default params · edge 4 / rim 6 · colour reveal mid · full).
+
+**Not touched**: `labs/`, `src/labs/`. `design/REVIEW-v7.md` (untracked, written by agy during this session) was read but not committed; it reviews the earlier v7 state.
+
+**Open questions for Richard**
+- Fill `design/ABOUT.md` (languages + levels, week, a dry line per hobby, more hobbies, learning / reading, age if you want it shown).
+- Review the intro draft.
+- `about.png` (green screen) into `raw/`, then `npm run poster -- about`.
+- World map: still waits for the country list (not part of this brief).

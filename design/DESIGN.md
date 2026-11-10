@@ -421,3 +421,24 @@ Owner review of v6, 2026-11-10. Open work is in TASKS.md.
 - Backdrop: ink-0 (`--ash-900` = #050505), opaque, with screentone; nothing of the page shows.
 - Desktop: 12 columns inside the safe area. Cols 1–2 the vertical MENU, exactly as tall as the list, letters evenly spaced. Cols 3–6 the list; numbers in one column directly left of their item, 16 px gap, no staircase. Cols 7–12 the preview of the selected item: name + role, portrait (shrinks first), kicker, label `clamp(48px, 6vw, 112px)`, one teaser line.
 - Footer: one row, three zones: DE/EN · THEME | Impressum · Datenschutz | GITHUB · LINKEDIN · MAIL · QUICK READ. Below 1024 px the preview drops to the name in the top row (clear of the close button), and the footer stacks.
+
+**/about** (replaces the copied descent panels)
+- Richard as a person, not skills (one line "Skills → Stack"). Status-screen spirit, our own design, no game wording or assets.
+- Grid ≥ 1024 px: portrait (cols 1–4, spans both rows) · intro above sub-menu (cols 5–7) + detail panel (cols 8–12). Below: portrait beside the intro, then sub-menu + detail; < 640 px stacked.
+- Sub-menu STATUS · WEEK · INVENTORY · NOW (↑↓, ESC like the other screens), own camera prop instance, idle motion = turning HUD rings + 1.2 % breathing.
+- STATUS: name, base, role, languages with 4 level pips (native / fluent / good / basic); age only if given. WEEK: 7 slanted day slabs Mon–Sun, today inverted. INVENTORY: item tiles with own line icons (barbell, rack, empty slot) and one dry line each. NOW: building (from the NOW entries) / learning / reading.
+- Source: `src/data/profile.js`, filled only from `design/ABOUT.md`. TODO strings show in development only; a section whose entries are all TODO leaves the sub-menu in production.
+
+**Career ride**
+- No lines of any kind in the background. Three large slanted ink wedges (`--ash-800`, `--ash-700`/45 %) move with the ride at 0.22 / 0.38 / 0.55 of its speed; they run full bleed.
+- A huge outline year (Anton, 2 px stroke `--ash-600`) sits behind the active role at the reading line.
+- Roles are slanted slabs with rank pips (I = one pip …); the active one inverted (paper), the others at 45 %. Role 0 lands ≥ 120 px right of the year column; leaving roles fade out before it.
+
+**The 90° turn** (replaces the v6 roll during the scroll-out)
+- Its own pinned beat of 60 vh after the last role, scrubbed by scroll and reversible: 0 % hold on the last role · 0–15 % radial speedline burst + 3 % scale-up · 15–70 % the whole board turns 90° clockwise around the screen centre (cubic in-out) while the year counter-rotates and stays upright · 70–100 % the board leaves upward along its new axis and the next title ("REST HERE, TRAVELLER") slides in from below.
+- Reduced motion: no ride, the vertical list (cut). Phones (< 768 px): a 300 ms paper slab wipe at the end of the list.
+
+**Portrait poster**
+- `npm run poster` on `src/assets/portraits/raw/<id>.png` (green screen): EXIF strip, chroma key on g − max(r, b) with spill suppression (g ≤ max(r, b)), alpha erode 1 px + feather 1.5 px, grayscale + CLAHE. Layers gray / color / poster as AVIF + WebP at 900 / 1400 / 1800 px, never upscaled.
+- Shader: 5 tones #121212 / #2a2a2a / #555 / #8a8a8a / #f4f4f0 with soft steps, Sobel edge pass toward the darkest tone, 2 px paper rim. Static poster for no WebGL / reduced motion. `colorReveal` (default off) dissolves the poster into the colour photo on hover.
+- Dev-only `/?portrait-lab`: sliders for the tone steps, softness, edge, rim, and the `colorReveal` toggle. `stage` stays a placeholder until `stage.png` exists; `about` until `about.png` exists.
