@@ -1,6 +1,6 @@
 # Architecture Documentation
 
-Technical architecture of `richardzuikov.com`: routing, Atlus Neo-Pop stage, Three.js WebGL graphics, data layer, and internationalization.
+Technical architecture of `richardzuikov.com`: render loop orchestration, scroll-to-rail projection, stateless props system, test-hook contracts, and file ownership boundaries.
 
 ---
 
@@ -22,124 +22,126 @@ graph TD
   AppRoutes --> Subpages["Subpages (/stack, /career, /work, /impressum)"]
 
   Stage --> StageScene["Stage Three.js Scene (scene.js)"]
+  StageScene --> DescentProps["Descent Props (descent-props.js)"]
   StageScene --> FloatingShards["Floating Shards (floating-shards.js)"]
   StageScene --> InkWater["Ink Water Simulation (ink-water.js)"]
   StageScene --> BonfireModule["Bonfire Scene (src/three/bonfire/)"]
-
-  BonfireModule --> Flames["Flames Shader (flames.js)"]
-  BonfireModule --> Iron["Soldering Iron Model (iron.js)"]
-  BonfireModule --> Embers["Ember Particles (particles.js)"]
-  BonfireModule --> PCB["PCB Heap (pcb.js)"]
-  BonfireModule --> Ruins["Medieval Ruins Silhouettes (ruins.js)"]
 ```
 
 ---
 
-## 2. Routing & Navigation Map
+## 2. The Unified Render Loop
 
-Routing is orchestrated in `src/App.jsx` using `react-router-dom` v6 with dynamic code-splitting via `React.lazy()` and `React.Suspense`.
+### 2.1 Single-Driver requestAnimationFrame
+The application maintains strictly **one** global `requestAnimationFrame` driver loop residing in `src/components/stage/scene.js`. Multiple independent RAF loops are explicitly prohibited to prevent frame desynchronization, micro-stutter, and redundant GPU context switches.
 
-### Active Routes
+### 2.2 The 4 Render Stages (Execution Order)
+Every tick of the render loop executes four deterministic phases in linear order:
 
-| Route | Page Component | Description |
-| :--- | :--- | :--- |
-| `/` | `src/pages/Stage.jsx` | Full Atlus stage experience with WebGL canvas and DOM overlay |
-| `/quick` | `src/pages/Quick.jsx` | Fast, accessible long-scroll resume & overview |
-| `/stack` | `src/pages/Stack.jsx` | Deep dive into technical toolset, technologies, and proficiencies |
-| `/career` | `src/pages/Career.jsx` | Career journey, education, and milestones |
-| `/work` | `src/pages/Work.jsx` | Project showcase and portfolio items |
-| `/impressum` | `src/pages/Impressum.jsx` | Impressum & legal notice (German/English) |
-| `/datenschutz`| `src/pages/Impressum.jsx` | Privacy policy alias |
-| `/legal` | `src/pages/Impressum.jsx` | English legal alias |
-| `*` | `src/pages/NotFound.jsx` | Custom 404 error page |
+```
+[Phase 1: Scroll & Rail] ──> [Phase 2: Scene & Props] ──> [Phase 3: WebGL Draw] ──> [Phase 4: DOM Proxy Sync]
+```
 
-### Route Redirects
+1. **Phase 1: Scroll & Camera Rail Sampling**
+   - The Lenis smooth-scroll instance reports the normalized scroll progress `t` and interpolated scroll position `scrollY`.
+   - The camera position `(x, y, z)` and orientation `quaternion` are sampled along the camera rail spline.
+   - Field of view (FOV) is dynamically adapted based on viewport aspect ratio (desktop vs mobile).
+2. **Phase 2: Scene & 3D Props Evaluation**
+   - Background geometry (rings, shards, ambient mesh planes) updates its phase offsets.
+   - The descent props module evaluates stateless position formulas for each active prop based on current camera space and panel viewport anchors.
+   - Frustum culling and collision avoidance sweeps determine mesh visibility.
+3. **Phase 3: WebGL Draw Call**
+   - Three.js `renderer.render(scene, camera)` issues GPU draw commands to the shared canvas.
+   - **Canvas clear ownership**: `scene.js` exclusively owns `gl.clear()` with obsidian background `#050505` (`rgb(5, 5, 5)`). Child components, vignettes, and props must **never** clear or rebind the primary framebuffer.
+4. **Phase 4: DOM Proxy Synchronization & Test Hook Emission**
+   - For accessibility, SEO, and visual testing, projected 3D coordinates are mirrored onto DOM proxies (`[data-prop="..."]`).
+   - If in development mode or `?e2e=1` is active, the projected coordinates and visibility flags are emitted into `window.__propScreenPos`.
 
-To preserve backward compatibility with legacy links and portfolio sections:
-- `/contact` ➔ redirects to `/#bonfire` (owner decision per DESIGN.md §8)
-- `/lab`, `/works`, `/portfolio`, `/dev` ➔ redirects to `/#arcana`
-
-### Transition Mechanics
-
-Route transitions utilize `useWipeLocation` (`src/hooks/use-wipe-location.js`), rendering an animated manga slash-wipe panel (`.wipe-panel` in `src/css/style.scss`) that sweeps across the viewport on navigation changes.
-
----
-
-## 3. Atlus Stage & Viewport Synchronization
-
-The core visual experience resides in `src/pages/Stage.jsx` and `src/components/stage/scene.js`.
-
-### Hybrid DOM / WebGL Integration
-- Three.js operates in a fixed background canvas (`#stage-canvas`).
-- Interactive buttons, navigation links, and text labels are rendered as real semantic HTML elements positioned over WebGL objects using CSS transforms and bounding-box measurements (`getBoundingClientRect`).
-- Guarantees full accessibility (a11y), natural text selection, keyboard navigation (`Tab`, `Esc`, `Enter`), and search engine discoverability.
-
-### Stage Submodules (`src/components/stage/`)
-- `scene.js`: Central Three.js manager initializing camera, scene graph, lights, post-processing shaders, and rendering loop.
-- `floating-shards.js`: 40–60 flat-shaded geometric polygon shards drifting in 3D space, reactive to cursor physics (spring recoil).
-- `ink-water.js`: Dynamic sumi-e ink fluid simulation beneath the stage slabs.
-- `CardInspect.jsx`: Modal view providing close-up inspection of tarot project cards with keyboard and mouse controls.
-- `ProjectDeck.jsx`: Card carousel orchestrating project transitions with 3D depth perspective.
-
-### Atlus Manga UI Components (`src/components/atlus/`)
-- `SkillBoard.jsx` & `SkillVignette.jsx`: Manga panel displaying skills categorized by engineering discipline with speedlines and halftone effects.
-- `RecordBoard.jsx`: Career timeline featuring flipping year numerals, slanted expanding bars, and role details.
-- `KeyItems.jsx`: Visual inventory representation for certifications and achievements.
-- `ArcanaCard.jsx`: Project cards styled as Major Arcana tarot cards.
-- `CausticsBackground.jsx`: Atmospheric procedural background illumination.
+### 2.3 Overlay Pause / Resume Lifecycle
+When an overlay dialog or sub-screen is opened:
+- Full-screen overlays (`/about`, `/work`, `/stack`, `/career`, `MenuOverlay`, Card Inspect lightbox) signal the loop orchestrator.
+- The render loop halts `requestAnimationFrame` execution or clamps rendering to 0 Hz, dropping GPU idle usage to 0%.
+- When the overlay is dismissed, the loop resumes at the exact recorded scroll position without triggering spring jitter or camera teleportation.
 
 ---
 
-## 4. Three.js Bonfire Subsystem (`src/three/bonfire/`)
+## 3. Scroll → Lenis → Camera Rail Architecture
 
-Located at the bottom of the home stage (`#bonfire`), the bonfire represents a safe haven inspired by *Dark Souls*, featuring a soldering iron plunged into a pile of charred PCBs and embers.
+### 3.1 Single-Source Easing (The "No Double-Smoothing" Rule)
+Scroll motion is eased **strictly once** at the Lenis level:
+- Lenis provides physical wheel damping and smooth momentum interpolation.
+- Inside Three.js, camera transforms, prop offsets, and rail positions consume the interpolated scroll values **directly** (`lerp` or spring dampening inside Three.js on top of Lenis is forbidden).
+- Double-smoothing introduces phase-lag, rubber-banding, and spatial drift between DOM elements and 3D meshes.
 
-### Module Breakdown
-- `index.js`: Mount point initializing the bonfire scene, camera positions, landing zoom animations, and intersection observers.
-- `flames.js`: Multi-layered procedural flame shader with turbulence noise, bright inner core, and heat haze distortion.
-- `iron.js`: 3D procedural geometry representing a soldering iron with real proportions:
-  - Conical tip, metallic barrel with hex nut, heat-insulating finger guard disc, ribbed ergonomic grip, and strain-relief stub.
-- `pcb.js`: Procedural circuit board rubble with etched traces and heat discoloration.
-- `particles.js`: Rising ash particles, floating embers, and flickering sparks.
-- `ruins.js`: Atmospheric distant medieval castle silhouettes with fog fading on the right, keeping the left text area high-contrast.
-- `stones.js` & `logs.js`: Stone perimeter ring and scorched wooden logs.
-- `quality.js`: Device performance tiering detecting mobile/desktop to throttle particle counts and disable heavy shader passes.
-- `ContactList.jsx`: Interactive contact cards (Email, GitHub, LinkedIn) rendered above the bonfire.
+### 3.2 Coordinate Space Transformation
+The system coordinates three distinct spaces:
+1. **Window Viewport Space**: Measured in CSS pixels (`0, 0` top-left, `1440 × 900` bottom-right).
+2. **Three.js World Space**: Measured in Three.js world units, centered at `(0, 0, 0)`, with $+X$ right, $+Y$ up, $+Z$ toward camera.
+3. **Manga Panel Gutter Slots**: The 2D layout boxes beside each panel (`[data-slot="panel-N"]`) where props reside.
 
----
-
-## 5. Data Architecture & Models (`src/data/`)
-
-Static content is structured in decoupled data modules:
-
-- `featured-projects.js`: Portfolio project metadata, tech stack tags, Major Arcana associations (e.g. *The Magician*, *The Tower*), and live/code repository links.
-- `portraits.js`: Responsive portrait image sets across multiple resolutions (640w, 1200w, WebP formats).
-- `project-images.js`: Mapping of visual media and screenshots for project cards.
-- `stack-uses.js`: Detailed technical breakdown of daily drivers, languages, frameworks, cloud infrastructure, and hardware tools.
+Conversion factor between Viewport Pixels and Three.js World Units at distance $Z$:
+$$k = \frac{2 \cdot \tan\left(\frac{\text{FOV} \cdot \pi}{360}\right) \cdot |Z_{\text{camera}} - Z_{\text{target}}|}{\text{window.innerHeight}}$$
 
 ---
 
-## 6. Internationalization (i18n)
+## 4. The Props System: Stateless Projection
 
-Localization is implemented without external runtime bloat in `src/lib/translations.js` and consumed via `src/hooks/use-language.js`:
+### 4.1 The Stateless Formula
+`src/components/stage/descent-props.js` implements a purely functional, stateless projection architecture.
+- **Why No Mutable Springs?** Historical spring physics accumulated frame-delta divergence, leading to irrecoverable visual drift across rapid scroll reversals.
+- **Stateless Law**: For any given scroll position $Y$ and camera state $C$, the position of prop $i$ must evaluate to the exact same projected pixel coordinates $(x, y)$, regardless of whether the user scrolled top-to-bottom, bottom-to-top, or warped directly to a hash anchor.
 
-- Supported languages: **German (`de`)** and **English (`en`)**.
-- Stored in browser `localStorage` under `rz_lang` with automatic fallback to browser navigator language.
-- Missing translations default cleanly to English keys.
-- Strictly adheres to the rule: *Never invent facts. Unconfirmed data points remain flagged or omitted.*
+### 4.2 Panel Association & Gutter Slots
+- Each prop is permanently assigned to an immutable panel index (`PROPS = [ { panel: 0, build: chip }, ... ]`).
+- The prop calculates its rest anchor by reading its panel's bounding box and finding the outer gutter:
+  - If panel is on viewport right $\to$ prop anchor is centered in left gutter (`[0, rect.left]`).
+  - If panel is on viewport left $\to$ prop anchor is centered in right gutter (`[rect.right, viewportWidth]`).
+- Collision sweep: If the gutter width is smaller than the prop bounding radius (`radius * 2 + GUTTER_MARGIN * 2`), the prop cleanly culls with reason `'gutter <width>'`.
+
+### 4.3 Mobile & Narrow Viewport Fallback
+On screens with viewport width $< 768\text{px}$ (or when `narrow === true`):
+- All 3D Three.js descent meshes are culled and unmounted from the scene graph.
+- The UI seamlessly renders lightweight, static 2D SVG badges (`src/assets/badges/`) inline within the manga panel headers.
+- This guarantees zero WebGL overhead on budget mobile chips while preserving editorial hierarchy.
 
 ---
 
-## 7. Performance & Optimization Strategy
+## 5. Test-Hook Contract: `window.__propScreenPos`
 
-As specified in `design/DESIGN.md §8`:
+### 5.1 Schema
+```typescript
+interface PropScreenPosPayload {
+  frame: number;
+  props: Array<{
+    id: 'chip' | 'pcb' | 'monitor' | 'rack' | 'dome';
+    visible: boolean;
+    inFrustum: boolean;
+    scene: 'descent' | 'detached';
+    reason: 'ok' | 'narrow' | 'no-panel' | 'gutter' | 'collision';
+    x: number; // Viewport X in pixels (0 to viewportWidth)
+    y: number; // Viewport Y in pixels (0 to viewportHeight)
+  }>;
+}
+```
 
-1. **Shader Pre-compilation**: All custom GLSL shaders are pre-warmed via `renderer.compileAsync` before starting the render loop to prevent frame drops on first interaction.
-2. **Dynamic Framerate Capping**:
-   - Desktop runs at 60 fps.
-   - Mobile (< 768 px) is capped at 30 fps with halved particle densities and disabled bloom.
-   - Loop pauses completely when the document tab is hidden (`document.hidden`).
-3. **Texture Loading**: Textures are lazily loaded with `createImageBitmap` and downscaled before GPU upload.
-4. **Bundle Budgets**:
-   - Initial JS chunk ≤ 100 KB gzip.
-   - Three.js 3D scene chunk ≤ 400 KB gzip (currently ~211 KB gzip).
+### 5.2 Exposure Rules
+- Exposed **only** when `import.meta.env.DEV === true` OR query parameter `?e2e=1` is present in the URL.
+- When `?e2e=1` is supplied, it is persisted to `sessionStorage` so that the hook remains available across sub-screen navigation round-trips (`/about`, `/work`, etc.).
+- In production builds without `?e2e=1`, `window.__propScreenPos` is `undefined` (zero surface area, zero overhead).
+
+### 5.3 E2E Test Reading Rules
+- Automated tests (Playwright) must wait for scroll interpolation to settle (`page.waitForTimeout(300)` or frame delta $< 0.1\text{px}$) before asserting on coordinates.
+- Reading coordinates mid-wheel-dispatch while momentum is active is prohibited.
+
+---
+
+## 6. Team & File Ownership Map
+
+| Domain / Paths | Primary Owner | Secondary Reviewer | Modification Policy |
+| :--- | :--- | :--- | :--- |
+| `src/components/**`, `src/pages/**` | **Claude Code** (`feat/atlus-*`) | Antigravity | Do not touch without coordination. Code review required. |
+| `src/three/bonfire/**`, `public/textures/bonfire/**` | **Antigravity** | Claude Code | Isolated 3D bonfire scene. |
+| `design/**`, `design/research/**` | **Antigravity** (`docs/*`, `lab/*`) | Richard | Architectural research, reviews, and design benchmarks. |
+| `.github/workflows/**`, `.github/tests/**` | **Antigravity** (`test/*`, `chore/ci-docs`) | Richard | CI pipelines, Playwright E2E suites, security scans. |
+| `docs/ARCHITECTURE.md`, `docs/adr/**` | **Antigravity** | Claude Code, Richard | Living canon for system architecture and ADRs. |
+| Release Merges, Branch Deletion | **Richard** | — | Sole owner of `main` merges, prod deployments, and project secrets. |
