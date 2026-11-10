@@ -401,3 +401,17 @@ Owner review of v5, 2026-11-10. Open work is in TASKS.md.
 
 **Stack** — Hardware vignette: Fourier square-wave build-up (odd harmonics 1 … 15, Gibbs overshoot), label "Σ sin(nωt)/n".
 
+
+---
+
+## §18 Changelog v7
+
+Owner review of v6, 2026-11-10. Open work is in TASKS.md.
+
+**Descent props** (replaces the collision rules of §16/§17)
+- Fixed map: 01 PCB tile · 02 chip · 03 monitor · 04 rack unit · 05 security camera.
+- Each panel sits in a `.descent-row` with a reserved, empty `.prop-slot[data-slot]` in its gutter (CSS grid, ≥ 1024 px). The prop rests on the slot centre and takes its panel's translateY (`--depth × --parallax`), so it can't touch text by construction. No runtime collision test, no measured hiding.
+- Visibility by breakpoint only: ≥ 1024 px all five, < 1024 px none. Never scroll-dependent; the five props are never frustum-culled.
+- Each prop is placed through the camera of the current frame (ray onto its plane), so camera damping and perspective can't move it off its slot.
+- Every screen builds its own prop instances (factories); nothing is re-parented between scenes. `/about` keeps its own camera instance.
+- Test hook `window.__propScreenPos()` (dev or `?e2e=1`, sticky for the tab session): `{ frame, props: [{ id, visible, inFrustum, scene, x, y, rest }] }`.

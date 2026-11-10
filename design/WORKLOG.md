@@ -306,3 +306,23 @@ The v6 report in the chat was cut off after task 1. The task 2–7 summary was a
 **Test hook**: `window.__propScreenPos()` → `{ frame, props: [{ id, visible, x, y }] }`. It holds the world position of each prop mesh (`getWorldPosition`), projected with the camera of the frame that was just rendered, in viewport px. It is only set in dev or with `?e2e=1` (`scene.js`) and removed on dispose. `screenPositions(camera)` in `descent-props.js` reads only the meshes and never the DOM.
 
 **Test**: `.github/tests/e2e.spec.js` › "Prop screen positions (test hook)" checks four things: no hook without `?e2e=1`; 5 ids; `frame` increases; hook and proxy centre differ by < 1.5 px. Desktop only, because props are hidden below 1024 px. Full suite: 24 passed, 2 skipped (both mobile, by design). `test:security` green.
+
+## 2026-11-10 · Claude Code (Opus 5.5) · changelog v7
+
+**Step 0**: PR #19: checks green, set from draft to ready, merged into `feat/atlus-menu` (`baa6c22`). Worktree `../rz-atlus-v7`, branch `feat/atlus-v7` from `origin/feat/atlus-menu`. `design/REVIEW-v6.md` is not on `feat/atlus-menu`; it lives on `test/e2e-v6` (PR #18, not merged) and was read from there.
+
+**Task 1: descent props disappear (P0)**
+
+Evidence before the fix (per-prop log through the extended hook: visible, scene, frustum, layout reason; script outside the repo):
+- (a) **Confirmed, cause.** `layout()` hid a prop when no parallax candidate passed the runtime text-collision sweep. The result depended on the moment of measurement. 2560×1440, three cold loads: first measure `all ok`, re-measure after ~400 ms (fonts/images) → `monitor: collision, dome: collision`. The camera (panel 05) disappeared and stayed gone until the next layout change. Other viewports, zoom levels or font timings flip other props. In addition each prop took a parallax constant other than its panel's (up to ±150 px × depth), so at some scroll positions it hung far from its panel, and Richard read that as "missing". Richard's "chip on panel 02" also did not match the old map (chip was on 01, PCB on 02).
+- (b) **Ruled out.** No object is shared: all builders are factories, the `/about` camera is its own instance in its own renderer (`prop-viewer.js`, `prop="domeCamera"`, by design). Every descent prop reported `scene: descent` before and after opening/closing all four sub-screens.
+- (c) **Not the cause.** Every prop with `visible` was `inFrustum`. Still set `frustumCulled = false` for the five, as the brief asks.
+- (d) **Ruled out.** No IntersectionObserver or enter/leave state on the props; 5 fast wheel bursts changed nothing.
+
+Fix: see DESIGN.md §18 (rows with reserved slots, fixed map, visibility by breakpoint only, collision code deleted). Found while verifying: the drawn mesh sat 8–25 px off its rest point, because the props live at z = −0.4 while the px→world scale is for z = 0 (4 % per distance from the screen centre) plus camera damping. Now each prop is placed by a ray through the frame's camera.
+
+Acceptance (script outside the repo): 1440×900, 20 random scroll positions + after opening/closing `/about`, `/work`, `/stack`, `/career` + after 5× fast top→bottom→top: 108 checks, 0 fails. Every prop whose panel is in view is visible, in scene `descent`, in the frustum when its slot is on screen, has a rest error ≤ 0.07 px to its slot, has a mesh within the idle amplitude (≤ 7 px), and has no on-screen overlap with any text block. Same result at 1024×768 (106), 1920×1080 (115), 2560×1440 (140). At 1023, 768 and 390 px all five are hidden. Screenshots: `design/screenshots/v7/props/panel-0{1..5}-1440.png`, `descent-390.png`.
+
+Review (§10): round 1 at 1440: PCB, chip and camera sit beside their panels; 13rem slot → the footprint touched panel 01 at the top edge, but only off screen. Slot set to 11rem, check limited to on-screen overlap. Round 2 at 390: layout unchanged, no slots.
+
+e2e: the hook test now also checks the fixed slot order, all five `visible` in scene `descent` and, at each panel, rest = slot (±1 px). Note: a leftover `vite preview` from the v6 worktree on :4173 had served the old build to Playwright (`reuseExistingServer`); stopped, then 24 passed, 2 skipped.

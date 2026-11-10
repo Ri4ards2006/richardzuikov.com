@@ -226,6 +226,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   renderer.setPixelRatio(pixelRatio);
 
   const scene = new THREE.Scene();
+  scene.name = 'descent';
   const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 80);
   camera.position.z = CAM_Z;
 
@@ -462,13 +463,21 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     // Layout rects, not getBoundingClientRect: the panels carry a scroll-dependent parallax transform,
     // and measuring it mid-scroll used to bake the current offset into every anchor (prop drift, v6).
     const parallaxOf = (el) => (el.classList.contains('manga-panel') ? parseFloat(getComputedStyle(el).getPropertyValue('--parallax')) || 0 : 0);
+    // Each panel's reserved prop slot sits in its row's gutter and shares the panel's translateY (--depth).
     state.panels = a.panels.map((el) => {
       const r = layoutRect(el);
-      return { el, top: r.top, height: r.height, depth: '' };
+      const slot = el.parentElement?.querySelector('[data-slot]') ?? null;
+      const parallax = parallaxOf(el);
+      slot?.style.setProperty('--parallax', `${parallax}px`);
+      return { el, slot, top: r.top, height: r.height, parallax, depth: '' };
     });
     props.layout({
-      panels: a.panels.map((el) => ({ rect: layoutRect(el), parallax: parallaxOf(el) })),
-      obstacles: (a.obstacles ?? []).map((el) => ({ rect: layoutRect(el), parallax: parallaxOf(el) })),
+      slots: state.panels.filter((panel) => panel.slot).map((panel) => ({
+        id: panel.slot.dataset.slot,
+        rect: layoutRect(panel.slot),
+        panelRect: { top: panel.top, height: panel.height },
+        parallax: panel.parallax,
+      })),
       viewportWidth: state.w,
       viewportHeight: state.h,
       k: state.k,
@@ -650,6 +659,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       const depth = Math.max(-DEPTH_LIMIT, Math.min(DEPTH_LIMIT, (panel.top + panel.height / 2 - state.scroll - state.h / 2) / state.h)).toFixed(3);
       if (depth !== panel.depth) {
         panel.el.style.setProperty('--depth', depth);
+        panel.slot?.style.setProperty('--depth', depth);
         panel.depth = depth;
       }
     });
@@ -659,7 +669,6 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       scroll: state.scroll,
       velocity: scrollVelocity,
       camera,
-      camY: state.camY,
       aimAt: pointerSeen ? propAim.set(mouse.x * state.w * 0.5 * state.k, state.camY - mouse.y * state.h * 0.5 * state.k, 3) : null,
     });
 
@@ -692,7 +701,16 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
 
   // Test-only: window.__propScreenPos() returns the props' projected mesh positions of the last rendered
   // frame (agy's drift test). Never in a production page view without ?e2e=1.
-  const testHook = (import.meta.env.DEV || new URLSearchParams(window.location.search).get('e2e') === '1')
+  // ?e2e=1 sticks for the tab session, so the hook survives a round trip through a sub-screen.
+  const e2e = (() => {
+    try {
+      if (new URLSearchParams(window.location.search).get('e2e') === '1') sessionStorage.setItem('e2e', '1');
+      return sessionStorage.getItem('e2e') === '1';
+    } catch {
+      return new URLSearchParams(window.location.search).get('e2e') === '1';
+    }
+  })();
+  const testHook = (import.meta.env.DEV || e2e)
     ? { frame: 0, props: [] }
     : null;
   if (testHook) window.__propScreenPos = () => ({ frame: testHook.frame, props: testHook.props });

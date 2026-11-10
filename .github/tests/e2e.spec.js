@@ -258,10 +258,27 @@ test.describe('Prop screen positions (test hook)', () => {
 
     const first = await page.evaluate(() => window.__propScreenPos());
     expect(first.props.map((p) => p.id).sort()).toEqual(['chip', 'dome', 'monitor', 'pcb', 'rack']);
-    const shown = first.props.filter((p) => p.visible);
-    expect(shown.length).toBeGreaterThan(0);
-    for (const p of shown) {
+    // v7: visibility by breakpoint only, every prop in the descent scene, never culled.
+    for (const p of first.props) {
+      expect(p.visible).toBe(true);
+      expect(p.scene).toBe('descent');
       expect(Number.isFinite(p.x) && Number.isFinite(p.y)).toBe(true);
+    }
+
+    // Fixed map, and each prop rests on its reserved slot (±1 px) at every scroll position.
+    const order = await page.evaluate(() => [...document.querySelectorAll('.descent-row [data-slot]')].map((n) => n.dataset.slot));
+    expect(order).toEqual(['pcb', 'chip', 'monitor', 'rack', 'dome']);
+    for (const index of [0, 1, 2, 3, 4]) {
+      await page.evaluate((i) => document.querySelectorAll('.descent-row')[i].scrollIntoView({ block: 'center' }), index);
+      await page.waitForTimeout(700);
+      const { slot, prop } = await page.evaluate((i) => {
+        const node = document.querySelectorAll('.descent-row [data-slot]')[i];
+        const r = node.getBoundingClientRect();
+        return { slot: { x: r.left + r.width / 2, y: r.top + r.height / 2 }, prop: window.__propScreenPos().props.find((p) => p.id === node.dataset.slot) };
+      }, index);
+      expect(prop.visible && prop.inFrustum).toBe(true);
+      expect(Math.abs(prop.rest.x - slot.x)).toBeLessThanOrEqual(1);
+      expect(Math.abs(prop.rest.y - slot.y)).toBeLessThanOrEqual(1);
     }
 
     // The DOM proxies are written from the same mesh position in the same frame.

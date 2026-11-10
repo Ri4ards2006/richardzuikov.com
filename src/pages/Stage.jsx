@@ -29,6 +29,8 @@ const SLAB_SIZES = [1, 0.84, 1.12, 0.92, 1.04];
 const SLAB_OFFSETS = [0, 1.1, 0.4, 1.6, 0.7];
 // Depth layer per descent panel: near panels move against the scroll, far ones trail it.
 const PANEL_LAYERS = ['near', 'far', 'mid', 'near', 'far'];
+// Fixed prop per descent panel: 01 PCB tile · 02 chip · 03 monitor · 04 rack unit · 05 security camera.
+const DESCENT_SLOTS = ['pcb', 'chip', 'monitor', 'rack', 'dome'];
 const LAND_PIN_MS = 1500;
 const LAND_RELEASE_EVENTS = ['wheel', 'touchstart', 'keydown', 'pointerdown'];
 
@@ -98,8 +100,6 @@ export default function Stage() {
           slots: slotRefs.current.filter(Boolean),
           panels: panelRefs.current.filter(Boolean),
           skillProp: stageRef.current?.querySelector('.skill-prop'),
-          // Text the descent props must keep clear of.
-          obstacles: [...(stageRef.current?.querySelectorAll('.manga-panel, .stage-descent h2, .stage-descent > p, .stage-now h2, .now-panel') ?? [])],
           propProxies: [...(stageRef.current?.querySelectorAll('[data-prop]') ?? [])],
         }),
       });
@@ -357,20 +357,23 @@ export default function Stage() {
         <h2 id="descent-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight mt-2">{t.atlus.stage.descentTitle}</h2>
         <div className="mt-16 space-y-24 md:space-y-32">
           {t.about.logEntries.map((entry, index) => (
-            <article
-              key={entry.title}
-              ref={(node) => { panelRefs.current[index] = node; }}
-              className={`manga-panel is-${PANEL_LAYERS[index % PANEL_LAYERS.length]} ${index % 2 ? 'is-right' : ''}`}
-            >
-              <div className="flex items-start justify-between gap-5">
-                <span aria-hidden="true" className="font-anton text-6xl leading-none text-ash-600">{String(index + 1).padStart(2, '0')}</span>
-                <PanelIllustration index={index} />
-              </div>
-              <h3 className="font-anton uppercase text-3xl tracking-wide mt-2">{entry.title}</h3>
-              <p className="mt-3 text-base leading-relaxed text-ash-200">{entry.desc}</p>
-              {/* TODO strings are placeholders for facts still to be supplied, so visitors never see them. */}
-              {import.meta.env.DEV && <p className="mt-3 font-mono text-xs text-ash-300">{entry.todo}</p>}
-            </article>
+            // Row = panel + its reserved gutter slot for the 3D prop (DESIGN.md §18); the slot is empty markup.
+            <div key={entry.title} className={`descent-row ${index % 2 ? 'is-right' : ''}`}>
+              <article
+                ref={(node) => { panelRefs.current[index] = node; }}
+                className={`manga-panel is-${PANEL_LAYERS[index % PANEL_LAYERS.length]} ${index % 2 ? 'is-right' : ''}`}
+              >
+                <div className="flex items-start justify-between gap-5">
+                  <span aria-hidden="true" className="font-anton text-6xl leading-none text-ash-600">{String(index + 1).padStart(2, '0')}</span>
+                  <PanelIllustration index={index} />
+                </div>
+                <h3 className="font-anton uppercase text-3xl tracking-wide mt-2">{entry.title}</h3>
+                <p className="mt-3 text-base leading-relaxed text-ash-200">{entry.desc}</p>
+                {/* TODO strings are placeholders for facts still to be supplied, so visitors never see them. */}
+                {import.meta.env.DEV && <p className="mt-3 font-mono text-xs text-ash-300">{entry.todo}</p>}
+              </article>
+              {DESCENT_SLOTS[index] && <div aria-hidden="true" className="prop-slot" data-slot={DESCENT_SLOTS[index]} />}
+            </div>
           ))}
         </div>
       </section>

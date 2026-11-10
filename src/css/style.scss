@@ -538,6 +538,43 @@ h1[tabindex='-1']:focus-visible {
   transform: translateY(calc(var(--depth, 0) * var(--parallax))) perspective(1100px) rotateY(var(--tilt)) rotateX(calc(var(--depth, 0) * 9deg)) rotateZ(var(--roll)) scale(var(--layer-scale));
 }
 
+/* Row = panel + reserved gutter slot for its 3D prop (DESIGN.md §18). The slot is empty, takes the
+   panel's translateY (--depth / --parallax written by scene.js) and exists from 1024 px up only. */
+.prop-slot {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .descent-row {
+    display: grid;
+    grid-template-columns: minmax(0, 34rem) minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .descent-row.is-right {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 34rem);
+  }
+
+  .descent-row.is-right .manga-panel {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .descent-row.is-right .prop-slot {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .prop-slot {
+    display: block;
+    justify-self: center;
+    width: min(11rem, 100%);
+    aspect-ratio: 1;
+    pointer-events: none;
+    transform: translateY(calc(var(--depth, 0) * var(--parallax, 0px)));
+  }
+}
+
 .manga-panel.is-near {
   --layer-scale: 1.06;
   --parallax: -130px;
