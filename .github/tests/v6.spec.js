@@ -7,7 +7,7 @@ test.describe('v6: Prop drift test', () => {
     await page.waitForTimeout(1000);
 
     // Read projected screen positions of actual WebGL meshes directly from Three.js scene camera projection
-    const initialPositions = await page.evaluate(() => {
+    const rawInitial = await page.evaluate(() => {
       if (typeof window.__propScreenPos === 'function') {
         return window.__propScreenPos();
       }
@@ -16,9 +16,31 @@ test.describe('v6: Prop drift test', () => {
 
     // If v6 does not expose window.__propScreenPos, this assertion fails with an explicit contract message
     expect(
-      initialPositions,
-      'window.__propScreenPos must be exposed as a function returning projected screen coordinates { [propId]: { x, y } } per frame (when import.meta.env.MODE !== "production" or ?e2e=1)'
+      rawInitial,
+      'window.__propScreenPos must be exposed as a function returning projected screen coordinates { [propId]: { x, y } } or { frame, props: [...] } per frame (when import.meta.env.MODE !== "production" or ?e2e=1)'
     ).not.toBeNull();
+
+    const normalizePositions = (res) => {
+      if (!res) return null;
+      if (Array.isArray(res.props)) {
+        const map = {};
+        for (const p of res.props) {
+          map[p.id] = { x: p.x, y: p.y, visible: p.visible };
+        }
+        return map;
+      }
+      if (Array.isArray(res)) {
+        const map = {};
+        for (const p of res) {
+          map[p.id] = { x: p.x, y: p.y, visible: p.visible };
+        }
+        return map;
+      }
+      if (typeof res === 'object') return res;
+      return null;
+    };
+
+    const initialPositions = normalizePositions(rawInitial);
     expect(Object.keys(initialPositions || {}).length, 'window.__propScreenPos must return positions for at least one prop').toBeGreaterThan(0);
 
     // Scroll top->bottom->top 5x with fast page.mouse.wheel bursts of varying delta
@@ -40,14 +62,15 @@ test.describe('v6: Prop drift test', () => {
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(1000);
 
-    const finalPositions = await page.evaluate(() => {
+    const rawFinal = await page.evaluate(() => {
       if (typeof window.__propScreenPos === 'function') {
         return window.__propScreenPos();
       }
       return null;
     });
 
-    expect(finalPositions, 'window.__propScreenPos must return final positions').not.toBeNull();
+    expect(rawFinal, 'window.__propScreenPos must return final positions').not.toBeNull();
+    const finalPositions = normalizePositions(rawFinal);
 
     for (const [id, initialPos] of Object.entries(initialPositions)) {
       const finalPos = finalPositions[id];
