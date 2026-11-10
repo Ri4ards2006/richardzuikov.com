@@ -1,4 +1,18 @@
 {
+  "git": {
+    "deploymentEnabled": {
+      "dependabot/*": false,
+      "dependabot/**": false,
+      "test/*": false,
+      "test/**": false,
+      "chore/*": false,
+      "chore/**": false,
+      "backup/*": false,
+      "backup/**": false,
+      "docs/*": false,
+      "docs/**": false
+    }
+  },
   "rewrites": [
     {
       "source": "/((?!assets/|cv/|.*\\.[^/]+$).*)",

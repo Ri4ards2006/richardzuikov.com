@@ -28,18 +28,27 @@ Never work directly in the main repository checkout (`/home/richard/Projects/Ong
 
 ## 3. Branching & Delivery Protocol
 
-- **Branch Naming**:
-  - `feat/<feature-name>`: New UI components, stage modules, animations
-  - `fix/<issue-name>`: Bug fixes or visual regression corrections
-  - `chore/<chore-name>`: CI workflows, tool configuration, static assets
-  - `docs/<doc-name>`: Documentation, design reviews, audit summaries
+- **Vercel Deploy Budget & Push Discipline**:
+  - **Commit per task, push once per session**: The repository is linked to 4 Vercel projects on the Hobby tier (100 deployments/day limit = 25 pushes max across all developers and agents). Make granular commits locally per task, but **push to origin only once per session** after full verification.
+- **Branch Prefix & Deployment Matrix**:
+  | Branch Prefix | Vercel Deploys? | Intended Scope |
+  | :--- | :---: | :--- |
+  | `main` | **YES** | Production releases |
+  | `feat/*` | **YES** | New features requiring live visual design review |
+  | `fix/*` | **YES** | Bug fixes requiring live visual preview |
+  | `chore/*` | **NO** | CI/infra, configs, asset optimization |
+  | `test/*` | **NO** | E2E tests, QA suites, regressions |
+  | `docs/*` | **NO** | Architectural docs, reviews, design specs |
+  | `backup/*` | **NO** | Checkpoints & branch stashes |
+  | `dependabot/*` | **NO** | Automated dependency bumps |
 - **Forbidden Actions**:
   - ❌ **NEVER push directly to `main`**.
   - ❌ **NEVER merge pull requests** unless explicitly requested by the owner.
   - ❌ **NEVER force-push (`git push --force`)**.
+  - ❌ **NEVER push multiple times in a loop** (exhausts Vercel deployment quotas).
   - ❌ **NEVER alter repository settings or global git configs**.
 - **Delivery**:
-  - Always push your branch to `origin` and use `gh pr create` to open a Pull Request into `feat/atlus-menu` (or the specified target branch).
+  - Always push your branch to `origin` once and use `gh pr create` to open a Pull Request into `feat/atlus-menu` (or the specified target branch).
   - Stop after opening the PR.
 
 ---
