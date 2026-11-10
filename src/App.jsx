@@ -11,9 +11,14 @@ const Work = lazy(() => import('./pages/Work'));
 const Stack = lazy(() => import('./pages/Stack'));
 const Career = lazy(() => import('./pages/Career'));
 const Impressum = lazy(() => import('./pages/Impressum'));
+// Dev-only poster lab (v7 task 6); the DEV guard drops it from the production bundle.
+const PortraitLab = import.meta.env.DEV ? lazy(() => import('./pages/PortraitLab')) : null;
 
 function AppRoutes() {
   const { displayed, transition, clearTransition } = useWipeLocation();
+  if (PortraitLab && new URLSearchParams(displayed.search).has('portrait-lab')) {
+    return <Suspense fallback={null}><PortraitLab /></Suspense>;
+  }
 
   return (
     <>

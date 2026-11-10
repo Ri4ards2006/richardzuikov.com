@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "portraits": "bash scripts/portraits.sh",
+    "poster": "bash scripts/poster.sh",
     "test:e2e": "playwright test",
     "test:security": "node .github/scripts/check-gps-exif.cjs",
     "lhci": "lhci autorun"

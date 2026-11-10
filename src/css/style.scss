@@ -3894,6 +3894,107 @@ html.gm-open .menu-dots {
   }
 }
 
+/* ---------- Poster portrait (DESIGN.md §18, v7 task 6) ---------- */
+
+.poster {
+  position: relative;
+  display: block;
+}
+
+.poster img,
+.poster-gl {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.poster-color,
+.poster-gl {
+  position: absolute;
+  inset: 0;
+}
+
+.poster-gl {
+  height: 100%;
+  opacity: 0;
+}
+
+.poster.is-gl .poster-gl {
+  opacity: 1;
+}
+
+.poster.is-gl .poster-static {
+  visibility: hidden;
+}
+
+/* Static fallback reveal: a plain cross-fade. */
+.poster-color {
+  opacity: 0;
+  transition: opacity 250ms ease-out;
+}
+
+.poster.has-reveal:hover .poster-color {
+  opacity: 1;
+}
+
+/* Poster figures stay in their own tones (no grayscale filter on top). */
+.prof-portrait .poster.prof-figure {
+  filter: none;
+}
+
+/* Dev-only portrait lab (/?portrait-lab). */
+.portrait-lab {
+  display: grid;
+  grid-template-columns: 18rem minmax(0, 1fr);
+  gap: 2rem;
+  padding: 5.5rem 1.5rem 2rem;
+  color: rgb(var(--ash-100));
+}
+
+.portrait-lab aside {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+}
+
+.portrait-lab label {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.portrait-lab label.is-row {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+
+.portrait-lab button,
+.portrait-lab select {
+  padding: 0.4rem;
+  color: rgb(var(--ash-900));
+  background: rgb(var(--ash-100));
+}
+
+.portrait-lab pre {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.portrait-lab-stage {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.portrait-lab figcaption {
+  margin-top: 0.5rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: rgb(var(--ash-300));
+}
+
 /* ---------- Detail screen: Career entries and Stack skills (DESIGN.md §16) ---------- */
 
 .dts {
