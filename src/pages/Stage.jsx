@@ -15,7 +15,7 @@ import ProjectDeck from '../components/stage/ProjectDeck';
 import NowSection from '../components/stage/NowSection';
 import CardInspect from '../components/stage/CardInspect';
 import SkillBoard from '../components/atlus/SkillBoard';
-import RecordBoard from '../components/atlus/RecordBoard';
+import RecordBoard, { SpeedLines } from '../components/atlus/RecordBoard';
 import ContactList from '../three/bonfire/ContactList';
 import { grainTexture } from '../lib/noise-textures';
 import { ImpactInk, InkSplat, TraceStar } from '../components/atlus/glyphs';
@@ -421,6 +421,7 @@ export default function Stage() {
 
       <section id="record" aria-labelledby="record-title" className="stage-works scroll-mt-16">
         <div className="record-pin">
+          <SpeedLines />
           <div className="record-yaw">
             <ImpactInk variant={2} />
             <p className="font-mono text-xs tracking-widest text-ash-300">04 / {t.atlus.hud.career}</p>

@@ -2839,7 +2839,9 @@ html.gm-open .menu-dots {
 
 .record-ride .record-yaw {
   position: relative;
-  transform: rotateY(var(--yaw, 0deg)) translateZ(calc(var(--yaw-abs, 0) * -1px));
+  z-index: 1;
+  /* Turn in (yaw), hand-over roll at the end (v6). */
+  transform: rotateY(var(--yaw, 0deg)) rotateZ(var(--roll, 0deg));
   transform-origin: 50% 50%;
   backface-visibility: hidden;
   will-change: transform;
@@ -2850,17 +2852,26 @@ html.gm-open .menu-dots {
   align-items: center;
 }
 
+.record-ride .record-board {
+  gap: 0;
+}
+
+/* The year counter owns its column on solid ink; the ride viewport starts to its right. */
 .record-ride .record-year {
   position: relative;
   top: auto;
   z-index: 3;
+  align-self: stretch;
+  align-items: center;
+  padding-inline-end: 1.5rem;
+  background: rgb(var(--ash-900));
+  box-shadow: 1.5rem 0 0 rgb(var(--ash-900));
 }
 
 .record-ride .record-track {
   overflow: hidden;
-  padding: 1.5rem 0 1rem 2.5rem;
+  padding: 1.5rem 0 1rem 2.75rem;
   margin-block: -1.5rem -1rem;
-  margin-inline-start: -1.75rem;
   min-height: 20rem;
   -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent);
   mask-image: linear-gradient(90deg, #000 85%, transparent);
@@ -2908,18 +2919,39 @@ html.gm-open .menu-dots {
   transform: translateY(-0.5rem);
 }
 
-/* Horizontal speedlines while the timeline rides. */
-.record-ride .record-pin::after {
-  content: '';
+/* Persona speedlines while the timeline rides: tapered wedges at -8°, streaming with --lines-x. */
+.ride-lines {
+  display: none;
+}
+
+.record-ride .ride-lines {
   position: absolute;
-  inset: 20% 0;
+  inset: -10% -10%;
+  display: block;
+  overflow: hidden;
   pointer-events: none;
-  background: repeating-linear-gradient(90deg, rgb(var(--ash-100) / 0.14) 0 90px, transparent 90px 260px);
-  background-position: calc(var(--shift, 0px) * -2) 0;
-  -webkit-mask-image: repeating-linear-gradient(180deg, transparent 0 23px, #000 23px 24px), linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent);
-  -webkit-mask-composite: source-in;
-  mask-image: repeating-linear-gradient(180deg, transparent 0 23px, #000 23px 24px), linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent);
-  mask-composite: intersect;
+  transform: rotate(-8deg);
+}
+
+.ride-lines-strip {
+  display: flex;
+  width: 200%;
+  height: 100%;
+  transform: translateX(var(--lines-x, 0px));
+}
+
+.ride-lines-half {
+  position: relative;
+  flex: none;
+  width: 50%;
+  height: 100%;
+}
+
+.ride-lines-half > span {
+  position: absolute;
+  background: rgb(var(--ash-100));
+  /* Point trails to the left, thick end leads: the direction of travel. */
+  clip-path: polygon(0 50%, 100% 0, 100% 100%);
 }
 
 .record-ride .stage-more {
