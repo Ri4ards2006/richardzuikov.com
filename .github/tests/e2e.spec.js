@@ -301,3 +301,44 @@ test.describe('Prop screen positions (test hook)', () => {
     expect(second.frame).toBeGreaterThan(first.frame);
   });
 });
+
+test.describe('Pause menu (v7)', () => {
+  test('the open menu pauses the page: no scroll, main inert, exact position restored', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(1000);
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await page.waitForTimeout(800);
+    const before = await page.evaluate(() => window.scrollY);
+
+    await page.locator('.menu-dots').first().click();
+    await expect(page.locator('.gm')).toBeVisible();
+    const vp = page.viewportSize();
+    await page.mouse.move(vp.width / 2, vp.height / 2);
+    await page.mouse.wheel(0, -1500);
+    await page.keyboard.press('PageUp');
+    await page.waitForTimeout(400);
+    const during = await page.evaluate(() => ({
+      y: window.scrollY,
+      inert: document.querySelector('main').inert,
+      hidden: document.querySelector('main').getAttribute('aria-hidden'),
+    }));
+    expect(during).toEqual({ y: before, inert: true, hidden: 'true' });
+
+    // Letters column exactly as tall as the list; no footer chip overlaps another.
+    const layout = await page.evaluate(() => {
+      const box = (n) => n.getBoundingClientRect();
+      const letters = box(document.querySelector('.gm-letters'));
+      const list = box(document.querySelector('.gm-list'));
+      const chips = [...document.querySelectorAll('.gm-foot .gm-chip, .gm-legal button')].map(box);
+      const overlaps = chips.some((a, i) => chips.some((b, j) => i < j && a.left < b.right - 0.5 && b.left < a.right - 0.5 && a.top < b.bottom - 0.5 && b.top < a.bottom - 0.5));
+      return { dh: Math.abs(letters.height - list.height), overlaps };
+    });
+    expect(layout.dh).toBeLessThanOrEqual(1);
+    expect(layout.overlaps).toBe(false);
+
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.gm')).toHaveCount(0);
+    const after = await page.evaluate(() => ({ y: window.scrollY, inert: document.querySelector('main').inert }));
+    expect(after).toEqual({ y: before, inert: false });
+  });
+});

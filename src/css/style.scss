@@ -1289,72 +1289,71 @@ html.gm-open .menu-dots {
   100% { transform: translateX(-40vw) skewX(-18deg); }
 }
 
-/* Vertical MENU in its own fixed-width column: upright, even leading, never under the list. */
-.gm-letters {
+/* Pause screen (DESIGN.md §18): 12 columns inside the safe area. Cols 1-2 the vertical MENU (exactly as
+   tall as the list), 3-6 the list, 7-12 the preview; the footer is one row of three zones. */
+.gm-grid {
+  --gm-pad: clamp(1rem, 3vw, 2.5rem);
   position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: var(--gm-col);
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr) auto;
+  column-gap: clamp(0.75rem, 1.6vw, 1.5rem);
+  row-gap: 1.5rem;
+  padding: calc(var(--gm-pad) + 3rem) var(--gm-pad) var(--gm-pad);
+}
+
+/* MENU letters and list share one row, so the letters column is exactly as tall as the list. */
+.gm-menu {
+  grid-column: 1 / 7;
+  align-self: center;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: stretch;
+}
+
+.gm-letters {
+  grid-column: 1 / 3;
+  container-type: size;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  min-height: 0;
   overflow: hidden;
   font-family: Anton, Impact, sans-serif;
-  font-size: min(calc(var(--gm-col) * 1.1), 19vh);
-  line-height: 1.05;
-  color: rgb(var(--ash-100) / 0.1);
-  border-inline-end: 1px solid rgb(var(--ash-100) / 0.1);
+  line-height: 1;
+  color: rgb(var(--ash-100) / 0.12);
+  border-inline-end: 1px solid rgb(var(--ash-100) / 0.12);
   user-select: none;
   pointer-events: none;
 }
 
-/* Echo of the focused item, like the stage menu. */
-.gm-echo {
-  position: absolute;
-  right: -0.08em;
-  bottom: 9vh;
-  font-family: Anton, Impact, sans-serif;
-  font-size: clamp(4.5rem, 11vw, 12rem);
-  line-height: 0.9;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: rgb(var(--ash-100) / 0.05);
-  -webkit-text-stroke: 1.5px rgb(var(--ash-100) / 0.15);
-  transform: rotate(-6deg);
-  pointer-events: none;
-  animation: gm-echo 180ms cubic-bezier(0.2, 0.9, 0.1, 1) both;
-}
-
-@keyframes gm-echo {
-  from { opacity: 0; translate: 12px 0; }
-  to { opacity: 1; translate: 0 0; }
+/* Four letters, evenly spaced over the list height; never wider than the two columns. Container units
+   resolve against the letters column (an ancestor of the spans), not the viewport. */
+.gm-letters span {
+  font-size: min(24cqh, 90cqw);
 }
 
 .gm-main {
-  position: absolute;
-  left: calc(var(--gm-col) + var(--gm-gap));
-  top: 50%;
-  transform: translateY(-54%);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  grid-column: 3 / 7;
+  min-width: 0;
   perspective: 900px;
 }
 
 .gm-list {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.35rem;
 }
 
+/* Number column directly left of its item, fixed 16 px gap, no staircase. */
 .gm-list li {
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  column-gap: 16px;
   align-items: center;
-  gap: 0.75rem;
-  margin-inline-start: calc(var(--i) * 1.4rem + var(--o) * 0.9rem);
   transform-style: preserve-3d;
 }
 
@@ -1362,7 +1361,7 @@ html.gm-open .menu-dots {
 .gm-list li::before {
   content: '';
   position: absolute;
-  inset-inline-start: 2.25rem;
+  inset-inline-start: calc(2.25rem + 16px);
   top: 8%;
   width: 80%;
   height: 84%;
@@ -1379,25 +1378,27 @@ html.gm-open .menu-dots {
 }
 
 .gm-number {
-  min-width: 1.75rem;
-  translate: 0 calc(var(--i) * -0.2rem - 0.6rem);
   font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
   font-size: 0.75rem;
+  text-align: right;
+  white-space: nowrap;
   color: rgb(var(--ash-300));
 }
 
 .gm-slab {
   position: relative;
-  display: inline-block;
-  padding: 0.05rem 2.75rem 0.05rem 1rem;
+  justify-self: start;
+  max-width: 100%;
+  padding: 0.14em 2.25rem 0.02em 0.9rem;
   font-family: Anton, Impact, sans-serif;
-  font-size: clamp(2.5rem, 9.5vh, 5.75rem);
+  font-size: min(9vh, 4.4vw, 5.5rem);
   line-height: 1.12;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  white-space: nowrap;
   color: rgb(var(--ash-200));
-  clip-path: polygon(0 0, 100% 0, calc(100% - 1.75rem) 100%, 0 100%);
-  transform: rotateY(-16deg) rotateZ(calc(-5deg - var(--i) * 0.8deg));
+  clip-path: polygon(0 0, 100% 0, calc(100% - 1.5rem) 100%, 0 100%);
+  transform: rotateY(-14deg) rotateZ(-4deg);
   transform-origin: left center;
   opacity: 0;
   translate: -3rem 0;
@@ -1419,16 +1420,93 @@ html.gm-open .menu-dots {
   outline-offset: -5px;
 }
 
+/* Preview of the selected section: name, portrait (shrinks first), then the label block. */
+.gm-preview {
+  grid-column: 7 / 13;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  justify-items: end;
+  text-align: right;
+  pointer-events: none;
+}
+
+.gm-name {
+  font-family: Anton, Impact, sans-serif;
+  font-size: clamp(1.5rem, 2.4vw, 2.75rem);
+  line-height: 1;
+  text-transform: uppercase;
+  color: rgb(var(--ash-100));
+}
+
+.gm-name span {
+  display: block;
+  margin-top: 0.6rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  color: rgb(var(--ash-300));
+}
+
+.gm-portrait {
+  min-height: 0;
+  height: 100%;
+  max-height: 26rem;
+  max-width: 100%;
+  margin-block: 0.75rem;
+  object-fit: contain;
+  object-position: right bottom;
+  filter: grayscale(1) contrast(1.15);
+  opacity: 0.85;
+}
+
+.gm-echo {
+  max-width: 100%;
+  animation: gm-echo 180ms cubic-bezier(0.2, 0.9, 0.1, 1) both;
+}
+
+@keyframes gm-echo {
+  from { opacity: 0; translate: 12px 0; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+.gm-kicker {
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  color: rgb(var(--ash-300));
+}
+
+.gm-label {
+  font-family: Anton, Impact, sans-serif;
+  font-size: clamp(48px, 6vw, 112px);
+  /* Room for umlaut dots inside the clipped line box. */
+  line-height: 1.15;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  color: rgb(var(--ash-100) / 0.08);
+  -webkit-text-stroke: 1.5px rgb(var(--ash-100) / 0.45);
+}
+
+.gm-teaser {
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+  color: rgb(var(--ash-200));
+}
+
 /* HUD chips: slanted, small, mono. */
 .gm-chip {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   min-height: 2.75rem;
-  padding: 0 1.1rem;
+  padding: 0 clamp(0.7rem, 0.9vw, 1.1rem);
   font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
   font-size: 0.75rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   white-space: nowrap;
   color: rgb(var(--ash-100));
@@ -1445,64 +1523,29 @@ html.gm-open .menu-dots {
   transform: translateY(-2px);
 }
 
-/* Name and portrait, as on the stage (top right). */
-.gm-hero {
-  position: absolute;
-  top: 4rem;
-  right: clamp(1rem, 3vw, 2.5rem);
+/* Footer: one row, three zones (settings | legal | links). */
+.gm-foot {
+  grid-column: 1 / 13;
+  /* Above the wipe shards (z 90): the legal links are never covered. */
+  position: relative;
+  z-index: 95;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.gm-zone {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  text-align: right;
-  pointer-events: none;
-}
-
-.gm-name {
-  font-family: Anton, Impact, sans-serif;
-  font-size: clamp(2.5rem, 5.2vw, 6.5rem);
-  line-height: 0.94;
-  text-transform: uppercase;
-  color: rgb(var(--ash-100));
-  transform: rotate(-4deg) skewX(-6deg);
-  transform-origin: right top;
-}
-
-.gm-name span {
-  display: block;
-}
-
-.gm-name span + span {
-  margin-inline-end: 0.55em;
-}
-
-.gm-role {
-  margin-top: 1.75rem;
-  font-family: ui-monospace, monospace;
-  font-size: 0.6875rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgb(var(--ash-300));
-}
-
-.gm-portrait {
-  height: min(44vh, 28rem);
-  max-width: 26vw;
-  margin-top: 1rem;
-  object-fit: contain;
-  object-position: right bottom;
-  filter: grayscale(1) contrast(1.15);
-}
-
-.gm-corner {
-  position: absolute;
-  bottom: 2.5rem;
-  display: flex;
+  flex-wrap: nowrap;
   gap: 0.375rem;
-  transform: rotate(-3deg);
+  min-width: 0;
 }
 
-.gm-corner.is-left { left: clamp(1rem, 3vw, 2.5rem); }
-.gm-corner.is-right { right: clamp(1rem, 3vw, 2.5rem); }
+.gm-zone.is-links {
+  justify-content: flex-end;
+}
 
 .gm-lang b {
   font-weight: 700;
@@ -1515,21 +1558,16 @@ html.gm-open .menu-dots {
 }
 
 .gm-legal {
-  position: absolute;
-  /* Above the wipe shards (z 90): the legal links are never covered. */
-  z-index: 95;
-  left: 0;
-  right: 0;
-  bottom: 0.25rem;
-  text-align: center;
+  align-items: center;
   font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   letter-spacing: 0.12em;
+  white-space: nowrap;
   color: rgb(var(--ash-300));
 }
 
 .gm-legal button {
-  min-height: 1.75rem;
+  min-height: 2.75rem;
   padding-inline: 0.25rem;
   letter-spacing: inherit;
 }
@@ -1544,7 +1582,7 @@ html.gm-open .menu-dots {
 
 .gm-close {
   position: fixed;
-  z-index: 1;
+  z-index: 96;
   top: 0.625rem;
   right: 1.25rem;
   width: 3.25rem;
@@ -1569,81 +1607,108 @@ html.gm-open .menu-dots {
   box-shadow: inset 0 0 0 2px rgb(var(--ash-100));
 }
 
-@media (max-width: 767px) {
-  .gm {
-    --gm-col: 2.75rem;
-    --gm-gap: 2rem;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem 1rem 1.25rem calc(var(--gm-col) + var(--gm-gap));
+@media (max-width: 1279px) {
+  .gm-foot .gm-chip {
+    padding-inline: 0.6rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
   }
 
-  .gm-hero {
-    position: static;
-    align-items: flex-start;
+  .gm-legal {
+    letter-spacing: 0.04em;
+  }
+}
+
+/* Below 1024 px the preview goes and the footer stacks. */
+@media (max-width: 1023px) {
+  .gm {
+    overflow-y: auto;
+  }
+
+  .gm-grid {
+    position: relative;
+    inset: auto;
+    min-height: 100%;
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto;
+    column-gap: 1.25rem;
+    padding: 0.75rem 1rem 1.25rem;
+  }
+
+  .gm-menu {
+    grid-column: 1 / 3;
+    grid-row: 2;
+  }
+
+  .gm-letters {
+    grid-column: 1;
+  }
+
+  .gm-main {
+    grid-column: 2;
+  }
+
+  .gm-slab {
+    font-size: clamp(1.9rem, 9.5vw, 3.25rem);
+    padding-inline-end: 1.75rem;
+  }
+
+  .gm-list li {
+    grid-template-columns: 2rem minmax(0, 1fr);
+    column-gap: 10px;
+  }
+
+  .gm-list li::before {
+    inset-inline-start: calc(2rem + 10px);
+  }
+
+  .gm-number {
+    font-size: 0.6875rem;
+  }
+
+  /* Name only, in the top row; it leaves room for the close button (≤ 375 px too). */
+  .gm-preview {
+    grid-column: 1 / 3;
+    grid-row: 1;
+    display: block;
+    min-height: 2.75rem;
+    padding-inline-end: 4.75rem;
     text-align: left;
-    padding-inline-end: 4rem;
   }
 
   .gm-name {
-    font-size: 1.75rem;
-    transform: none;
+    font-size: 1.5rem;
+    line-height: 1.1;
   }
 
   .gm-name span {
-    display: inline;
-  }
-
-  .gm-name span + span {
-    margin-inline-end: 0;
-  }
-
-  .gm-role {
     margin-top: 0.25rem;
     font-size: 0.625rem;
+    letter-spacing: 0.14em;
   }
 
-  .gm-portrait {
-    display: none;
-  }
-
+  .gm-portrait,
   .gm-echo {
     display: none;
   }
 
-  .gm-main {
-    position: static;
-    transform: none;
-    margin-block: auto 1.5rem;
+  .gm-foot {
+    grid-column: 1 / 3;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+    gap: 0.5rem;
   }
 
-  .gm-number {
-    min-width: 1.5rem;
-  }
-
-  .gm-list li {
-    gap: 0.4rem;
-    margin-inline-start: calc(var(--i) * 0.35rem);
-  }
-
-  .gm-slab {
-    font-size: clamp(2rem, 10vw, 3.25rem);
-    padding-inline-end: 2rem;
-  }
-
-  .gm-corner {
-    position: static;
+  .gm-zone {
     flex-wrap: wrap;
-    margin-top: 0.5rem;
-    transform: rotate(-2deg);
   }
 
-  .gm-legal {
-    position: relative;
-    bottom: auto;
-    margin-top: 1rem;
-    text-align: left;
+  .gm-zone.is-links {
+    justify-content: flex-start;
+  }
+
+  .gm-close {
+    right: 0.75rem;
   }
 }
 

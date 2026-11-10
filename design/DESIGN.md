@@ -415,3 +415,9 @@ Owner review of v6, 2026-11-10. Open work is in TASKS.md.
 - Each prop is placed through the camera of the current frame (ray onto its plane), so camera damping and perspective can't move it off its slot.
 - Every screen builds its own prop instances (factories); nothing is re-parented between scenes. `/about` keeps its own camera instance.
 - Test hook `window.__propScreenPos()` (dev or `?e2e=1`, sticky for the tab session): `{ frame, props: [{ id, visible, inFrustum, scene, x, y, rest }] }`.
+
+**Pause menu** (supersedes the menu layout of §17)
+- Real pause: while open, `<html>` has `overflow: hidden`, `<main>` and the site footer are `inert` + `aria-hidden`, wheel/touch never reach the page's listeners; on close the exact scroll position comes back (unless an entry sent the visitor elsewhere). The site scrolls natively; there is no Lenis.
+- Backdrop: ink-0 (`--ash-900` = #050505), opaque, with screentone; nothing of the page shows.
+- Desktop: 12 columns inside the safe area. Cols 1–2 the vertical MENU, exactly as tall as the list, letters evenly spaced. Cols 3–6 the list; numbers in one column directly left of their item, 16 px gap, no staircase. Cols 7–12 the preview of the selected item: name + role, portrait (shrinks first), kicker, label `clamp(48px, 6vw, 112px)`, one teaser line.
+- Footer: one row, three zones: DE/EN · THEME | Impressum · Datenschutz | GITHUB · LINKEDIN · MAIL · QUICK READ. Below 1024 px the preview drops to the name in the top row (clear of the close button), and the footer stacks.
