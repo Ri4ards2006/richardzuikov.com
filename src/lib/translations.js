@@ -190,6 +190,7 @@ export const translations = {
       certificates: [
         {
           id: "7Y5OLV313LZX",
+          emblem: "AZ-900",
           title: "AZ-900: Microsoft Azure Fundamentals",
           issuer: "Microsoft",
           date: "Mai 2026",
@@ -198,6 +199,7 @@ export const translations = {
         },
         {
           id: "T6LTXVIVD8PF",
+          emblem: "POWER",
           title: "Linux & Private Cloud Admin on IBM Power Systems",
           issuer: "Red Hat & IBM",
           date: "Mai 2026",
@@ -206,6 +208,7 @@ export const translations = {
         },
         {
           id: "P9EALFL0QGOT",
+          emblem: "PYTHON",
           title: "Google IT Automation with Python",
           issuer: "Google",
           date: "Apr. 2026",
@@ -214,6 +217,7 @@ export const translations = {
         },
         {
           id: "ZXZ4ANI6JFX4",
+          emblem: "ARCHITECT",
           title: "IBM Systems and Solutions Architect",
           issuer: "IBM",
           date: "Apr. 2026",
@@ -222,6 +226,7 @@ export const translations = {
         },
         {
           id: "CSCO-CCNA",
+          emblem: "CCNA",
           title: "Cisco Certified Network Associate (CCNA)",
           issuer: "Cisco",
           date: "Mai 2026",
@@ -230,6 +235,7 @@ export const translations = {
         },
         {
           id: "LF-CKA",
+          emblem: "CKA",
           title: "Certified Kubernetes Administrator (CKA)",
           issuer: "Cloud Native Computing Foundation (CNCF) & Linux Foundation",
           date: "Mai 2026",
@@ -558,6 +564,7 @@ export const translations = {
       certificates: [
         {
           id: "7Y5OLV313LZX",
+          emblem: "AZ-900",
           title: "AZ-900: Microsoft Azure Fundamentals",
           issuer: "Microsoft",
           date: "May 2026",
@@ -566,6 +573,7 @@ export const translations = {
         },
         {
           id: "T6LTXVIVD8PF",
+          emblem: "POWER",
           title: "Linux & Private Cloud Admin on IBM Power Systems",
           issuer: "Red Hat & IBM",
           date: "May 2026",
@@ -574,6 +582,7 @@ export const translations = {
         },
         {
           id: "P9EALFL0QGOT",
+          emblem: "PYTHON",
           title: "Google IT Automation with Python",
           issuer: "Google",
           date: "Apr. 2026",
@@ -582,6 +591,7 @@ export const translations = {
         },
         {
           id: "ZXZ4ANI6JFX4",
+          emblem: "ARCHITECT",
           title: "IBM Systems and Solutions Architect",
           issuer: "IBM",
           date: "Apr. 2026",
@@ -590,6 +600,7 @@ export const translations = {
         },
         {
           id: "CSCO-CCNA",
+          emblem: "CCNA",
           title: "Cisco Certified Network Associate (CCNA)",
           issuer: "Cisco",
           date: "May 2026",
@@ -598,6 +609,7 @@ export const translations = {
         },
         {
           id: "LF-CKA",
+          emblem: "CKA",
           title: "Certified Kubernetes Administrator (CKA)",
           issuer: "Cloud Native Computing Foundation (CNCF) & Linux Foundation",
           date: "May 2026",

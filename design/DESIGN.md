@@ -165,7 +165,7 @@ Home `/` = one page: one fixed WebGL canvas behind, HTML sections on top.
 - **heading:** panel with ransom-note headline "WHERE I'M HEADING", short text.
 - **arcana:** game-card style with roman numerals, no occult symbols, no slogan headlines. Entering the section deals the 3 cards onto a table (fly in, slam, small bounce, dust puff). Scroll progress rotates the fan. Hover = 3D tilt + silver sheen sweep. Click opens the inspect view (see §14). Front: high-contrast grayscale image with very fine screentone, object recognisable, roman numeral centred at the top, title. Frame drawn as SVG, no image. Below: a browsable deck of all projects (data from Lab) as smaller cards in a fan/carousel (drag, wheel, arrow keys); a click on the selected card opens the same inspect view. Rack Configurator is one card in the deck.
 - **skill:** no ratings; each item shows short "used for / where" tags. List tilted in 3D; active item = asymmetric paper slab. Right panel: animated monochrome mini vignette per category — Low-level: source → asm → hex scrolling; Systems: rack with blinking LEDs; Hardware: oscilloscope trace; Web: browser wireframe assembling itself. The empty space below is filled by a detail panel for the selected item.
-- **record:** years as big Anton numerals that **flip like a calendar** while scrolling; each role slides in as a slanted bar with a roman rank. **KEY ITEMS:** certificates as a Souls-style inventory grid (square tiles, generic line icons — no brand logos). Selected tile → right panel: title (Cinzel), issuer, date, one dry flavor-text line (editable), verify link only when it points at that exact credential.
+- **record:** years as big Anton numerals that **flip like a calendar** while scrolling; each role slides in as a slanted bar with a roman rank. **KEY ITEMS:** certificates as a Souls-style inventory grid. Front: the exam code as the emblem (AZ-900, CCNA, CKA …) in Anton inside the frame plus one small generic line glyph. Flip / inspect back: the **official earned badge**, shown unmodified and in colour (§2), linked to its verification URL only when that URL points at that exact credential; files come from Richard as `src/assets/badges/<id>.png` (never scraped or redrawn), until then the back keeps the line icon. Earned badges are allowed on the back only; **no standalone company logos anywhere.** Selected tile → right panel: title (Cinzel), issuer, date, one dry flavor-text line (editable).
 - One continuous particle story: stage shards continue into the descent, thin out and turn into rising ash, which becomes embers at the bonfire.
 - 55 – 80 %: panels fade, darkness grows, ash particles shift colour into embers.
 
@@ -204,7 +204,7 @@ Home `/` = one page: one fixed WebGL canvas behind, HTML sections on top.
 
 - Portrait: drop photos into `src/assets/portraits/raw/` → `npm run portraits`. Layer split via manual masks; optional depth map generated locally.
 - Textures: Poly Haven CC0 only, logged in `design/ASSETS.md`. Everything else is generated in code.
-- Never: game assets, brand logos for certificates, copyrighted music. No sound for now.
+- Never: game assets, standalone company / brand logos, copyrighted music. No sound for now. Exception: a certificate's official earned badge on the KEY ITEMS back, unmodified (§7).
 
 ---
 
