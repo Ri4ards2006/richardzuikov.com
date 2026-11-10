@@ -1,21 +1,25 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('v6: Prop drift test', () => {
-  test('record the bounding box of every [data-prop] at rest, scroll top->bottom->top 5x with fast page.mouse.wheel bursts of varying delta, wait 1 s, assert |Δ| <= 1 px', async ({ page }) => {
-    await page.goto('/', { waitUntil: 'domcontentloaded' });
+  test('record projected screen positions via window.__propScreenPos at rest, scroll top->bottom->top 5x with fast wheel bursts, wait 1 s, assert |Δ| <= 1 px', async ({ page }) => {
+    // Navigate with ?e2e=1 to enable test-only hooks in non-dev environments
+    await page.goto('/?e2e=1', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(1000);
 
-    const propElements = page.locator('[data-prop]');
-    const count = await propElements.count();
-    // Must fail on current feat/atlus-menu (proves the bug / missing [data-prop] elements)
-    expect(count, 'Expected [data-prop] elements to exist on the page').toBeGreaterThan(0);
+    // Read projected screen positions of actual WebGL meshes directly from Three.js scene camera projection
+    const initialPositions = await page.evaluate(() => {
+      if (typeof window.__propScreenPos === 'function') {
+        return window.__propScreenPos();
+      }
+      return null;
+    });
 
-    const initialBoxes = [];
-    for (let i = 0; i < count; i++) {
-      const box = await propElements.nth(i).boundingBox();
-      expect(box, `Initial bounding box for [data-prop] index ${i} must not be null`).not.toBeNull();
-      initialBoxes.push(box);
-    }
+    // If v6 does not expose window.__propScreenPos, this assertion fails with an explicit contract message
+    expect(
+      initialPositions,
+      'window.__propScreenPos must be exposed as a function returning projected screen coordinates { [propId]: { x, y } } per frame (when import.meta.env.MODE !== "production" or ?e2e=1)'
+    ).not.toBeNull();
+    expect(Object.keys(initialPositions || {}).length, 'window.__propScreenPos must return positions for at least one prop').toBeGreaterThan(0);
 
     // Scroll top->bottom->top 5x with fast page.mouse.wheel bursts of varying delta
     const bursts = [450, 850, -350, 1100, -750, 500, -1200, 950, -600];
@@ -36,13 +40,22 @@ test.describe('v6: Prop drift test', () => {
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(1000);
 
-    for (let i = 0; i < count; i++) {
-      const finalBox = await propElements.nth(i).boundingBox();
-      const initBox = initialBoxes[i];
-      const deltaX = Math.abs(finalBox.x - initBox.x);
-      const deltaY = Math.abs(finalBox.y - initBox.y);
-      expect(deltaX, `[data-prop] index ${i} drifted horizontally by ${deltaX}px (expected <= 1px)`).toBeLessThanOrEqual(1);
-      expect(deltaY, `[data-prop] index ${i} drifted vertically by ${deltaY}px (expected <= 1px)`).toBeLessThanOrEqual(1);
+    const finalPositions = await page.evaluate(() => {
+      if (typeof window.__propScreenPos === 'function') {
+        return window.__propScreenPos();
+      }
+      return null;
+    });
+
+    expect(finalPositions, 'window.__propScreenPos must return final positions').not.toBeNull();
+
+    for (const [id, initialPos] of Object.entries(initialPositions)) {
+      const finalPos = finalPositions[id];
+      expect(finalPos, `Prop "${id}" must have a final projected screen position`).toBeDefined();
+      const deltaX = Math.abs(finalPos.x - initialPos.x);
+      const deltaY = Math.abs(finalPos.y - initialPos.y);
+      expect(deltaX, `Prop "${id}" projected X drifted by ${deltaX.toFixed(2)}px (expected <= 1px)`).toBeLessThanOrEqual(1);
+      expect(deltaY, `Prop "${id}" projected Y drifted by ${deltaY.toFixed(2)}px (expected <= 1px)`).toBeLessThanOrEqual(1);
     }
   });
 });
