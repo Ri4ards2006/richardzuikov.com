@@ -6,10 +6,9 @@ Nothing here is invented: whatever stays empty does not appear on the page.
 - Age (or leave empty):
 - Based in: Flensburg
 - Languages + level (native / fluent / good / basic): German …, English …, Latvian …, Russian …
-- Hobbies (with one dry line each): Powerlifting – …, Homelab – …, …
+- Hobbies (with one dry line each): Powerlifting – …, Homelab – …, Reading – …, Coding – …, Outside – … (list: Richard, 2026-11-11; the dry lines are still open)
 - Interests:
-- Typical week (Mon–Sun, short): Mon: Berufsschule / field work / gym / lab …
-- Currently building / learning / reading:
+- Now (Richard, 2026-11-11): Ausbildung IT-Systemelektroniker · Gym (powerlifting) · Reading — details for each still open
 - Travel I'm ok to mention:
 - How friends would describe me in one sentence:
 - What I'm looking for (jobs/freelance/after 2027):

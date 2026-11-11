@@ -4,7 +4,7 @@ import { cutouts, portraits } from '../../data/portraits';
 import CutoutPortrait from '../atlus/CutoutPortrait';
 import { InkSplat } from '../atlus/glyphs';
 import OpenScreen from '../atlus/OpenScreen';
-import { DEV_HINTS } from '../../lib/dev-hints';
+import { inventory, pick } from '../../data/profile';
 
 // Fixed so the letters do not shift between renders (DESIGN.md §3).
 const LETTER_TILT = [-5, 3, -2, 6, -4, 2, -6, 4, -3];
@@ -30,10 +30,10 @@ function RansomTitle({ id, text }) {
 }
 
 const AboutSection = forwardRef(function AboutSection({ portraitRef, webgl }, ref) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const copy = t.atlus.about;
-  // TODO strings are placeholders for facts still to be supplied, so visitors never see them.
-  const into = DEV_HINTS ? copy.todoInto : null;
+  // "What I'm into" = the /about inventory (Richard's hobbies), names only: no TODO text here (§19).
+  const into = inventory.map((item) => pick(item.name, language));
 
   return (
     <section id="about" ref={ref} aria-labelledby="about-title" className="stage-about scroll-mt-16">
@@ -48,12 +48,10 @@ const AboutSection = forwardRef(function AboutSection({ portraitRef, webgl }, re
           <ul className="about-tags">
             {t.about.tags.map((tag) => <li key={tag}>{tag}</li>)}
           </ul>
-          {into && (
-            <>
-              <h3 className="about-label">{copy.into}</h3>
-              <p className="text-base leading-relaxed text-ash-300">{into}</p>
-            </>
-          )}
+          <h3 className="about-label">{copy.into}</h3>
+          <ul className="about-tags is-into">
+            {into.map((name) => <li key={name}>{name}</li>)}
+          </ul>
         </div>
         <OpenScreen to="/about" />
       </div>

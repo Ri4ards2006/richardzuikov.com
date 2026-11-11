@@ -45,7 +45,7 @@ export const translations = {
       overview: "Übersicht"
     },
     atlus: {
-      "about": {"title":"WER BIN ICH","who":"WER","what":"WAS ICH MACHE","into":"WOFÜR ICH MICH BEGEISTERE","todoInto":"TODO: ergänzen, wofür Richard sich begeistert.","profile":{"tabs":{"status":"STATUS","week":"WOCHE","inventory":"INVENTAR","now":"JETZT"},"name":"NAME","base":"BASIS","role":"ROLLE","age":"ALTER","languages":"SPRACHEN","levels":["","GRUNDKENNTNISSE","GUT","FLIESSEND","MUTTERSPRACHE"],"today":"HEUTE","weekTitle":"EINE TYPISCHE WOCHE","inventoryTitle":"INVENTAR","building":"BAUE","learning":"LERNE","reading":"LESE","skills":"Skills → Stack","portrait":"Porträt im Profil","draft":"ENTWURF: Intro von Richard zu prüfen."}},
+      "about": {"title":"WER BIN ICH","who":"WER","what":"WAS ICH MACHE","into":"WOFÜR ICH MICH BEGEISTERE","profile":{"tabs":{"status":"STATUS","inventory":"INVENTAR","now":"JETZT"},"name":"NAME","base":"BASIS","role":"ROLLE","age":"ALTER","languages":"SPRACHEN","levels":["","GRUNDKENNTNISSE","GUT","FLIESSEND","MUTTERSPRACHE"],"inventoryTitle":"INVENTAR","skills":"Skills → Stack","portrait":"Porträt im Profil","draft":"ENTWURF: Intro von Richard zu prüfen."}},
       "now": {"label":"JETZT /","title":"In Arbeit","helm":{"title":"Helm","kicker":"KI-Agent","summary":"TODO: Ein bis zwei Sätze, was Helm macht (von Richard)","progress":"TODO: Fortschritt / Schritte für den Balken (von Richard)"}},
       "stage": {"loading":"SYSTEM WIRD GELADEN","skip":"Beliebige Taste zum Überspringen","descent":"ABSTIEG / SYSTEME","descentTitle":"VOM PIN ZUM PAKET","works":"AUSGEWÄHLTE ARBEITEN","rack":"19\" Rack Configurator","abyssLabel":"TIEFE / 100 %","scroll":"Nach unten scrollen","portrait":"Porträt"},
       "contact": {"headline":"RASTE HIER, WANDERER","kindled":"VERBINDUNG ENTFACHT"},
@@ -420,7 +420,7 @@ export const translations = {
       overview: "Overview"
     },
     atlus: {
-      "about": {"title":"WHO AM I","who":"WHO","what":"WHAT I DO","into":"WHAT I'M INTO","todoInto":"TODO: add what Richard is into.","profile":{"tabs":{"status":"STATUS","week":"WEEK","inventory":"INVENTORY","now":"NOW"},"name":"NAME","base":"BASE","role":"ROLE","age":"AGE","languages":"LANGUAGES","levels":["","BASIC","GOOD","FLUENT","NATIVE"],"today":"TODAY","weekTitle":"A TYPICAL WEEK","inventoryTitle":"INVENTORY","building":"BUILDING","learning":"LEARNING","reading":"READING","skills":"Skills → Stack","portrait":"Profile portrait","draft":"DRAFT: intro for Richard to review."}},
+      "about": {"title":"WHO AM I","who":"WHO","what":"WHAT I DO","into":"WHAT I'M INTO","profile":{"tabs":{"status":"STATUS","inventory":"INVENTORY","now":"NOW"},"name":"NAME","base":"BASE","role":"ROLE","age":"AGE","languages":"LANGUAGES","levels":["","BASIC","GOOD","FLUENT","NATIVE"],"inventoryTitle":"INVENTORY","skills":"Skills → Stack","portrait":"Profile portrait","draft":"DRAFT: intro for Richard to review."}},
       "now": {"label":"NOW /","title":"In Progress","helm":{"title":"Helm","kicker":"AI agent","summary":"TODO: One or two sentences on what Helm does (from Richard)","progress":"TODO: Progress / steps for the bar (from Richard)"}},
       "stage": {"loading":"LOADING SYSTEM","skip":"Press any key to skip","descent":"DESCENT / SYSTEMS","descentTitle":"FROM PIN TO PACKET","works":"SELECTED WORKS","rack":"19\" Rack Configurator","abyssLabel":"DEPTH / 100 %","scroll":"Scroll down","portrait":"Portrait"},
       "contact": {"headline":"REST HERE, TRAVELLER","kindled":"CONNECTION KINDLED"},
