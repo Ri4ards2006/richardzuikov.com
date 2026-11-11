@@ -3,6 +3,7 @@ import { useLanguage } from '../../hooks/use-language';
 import { useSectionEnter } from '../../hooks/use-section-enter';
 import { nowEntries } from '../../data/now';
 import { Icon } from '../atlus/glyphs';
+import { DEV_HINTS } from '../../lib/dev-hints';
 
 const pick = (value, language) => (typeof value === 'string' ? value : value[language]);
 const isTodo = (text) => typeof text === 'string' && text.startsWith('TODO');
@@ -81,7 +82,7 @@ export default function NowSection() {
             {!isTodo(lines) && <p className="mt-2 text-sm leading-relaxed text-ash-200">{lines}</p>}
             <QuestBar entry={entry} language={language} />
             {/* TODO strings are placeholders for facts still to be supplied, so visitors never see them. */}
-            {import.meta.env.DEV && entry.todo && <p className="mt-2 font-mono text-[11px] text-ash-300">{pick(entry.todo, language)}</p>}
+            {DEV_HINTS && entry.todo && <p className="mt-2 font-mono text-[11px] text-ash-300">{pick(entry.todo, language)}</p>}
           </li>
           );
         })}

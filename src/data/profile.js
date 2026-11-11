@@ -2,9 +2,10 @@
 // Nothing here is invented. A string starting with "TODO" is shown in development only and
 // hidden in production; a section whose entries are all TODO disappears from the sub-menu there.
 import { nowEntries } from './now';
+import { DEV_HINTS } from '../lib/dev-hints';
 
 export const isTodo = (text) => typeof text === 'string' && text.startsWith('TODO');
-export const shown = (text) => Boolean(text) && (!isTodo(text) || import.meta.env.DEV);
+export const shown = (text) => Boolean(text) && (!isTodo(text) || DEV_HINTS);
 export const pick = (value, language) => (value && typeof value === 'object' ? value[language] ?? value.en : value);
 
 // Draft built from the facts in the ABOUT block and the published apprenticeship entry.

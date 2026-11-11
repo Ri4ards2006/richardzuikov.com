@@ -4,6 +4,7 @@ import { cutouts, portraits } from '../../data/portraits';
 import CutoutPortrait from '../atlus/CutoutPortrait';
 import { InkSplat } from '../atlus/glyphs';
 import OpenScreen from '../atlus/OpenScreen';
+import { DEV_HINTS } from '../../lib/dev-hints';
 
 // Fixed so the letters do not shift between renders (DESIGN.md §3).
 const LETTER_TILT = [-5, 3, -2, 6, -4, 2, -6, 4, -3];
@@ -32,7 +33,7 @@ const AboutSection = forwardRef(function AboutSection({ portraitRef, webgl }, re
   const { t } = useLanguage();
   const copy = t.atlus.about;
   // TODO strings are placeholders for facts still to be supplied, so visitors never see them.
-  const into = import.meta.env.DEV ? copy.todoInto : null;
+  const into = DEV_HINTS ? copy.todoInto : null;
 
   return (
     <section id="about" ref={ref} aria-labelledby="about-title" className="stage-about scroll-mt-16">

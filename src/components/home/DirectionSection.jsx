@@ -1,11 +1,12 @@
 import React from 'react';
 import { useLanguage } from '../../hooks/use-language';
 import Section from './Section';
+import { DEV_HINTS } from '../../lib/dev-hints';
 
 export default function DirectionSection({ number }) {
   const { t } = useLanguage();
   // TODO strings are placeholders for facts still to be supplied, so visitors never see them.
-  const todos = import.meta.env.DEV ? [t.landing.todoStudies, t.landing.todoNextGoals] : [];
+  const todos = DEV_HINTS ? [t.landing.todoStudies, t.landing.todoNextGoals] : [];
 
   return (
     <Section id="direction" number={number} title={t.landing.nav.direction}>

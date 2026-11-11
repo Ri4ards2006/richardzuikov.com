@@ -3,6 +3,7 @@ import { useLanguage } from '../../hooks/use-language';
 import { ROMAN } from '../../lib/atlus';
 import DetailScreen from './DetailScreen';
 import { TraceStar } from './glyphs';
+import { DEV_HINTS } from '../../lib/dev-hints';
 
 // Career entry detail: rank, role, company, period, bullets, skills gained.
 // Bullets come from career.timeline[].bullets; entries without them show their description to
@@ -29,7 +30,7 @@ export default function CareerDetail({ index, onIndex, onClose }) {
             <>
               {entry.desc && <p className="mt-5 text-base leading-relaxed text-ash-200">{entry.desc}</p>}
               {/* TODO strings are placeholders for facts still to be supplied, so visitors never see them. */}
-              {import.meta.env.DEV && <p className="mt-3 font-mono text-xs text-ash-300">{t.atlus.detail.todoBullets}</p>}
+              {DEV_HINTS && <p className="mt-3 font-mono text-xs text-ash-300">{t.atlus.detail.todoBullets}</p>}
             </>
           )}
           {entry.tags.length > 0 && (

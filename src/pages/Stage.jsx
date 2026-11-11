@@ -21,6 +21,7 @@ import ContactList from '../three/bonfire/ContactList';
 import { grainTexture } from '../lib/noise-textures';
 import { ImpactInk, InkSplat, TraceStar } from '../components/atlus/glyphs';
 import OpenScreen, { RETURN_KEY } from '../components/atlus/OpenScreen';
+import { DEV_HINTS } from '../lib/dev-hints';
 
 const INTRO_KEY = 'seen-stage-intro';
 const BOOT_MS = 800;
@@ -397,7 +398,7 @@ export default function Stage() {
                 <h3 className="font-anton uppercase text-3xl tracking-wide mt-2">{entry.title}</h3>
                 <p className="mt-3 text-base leading-relaxed text-ash-200">{entry.desc}</p>
                 {/* TODO strings are placeholders for facts still to be supplied, so visitors never see them. */}
-                {import.meta.env.DEV && <p className="mt-3 font-mono text-xs text-ash-300">{entry.todo}</p>}
+                {DEV_HINTS && <p className="mt-3 font-mono text-xs text-ash-300">{entry.todo}</p>}
               </article>
               {DESCENT_SLOTS[index] && <div aria-hidden="true" className="prop-slot" data-slot={DESCENT_SLOTS[index]} />}
             </div>

@@ -5,6 +5,7 @@ import Screen, { SubMenu } from '../components/atlus/Screen';
 import ProfilePortrait from '../components/atlus/ProfilePortrait';
 import { Icon } from '../components/atlus/glyphs';
 import { LEVELS, intro, inventory, isTodo, now, pick, shown, status, week } from '../data/profile';
+import { DEV_HINTS } from '../lib/dev-hints';
 
 // /about (DESIGN.md §18, v7 task 3): Richard as a person, as a status screen. Skills live in
 // Descent / Stack. Left the profile portrait, then the sub-menu, then the detail panel.
@@ -52,7 +53,7 @@ function StatusPanel({ copy, language }) {
           );
         })}
       </ul>
-      {missingLevels && import.meta.env.DEV && <p className="prof-todo">{pick(status.todoLevels, language)}</p>}
+      {missingLevels && DEV_HINTS && <p className="prof-todo">{pick(status.todoLevels, language)}</p>}
     </>
   );
 }
@@ -141,7 +142,7 @@ export default function About() {
       <div className="prof-body">
         <div className="prof-intro">
           <p>{introText}</p>
-          {import.meta.env.DEV && <p className="prof-todo">{copy.draft}</p>}
+          {DEV_HINTS && <p className="prof-todo">{copy.draft}</p>}
         </div>
         <ProfilePortrait label={copy.portrait} />
         <SubMenu label={t.landing.nav.about} items={tabs} active={active} onSelect={setActive} />
