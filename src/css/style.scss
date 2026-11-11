@@ -263,13 +263,16 @@ h1[tabindex='-1']:focus-visible {
 
 .stage-name-block {
   font-family: Anton, Impact, sans-serif;
-  /* ~1.4× the v3 size on desktop; 7.4vw → 10.4vw keeps it fluid from 1280 to 1920 px. */
-  font-size: clamp(3.25rem, 10.4vw, 10rem);
+  /* ~1.4× the v3 size on desktop; 7.4vw → 10.4vw keeps it fluid from 1280 to 1920 px. The 15vh cap
+     (§19) keeps the role line above the hero's face on short, wide viewports. */
+  font-size: clamp(3.25rem, min(10.4vw, 15vh), 10rem);
   font-weight: 400;
   line-height: 0.94;
   letter-spacing: 0.01em;
   text-transform: uppercase;
   color: rgb(var(--ash-100));
+  /* Hard ink offset (no blur): the name stays legible where it crosses the hero's hair (§19). */
+  text-shadow: 0.035em 0.035em 0 rgb(var(--ash-900));
   transform: rotate(-4deg) skewX(-6deg);
   transform-origin: right top;
 }
@@ -284,6 +287,7 @@ h1[tabindex='-1']:focus-visible {
 
 .stage-role {
   margin-top: 1.5rem;
+  text-shadow: 1px 1px 0 rgb(var(--ash-900)), -1px -1px 0 rgb(var(--ash-900));
   font-family: ui-monospace, monospace;
   font-size: 0.75rem;
   letter-spacing: 0.18em;
@@ -293,10 +297,22 @@ h1[tabindex='-1']:focus-visible {
 
 .stage-portrait {
   min-height: 18rem;
-  /* Starts below the larger name block, so the HUD rings never run into the role line. */
-  margin-top: clamp(9rem, 19vw, 19rem);
   align-self: stretch;
   pointer-events: none;
+}
+
+/* One hero (DESIGN.md §19): the figure is ~70 % of the viewport tall, in the right half, and its crop
+   line (hip) sits on the viewport's bottom edge. The box is exactly the figure, so the scene, the
+   no-WebGL <picture> and the water mask all use the same rect. */
+@media (min-width: 761px) {
+  .stage-portrait {
+    position: absolute;
+    left: 48%;
+    bottom: 0;
+    height: 70vh;
+    min-height: 0;
+    aspect-ratio: var(--hero-aspect);
+  }
 }
 
 .stage-menu {
@@ -2648,6 +2664,8 @@ html.gm-open .menu-dots {
 }
 
 .ink-stage-name {
+  /* Holds still: the hero is the only thing that moves on the stage (§19). */
+  animation: none;
   right: -1rem;
   bottom: 1.6rem;
   width: clamp(14rem, 34vw, 30rem);
@@ -3662,7 +3680,7 @@ html.gm-open .menu-dots {
 }
 
 @keyframes prof-breathe {
-  to { transform: scale(1.012); }
+  to { transform: scale(1.006); }
 }
 
 .prof-h {

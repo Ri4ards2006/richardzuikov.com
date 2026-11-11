@@ -113,6 +113,7 @@ export default function Stage() {
         onDiveEnd: () => setPhase('done'),
         anchors: () => ({
           portrait: portraitRef.current,
+          menu: stageRef.current?.querySelector('.stage-menu ul'),
           about: aboutRef.current,
           aboutPortrait: aboutPortraitRef.current,
           fire: fireRef.current,
@@ -365,7 +366,8 @@ export default function Stage() {
             </ul>
           </nav>
         </div>
-        <div ref={portraitRef} className="stage-portrait">
+        {/* The figure's box: 70 vh tall, bottom edge on the viewport's bottom edge (desktop, §19). */}
+        <div ref={portraitRef} className="stage-portrait" style={{ '--hero-aspect': heroSet?.aspect ?? 0.62 }}>
           {heroSet ? (
             // Always rendered: visible without WebGL; with WebGL hidden (still loading) as the scene's source.
             <CutoutPortrait set={heroSet} art={HERO_ART} imgRefs={heroImgRefs} className={`hero-cutout ${webgl ? 'is-scene-source' : ''}`} sizes="(min-width: 768px) 34vw, 70vw" />

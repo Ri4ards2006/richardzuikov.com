@@ -7,6 +7,9 @@ const SPRING = 11;
 const DAMPING = 4.5;
 // How much of the descent one shard takes to shrink away into ash.
 const THIN_SPAN = 0.24;
+// Hero calm (DESIGN.md §19): slow spin and bob, a fraction of the v7 rates.
+const SPIN = 0.35;
+const BOB_RATE = 0.18;
 
 const vertexShader = `
   attribute float aTone; varying vec3 vPos; varying float vTone;
@@ -41,7 +44,7 @@ export function createFloatingShards(count) {
       z: -3.2 + hash(i + 530) * 2.9,
       size: [(0.055 + hash(i + 540) * 0.16) * large, (0.04 + hash(i + 550) * 0.1) * large, 0.025 + hash(i + 560) * 0.06],
       thinAt: 0.02 + hash(i + 700) * 0.72,
-      spin: [(hash(i + 570) - 0.5) * 0.7, (hash(i + 580) - 0.5) * 0.7],
+      spin: [(hash(i + 570) - 0.5) * 0.7 * SPIN, (hash(i + 580) - 0.5) * 0.7 * SPIN],
       phase: hash(i + 590) * Math.PI * 2,
       base: new THREE.Vector2(),
       offset: new THREE.Vector2(),
@@ -83,7 +86,7 @@ export function createFloatingShards(count) {
         item.offset.addScaledVector(item.velocity, dt);
 
         const thin = smooth(Math.min(1, Math.max(0, (story - item.thinAt) / THIN_SPAN)));
-        dummy.position.set(item.base.x + item.offset.x, item.base.y + item.offset.y + Math.sin(time * 0.4 + item.phase) * 0.07 + thin * 1.4, item.z);
+        dummy.position.set(item.base.x + item.offset.x, item.base.y + item.offset.y + Math.sin(time * BOB_RATE + item.phase) * 0.07 + thin * 1.4, item.z);
         dummy.rotation.set(item.phase + time * item.spin[0], item.phase * 2 + time * item.spin[1], item.phase);
         const keep = Math.max(1 - thin, 0.0001);
         dummy.scale.set(item.size[0] * keep, item.size[1] * keep, item.size[2] * keep);

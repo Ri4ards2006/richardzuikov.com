@@ -27,6 +27,15 @@ const FRAME_STROKE = 1.15;
 const COLOUR_FADE_S = 0.25;
 // Real-photo portraits: B/W → colour cross-fade (DESIGN.md §2 "Portraits").
 const PORTRAIT_FADE_S = 0.3;
+// Hero motion budget (DESIGN.md §19): breathing ≤ 0.6 % scale, parallax ≤ 6 px, nothing else moves.
+const BREATH = 0.006;
+const BREATH_S = 5.5;
+const PARALLAX_PX = 6;
+const RING_PARALLAX_PX = 3;
+// HUD rings around the hero's head: radii in figure heights, centre at this height of the figure.
+const RING_SCALE = 0.2;
+const RING_CENTRE = 0.64;
+const HERO_SHARDS = 8;
 const RIDE_WHIP = 28 * Math.PI / 180;
 const RIDE_DRIFT = 0.25;
 const RIDE_ROLL = 12 * Math.PI / 180;
@@ -252,7 +261,7 @@ export function createStage({ canvas, anchors, projects, portrait: portraitUrls,
        float d=length(gl_PointCoord-.5);
        if(d>.5||vShow<.01)discard;
        vec3 ash=mix(vec3(.957,.957,.941),vec3(.56,.56,.54),uStory);
-       gl_FragColor=vec4(mix(ash,vec3(1.,.42,0.),vHeat),(1.-d*(2.-uStory*.8))*(.7+uStory*.3)*vShow);
+       gl_FragColor=vec4(mix(ash,vec3(1.,.42,0.),vHeat),(1.-d*(2.-uStory*.8))*(.35+uStory*.65)*vShow);
      }`,
     { uTime: { value: 0 }, uRise: { value: 0 }, uStory: { value: 0 }, uEmber: { value: 0 }, uPixel: { value: 1 } },
   ));
@@ -263,7 +272,7 @@ export function createStage({ canvas, anchors, projects, portrait: portraitUrls,
   scene.add(hero);
   const heroLayers = [];
   let heroFigure = null;
-  const rings = [1.55, 1.95, 2.3].map((radius, i) => {
+  [1.55, 1.95, 2.3].forEach((radius, i) => {
     const pts = [];
     const segments = 96;
     for (let s = 0; s < segments; s += 1) {
@@ -273,10 +282,9 @@ export function createStage({ canvas, anchors, projects, portrait: portraitUrls,
       if (i !== 1 || s % 3) pts.push(new THREE.Vector3(Math.cos(a) * radius, Math.sin(a) * radius, 0), new THREE.Vector3(Math.cos(a + 0.0654) * radius, Math.sin(a + 0.0654) * radius, 0));
     }
     const ring = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: PAPER, transparent: true, opacity: 0.32 - i * 0.07 }));
-    ring.position.z = -0.8 - i * 0.2;
+    ring.scale.setScalar(RING_SCALE);
     hero.add(ring);
-    heroLayers.push({ object: ring, depth: 0.12 + i * 0.05, base: new THREE.Vector3(0, 0, ring.position.z) });
-    return ring;
+    heroLayers.push({ object: ring, px: RING_PARALLAX_PX, base: new THREE.Vector3(0, RING_CENTRE, -0.16 - i * 0.04) });
   });
 
   const water = createInkWater();
@@ -285,6 +293,7 @@ export function createStage({ canvas, anchors, projects, portrait: portraitUrls,
   // Colour of the two real-photo figures: 0 = B/W, 1 = colour (see portraitColour below).
   const colour = { hero: { t: 0, hover: false, tap: false }, profile: { t: 0, hover: false, tap: false } };
   let heroMaps = null;
+  let heroAspect = 0;
   // Hero figure from { bw, color }: <img> elements (the DOM <picture> picks `stage` / `head` by media
   // query and swaps on resize; every swap reloads the textures) or plain URLs (legacy silhouette).
   const setHero = (maps, aspect) => {
@@ -294,7 +303,10 @@ export function createStage({ canvas, anchors, projects, portrait: portraitUrls,
     }
     Object.values(heroMaps ?? {}).forEach((map) => map.dispose());
     heroMaps = maps;
-    const geometry = new THREE.PlaneGeometry(3.1 * aspect, 3.1);
+    heroAspect = aspect;
+    // One unit = the figure's height; the pivot sits on its bottom edge, which rests on the viewport's
+    // bottom edge (§19), so breathing never lifts the crop line into view.
+    const geometry = new THREE.PlaneGeometry(aspect, 1).translate(0, 0.5, 0);
     if (heroFigure) {
       heroFigure.geometry.dispose();
       heroFigure.geometry = geometry;
@@ -303,7 +315,7 @@ export function createStage({ canvas, anchors, projects, portrait: portraitUrls,
     } else {
       heroFigure = new THREE.Mesh(geometry, createPortrait(maps));
       hero.add(heroFigure);
-      heroLayers.push({ object: heroFigure, depth: 0.42, base: new THREE.Vector3(0, -0.1, 0) });
+      heroLayers.push({ object: heroFigure, px: PARALLAX_PX, base: new THREE.Vector3(0, 0, 0) });
     }
     state.lastInput = performance.now();
   };
@@ -353,13 +365,15 @@ export function createStage({ canvas, anchors, projects, portrait: portraitUrls,
     });
   }).catch(() => {});
 
+  const heroCentre = new THREE.Vector3();
   const profileHeight = () => Math.min(profile.box.h, profile.box.w / profile.aspect);
 
   // p: 0 on the stage, 1 settled in About. The figure turns edge-on, then the profile turns in.
   function placeProfile(mesh, p) {
-    mesh.position.lerpVectors(hero.position, profile.to, p);
+    heroCentre.set(hero.position.x, hero.position.y + hero.scale.y * 0.5, 0);
+    mesh.position.lerpVectors(heroCentre, profile.to, p);
     mesh.position.z = Math.sin(p * Math.PI) * 1.4;
-    mesh.scale.setScalar(THREE.MathUtils.lerp(hero.scale.x * 3.1, profileHeight(), p));
+    mesh.scale.setScalar(THREE.MathUtils.lerp(hero.scale.y, profileHeight(), p));
     mesh.rotation.y = rad(-90) * (1 - smooth(clamp01((p - 0.5) / 0.5)));
   }
 
@@ -391,7 +405,8 @@ export function createStage({ canvas, anchors, projects, portrait: portraitUrls,
     return { project, index, face, map, colourFace, colourMap, colour, colourT: 0, mesh, group, tilt, lift: 0, base: new THREE.Vector3() };
   });
 
-  const floating = createFloatingShards(isSmall ? 30 : 38);
+  // At most 8 shards in the hero (DESIGN.md §19); they still carry on into the descent as ash.
+  const floating = createFloatingShards(HERO_SHARDS);
   scene.add(floating.mesh);
   const props = createDescentProps();
   const skillProp = createSkillProp();
@@ -490,9 +505,17 @@ export function createStage({ canvas, anchors, projects, portrait: portraitUrls,
     floating.layout(Math.tan(rad(FOV / 2)), state.w / state.h, CAM_Z);
 
     const a = anchors();
+    // The portrait anchor is the figure's box: bottom edge on the viewport's bottom edge (desktop).
     const portrait = worldOf(a.portrait.getBoundingClientRect());
-    hero.position.set(portrait.x, portrait.y, 0);
-    hero.scale.setScalar(Math.min(portrait.h / 5, portrait.w / 4.8));
+    const figureH = Math.min(portrait.h, portrait.w / (heroAspect || 0.62));
+    hero.position.set(portrait.x, portrait.y - portrait.h / 2, 0);
+    hero.scale.setScalar(figureH);
+    // Water mask: page rects of the menu and the figure (the strokes stay off both, §19).
+    const pageRect = (el) => {
+      const r = el?.getBoundingClientRect();
+      return r ? { left: r.left, right: r.right, top: r.top + state.scroll, bottom: r.bottom + state.scroll } : null;
+    };
+    state.waterMask = [pageRect(a.menu), pageRect(a.portrait)];
 
     a.slots.forEach((slot, i) => {
       const card = cards[i];
@@ -641,11 +664,12 @@ export function createStage({ canvas, anchors, projects, portrait: portraitUrls,
     if (floating.mesh.visible) floating.update(dt, time, pointerSeen ? pointer.set(mouse.x, -mouse.y) : null, story);
     water.mesh.visible = hero.visible;
     if (hero.visible) {
-      water.update(time, clamp01(state.scroll / (state.h * 0.55)) * 1.2);
-      heroLayers.forEach(({ object, depth, base }) => {
-        object.position.set(base.x + mouse.x * depth, base.y - mouse.y * depth * 0.6, base.z);
+      water.update(time, clamp01(state.scroll / (state.h * 0.55)) * 1.2, state.waterMask, state.scroll, state.h, renderer.getPixelRatio());
+      // Horizontal only, against the mouse: a vertical shift would lift the figure off the screen edge.
+      heroLayers.forEach(({ object, px, base }) => {
+        object.position.set(base.x - (mouse.x * px * state.k) / hero.scale.x, base.y, base.z);
       });
-      rings.forEach((ring, i) => { ring.rotation.z = time * (i % 2 ? -0.05 : 0.07); });
+      if (heroFigure) heroFigure.scale.setScalar(1 + BREATH * (0.5 - 0.5 * Math.cos((time / BREATH_S) * Math.PI * 2)));
     }
 
     const aboutEnter = smooth(clamp01(state.scroll / profile.settle));
