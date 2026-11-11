@@ -27,9 +27,21 @@ export const portraits = {
 // `night` is left out of the eager glob, so its files never reach the bundle while the flag is off.
 export const FLAGS = { nightPortrait: false };
 
+// Edges where the figure hits the frame of its source photo, measured on the cut-outs (share of the
+// edge that is opaque: stage bottom 72 % / right 11 %, about bottom 99 % / right 55 %, head bottom
+// 100 % / left 43 % / right 41 %). Each one fades into ink over this share of the figure (18–25 %,
+// DESIGN.md §19), so no cut-out ends in a hard straight line, wherever it is shown.
+export const CUTOUT_FADE = {
+  stage: { left: 0, right: 0.2, bottom: 0.2 },
+  about: { left: 0, right: 0.22, bottom: 0.22 },
+  head: { left: 0.2, right: 0.2, bottom: 0.2 },
+  night: { left: 0, right: 0, bottom: 0.2 },
+};
+const NO_FADE = { left: 0, right: 0, bottom: 0 };
+
 const cutoutFiles = import.meta.glob(['../assets/portraits/cutout/*.{avif,webp}', '!../assets/portraits/cutout/night-*'], { eager: true, query: '?url', import: 'default' });
 
-// -> { sizes: [{ w, h }], color: { [h]: { avif, webp } }, bw: { … }, aspect } | null
+// -> { sizes: [{ w, h }], color: { [h]: { avif, webp } }, bw: { … }, aspect, fade } | null
 export function cutoutSet(id, source = cutoutFiles) {
   const set = { sizes: [], color: {}, bw: {} };
   Object.entries(source).forEach(([path, url]) => {
@@ -43,7 +55,22 @@ export function cutoutSet(id, source = cutoutFiles) {
   set.sizes.sort((a, b) => a.h - b.h);
   if (!set.sizes.length) return null;
   set.aspect = set.sizes[0].w / set.sizes[0].h;
+  set.fade = CUTOUT_FADE[id] ?? NO_FADE;
   return set;
+}
+
+// Cut-out id of a file URL (`…/stage-bw-562x900.webp` → 'stage'), for textures loaded by URL.
+export const cutoutIdOf = (url) => url?.match(/\/([a-z]+)-(?:color|bw)-\d+x\d+[^/]*$/)?.[1] ?? null;
+
+export const fadeOf = (id) => CUTOUT_FADE[id] ?? NO_FADE;
+
+// CSS custom properties of an edge fade (CutoutPortrait's mask, style.scss).
+export function fadeVars(fade, prefix = 'fade') {
+  return {
+    [`--${prefix}-l`]: `${fade.left * 100}%`,
+    [`--${prefix}-r`]: `${fade.right * 100}%`,
+    [`--${prefix}-b`]: `${fade.bottom * 100}%`,
+  };
 }
 
 export const cutouts = { stage: cutoutSet('stage'), about: cutoutSet('about'), head: cutoutSet('head') };

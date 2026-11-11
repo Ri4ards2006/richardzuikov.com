@@ -3920,6 +3920,32 @@ html.gm-open .menu-dots {
   display: block;
   aspect-ratio: var(--cutout-aspect);
   outline-offset: 6px;
+  /* Edge fade (§19): every edge where the figure hits its source frame fades into ink over 18–25 %
+     of the figure (--fade-* from data/portraits.js). The box is the photo's box, so the mask lands on
+     the figure, not on letterboxing. */
+  --fade-l: 0%;
+  --fade-r: 0%;
+  --fade-b: 0%;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 var(--fade-l)),
+    linear-gradient(to left, transparent, #000 var(--fade-r)),
+    linear-gradient(to top, transparent, #000 var(--fade-b));
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent, #000 var(--fade-l)),
+    linear-gradient(to left, transparent, #000 var(--fade-r)),
+    linear-gradient(to top, transparent, #000 var(--fade-b));
+  mask-composite: intersect;
+}
+
+/* Art direction: the same media query as the hero's <picture> source (`head` below 768 px). */
+@media (max-width: 767px) {
+  .cutout[data-art] {
+    --cutout-aspect: var(--art-aspect);
+    --fade-l: var(--art-fade-l);
+    --fade-r: var(--art-fade-r);
+    --fade-b: var(--art-fade-b);
+  }
 }
 
 .cutout img {
@@ -3977,15 +4003,22 @@ html.gm-open .menu-dots {
   object-position: right bottom;
 }
 
-/* Fills the 4:5 portrait cell; object-fit keeps both layers on the same box. */
+/* As tall as its cell, as wide as the photo's aspect ratio: the box is exactly the figure, so the
+   edge-fade mask sits on the photo's own edges (§19). */
 .cutout.prof-figure,
 .cutout.gm-portrait,
 .cutout.hero-cutout {
-  aspect-ratio: auto;
-  width: 100%;
+  aspect-ratio: var(--cutout-aspect);
+  width: auto;
   height: 100%;
+  max-width: 100%;
+  margin-inline: auto;
   filter: none;
   opacity: 1;
+}
+
+.cutout.gm-portrait {
+  margin-inline: auto 0;
 }
 
 /* Dev-only portrait lab (/?portrait-lab). */

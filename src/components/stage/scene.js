@@ -6,6 +6,7 @@ import { createDescentProps, DEPTH_LIMIT } from './descent-props';
 import { createSkillProp } from './skill-props';
 import { disposeObject, hash, makeCanvas, pointsMaterial, seededPoints, smooth, texture } from '../../three/utils';
 import cardFrameSvg from '../../assets/svg/card-frame.svg?raw';
+import { cutoutIdOf, fadeOf } from '../../data/portraits';
 
 const FOV = 40;
 const CAM_Z = 10;
@@ -195,10 +196,13 @@ function drawCard(canvas, project, index, img, colour = false) {
 // baked CLAHE, S-curve, grain and the paper rim, so the shader only blends; uDissolve keeps the
 // screentone break-up of the profile as it scrolls away.
 const PHOTO_PORTRAIT = `
-  varying vec2 vUv; uniform sampler2D uBw,uColor; uniform float uOpacity,uDissolve,uColour;
+  varying vec2 vUv; uniform sampler2D uBw,uColor; uniform float uOpacity,uDissolve,uColour; uniform vec3 uFade;
   void main(){
     vec4 bw=texture2D(uBw,vUv);
     vec4 c=mix(bw,texture2D(uColor,vUv),uColour);
+    // Edge fade into ink where the figure hits its source frame (left, right, bottom; §19).
+    vec3 f=max(uFade,vec3(1e-4));
+    c.a*=clamp(vUv.x/f.x,0.,1.)*clamp((1.-vUv.x)/f.y,0.,1.)*clamp(vUv.y/f.z,0.,1.);
     if(c.a<.02)discard;
     if(uDissolve>0.){
       vec2 cell=fract(mat2(.707,-.707,.707,.707)*gl_FragCoord.xy/(5.+uDissolve*11.))-.5;
@@ -207,11 +211,11 @@ const PHOTO_PORTRAIT = `
     gl_FragColor=vec4(c.rgb,c.a*uOpacity);
   }`;
 
-function createPortrait({ bw, color }, { ghost = false } = {}) {
+function createPortrait({ bw, color }, { ghost = false, fade = fadeOf(null) } = {}) {
   return new THREE.ShaderMaterial({
     transparent: true,
     depthWrite: !ghost,
-    uniforms: { uBw: { value: bw }, uColor: { value: color }, uOpacity: { value: 1 }, uDissolve: { value: 0 }, uColour: { value: 0 } },
+    uniforms: { uBw: { value: bw }, uColor: { value: color }, uOpacity: { value: 1 }, uDissolve: { value: 0 }, uColour: { value: 0 }, uFade: { value: new THREE.Vector3(fade.left, fade.right, fade.bottom) } },
     vertexShader: 'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
     fragmentShader: PHOTO_PORTRAIT,
   });
@@ -226,7 +230,7 @@ async function loadPortrait(urls) {
     map.needsUpdate = true;
     return map;
   };
-  return { maps: { bw: tex(bwImg), color: tex(colorImg) }, aspect: bwImg.width / bwImg.height };
+  return { maps: { bw: tex(bwImg), color: tex(colorImg) }, aspect: bwImg.width / bwImg.height, fade: fadeOf(cutoutIdOf(urls.bw)) };
 }
 
 export function createStage({ canvas, anchors, projects, portrait: portraitUrls, profile: profileUrls, onDiveEnd }) {
@@ -296,7 +300,7 @@ export function createStage({ canvas, anchors, projects, portrait: portraitUrls,
   let heroAspect = 0;
   // Hero figure from { bw, color }: <img> elements (the DOM <picture> picks `stage` / `head` by media
   // query and swaps on resize; every swap reloads the textures) or plain URLs (legacy silhouette).
-  const setHero = (maps, aspect) => {
+  const setHero = (maps, aspect, fade) => {
     if (state.disposed) {
       Object.values(maps).forEach((map) => map.dispose());
       return;
@@ -312,8 +316,9 @@ export function createStage({ canvas, anchors, projects, portrait: portraitUrls,
       heroFigure.geometry = geometry;
       heroFigure.material.uniforms.uBw.value = maps.bw;
       heroFigure.material.uniforms.uColor.value = maps.color;
+      heroFigure.material.uniforms.uFade.value.set(fade.left, fade.right, fade.bottom);
     } else {
-      heroFigure = new THREE.Mesh(geometry, createPortrait(maps));
+      heroFigure = new THREE.Mesh(geometry, createPortrait(maps, { fade }));
       hero.add(heroFigure);
       heroLayers.push({ object: heroFigure, px: PARALLAX_PX, base: new THREE.Vector3(0, 0, 0) });
     }
@@ -330,12 +335,12 @@ export function createStage({ canvas, anchors, projects, portrait: portraitUrls,
     const key = `${bw.currentSrc}|${color.currentSrc}`;
     if (key === heroKey) return;
     heroKey = key;
-    loadPortrait({ bw: bw.currentSrc, color: color.currentSrc }).then(({ maps, aspect }) => {
+    loadPortrait({ bw: bw.currentSrc, color: color.currentSrc }).then(({ maps, aspect, fade }) => {
       if (key !== heroKey) {
         Object.values(maps).forEach((map) => map.dispose());
         return;
       }
-      setHero(maps, aspect);
+      setHero(maps, aspect, fade);
     }).catch(() => {});
   };
   if (heroImgs) {
@@ -343,20 +348,20 @@ export function createStage({ canvas, anchors, projects, portrait: portraitUrls,
     heroImgs.color.addEventListener('load', syncHero);
     syncHero();
   } else {
-    loadPortrait(portraitUrls).then(({ maps, aspect }) => setHero(maps, aspect)).catch(() => {});
+    loadPortrait(portraitUrls).then(({ maps, aspect, fade }) => setHero(maps, aspect, fade)).catch(() => {});
   }
 
   // Side-profile figure of the About section.
   const profile = { ghosts: [], mesh: null, maps: null, geometry: null, aspect: 1, box: { w: 1, h: 1 }, to: new THREE.Vector3(), top: 0, settle: 1, height: 1 };
-  loadPortrait(profileUrls).then(({ maps, aspect }) => {
+  loadPortrait(profileUrls).then(({ maps, aspect, fade }) => {
     if (state.disposed) return;
     profile.maps = maps;
     profile.aspect = aspect;
     profile.geometry = new THREE.PlaneGeometry(profile.aspect, 1);
-    profile.mesh = new THREE.Mesh(profile.geometry, createPortrait(maps));
+    profile.mesh = new THREE.Mesh(profile.geometry, createPortrait(maps, { fade }));
     scene.add(profile.mesh);
     profile.ghosts = GHOST_FOLLOW.map((follow) => {
-      const material = createPortrait(maps, { ghost: true });
+      const material = createPortrait(maps, { ghost: true, fade });
       const mesh = new THREE.Mesh(profile.geometry, material);
       mesh.visible = false;
       mesh.renderOrder = -1;
