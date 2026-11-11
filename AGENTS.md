@@ -41,6 +41,8 @@ Never work directly in the main repository checkout (`/home/richard/Projects/Ong
 - **Delivery**:
   - Always push your branch to `origin` and use `gh pr create` to open a Pull Request into `feat/atlus-menu` (or the specified target branch).
   - Stop after opening the PR.
+- **Attribution**:
+  - No attribution trailers or 'Generated with' lines in commits, PRs or comments.
 
 ---
 

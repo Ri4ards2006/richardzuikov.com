@@ -3937,19 +3937,17 @@ html.gm-open .menu-dots {
 }
 
 /* The cut-outs carry their own tones: no grayscale filter on top. */
-/* No-WebGL hero: `stage` from 768 px, `head` below. The hero anchors and the menu preview are
-   pointer-events: none, so the cut-out takes the pointer back for its hover. */
+/* The hero anchors and the menu preview are pointer-events: none, so the cut-out takes the pointer
+   back for its hover. The hero swaps `stage` / `head` through its <picture> media query (§18). */
 .stage-portrait .cutout,
 .about-portrait .cutout,
 .gm-preview .cutout {
   pointer-events: auto;
 }
 
-.hero-cutout.is-mobile { display: none; }
-
-@media (max-width: 767px) {
-  .hero-cutout.is-desktop { display: none; }
-  .hero-cutout.is-mobile { display: block; }
+/* With WebGL the scene draws the hero; the <picture> stays in layout and keeps loading as its source. */
+.hero-cutout.is-scene-source {
+  visibility: hidden;
 }
 
 /* §18: below 1024 px the menu preview drops to the name, portrait included. */

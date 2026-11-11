@@ -35,19 +35,19 @@ const DESCENT_SLOTS = ['pcb', 'chip', 'monitor', 'rack', 'dome'];
 const LAND_PIN_MS = 1500;
 const LAND_RELEASE_EVENTS = ['wheel', 'touchstart', 'keydown', 'pointerdown'];
 
-// Below this width the hero uses the `head` cut-out (same breakpoint as the scene's SMALL_SCREEN).
-const MOBILE_HERO = 768;
+// Hero art direction (DESIGN.md §18 "Portraits"): `head` below 768 px, `stage` above, chosen by the
+// <picture> media query so a resize swaps it without JS. The WebGL scene uploads whatever these
+// <img> elements loaded.
+const HERO_ART = cutouts.head ? [{ media: '(max-width: 767px)', set: cutouts.head }] : [];
 
-// Scene textures: the cut-out size whose height covers the hero at this DPR; legacy file otherwise.
+// Profile texture for the scene: the cut-out size whose height covers the viewport at this DPR.
 const sceneCutout = (set, fallback) => {
   if (!set) return { bw: fallback, color: fallback };
   const px = window.innerHeight * Math.min(window.devicePixelRatio || 1, 1.5);
   return { bw: cutoutUrl(set, 'bw', px), color: cutoutUrl(set, 'color', px) };
 };
 
-const HeroCutout = ({ set, className, fallback }) => (set
-  ? <CutoutPortrait set={set} className={className} sizes="(min-width: 768px) 34vw, 70vw" />
-  : <img src={fallback} alt="" className={`${className} h-full w-full object-contain grayscale`} />);
+const heroSet = cutouts.stage ?? cutouts.head;
 
 const delay = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
 
@@ -80,6 +80,12 @@ export default function Stage() {
   const canvasRef = useRef(null);
   const stageRef = useRef(null);
   const portraitRef = useRef(null);
+  // The hero's two <img> elements ({ bw, color }), filled by CutoutPortrait's refs.
+  const heroImages = useRef({});
+  const heroImgRefs = useRef({
+    bw: (node) => { heroImages.current.bw = node; },
+    color: (node) => { heroImages.current.color = node; },
+  }).current;
   const aboutRef = useRef(null);
   const aboutPortraitRef = useRef(null);
   const fireRef = useRef(null);
@@ -102,7 +108,7 @@ export default function Stage() {
       const stage = createStage({
         canvas: canvasRef.current,
         projects: featuredProjects,
-        portrait: sceneCutout(window.innerWidth < MOBILE_HERO ? cutouts.head : cutouts.stage, portraits.stage.large),
+        portrait: heroSet ? heroImages.current : sceneCutout(null, portraits.stage.large),
         profile: sceneCutout(cutouts.about, portraits.about.large),
         onDiveEnd: () => setPhase('done'),
         anchors: () => ({
@@ -360,12 +366,11 @@ export default function Stage() {
           </nav>
         </div>
         <div ref={portraitRef} className="stage-portrait">
-          {!webgl && (
-            // Desktop: `stage`; phones: `head` (DESIGN.md §18 "Portraits"). CSS picks one, no JS.
-            <>
-              <HeroCutout set={cutouts.stage} className="hero-cutout is-desktop" fallback={portraits.stage.large} />
-              <HeroCutout set={cutouts.head} className="hero-cutout is-mobile" fallback={portraits.stage.large} />
-            </>
+          {heroSet ? (
+            // Always rendered: visible without WebGL; with WebGL hidden (still loading) as the scene's source.
+            <CutoutPortrait set={heroSet} art={HERO_ART} imgRefs={heroImgRefs} className={`hero-cutout ${webgl ? 'is-scene-source' : ''}`} sizes="(min-width: 768px) 34vw, 70vw" />
+          ) : (
+            !webgl && <img src={portraits.stage.large} alt="" className="h-full w-full object-contain grayscale" />
           )}
         </div>
       </section>

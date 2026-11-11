@@ -39,8 +39,22 @@ test.describe('Real-photo portraits', () => {
     await page.goto('/');
     const hero = page.locator('.stage-portrait .hero-cutout:visible');
     await expect(hero).toHaveCount(1);
-    await expect(hero.locator('.cutout-bw img')).toHaveAttribute('src', isMobile ? /head-bw-/ : /stage-bw-/);
+    // <picture> art direction: the shown file is currentSrc (src stays the default `stage`).
+    await expect.poll(() => hero.locator('.cutout-bw img').evaluate((img) => img.currentSrc)).toMatch(isMobile ? /head-bw-/ : /stage-bw-/);
     await context.close();
+  });
+
+  test('hero <picture> swaps stage / head on resize without a reload', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'one resize run is enough; it starts on the desktop viewport');
+    await page.goto('/');
+    const layer = (name) => page.locator(`.stage-portrait .hero-cutout .cutout-${name} img`).evaluate((img) => img.currentSrc);
+    await expect.poll(() => layer('bw')).toMatch(/stage-bw-/);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect.poll(() => layer('bw')).toMatch(/head-bw-/);
+    await expect.poll(() => layer('colour')).toMatch(/head-color-/);
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await expect.poll(() => layer('bw')).toMatch(/stage-bw-/);
+    await expect.poll(() => layer('colour')).toMatch(/stage-color-/);
   });
 
   test('pause menu preview uses the head cut-out', async ({ page, isMobile }) => {

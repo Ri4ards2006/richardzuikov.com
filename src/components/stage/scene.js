@@ -285,14 +285,54 @@ export function createStage({ canvas, anchors, projects, portrait: portraitUrls,
   // Colour of the two real-photo figures: 0 = B/W, 1 = colour (see portraitColour below).
   const colour = { hero: { t: 0, hover: false, tap: false }, profile: { t: 0, hover: false, tap: false } };
   let heroMaps = null;
-  loadPortrait(portraitUrls).then(({ maps, aspect }) => {
-    if (state.disposed) return;
+  // Hero figure from { bw, color }: <img> elements (the DOM <picture> picks `stage` / `head` by media
+  // query and swaps on resize; every swap reloads the textures) or plain URLs (legacy silhouette).
+  const setHero = (maps, aspect) => {
+    if (state.disposed) {
+      Object.values(maps).forEach((map) => map.dispose());
+      return;
+    }
+    Object.values(heroMaps ?? {}).forEach((map) => map.dispose());
     heroMaps = maps;
-    const figure = new THREE.Mesh(new THREE.PlaneGeometry(3.1 * aspect, 3.1), createPortrait(maps));
-    heroFigure = figure;
-    hero.add(figure);
-    heroLayers.push({ object: figure, depth: 0.42, base: new THREE.Vector3(0, -0.1, 0) });
-  }).catch(() => {});
+    const geometry = new THREE.PlaneGeometry(3.1 * aspect, 3.1);
+    if (heroFigure) {
+      heroFigure.geometry.dispose();
+      heroFigure.geometry = geometry;
+      heroFigure.material.uniforms.uBw.value = maps.bw;
+      heroFigure.material.uniforms.uColor.value = maps.color;
+    } else {
+      heroFigure = new THREE.Mesh(geometry, createPortrait(maps));
+      hero.add(heroFigure);
+      heroLayers.push({ object: heroFigure, depth: 0.42, base: new THREE.Vector3(0, -0.1, 0) });
+    }
+    state.lastInput = performance.now();
+  };
+  const heroImgs = portraitUrls.bw instanceof HTMLImageElement ? portraitUrls : null;
+  let heroKey = '';
+  // The DOM <img> itself is not uploaded: with a w-descriptor srcset its natural size is density-
+  // corrected (e.g. 489 px for a 562 px file), which breaks the texture size. Its currentSrc (the file
+  // the media query picked, already in the HTTP cache) is decoded fresh at its true size instead.
+  const syncHero = () => {
+    const { bw, color } = heroImgs;
+    if (!bw.complete || !color.complete || !bw.currentSrc || !color.currentSrc) return;
+    const key = `${bw.currentSrc}|${color.currentSrc}`;
+    if (key === heroKey) return;
+    heroKey = key;
+    loadPortrait({ bw: bw.currentSrc, color: color.currentSrc }).then(({ maps, aspect }) => {
+      if (key !== heroKey) {
+        Object.values(maps).forEach((map) => map.dispose());
+        return;
+      }
+      setHero(maps, aspect);
+    }).catch(() => {});
+  };
+  if (heroImgs) {
+    heroImgs.bw.addEventListener('load', syncHero);
+    heroImgs.color.addEventListener('load', syncHero);
+    syncHero();
+  } else {
+    loadPortrait(portraitUrls).then(({ maps, aspect }) => setHero(maps, aspect)).catch(() => {});
+  }
 
   // Side-profile figure of the About section.
   const profile = { ghosts: [], mesh: null, maps: null, geometry: null, aspect: 1, box: { w: 1, h: 1 }, to: new THREE.Vector3(), top: 0, settle: 1, height: 1 };
@@ -824,6 +864,8 @@ export function createStage({ canvas, anchors, projects, portrait: portraitUrls,
       observer.disconnect();
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerdown', onPointerDown);
+      heroImgs?.bw.removeEventListener('load', syncHero);
+      heroImgs?.color.removeEventListener('load', syncHero);
       document.removeEventListener('visibilitychange', onVisibility);
       bonfire.dispose();
       Object.values(profile.maps ?? {}).forEach((map) => map.dispose());

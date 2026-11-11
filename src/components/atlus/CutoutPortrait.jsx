@@ -3,12 +3,26 @@ import React, { useEffect, useRef, useState } from 'react';
 // Real-photo portrait (DESIGN.md §2 + §18 "Portraits"): the black-and-white cut-out at rest, the
 // colour cut-out cross-faded on top on hover / focus (300 ms ease-out, CSS), instantly under reduced
 // motion. Touch (no hover): colour on tap or while the portrait sits in the middle band of the
-// viewport. `colour` forces it from outside (e.g. the stage → about turn).
+// viewport. `colour` forces it from outside.
+// `art`: [{ media, set }] art direction — a <source media> per entry ahead of the default `set`, so the
+// browser swaps the photo on resize with no JS (the hero: `head` below 768 px, `stage` above).
+// `imgRefs`: { bw, color } refs to the two <img> elements (the WebGL stage uploads what they loaded).
 const srcSet = (set, layer, format) => set.sizes.map(({ w, h }) => `${set[layer][h][format]} ${w}w`).join(', ');
 
 const TOUCH = '(hover: none)';
 
-export default function CutoutPortrait({ set, alt = '', sizes, colour = false, focusable = false, className = '', ...rest }) {
+// <source>s of one layer: art-directed AVIF + WebP first, then the default AVIF.
+const sources = (art, set, layer, sizes) => [
+  ...art.flatMap(({ media, set: artSet }) => {
+    const { w, h } = artSet.sizes[0];
+    return ['avif', 'webp'].map((format) => (
+      <source key={`${media}-${format}`} media={media} type={`image/${format}`} srcSet={srcSet(artSet, layer, format)} sizes={sizes} width={w} height={h} />
+    ));
+  }),
+  <source key="avif" type="image/avif" srcSet={srcSet(set, layer, 'avif')} sizes={sizes} />,
+];
+
+export default function CutoutPortrait({ set, art = [], imgRefs, alt = '', sizes, colour = false, focusable = false, className = '', ...rest }) {
   const ref = useRef(null);
   const [tapped, setTapped] = useState(false);
   const [centred, setCentred] = useState(false);
@@ -53,12 +67,12 @@ export default function CutoutPortrait({ set, alt = '', sizes, colour = false, f
       {...rest}
     >
       <picture className="cutout-bw">
-        <source type="image/avif" srcSet={srcSet(set, 'bw', 'avif')} sizes={sizes} />
-        <img src={set.bw[small.h].webp} srcSet={srcSet(set, 'bw', 'webp')} sizes={sizes} width={small.w} height={small.h} alt={focusable ? '' : alt} decoding="async" />
+        {sources(art, set, 'bw', sizes)}
+        <img ref={imgRefs?.bw} src={set.bw[small.h].webp} srcSet={srcSet(set, 'bw', 'webp')} sizes={sizes} width={small.w} height={small.h} alt={focusable ? '' : alt} decoding="async" />
       </picture>
       <picture className="cutout-colour" aria-hidden="true">
-        <source type="image/avif" srcSet={srcSet(set, 'color', 'avif')} sizes={sizes} />
-        <img src={set.color[small.h].webp} srcSet={srcSet(set, 'color', 'webp')} sizes={sizes} width={small.w} height={small.h} alt="" decoding="async" fetchpriority="low" />
+        {sources(art, set, 'color', sizes)}
+        <img ref={imgRefs?.color} src={set.color[small.h].webp} srcSet={srcSet(set, 'color', 'webp')} sizes={sizes} width={small.w} height={small.h} alt="" decoding="async" fetchpriority="low" />
       </picture>
     </span>
   );
