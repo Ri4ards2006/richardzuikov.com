@@ -5,7 +5,8 @@ import { useLanguage } from '../hooks/use-language';
 import { useReducedMotion } from '../hooks/use-reduced-motion';
 import { ROMAN, getActiveMenuId, landOnSection, menuItems, scrollTargets, setActiveMenuId } from '../lib/atlus';
 import { QUICK_PATH } from '../lib/sections';
-import { portraits } from '../data/portraits';
+import { cutouts, cutoutUrl, portraits } from '../data/portraits';
+import CutoutPortrait from '../components/atlus/CutoutPortrait';
 import { PROP_IDS } from '../components/stage/prop-ids';
 import { featuredProjects } from '../data/featured-projects';
 import IntroOverlay from '../components/stage/IntroOverlay';
@@ -33,6 +34,20 @@ const PANEL_LAYERS = ['near', 'far', 'mid', 'near', 'far'];
 const DESCENT_SLOTS = ['pcb', 'chip', 'monitor', 'rack', 'dome'];
 const LAND_PIN_MS = 1500;
 const LAND_RELEASE_EVENTS = ['wheel', 'touchstart', 'keydown', 'pointerdown'];
+
+// Below this width the hero uses the `head` cut-out (same breakpoint as the scene's SMALL_SCREEN).
+const MOBILE_HERO = 768;
+
+// Scene textures: the cut-out size whose height covers the hero at this DPR; legacy file otherwise.
+const sceneCutout = (set, fallback) => {
+  if (!set) return { bw: fallback, color: fallback };
+  const px = window.innerHeight * Math.min(window.devicePixelRatio || 1, 1.5);
+  return { bw: cutoutUrl(set, 'bw', px), color: cutoutUrl(set, 'color', px) };
+};
+
+const HeroCutout = ({ set, className, fallback }) => (set
+  ? <CutoutPortrait set={set} className={className} sizes="(min-width: 768px) 34vw, 70vw" />
+  : <img src={fallback} alt="" className={`${className} h-full w-full object-contain grayscale`} />);
 
 const delay = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
 
@@ -87,9 +102,8 @@ export default function Stage() {
       const stage = createStage({
         canvas: canvasRef.current,
         projects: featuredProjects,
-        portraitSrc: portraits.stage.large,
-        profileSrc: portraits.about.large,
-        profilePlaceholder: portraits.about.isPlaceholder,
+        portrait: sceneCutout(window.innerWidth < MOBILE_HERO ? cutouts.head : cutouts.stage, portraits.stage.large),
+        profile: sceneCutout(cutouts.about, portraits.about.large),
         onDiveEnd: () => setPhase('done'),
         anchors: () => ({
           portrait: portraitRef.current,
@@ -346,7 +360,13 @@ export default function Stage() {
           </nav>
         </div>
         <div ref={portraitRef} className="stage-portrait">
-          {!webgl && <img src={portraits.stage.large} alt="" className="h-full w-full object-contain grayscale" />}
+          {!webgl && (
+            // Desktop: `stage`; phones: `head` (DESIGN.md §18 "Portraits"). CSS picks one, no JS.
+            <>
+              <HeroCutout set={cutouts.stage} className="hero-cutout is-desktop" fallback={portraits.stage.large} />
+              <HeroCutout set={cutouts.head} className="hero-cutout is-mobile" fallback={portraits.stage.large} />
+            </>
+          )}
         </div>
       </section>
 

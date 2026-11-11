@@ -25,6 +25,8 @@ const CARD_H = 1317;
 const FRAME_STROKE = 1.15;
 // Photo colour reveal on hover / focus (DESIGN.md §2).
 const COLOUR_FADE_S = 0.25;
+// Real-photo portraits: B/W → colour cross-fade (DESIGN.md §2 "Portraits").
+const PORTRAIT_FADE_S = 0.3;
 const RIDE_WHIP = 28 * Math.PI / 180;
 const RIDE_DRIFT = 0.25;
 const RIDE_ROLL = 12 * Math.PI / 180;
@@ -179,46 +181,46 @@ function drawCard(canvas, project, index, img, colour = false) {
   ctx.textBaseline = 'alphabetic';
 }
 
-// About portrait: high-contrast grayscale, fine screentone only in the shadows, so features stay readable.
-const SOFT_PORTRAIT = `
-  varying vec2 vUv; uniform sampler2D uMap; uniform float uOpacity,uDissolve,uShade;
+// Real-photo portraits (DESIGN.md §2 + §18 "Portraits"): the B/W cut-out at rest, the colour cut-out
+// mixed in by uColour (hover / tap / centred on touch / the stage → about turn). The pipeline already
+// baked CLAHE, S-curve, grain and the paper rim, so the shader only blends; uDissolve keeps the
+// screentone break-up of the profile as it scrolls away.
+const PHOTO_PORTRAIT = `
+  varying vec2 vUv; uniform sampler2D uBw,uColor; uniform float uOpacity,uDissolve,uColour;
   void main(){
-    vec4 c=texture2D(uMap,vUv);
-    if(c.a<.5)discard;
-    float lum=dot(c.rgb,vec3(.299,.587,.114));
-    float tone=mix(lum,.05+.72*smoothstep(.1,.85,1.-vUv.x),uShade);
-    float v=clamp((tone-.5)*1.6+.5,0.,1.);
-    vec2 fine=fract(mat2(.707,-.707,.707,.707)*gl_FragCoord.xy/3.5)-.5;
-    v+=(1.-smoothstep(.14,.4,v))*(1.-smoothstep(.2,.3,length(fine)))*.34;
+    vec4 bw=texture2D(uBw,vUv);
+    vec4 c=mix(bw,texture2D(uColor,vUv),uColour);
+    if(c.a<.02)discard;
     if(uDissolve>0.){
       vec2 cell=fract(mat2(.707,-.707,.707,.707)*gl_FragCoord.xy/(5.+uDissolve*11.))-.5;
       if(length(cell)>(1.-uDissolve)*.9)discard;
     }
-    gl_FragColor=vec4(mix(vec3(.02),vec3(.957,.957,.941),v),uOpacity);
+    gl_FragColor=vec4(c.rgb,c.a*uOpacity);
   }`;
 
-function createPortrait(map, { ghost = false, soft = false, placeholder = false } = {}) {
+function createPortrait({ bw, color }, { ghost = false } = {}) {
   return new THREE.ShaderMaterial({
     transparent: true,
     depthWrite: !ghost,
-    uniforms: { uMap: { value: map }, uOpacity: { value: 1 }, uDissolve: { value: 0 }, uShade: { value: placeholder ? 1 : 0 } },
+    uniforms: { uBw: { value: bw }, uColor: { value: color }, uOpacity: { value: 1 }, uDissolve: { value: 0 }, uColour: { value: 0 } },
     vertexShader: 'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
-    fragmentShader: soft ? SOFT_PORTRAIT : `
-      varying vec2 vUv; uniform sampler2D uMap; uniform float uOpacity,uDissolve;
-      void main(){
-        vec4 c=texture2D(uMap,vUv);
-        if(c.a<.5)discard;
-        float lum=dot(c.rgb,vec3(.299,.587,.114));
-        float tone=max(lum,.1+.62*smoothstep(.32,.95,vUv.x));
-        vec2 cell=fract(mat2(.707,-.707,.707,.707)*gl_FragCoord.xy/(5.+uDissolve*11.))-.5;
-        float on=1.-smoothstep(.0,.08,length(cell)-sqrt(tone)*.62*(1.-uDissolve*uDissolve));
-        if(uDissolve>0.&&on<.5)discard;
-        gl_FragColor=vec4(mix(vec3(.02),vec3(.957,.957,.941),on),uOpacity);
-      }`,
+    fragmentShader: PHOTO_PORTRAIT,
   });
 }
 
-export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc, profilePlaceholder, onDiveEnd }) {
+// { bw, color } image URLs -> { bw, color } textures + aspect. No colour-space conversion: the
+// ShaderMaterial writes the sampled sRGB values straight out, like the other portrait shaders did.
+async function loadPortrait(urls) {
+  const [bwImg, colorImg] = await Promise.all([loadImage(urls.bw), loadImage(urls.color)]);
+  const tex = (img) => {
+    const map = new THREE.Texture(img);
+    map.needsUpdate = true;
+    return map;
+  };
+  return { maps: { bw: tex(bwImg), color: tex(colorImg) }, aspect: bwImg.width / bwImg.height };
+}
+
+export function createStage({ canvas, anchors, projects, portrait: portraitUrls, profile: profileUrls, onDiveEnd }) {
   const isSmall = window.innerWidth < SMALL_SCREEN;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: !isSmall, powerPreference: 'high-performance' });
   renderer.setClearColor(INK);
@@ -280,29 +282,29 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   const water = createInkWater();
   scene.add(water.mesh);
 
-  loadImage(portraitSrc).then((img) => {
+  // Colour of the two real-photo figures: 0 = B/W, 1 = colour (see portraitColour below).
+  const colour = { hero: { t: 0, hover: false, tap: false }, profile: { t: 0, hover: false, tap: false } };
+  let heroMaps = null;
+  loadPortrait(portraitUrls).then(({ maps, aspect }) => {
     if (state.disposed) return;
-    const map = new THREE.Texture(img);
-    map.needsUpdate = true;
-    const aspect = img.width / img.height;
-    const figure = new THREE.Mesh(new THREE.PlaneGeometry(3.1 * aspect, 3.1), createPortrait(map));
+    heroMaps = maps;
+    const figure = new THREE.Mesh(new THREE.PlaneGeometry(3.1 * aspect, 3.1), createPortrait(maps));
     heroFigure = figure;
     hero.add(figure);
     heroLayers.push({ object: figure, depth: 0.42, base: new THREE.Vector3(0, -0.1, 0) });
   }).catch(() => {});
 
   // Side-profile figure of the About section.
-  const profile = { ghosts: [], mesh: null, map: null, geometry: null, aspect: 1, box: { w: 1, h: 1 }, to: new THREE.Vector3(), top: 0, settle: 1, height: 1 };
-  loadImage(profileSrc).then((img) => {
+  const profile = { ghosts: [], mesh: null, maps: null, geometry: null, aspect: 1, box: { w: 1, h: 1 }, to: new THREE.Vector3(), top: 0, settle: 1, height: 1 };
+  loadPortrait(profileUrls).then(({ maps, aspect }) => {
     if (state.disposed) return;
-    profile.map = new THREE.Texture(img);
-    profile.map.needsUpdate = true;
-    profile.aspect = img.width / img.height;
+    profile.maps = maps;
+    profile.aspect = aspect;
     profile.geometry = new THREE.PlaneGeometry(profile.aspect, 1);
-    profile.mesh = new THREE.Mesh(profile.geometry, createPortrait(profile.map, { soft: true, placeholder: profilePlaceholder }));
+    profile.mesh = new THREE.Mesh(profile.geometry, createPortrait(maps));
     scene.add(profile.mesh);
     profile.ghosts = GHOST_FOLLOW.map((follow) => {
-      const material = createPortrait(profile.map, { ghost: true, soft: true, placeholder: profilePlaceholder });
+      const material = createPortrait(maps, { ghost: true });
       const mesh = new THREE.Mesh(profile.geometry, material);
       mesh.visible = false;
       mesh.renderOrder = -1;
@@ -608,10 +610,16 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
 
     const aboutEnter = smooth(clamp01(state.scroll / profile.settle));
     if (heroFigure) heroFigure.rotation.y = rad(90) * smooth(clamp01(aboutEnter / 0.5));
+    // Portrait colour (DESIGN.md §2): hover, tap, centred on touch, and the whole stage → about turn.
+    const turning = aboutEnter > 0.01 && aboutEnter < 0.99;
+    const heroColour = portraitColour(colour.hero, turning || ((colour.hero.hover || colour.hero.tap || centred('portrait')) && aboutEnter < 0.01), dt, now);
+    const profileColour = portraitColour(colour.profile, turning || colour.profile.hover || colour.profile.tap || (aboutEnter >= 0.99 && centred('aboutPortrait')), dt, now);
+    if (heroFigure) heroFigure.material.uniforms.uColour.value = heroColour;
     if (profile.mesh) {
       placeProfile(profile.mesh, aboutEnter);
       const dissolve = clamp01((state.scroll - (profile.top + profile.height * 0.42)) / (profile.height * 0.5));
       profile.mesh.material.uniforms.uDissolve.value = dissolve;
+      profile.mesh.material.uniforms.uColour.value = profileColour;
       profile.mesh.visible = aboutEnter > 0.5 && dissolve < 1;
       profile.ghosts.forEach((ghost, i) => {
         ghost.p += (aboutEnter - ghost.p) * (1 - Math.exp(-dt * ghost.follow));
@@ -620,6 +628,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
         if (!ghost.mesh.visible) return;
         placeProfile(ghost.mesh, ghost.p);
         ghost.material.uniforms.uOpacity.value = opacity;
+        ghost.material.uniforms.uColour.value = profileColour;
       });
     }
 
@@ -683,10 +692,42 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
     }
   }
 
+  // Portrait hit test against the DOM anchors (they stay pointer-events: none above the canvas).
+  const inside = (key, x, y) => {
+    const rect = anchors()[key]?.getBoundingClientRect();
+    return !!rect && x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+  };
+  const touchOnly = window.matchMedia('(hover: none)');
+  // Touch: a portrait whose centre sits in the middle 20 % of the viewport counts as centred.
+  const centred = (key) => {
+    if (!touchOnly.matches) return false;
+    const rect = anchors()[key]?.getBoundingClientRect();
+    if (!rect || !rect.height) return false;
+    const mid = (rect.top + rect.bottom) / 2;
+    return mid > state.h * 0.4 && mid < state.h * 0.6;
+  };
+  // 300 ms ease-out toward the target, like the tarot cards; keeps the loop awake while it moves.
+  function portraitColour(entry, on, dt, now) {
+    entry.t = clamp01(entry.t + (on ? dt : -dt) / PORTRAIT_FADE_S);
+    if (entry.t > 0 && entry.t < 1) state.lastInput = now;
+    return 1 - (1 - entry.t) ** 3;
+  }
+
   const onPointerMove = (event) => {
     mouse.tx = (event.clientX / window.innerWidth - 0.5) * 2;
     mouse.ty = (event.clientY / window.innerHeight - 0.5) * 2;
-    if (event.pointerType === 'mouse') pointerSeen = true;
+    if (event.pointerType === 'mouse') {
+      pointerSeen = true;
+      colour.hero.hover = inside('portrait', event.clientX, event.clientY);
+      colour.profile.hover = inside('aboutPortrait', event.clientX, event.clientY);
+    }
+    state.lastInput = performance.now();
+  };
+  const onPointerDown = (event) => {
+    if (event.pointerType === 'mouse') return;
+    if (inside('portrait', event.clientX, event.clientY)) colour.hero.tap = !colour.hero.tap;
+    else if (inside('aboutPortrait', event.clientX, event.clientY)) colour.profile.tap = !colour.profile.tap;
+    else return;
     state.lastInput = performance.now();
   };
   const onVisibility = () => {
@@ -720,6 +761,7 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
   const observer = new ResizeObserver(measure);
   observer.observe(document.documentElement);
   window.addEventListener('pointermove', onPointerMove, { passive: true });
+  window.addEventListener('pointerdown', onPointerDown, { passive: true });
   document.addEventListener('visibilitychange', onVisibility);
 
   return {
@@ -781,9 +823,11 @@ export function createStage({ canvas, anchors, projects, portraitSrc, profileSrc
       cancelAnimationFrame(state.frame);
       observer.disconnect();
       window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerdown', onPointerDown);
       document.removeEventListener('visibilitychange', onVisibility);
       bonfire.dispose();
-      profile.map?.dispose();
+      Object.values(profile.maps ?? {}).forEach((map) => map.dispose());
+      Object.values(heroMaps ?? {}).forEach((map) => map.dispose());
       disposeObject(scene);
       renderer.dispose();
     },

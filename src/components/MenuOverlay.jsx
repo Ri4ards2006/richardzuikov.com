@@ -8,7 +8,8 @@ import { useReducedMotion } from '../hooks/use-reduced-motion';
 import { getActiveMenuId, landOnSection, menuItems, scrollTargets } from '../lib/atlus';
 import { QUICK_PATH } from '../lib/sections';
 import { socialLinks } from './home/SocialLinks';
-import { portraits } from '../data/portraits';
+import { cutouts, portraits } from '../data/portraits';
+import CutoutPortrait from './atlus/CutoutPortrait';
 
 const LETTERS = ['M', 'E', 'N', 'U'];
 
@@ -167,7 +168,9 @@ function Panel({ closing, onClose, onExited }) {
         {/* Preview of the selected section, with name and portrait as on the stage. */}
         <div aria-hidden="true" className="gm-preview">
           <p className="gm-name">Richard Zuikov <span>{t.career.role}</span></p>
-          <img src={portraits.stage.large} alt="" className="gm-portrait" />
+          {cutouts.head
+            ? <CutoutPortrait set={cutouts.head} className="gm-portrait" sizes="(min-width: 1024px) 22vw, 0px" />
+            : <img src={portraits.stage.large} alt="" className="gm-portrait" />}
           <div key={activeItem.id} className="gm-echo">
             <p className="gm-kicker">{activeItem.number} / {t.atlus.hud[activeItem.id] ?? ''}</p>
             <p className="gm-label">{t.landing.nav[activeItem.id]}</p>

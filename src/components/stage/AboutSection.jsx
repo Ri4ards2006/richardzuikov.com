@@ -1,6 +1,7 @@
 import React, { forwardRef } from 'react';
 import { useLanguage } from '../../hooks/use-language';
-import { portraits } from '../../data/portraits';
+import { cutouts, portraits } from '../../data/portraits';
+import CutoutPortrait from '../atlus/CutoutPortrait';
 import { InkSplat } from '../atlus/glyphs';
 import OpenScreen from '../atlus/OpenScreen';
 
@@ -56,7 +57,9 @@ const AboutSection = forwardRef(function AboutSection({ portraitRef, webgl }, re
         <OpenScreen to="/about" />
       </div>
       <div ref={portraitRef} className="about-portrait">
-        {!webgl && <img src={portraits.about.large} alt="" className="h-full w-full object-contain grayscale" />}
+        {!webgl && (cutouts.about
+          ? <CutoutPortrait set={cutouts.about} className="hero-cutout" sizes="(min-width: 768px) 30vw, 60vw" />
+          : <img src={portraits.about.large} alt="" className="h-full w-full object-contain grayscale" />)}
       </div>
     </section>
   );

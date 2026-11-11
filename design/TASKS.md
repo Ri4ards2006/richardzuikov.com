@@ -415,4 +415,5 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | Task 4: Career: no hairlines, ink wedges + outline year, role 0 ≥ 120 px right of the year column (REVIEW-v6 P1), slanted slabs with rank pips |
 | done | claude-code | Task 5: 90° turn as its own pinned 60 vh beat (scrubbed, reversible; reduced motion = cut; mobile = slab wipe), screenshot strip |
 | done | claude-code | Task 6: poster pipeline (`npm run poster`: chroma key, CLAHE, 5-tone shader, AVIF/WebP, `/?portrait-lab` with `colorReveal`); tested on a synthetic image only |
-| todo | Richard | Put the green-screen `about.png` into `src/assets/portraits/raw/` (it is not on disk), then `npm run poster -- about` and commit `src/assets/portraits/poster/` |
+| done | Richard | Green-screen sources `stage` / `about` / `head` / `night` in `src/assets/portraits/raw/` (gitignored) |
+| done | claude-code | Portraits (replaces the poster shader): `npm run cutout` → colour + B/W cut-outs (CLAHE, S-curve, grain, paper rim), B/W at rest → colour on hover / focus / tap / centred / stage → about turn; stage → hero, about → /about, head → menu + mobile hero, night behind a flag; lab keeps contrast / grain / rim; screenshots in `design/screenshots/v7/portraits/` |

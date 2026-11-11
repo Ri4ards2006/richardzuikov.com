@@ -11,7 +11,7 @@ const Work = lazy(() => import('./pages/Work'));
 const Stack = lazy(() => import('./pages/Stack'));
 const Career = lazy(() => import('./pages/Career'));
 const Impressum = lazy(() => import('./pages/Impressum'));
-// Dev-only poster lab (v7 task 6); the DEV guard drops it from the production bundle.
+// Dev-only portrait lab (DESIGN.md §18 "Portraits"); the DEV guard drops it from the production bundle.
 const PortraitLab = import.meta.env.DEV ? lazy(() => import('./pages/PortraitLab')) : null;
 
 function AppRoutes() {

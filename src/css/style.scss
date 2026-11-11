@@ -3894,52 +3894,82 @@ html.gm-open .menu-dots {
   }
 }
 
-/* ---------- Poster portrait (DESIGN.md §18, v7 task 6) ---------- */
+/* ---------- Real-photo portraits (DESIGN.md §2 + §18 "Portraits") ---------- */
 
-.poster {
+/* B/W cut-out at rest; the colour cut-out cross-fades on top on hover / focus / tap / centred. */
+.cutout {
   position: relative;
   display: block;
+  aspect-ratio: var(--cutout-aspect);
+  outline-offset: 6px;
 }
 
-.poster img,
-.poster-gl {
+.cutout img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom;
 }
 
-.poster-color,
-.poster-gl {
+.cutout-colour {
   position: absolute;
   inset: 0;
+  opacity: 0;
+  transition: opacity 300ms ease-out;
 }
 
-.poster-gl {
+.cutout.is-colour .cutout-colour,
+.cutout:focus-visible .cutout-colour {
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .cutout:hover .cutout-colour {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cutout-colour {
+    transition: none;
+  }
+}
+
+/* The cut-outs carry their own tones: no grayscale filter on top. */
+/* No-WebGL hero: `stage` from 768 px, `head` below. The hero anchors and the menu preview are
+   pointer-events: none, so the cut-out takes the pointer back for its hover. */
+.stage-portrait .cutout,
+.about-portrait .cutout,
+.gm-preview .cutout {
+  pointer-events: auto;
+}
+
+.hero-cutout.is-mobile { display: none; }
+
+@media (max-width: 767px) {
+  .hero-cutout.is-desktop { display: none; }
+  .hero-cutout.is-mobile { display: block; }
+}
+
+/* §18: below 1024 px the menu preview drops to the name, portrait included. */
+@media (max-width: 1023px) {
+  .cutout.gm-portrait { display: none; }
+}
+
+.cutout.gm-portrait img {
+  object-position: right bottom;
+}
+
+/* Fills the 4:5 portrait cell; object-fit keeps both layers on the same box. */
+.cutout.prof-figure,
+.cutout.gm-portrait,
+.cutout.hero-cutout {
+  aspect-ratio: auto;
+  width: 100%;
   height: 100%;
-  opacity: 0;
-}
-
-.poster.is-gl .poster-gl {
-  opacity: 1;
-}
-
-.poster.is-gl .poster-static {
-  visibility: hidden;
-}
-
-/* Static fallback reveal: a plain cross-fade. */
-.poster-color {
-  opacity: 0;
-  transition: opacity 250ms ease-out;
-}
-
-.poster.has-reveal:hover .poster-color {
-  opacity: 1;
-}
-
-/* Poster figures stay in their own tones (no grayscale filter on top). */
-.prof-portrait .poster.prof-figure {
   filter: none;
+  opacity: 1;
 }
 
 /* Dev-only portrait lab (/?portrait-lab). */
@@ -3964,11 +3994,6 @@ html.gm-open .menu-dots {
   gap: 0.25rem;
 }
 
-.portrait-lab label.is-row {
-  grid-template-columns: auto 1fr;
-  align-items: center;
-}
-
 .portrait-lab button,
 .portrait-lab select {
   padding: 0.4rem;
@@ -3986,6 +4011,12 @@ html.gm-open .menu-dots {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.5rem;
   align-items: start;
+}
+
+.portrait-lab-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .portrait-lab figcaption {
