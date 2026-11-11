@@ -240,7 +240,7 @@ h1[tabindex='-1']:focus-visible {
   width: 100%;
   max-width: 76rem;
   margin-inline: auto;
-  padding-inline: 1.25rem;
+  padding-inline: var(--space-edge);
 }
 
 .stage-hero {
@@ -256,7 +256,7 @@ h1[tabindex='-1']:focus-visible {
   position: absolute;
   z-index: 10;
   top: 0.5rem;
-  right: 1.25rem;
+  right: var(--space-edge);
   text-align: right;
   pointer-events: none;
 }
@@ -371,7 +371,7 @@ h1[tabindex='-1']:focus-visible {
 
 /* HUD bottom-right: the only place for control hints (DESIGN.md §16). */
 .stage-hud-br {
-  right: 1.25rem;
+  right: var(--space-edge);
   bottom: 0.625rem;
   display: flex;
   flex-direction: column;
@@ -464,7 +464,7 @@ h1[tabindex='-1']:focus-visible {
   grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
   gap: 2.5rem;
   align-items: center;
-  padding-block: 6rem;
+  padding-block: var(--space-section);
 }
 
 .about-portrait {
@@ -499,8 +499,8 @@ h1[tabindex='-1']:focus-visible {
 
 .about-panel {
   max-width: 34rem;
-  margin-top: 2.25rem;
-  padding: 1.75rem 2.25rem 2.5rem 1.75rem;
+  margin-top: var(--space-block);
+  padding: var(--space-panel);
   background: rgb(var(--ash-800) / 0.94);
   border: 3px solid rgb(var(--ash-100));
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2rem), calc(100% - 2rem) 100%, 0 100%);
@@ -536,14 +536,18 @@ h1[tabindex='-1']:focus-visible {
 }
 
 .stage-descent {
-  padding-block: 7rem;
+  padding-block: var(--space-section);
+}
+
+.descent-rows {
+  margin-top: var(--space-block);
 }
 
 .manga-panel {
   position: relative;
   --tilt: 9deg;
   max-width: 34rem;
-  padding: 1.75rem;
+  padding: var(--space-panel);
   background: rgb(var(--ash-800) / 0.94);
   border: 3px solid rgb(var(--ash-100));
   box-shadow: 10px 10px 0 rgb(var(--ash-900));
@@ -565,6 +569,9 @@ h1[tabindex='-1']:focus-visible {
     display: grid;
     grid-template-columns: minmax(0, 34rem) minmax(0, 1fr);
     align-items: center;
+    /* Near panels (scale 1.06 + 9° yaw) reach ~1.75rem past their box; the inset keeps them clear of
+       the 24 px edge gutter (§19). */
+    padding-inline: 1.75rem;
   }
 
   .descent-row.is-right {
@@ -813,11 +820,11 @@ h1[tabindex='-1']:focus-visible {
 }
 
 .stage-works {
-  padding-block: 5rem;
+  padding-block: var(--space-section);
 }
 
 .stage-tarot {
-  margin-top: 3.5rem;
+  margin-top: var(--space-block);
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 2.5rem;
@@ -1122,7 +1129,6 @@ h1[tabindex='-1']:focus-visible {
 
   .stage-about {
     grid-template-columns: minmax(0, 1fr);
-    padding-block: 4rem;
   }
 
   .about-portrait {
@@ -1189,7 +1195,7 @@ h1[tabindex='-1']:focus-visible {
   position: fixed;
   z-index: 60;
   top: 0.625rem;
-  right: 1.25rem;
+  right: var(--space-edge);
   width: 3.25rem;
   height: 2.75rem;
   display: flex;
@@ -1606,7 +1612,7 @@ html.gm-open .menu-dots {
   position: fixed;
   z-index: 96;
   top: 0.625rem;
-  right: 1.25rem;
+  right: var(--space-edge);
   width: 3.25rem;
   height: 2.75rem;
   display: flex;
@@ -1964,7 +1970,7 @@ html.gm-open .menu-dots {
 
 .skill-panel {
   position: relative;
-  padding: 1.5rem;
+  padding: var(--space-panel);
   background: rgb(var(--ash-800) / 0.94);
   border: 3px solid rgb(var(--ash-100));
 }
@@ -2310,7 +2316,7 @@ html.gm-open .menu-dots {
   grid-template-columns: auto minmax(0, 1fr);
   gap: 2.5rem;
   align-items: start;
-  margin-top: 2.5rem;
+  margin-top: var(--space-block);
 }
 
 .record-year {
@@ -2749,7 +2755,7 @@ html.gm-open .menu-dots {
 
 .stage-now {
   position: relative;
-  padding-block: 6rem 5rem;
+  padding-block: var(--space-section);
 }
 
 .now-list {
@@ -2757,14 +2763,13 @@ html.gm-open .menu-dots {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 2.25rem;
   align-items: start;
-  padding-bottom: 3rem;
-  margin-top: 3rem;
+  margin-top: var(--space-block);
   perspective: 1200px;
 }
 
 .now-panel {
   position: relative;
-  padding: 1.5rem 1.5rem 1.75rem;
+  padding: var(--space-panel);
   background: rgb(var(--ash-800) / 0.94);
   border: 3px solid rgb(var(--ash-100));
   box-shadow: 10px 10px 0 rgb(var(--ash-900));
@@ -3336,7 +3341,7 @@ html.gm-open .menu-dots {
   position: relative;
   max-width: 76rem;
   margin-inline: auto;
-  padding: 1.5rem 1.25rem 4rem;
+  padding: 1.5rem var(--space-edge) 4rem;
 }
 
 .scr-back {
@@ -3458,7 +3463,7 @@ html.gm-open .menu-dots {
   position: sticky;
   top: 5.5rem;
   min-width: 0;
-  padding: 1.5rem;
+  padding: var(--space-panel);
   background: rgb(var(--ash-800) / 0.94);
   border: 3px solid rgb(var(--ash-100));
 }

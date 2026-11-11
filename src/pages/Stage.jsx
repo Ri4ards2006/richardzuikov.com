@@ -383,7 +383,7 @@ export default function Stage() {
       <section aria-labelledby="descent-title" className="stage-descent">
         <p className="font-mono text-xs tracking-widest text-ash-300">{t.atlus.stage.descent}</p>
         <h2 id="descent-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight mt-2">{t.atlus.stage.descentTitle}</h2>
-        <div className="mt-16 space-y-24 md:space-y-32">
+        <div className="descent-rows space-y-24 md:space-y-32">
           {t.about.logEntries.map((entry, index) => (
             // Row = panel + its reserved gutter slot for the 3D prop (DESIGN.md §18); the slot is empty markup.
             <div key={entry.title} className={`descent-row ${index % 2 ? 'is-right' : ''}`}>

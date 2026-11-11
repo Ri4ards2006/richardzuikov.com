@@ -13,8 +13,31 @@
   --accent: 244 244 240;
   --accent-dim: 82 82 81;
 
+  /* Spacing (DESIGN.md §19): one token per level of the vertical rhythm, one panel padding, and the
+     edge gutter. Desktop never brings an element closer than 24 px to the viewport edge; from 1024 px
+     the gutter grows so slanted / scaled panels keep that distance too. */
+  --space-edge: 1.25rem;     /* phones: 20 px */
+  --space-section: 4rem;     /* padding-block of every home section → 2× between two sections */
+  --space-block: 2.25rem;    /* section heading → its content */
+  --space-panel: 1.25rem;    /* inner padding of every panel */
+
   /* The single warm exception: bonfire only. */
   --ember-hot: 255 106 0;   /* #ff6a00 */
   --ember-gold: 255 154 46; /* #ff9a2e */
   --ember-glow: 255 209 128; /* #ffd180, bonfire menu hover only */
+}
+
+@media (min-width: 768px) {
+  :root {
+    --space-edge: 1.5rem;    /* 24 px */
+    --space-section: 6rem;
+    --space-block: 3rem;
+    --space-panel: 1.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --space-edge: clamp(2.25rem, 3.5vw, 3rem);
+  }
 }
