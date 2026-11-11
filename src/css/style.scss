@@ -579,12 +579,18 @@ h1[tabindex='-1']:focus-visible {
   .descent-row.is-right .prop-slot {
     grid-column: 1;
     grid-row: 1;
+    /* Mirror of the default: 10 % closer to the panel on its right. */
+    margin-inline: 10% 0;
   }
 
+  /* v8 (§19): 1.5× the v7 slot (11rem), and 10 % closer to its panel: a margin of 10 % of the gutter on
+     the far side moves the centred slot 5 % of the gutter toward the panel, i.e. the prop's distance
+     to the panel edge (half the gutter) shrinks by 10 %. Still its own grid cell, so never on text. */
   .prop-slot {
     display: block;
     justify-self: center;
-    width: min(11rem, 100%);
+    margin-inline: 0 10%;
+    width: min(16.5rem, 90%);
     aspect-ratio: 1;
     pointer-events: none;
     transform: translateY(calc(var(--depth, 0) * var(--parallax, 0px)));
