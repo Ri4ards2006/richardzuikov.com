@@ -417,3 +417,13 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | Task 6: poster pipeline (`npm run poster`: chroma key, CLAHE, 5-tone shader, AVIF/WebP, `/?portrait-lab` with `colorReveal`); tested on a synthetic image only |
 | done | Richard | Green-screen sources `stage` / `about` / `head` / `night` in `src/assets/portraits/raw/` (gitignored) |
 | done | claude-code | Portraits (replaces the poster shader): `npm run cutout` → colour + B/W cut-outs (CLAHE, S-curve, grain, paper rim), B/W at rest → colour on hover / focus / tap / centred / stage → about turn; stage → hero, about → /about, head → menu + mobile hero, night behind a flag; lab keeps contrast / grain / rim; screenshots in `design/screenshots/v7/portraits/` |
+
+## Changelog v8 (DESIGN.md §19)
+
+- [x] Hero: 70 vh figure on the screen edge, motion budget (breathing 0.6 %, parallax ≤ 6 px), calm masked ink water, 8 slow shards
+- [x] Portrait edges fade into ink (hero, Who Am I, /about, pause menu)
+- [x] Descent props 1.5×, 10 % closer to their panel (checked 1024 / 1440 / 1920)
+- [x] TODO / DRAFT dev server only + e2e grep of the production DOM
+- [x] /about: WEEK removed, NOW and hobbies updated, Who Am I box lists the hobbies
+- [x] Spacing tokens, equal panel padding, ≥ 24 px edge gutter on desktop
+- [ ] Needs Richard: dry line per hobby, NOW details (apprenticeship / gym / reading), language levels

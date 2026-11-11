@@ -446,3 +446,25 @@ Owner review of v6, 2026-11-10. Open work is in TASKS.md.
 - Current sources allow: `stage` and `about` at 900 + 1400 px, `head` and `night` at 900 px; 1800 px exceeds 1.75× for all four.
 - Render: DOM `CutoutPortrait` (B/W picture + colour picture cross-faded in CSS) on `/about`, in the pause menu and for the no-WebGL hero; in the WebGL stage the hero and profile planes blend the two textures by `uColour` (same 300 ms ease-out). The hero is one `<picture>` per layer with a `(max-width: 767px)` source for `head`, so a resize swaps `stage` / `head` without JS; with WebGL the picture stays hidden in layout and the scene reloads its textures from the `currentSrc` the media query picked. The ink-water stage background stays. Plain ink behind every portrait, no backdrop slab. HUD rings and the 1.2 % breathing stay.
 - Dev-only `/?portrait-lab`: live contrast / grain / rim sliders on the CLAHE luminance the pipeline leaves in `raw/lab/` (gitignored), next to the baked cut-out with its colour hover; prints the `CONTRAST=… GRAIN=… RIM=… npm run cutout` line. The poster / posterize path and its tone sliders are gone.
+
+---
+
+## §19 Changelog v8 — polish
+
+Owner brief, 2026-11-11: the first 5 seconds — calm, big, expensive. Supersedes the hero motion values of §7 Card 03 (breathing 1.2 %, 3-layer parallax 0.5–3 %, 30–40 shards) and §18 (breathing 1.2 %).
+
+**Hero** (one hero, everything else still)
+- Figure box ~70 % of the viewport height (`.stage-portrait`, ≥ 761 px), right half (left edge at 48 %), its crop line on the viewport's bottom edge; the name stays top right (font capped at 15vh, hard ink offset where it crosses the hair).
+- Motion budget: breathing ≤ 0.6 % around the bottom pivot, horizontal parallax ≤ 6 px (rings 3 px), no other portrait motion (HUD rings static). Ink water at 40 % speed and 60 % strength, masked off the menu and the figure (screen-space rects, 56 px feather). 8 floating shards, slow spin and bob. Stage dust at half opacity; the name splat does not boil.
+- Rest state B/W, colour on hover (§2) unchanged.
+
+**Portrait edges**
+- No cut-out ends in a hard straight line. Edges where the figure hits its source photo's frame (measured: stage right + bottom, about right + bottom, head left + right + bottom; `CUTOUT_FADE` in `src/data/portraits.js`) fade into ink over 20–22 % of the figure: `uFade` in the WebGL portrait shader (hero, About profile, ghosts), a CSS mask on the aspect-locked `CutoutPortrait` box everywhere else.
+
+**Descent props** — 1.5× (slot 16.5rem) and 10 % closer to their panel (a 10 % gutter margin on the slot's far side); still their own grid cell.
+
+**TODO / DRAFT hints** — dev server only: `DEV_HINTS` (`src/lib/dev-hints.js`), defined in `vite.config.js` from `command === 'serve'`, not from NODE_ENV / mode. e2e `no-todo.spec.js` greps the rendered production DOM.
+
+**/about** — WEEK removed. NOW: Ausbildung IT-Systemelektroniker · Gym (powerlifting) · Reading, details TODO. INVENTORY: Powerlifting, Home lab, Reading, Coding, Outside (flavor lines TODO). The home Who Am I box lists the same hobbies under WHAT I'M INTO.
+
+**Spacing** — `src/css/tokens.css`: `--space-edge` (≥ 24 px on desktop, 36–48 px from 1024 px), `--space-section`, `--space-block`, `--space-panel`. One token per level; every panel uses `--space-panel`.
