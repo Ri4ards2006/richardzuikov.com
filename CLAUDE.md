@@ -9,5 +9,6 @@ This repository is governed by the unified AI agent rules defined in **[AGENTS.m
 4. **Never push to `main` and never merge PRs**. Always open a PR against `feat/atlus-menu`.
 5. **Follow the §10 visual review loop**: capture screenshots at `1440×900` and `390×844`, verify against `design/refs/`, iterate and fix.
 6. Verify quality gates before pushing: `npm run build`, `npm run test:security`, `npm run test:e2e`.
+7. No attribution trailers or 'Generated with' lines in commits, PRs or comments.
 
 Refer to [AGENTS.md](file:///home/richard/Projects/Ongoing/New/rz-ci/AGENTS.md) and [docs/ARCHITECTURE.md](file:///home/richard/Projects/Ongoing/New/rz-ci/docs/ARCHITECTURE.md) for complete details.

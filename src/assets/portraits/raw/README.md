@@ -23,3 +23,16 @@ For each file the script makes the background transparent (luminance → alpha f
 Photos are processed locally and never uploaded. On its first run `rembg` downloads its model file once to `~/.u2net/`.
 
 An id without a photo falls back to a silhouette: `../front-silhouette.svg` for `stage`, `../profile-silhouette.svg` for `about`, `../silhouette.svg` for the rest (see `src/data/portraits.js`).
+
+## Cut-out pipeline (green screen, v7)
+
+For `stage.png`, `about.png`, `head.png`, `night.png` shot on a green screen:
+
+```sh
+npm run cutout            # all four; an id without a raw file is skipped
+npm run cutout -- head    # only one id
+```
+
+Strips EXIF, keys out the green (spill suppression on the hair edge), erodes the alpha by 1 px and feathers it by 1 px, crops to the figure, then writes a colour and a black-and-white cut-out (CLAHE, S-curve, film grain) with a 1.5 px paper rim to `../cutout/` as AVIF + WebP, named `<id>-<color|bw>-<w>x<h>`. Heights 900 / 1400 / 1800 px with plain Lanczos, at most 1.75× the crop; larger heights are skipped (no AI upscaling). Commit the files in `../cutout/`, never this folder. If the key eats into dark green clothing or leaves a haze: `KEY_LOW=4% KEY_HIGH=16% npm run cutout`.
+
+Tune the B/W look live in development at `/?portrait-lab` (contrast, grain, rim), then run the command it prints, e.g. `CONTRAST=5 GRAIN=0.22 RIM=1.5 npm run cutout`. The lab reads `lab/<id>-m<margin>.png`, which the pipeline writes here (gitignored).

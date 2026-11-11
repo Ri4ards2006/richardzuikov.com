@@ -538,6 +538,43 @@ h1[tabindex='-1']:focus-visible {
   transform: translateY(calc(var(--depth, 0) * var(--parallax))) perspective(1100px) rotateY(var(--tilt)) rotateX(calc(var(--depth, 0) * 9deg)) rotateZ(var(--roll)) scale(var(--layer-scale));
 }
 
+/* Row = panel + reserved gutter slot for its 3D prop (DESIGN.md §18). The slot is empty, takes the
+   panel's translateY (--depth / --parallax written by scene.js) and exists from 1024 px up only. */
+.prop-slot {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .descent-row {
+    display: grid;
+    grid-template-columns: minmax(0, 34rem) minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .descent-row.is-right {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 34rem);
+  }
+
+  .descent-row.is-right .manga-panel {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .descent-row.is-right .prop-slot {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .prop-slot {
+    display: block;
+    justify-self: center;
+    width: min(11rem, 100%);
+    aspect-ratio: 1;
+    pointer-events: none;
+    transform: translateY(calc(var(--depth, 0) * var(--parallax, 0px)));
+  }
+}
+
 .manga-panel.is-near {
   --layer-scale: 1.06;
   --parallax: -130px;
@@ -1252,72 +1289,71 @@ html.gm-open .menu-dots {
   100% { transform: translateX(-40vw) skewX(-18deg); }
 }
 
-/* Vertical MENU in its own fixed-width column: upright, even leading, never under the list. */
-.gm-letters {
+/* Pause screen (DESIGN.md §18): 12 columns inside the safe area. Cols 1-2 the vertical MENU (exactly as
+   tall as the list), 3-6 the list, 7-12 the preview; the footer is one row of three zones. */
+.gm-grid {
+  --gm-pad: clamp(1rem, 3vw, 2.5rem);
   position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: var(--gm-col);
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr) auto;
+  column-gap: clamp(0.75rem, 1.6vw, 1.5rem);
+  row-gap: 1.5rem;
+  padding: calc(var(--gm-pad) + 3rem) var(--gm-pad) var(--gm-pad);
+}
+
+/* MENU letters and list share one row, so the letters column is exactly as tall as the list. */
+.gm-menu {
+  grid-column: 1 / 7;
+  align-self: center;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: stretch;
+}
+
+.gm-letters {
+  grid-column: 1 / 3;
+  container-type: size;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  min-height: 0;
   overflow: hidden;
   font-family: Anton, Impact, sans-serif;
-  font-size: min(calc(var(--gm-col) * 1.1), 19vh);
-  line-height: 1.05;
-  color: rgb(var(--ash-100) / 0.1);
-  border-inline-end: 1px solid rgb(var(--ash-100) / 0.1);
+  line-height: 1;
+  color: rgb(var(--ash-100) / 0.12);
+  border-inline-end: 1px solid rgb(var(--ash-100) / 0.12);
   user-select: none;
   pointer-events: none;
 }
 
-/* Echo of the focused item, like the stage menu. */
-.gm-echo {
-  position: absolute;
-  right: -0.08em;
-  bottom: 9vh;
-  font-family: Anton, Impact, sans-serif;
-  font-size: clamp(4.5rem, 11vw, 12rem);
-  line-height: 0.9;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: rgb(var(--ash-100) / 0.05);
-  -webkit-text-stroke: 1.5px rgb(var(--ash-100) / 0.15);
-  transform: rotate(-6deg);
-  pointer-events: none;
-  animation: gm-echo 180ms cubic-bezier(0.2, 0.9, 0.1, 1) both;
-}
-
-@keyframes gm-echo {
-  from { opacity: 0; translate: 12px 0; }
-  to { opacity: 1; translate: 0 0; }
+/* Four letters, evenly spaced over the list height; never wider than the two columns. Container units
+   resolve against the letters column (an ancestor of the spans), not the viewport. */
+.gm-letters span {
+  font-size: min(24cqh, 90cqw);
 }
 
 .gm-main {
-  position: absolute;
-  left: calc(var(--gm-col) + var(--gm-gap));
-  top: 50%;
-  transform: translateY(-54%);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  grid-column: 3 / 7;
+  min-width: 0;
   perspective: 900px;
 }
 
 .gm-list {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.35rem;
 }
 
+/* Number column directly left of its item, fixed 16 px gap, no staircase. */
 .gm-list li {
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  column-gap: 16px;
   align-items: center;
-  gap: 0.75rem;
-  margin-inline-start: calc(var(--i) * 1.4rem + var(--o) * 0.9rem);
   transform-style: preserve-3d;
 }
 
@@ -1325,7 +1361,7 @@ html.gm-open .menu-dots {
 .gm-list li::before {
   content: '';
   position: absolute;
-  inset-inline-start: 2.25rem;
+  inset-inline-start: calc(2.25rem + 16px);
   top: 8%;
   width: 80%;
   height: 84%;
@@ -1342,25 +1378,27 @@ html.gm-open .menu-dots {
 }
 
 .gm-number {
-  min-width: 1.75rem;
-  translate: 0 calc(var(--i) * -0.2rem - 0.6rem);
   font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
   font-size: 0.75rem;
+  text-align: right;
+  white-space: nowrap;
   color: rgb(var(--ash-300));
 }
 
 .gm-slab {
   position: relative;
-  display: inline-block;
-  padding: 0.05rem 2.75rem 0.05rem 1rem;
+  justify-self: start;
+  max-width: 100%;
+  padding: 0.14em 2.25rem 0.02em 0.9rem;
   font-family: Anton, Impact, sans-serif;
-  font-size: clamp(2.5rem, 9.5vh, 5.75rem);
+  font-size: min(9vh, 4.4vw, 5.5rem);
   line-height: 1.12;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  white-space: nowrap;
   color: rgb(var(--ash-200));
-  clip-path: polygon(0 0, 100% 0, calc(100% - 1.75rem) 100%, 0 100%);
-  transform: rotateY(-16deg) rotateZ(calc(-5deg - var(--i) * 0.8deg));
+  clip-path: polygon(0 0, 100% 0, calc(100% - 1.5rem) 100%, 0 100%);
+  transform: rotateY(-14deg) rotateZ(-4deg);
   transform-origin: left center;
   opacity: 0;
   translate: -3rem 0;
@@ -1382,16 +1420,93 @@ html.gm-open .menu-dots {
   outline-offset: -5px;
 }
 
+/* Preview of the selected section: name, portrait (shrinks first), then the label block. */
+.gm-preview {
+  grid-column: 7 / 13;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  justify-items: end;
+  text-align: right;
+  pointer-events: none;
+}
+
+.gm-name {
+  font-family: Anton, Impact, sans-serif;
+  font-size: clamp(1.5rem, 2.4vw, 2.75rem);
+  line-height: 1;
+  text-transform: uppercase;
+  color: rgb(var(--ash-100));
+}
+
+.gm-name span {
+  display: block;
+  margin-top: 0.6rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  color: rgb(var(--ash-300));
+}
+
+.gm-portrait {
+  min-height: 0;
+  height: 100%;
+  max-height: 26rem;
+  max-width: 100%;
+  margin-block: 0.75rem;
+  object-fit: contain;
+  object-position: right bottom;
+  filter: grayscale(1) contrast(1.15);
+  opacity: 0.85;
+}
+
+.gm-echo {
+  max-width: 100%;
+  animation: gm-echo 180ms cubic-bezier(0.2, 0.9, 0.1, 1) both;
+}
+
+@keyframes gm-echo {
+  from { opacity: 0; translate: 12px 0; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+.gm-kicker {
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  color: rgb(var(--ash-300));
+}
+
+.gm-label {
+  font-family: Anton, Impact, sans-serif;
+  font-size: clamp(48px, 6vw, 112px);
+  /* Room for umlaut dots inside the clipped line box. */
+  line-height: 1.15;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  color: rgb(var(--ash-100) / 0.08);
+  -webkit-text-stroke: 1.5px rgb(var(--ash-100) / 0.45);
+}
+
+.gm-teaser {
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+  color: rgb(var(--ash-200));
+}
+
 /* HUD chips: slanted, small, mono. */
 .gm-chip {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   min-height: 2.75rem;
-  padding: 0 1.1rem;
+  padding: 0 clamp(0.7rem, 0.9vw, 1.1rem);
   font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
   font-size: 0.75rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   white-space: nowrap;
   color: rgb(var(--ash-100));
@@ -1408,64 +1523,29 @@ html.gm-open .menu-dots {
   transform: translateY(-2px);
 }
 
-/* Name and portrait, as on the stage (top right). */
-.gm-hero {
-  position: absolute;
-  top: 4rem;
-  right: clamp(1rem, 3vw, 2.5rem);
+/* Footer: one row, three zones (settings | legal | links). */
+.gm-foot {
+  grid-column: 1 / 13;
+  /* Above the wipe shards (z 90): the legal links are never covered. */
+  position: relative;
+  z-index: 95;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.gm-zone {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  text-align: right;
-  pointer-events: none;
-}
-
-.gm-name {
-  font-family: Anton, Impact, sans-serif;
-  font-size: clamp(2.5rem, 5.2vw, 6.5rem);
-  line-height: 0.94;
-  text-transform: uppercase;
-  color: rgb(var(--ash-100));
-  transform: rotate(-4deg) skewX(-6deg);
-  transform-origin: right top;
-}
-
-.gm-name span {
-  display: block;
-}
-
-.gm-name span + span {
-  margin-inline-end: 0.55em;
-}
-
-.gm-role {
-  margin-top: 1.75rem;
-  font-family: ui-monospace, monospace;
-  font-size: 0.6875rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgb(var(--ash-300));
-}
-
-.gm-portrait {
-  height: min(44vh, 28rem);
-  max-width: 26vw;
-  margin-top: 1rem;
-  object-fit: contain;
-  object-position: right bottom;
-  filter: grayscale(1) contrast(1.15);
-}
-
-.gm-corner {
-  position: absolute;
-  bottom: 2.5rem;
-  display: flex;
+  flex-wrap: nowrap;
   gap: 0.375rem;
-  transform: rotate(-3deg);
+  min-width: 0;
 }
 
-.gm-corner.is-left { left: clamp(1rem, 3vw, 2.5rem); }
-.gm-corner.is-right { right: clamp(1rem, 3vw, 2.5rem); }
+.gm-zone.is-links {
+  justify-content: flex-end;
+}
 
 .gm-lang b {
   font-weight: 700;
@@ -1478,21 +1558,16 @@ html.gm-open .menu-dots {
 }
 
 .gm-legal {
-  position: absolute;
-  /* Above the wipe shards (z 90): the legal links are never covered. */
-  z-index: 95;
-  left: 0;
-  right: 0;
-  bottom: 0.25rem;
-  text-align: center;
+  align-items: center;
   font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   letter-spacing: 0.12em;
+  white-space: nowrap;
   color: rgb(var(--ash-300));
 }
 
 .gm-legal button {
-  min-height: 1.75rem;
+  min-height: 2.75rem;
   padding-inline: 0.25rem;
   letter-spacing: inherit;
 }
@@ -1507,7 +1582,7 @@ html.gm-open .menu-dots {
 
 .gm-close {
   position: fixed;
-  z-index: 1;
+  z-index: 96;
   top: 0.625rem;
   right: 1.25rem;
   width: 3.25rem;
@@ -1532,81 +1607,108 @@ html.gm-open .menu-dots {
   box-shadow: inset 0 0 0 2px rgb(var(--ash-100));
 }
 
-@media (max-width: 767px) {
-  .gm {
-    --gm-col: 2.75rem;
-    --gm-gap: 2rem;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem 1rem 1.25rem calc(var(--gm-col) + var(--gm-gap));
+@media (max-width: 1279px) {
+  .gm-foot .gm-chip {
+    padding-inline: 0.6rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
   }
 
-  .gm-hero {
-    position: static;
-    align-items: flex-start;
+  .gm-legal {
+    letter-spacing: 0.04em;
+  }
+}
+
+/* Below 1024 px the preview goes and the footer stacks. */
+@media (max-width: 1023px) {
+  .gm {
+    overflow-y: auto;
+  }
+
+  .gm-grid {
+    position: relative;
+    inset: auto;
+    min-height: 100%;
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto;
+    column-gap: 1.25rem;
+    padding: 0.75rem 1rem 1.25rem;
+  }
+
+  .gm-menu {
+    grid-column: 1 / 3;
+    grid-row: 2;
+  }
+
+  .gm-letters {
+    grid-column: 1;
+  }
+
+  .gm-main {
+    grid-column: 2;
+  }
+
+  .gm-slab {
+    font-size: clamp(1.9rem, 9.5vw, 3.25rem);
+    padding-inline-end: 1.75rem;
+  }
+
+  .gm-list li {
+    grid-template-columns: 2rem minmax(0, 1fr);
+    column-gap: 10px;
+  }
+
+  .gm-list li::before {
+    inset-inline-start: calc(2rem + 10px);
+  }
+
+  .gm-number {
+    font-size: 0.6875rem;
+  }
+
+  /* Name only, in the top row; it leaves room for the close button (≤ 375 px too). */
+  .gm-preview {
+    grid-column: 1 / 3;
+    grid-row: 1;
+    display: block;
+    min-height: 2.75rem;
+    padding-inline-end: 4.75rem;
     text-align: left;
-    padding-inline-end: 4rem;
   }
 
   .gm-name {
-    font-size: 1.75rem;
-    transform: none;
+    font-size: 1.5rem;
+    line-height: 1.1;
   }
 
   .gm-name span {
-    display: inline;
-  }
-
-  .gm-name span + span {
-    margin-inline-end: 0;
-  }
-
-  .gm-role {
     margin-top: 0.25rem;
     font-size: 0.625rem;
+    letter-spacing: 0.14em;
   }
 
-  .gm-portrait {
-    display: none;
-  }
-
+  .gm-portrait,
   .gm-echo {
     display: none;
   }
 
-  .gm-main {
-    position: static;
-    transform: none;
-    margin-block: auto 1.5rem;
+  .gm-foot {
+    grid-column: 1 / 3;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+    gap: 0.5rem;
   }
 
-  .gm-number {
-    min-width: 1.5rem;
-  }
-
-  .gm-list li {
-    gap: 0.4rem;
-    margin-inline-start: calc(var(--i) * 0.35rem);
-  }
-
-  .gm-slab {
-    font-size: clamp(2rem, 10vw, 3.25rem);
-    padding-inline-end: 2rem;
-  }
-
-  .gm-corner {
-    position: static;
+  .gm-zone {
     flex-wrap: wrap;
-    margin-top: 0.5rem;
-    transform: rotate(-2deg);
   }
 
-  .gm-legal {
-    position: relative;
-    bottom: auto;
-    margin-top: 1rem;
-    text-align: left;
+  .gm-zone.is-links {
+    justify-content: flex-start;
+  }
+
+  .gm-close {
+    right: 0.75rem;
   }
 }
 
@@ -2284,6 +2386,30 @@ html.gm-open .menu-dots {
   text-transform: uppercase;
 }
 
+.record-rank { grid-column: 1; grid-row: 1; }
+.record-role { grid-column: 2; grid-row: 1; }
+.record-meta { grid-column: 3; grid-row: 1; }
+
+.record-pips {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  gap: 0.25rem;
+}
+
+.record-pips span {
+  width: 0.7rem;
+  height: 0.4rem;
+  border: 1px solid currentColor;
+  opacity: 0.6;
+  transform: skewX(-20deg);
+}
+
+.record-pips .is-on {
+  background: currentColor;
+  opacity: 1;
+}
+
 .record-meta {
   font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
   font-size: 0.75rem;
@@ -2342,18 +2468,13 @@ html.gm-open .menu-dots {
 
   .record-meta {
     grid-column: 2;
+    grid-row: 2;
     white-space: normal;
   }
-}
 
-.travel-lines {
-  position: fixed;
-  z-index: 5;
-  inset: 0;
-  opacity: 0;
-  pointer-events: none;
-  background: repeating-conic-gradient(from 3deg at 50% 50%, rgb(var(--ash-100)) 0 0.7deg, transparent 0.7deg 9deg);
-  mask-image: radial-gradient(circle at 50% 50%, transparent 30%, #000 75%);
+  .record-pips {
+    grid-row: 3;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -2373,15 +2494,6 @@ html.gm-open .menu-dots {
     transform: scale(1.6) translateX(-2rem);
   }
 
-  .is-in .travel-lines {
-    animation: travel-lines 640ms ease-out both;
-  }
-
-  @keyframes travel-lines {
-    0% { opacity: 0; transform: scale(1.5); }
-    30% { opacity: 0.45; }
-    100% { opacity: 0; transform: scale(1); }
-  }
 }
 
 /* ---------- SVG glyphs from design/assets-src (PR #11) ---------- */
@@ -2833,15 +2945,24 @@ html.gm-open .menu-dots {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow: hidden;
+  /* Vertical clip only: the ink wedges run full bleed (html clips x). */
+  overflow: visible clip;
   perspective: 1400px;
 }
 
 .record-ride .record-yaw {
   position: relative;
   z-index: 1;
-  /* Turn in (yaw), hand-over roll at the end (v6). */
-  transform: rotateY(var(--yaw, 0deg)) rotateZ(var(--roll, 0deg));
+  /* Fills the pin, so its centre is the screen centre for the turn. */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  /* Turn in (yaw); the v7 turn beat: 90° around the screen centre plus the 3 % scale-up; at
+     70–100 % the turned board leaves upward along its new axis while the next title comes in. */
+  opacity: calc(1 - var(--next, 0) * 0.85);
+  transform: rotateY(var(--yaw, 0deg)) translateY(calc(var(--next, 0) * -70vh)) rotate(var(--turn, 0deg)) scale(var(--turn-scale, 1));
   transform-origin: 50% 50%;
   backface-visibility: hidden;
   will-change: transform;
@@ -2864,17 +2985,18 @@ html.gm-open .menu-dots {
   align-self: stretch;
   align-items: center;
   padding-inline-end: 1.5rem;
-  background: rgb(var(--ash-900));
-  box-shadow: 1.5rem 0 0 rgb(var(--ash-900));
 }
 
 .record-ride .record-track {
+  position: relative;
   overflow: hidden;
-  padding: 1.5rem 0 1rem 2.75rem;
+  /* Role 0 rests >= 120 px right of the year column (REVIEW-v6 P1). */
+  padding: 1.5rem 0 1rem 10rem;
   margin-block: -1.5rem -1rem;
   min-height: 20rem;
-  -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent);
-  mask-image: linear-gradient(90deg, #000 85%, transparent);
+  /* Leaving roles fade out before the year column; arriving ones fade in at the right. */
+  -webkit-mask-image: linear-gradient(90deg, transparent 1rem, #000 9rem, #000 85%, transparent);
+  mask-image: linear-gradient(90deg, transparent 1rem, #000 9rem, #000 85%, transparent);
 }
 
 .record-ride .record-list {
@@ -2907,51 +3029,192 @@ html.gm-open .menu-dots {
   font-size: 2rem;
 }
 
+.record-ride .record-rank {
+  grid-row: 1 / span 3;
+  align-self: start;
+}
+
+.record-ride .record-pips {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.record-ride .record-role {
+  grid-row: 2;
+}
+
 .record-ride .record-meta {
   grid-column: 2;
+  grid-row: 3;
+}
+
+.record-ride .record-list {
+  position: relative;
+  z-index: 1;
 }
 
 .record-ride .record-bar:not(.is-active) {
-  opacity: 0.72;
+  opacity: 0.45;
 }
 
 .record-ride .record-bar.is-active {
+  color: rgb(var(--ash-900));
+  background: rgb(var(--ash-100));
   transform: translateY(-0.5rem);
 }
 
-/* Persona speedlines while the timeline rides: tapered wedges at -8°, streaming with --lines-x. */
-.ride-lines {
+/* The year counter-rotates during the turn and stays upright (own property: the entrance
+   transition on transform must not lag the scrub). */
+.record-ride .record-year {
+  rotate: calc(var(--turn, 0deg) * -1);
+}
+
+/* Speedline burst at the start of the turn (radial, scrubbed by --burst); not a background. */
+.turn-burst,
+.record-next {
   display: none;
 }
 
-.record-ride .ride-lines {
+.record-ride .turn-burst {
   position: absolute;
-  inset: -10% -10%;
+  z-index: 2;
+  inset: -20% calc(50% - 60vw);
+  display: block;
+  pointer-events: none;
+  opacity: calc(var(--burst, 0) * 0.5);
+  background: repeating-conic-gradient(from 3deg at 50% 50%, rgb(var(--ash-100)) 0 0.6deg, transparent 0.6deg 7deg);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 28%, #000 70%);
+  mask-image: radial-gradient(circle at 50% 50%, transparent 28%, #000 70%);
+  transform: scale(calc(1.25 - var(--burst, 0) * 0.25));
+}
+
+/* The next title slides in along the turned axis (from below, upright). */
+.record-ride .record-next {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+  top: 50%;
+  display: block;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1.1;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  opacity: var(--next, 0);
+  transform: translateY(calc(-50% + (1 - var(--next, 0)) * 60vh));
+}
+
+/* Phones: 300 ms paper slab wipe at the hand-over to the bonfire. */
+.record-wipe {
+  display: block;
+  position: relative;
+  height: 4rem;
+  margin-top: 2rem;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.record-wipe > span {
+  position: absolute;
+  inset: 0;
+  background: rgb(var(--ash-100));
+  clip-path: polygon(1.5rem 0, 100% 0, calc(100% - 1.5rem) 100%, 0 100%);
+  transform: translateX(-110%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .record-wipe.is-in > span {
+    animation: record-wipe 300ms cubic-bezier(0.6, 0, 0.4, 1) both;
+  }
+
+  @keyframes record-wipe {
+    from { transform: translateX(-110%); }
+    to { transform: translateX(110%); }
+  }
+}
+
+@media (min-width: 768px) {
+  .record-wipe {
+    display: none;
+  }
+}
+
+/* Huge outline year behind the active role, at the reading line. */
+.record-ghost {
+  display: none;
+}
+
+.record-ride .record-ghost {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 5rem;
+  display: block;
+  font-family: Anton, Impact, sans-serif;
+  font-size: clamp(12rem, 24vw, 22rem);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 2px rgb(var(--ash-600));
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .record-ride .record-ghost {
+    animation: ghost-in 320ms cubic-bezier(0.2, 0.9, 0.1, 1) both;
+  }
+
+  @keyframes ghost-in {
+    from { opacity: 0; transform: translate(3rem, -50%); }
+  }
+}
+
+/* v7: ink wedges behind the ride (no lines). Each moves with --shift at its own --rate. */
+.ride-wedges {
+  display: none;
+}
+
+.record-ride .ride-wedges {
+  position: absolute;
+  inset: 0 calc(50% - 50vw);
   display: block;
   overflow: hidden;
   pointer-events: none;
-  transform: rotate(-8deg);
 }
 
-.ride-lines-strip {
-  display: flex;
-  width: 200%;
-  height: 100%;
-  transform: translateX(var(--lines-x, 0px));
-}
-
-.ride-lines-half {
-  position: relative;
-  flex: none;
-  width: 50%;
-  height: 100%;
-}
-
-.ride-lines-half > span {
+.ride-wedge {
   position: absolute;
-  background: rgb(var(--ash-100));
-  /* Point trails to the left, thick end leads: the direction of travel. */
-  clip-path: polygon(0 50%, 100% 0, 100% 100%);
+  background: rgb(var(--ash-800));
+  transform: translateX(calc(var(--shift, 0px) * var(--rate) * -1)) skewX(-14deg);
+}
+
+.ride-wedge.is-1 {
+  top: -10%;
+  left: 18%;
+  width: 46vw;
+  height: 62%;
+  clip-path: polygon(12% 0, 100% 0, 78% 100%, 0 100%);
+}
+
+.ride-wedge.is-2 {
+  bottom: -8%;
+  left: 52%;
+  width: 70vw;
+  height: 46%;
+  background: rgb(var(--ash-700) / 0.45);
+  clip-path: polygon(30% 0, 100% 0, 88% 100%, 0 100%);
+}
+
+.ride-wedge.is-3 {
+  top: 8%;
+  left: 108%;
+  width: 40vw;
+  height: 84%;
+  clip-path: polygon(40% 0, 100% 0, 60% 100%, 0 100%);
 }
 
 .record-ride .stage-more {
@@ -3241,8 +3504,13 @@ html.gm-open .menu-dots {
   grid-template-columns: 3rem minmax(0, 1fr);
 }
 
+.scr-body.is-career .record-pips {
+  grid-row: 3;
+}
+
 .scr-body.is-career .record-meta {
   grid-column: 2;
+  grid-row: 2;
   white-space: normal;
 }
 
@@ -3290,6 +3558,470 @@ html.gm-open .menu-dots {
   .scr-tone {
     animation: none;
   }
+}
+
+/* ---------- /about status screen (DESIGN.md §18, v7 task 3) ---------- */
+
+.prof-intro {
+  grid-area: intro;
+  max-width: 62ch;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: rgb(var(--ash-100));
+}
+
+.prof-todo {
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: rgb(var(--ash-300));
+}
+
+.prof-detail .prof-todo {
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-style: normal;
+  letter-spacing: 0;
+  text-transform: none;
+  color: rgb(var(--ash-300));
+}
+
+.prof-intro .prof-todo {
+  margin-top: 0.5rem;
+}
+
+.prof-body {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 3fr) minmax(0, 5fr);
+  grid-template-areas:
+    "portrait intro intro"
+    "portrait tabs detail";
+  grid-template-rows: auto 1fr;
+  gap: 1.75rem 2rem;
+  align-items: start;
+}
+
+.prof-body > .scr-tabs { grid-area: tabs; }
+.prof-detail { grid-area: detail; }
+
+.prof-portrait {
+  position: relative;
+  display: grid;
+  place-items: end center;
+  grid-area: portrait;
+  aspect-ratio: 4 / 5;
+  margin: 0;
+}
+
+.prof-rings {
+  position: absolute;
+  inset: 0 -4% auto;
+  width: 108%;
+  overflow: visible;
+  fill: none;
+  stroke: rgb(var(--ash-500));
+}
+
+.prof-ring.is-outer { stroke-width: 0.6; }
+.prof-ring.is-dash { stroke-width: 1.4; stroke-dasharray: 2 6; }
+.prof-ring.is-inner { stroke-width: 0.6; stroke: rgb(var(--ash-600)); }
+.prof-ring-ticks { stroke: rgb(var(--ash-300)); stroke-width: 1.2; }
+
+.prof-figure {
+  position: relative;
+  width: 100%;
+  max-height: 32rem;
+  object-fit: contain;
+  object-position: bottom;
+  filter: grayscale(1);
+  transform-origin: 50% 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .prof-ring.is-dash,
+  .prof-ring-ticks {
+    transform-origin: 100px 100px;
+    animation: prof-spin 60s linear infinite;
+  }
+
+  .prof-ring.is-inner {
+    transform-origin: 100px 100px;
+    animation: prof-spin 90s linear infinite reverse;
+  }
+
+  .prof-figure {
+    animation: prof-breathe 6s ease-in-out infinite alternate;
+  }
+
+  .prof-week li {
+    animation: slab-slam 220ms cubic-bezier(0.2, 0.9, 0.1, 1) calc(var(--i, 0) * 40ms) both;
+  }
+}
+
+@keyframes prof-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes prof-breathe {
+  to { transform: scale(1.012); }
+}
+
+.prof-h {
+  font-family: Anton, Impact, sans-serif;
+  font-size: 1.875rem;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.prof-sub {
+  margin: 1.25rem 0 0.5rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  color: rgb(var(--ash-300));
+}
+
+.prof-status {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.prof-status dd {
+  text-align: right;
+}
+
+.prof-langs {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.prof-langs li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.4rem;
+  font-family: Anton, Impact, sans-serif;
+  font-size: 1.125rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgb(var(--ash-700));
+}
+
+.prof-pips {
+  display: inline-flex;
+  gap: 0.3rem;
+}
+
+.prof-pips span {
+  width: 0.9rem;
+  height: 0.55rem;
+  border: 1px solid rgb(var(--ash-300));
+  transform: skewX(-20deg);
+}
+
+.prof-pips .is-on {
+  background: rgb(var(--ash-100));
+  border-color: rgb(var(--ash-100));
+}
+
+/* Week: seven slanted day slabs, today inverted. */
+.prof-week {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 1rem;
+}
+
+.prof-week li {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0.35rem 1.75rem 0.35rem 0.75rem;
+  background: rgb(var(--ash-900));
+  clip-path: polygon(0.75rem 0, 100% 0, calc(100% - 0.75rem) 100%, 0 100%);
+  margin-left: calc(var(--i, 0) * 0.2rem);
+}
+
+.prof-day {
+  font-family: Anton, Impact, sans-serif;
+  font-size: 1.25rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.prof-day-text {
+  font-size: 0.875rem;
+  color: rgb(var(--ash-200));
+}
+
+.prof-today {
+  font-family: ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+}
+
+.prof-week li.is-today {
+  background: rgb(var(--ash-100));
+  color: rgb(var(--ash-900));
+}
+
+.prof-week li.is-today .prof-day-text,
+.prof-week li.is-today .prof-todo {
+  color: rgb(var(--ash-700));
+}
+
+/* Inventory: item tiles with a line icon and one dry line. */
+.prof-inv {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.prof-item {
+  display: grid;
+  gap: 0.4rem;
+  align-content: start;
+  padding: 0.875rem;
+  background: rgb(var(--ash-900));
+  border: 2px solid rgb(var(--ash-600));
+}
+
+.prof-item:hover {
+  border-color: rgb(var(--ash-100));
+}
+
+.prof-item-icon {
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  color: rgb(var(--ash-100));
+}
+
+.prof-item-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.prof-item-name {
+  font-family: Anton, Impact, sans-serif;
+  font-size: 1.125rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.prof-item-name.prof-todo {
+  font-size: 0.75rem;
+  text-transform: none;
+}
+
+.prof-item-flavor {
+  font-size: 0.8125rem;
+  font-style: italic;
+  color: rgb(var(--ash-300));
+}
+
+.prof-now {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+.prof-now dt {
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  color: rgb(var(--ash-300));
+}
+
+.prof-now dd {
+  margin-top: 0.15rem;
+  font-family: Anton, Impact, sans-serif;
+  font-size: 1.375rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.prof-now dd.prof-todo {
+  font-size: 0.75rem;
+  text-transform: none;
+}
+
+.prof-skills {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  margin-top: 2rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(var(--ash-300));
+}
+
+.prof-skills:hover,
+.prof-skills:focus-visible {
+  color: rgb(var(--ash-100));
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 1023px) {
+  .prof-body {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    grid-template-areas:
+      "portrait intro"
+      "tabs detail";
+    grid-template-rows: auto;
+  }
+}
+
+@media (max-width: 639px) {
+  .prof-body {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "intro" "portrait" "tabs" "detail";
+  }
+
+  .prof-portrait {
+    width: min(100%, 12rem);
+  }
+
+  .prof-week li {
+    margin-left: 0;
+  }
+}
+
+/* ---------- Real-photo portraits (DESIGN.md §2 + §18 "Portraits") ---------- */
+
+/* B/W cut-out at rest; the colour cut-out cross-fades on top on hover / focus / tap / centred. */
+.cutout {
+  position: relative;
+  display: block;
+  aspect-ratio: var(--cutout-aspect);
+  outline-offset: 6px;
+}
+
+.cutout img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom;
+}
+
+.cutout-colour {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
+
+.cutout.is-colour .cutout-colour,
+.cutout:focus-visible .cutout-colour {
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .cutout:hover .cutout-colour {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cutout-colour {
+    transition: none;
+  }
+}
+
+/* The cut-outs carry their own tones: no grayscale filter on top. */
+/* The hero anchors and the menu preview are pointer-events: none, so the cut-out takes the pointer
+   back for its hover. The hero swaps `stage` / `head` through its <picture> media query (§18). */
+.stage-portrait .cutout,
+.about-portrait .cutout,
+.gm-preview .cutout {
+  pointer-events: auto;
+}
+
+/* With WebGL the scene draws the hero; the <picture> stays in layout and keeps loading as its source. */
+.hero-cutout.is-scene-source {
+  visibility: hidden;
+}
+
+/* §18: below 1024 px the menu preview drops to the name, portrait included. */
+@media (max-width: 1023px) {
+  .cutout.gm-portrait { display: none; }
+}
+
+.cutout.gm-portrait img {
+  object-position: right bottom;
+}
+
+/* Fills the 4:5 portrait cell; object-fit keeps both layers on the same box. */
+.cutout.prof-figure,
+.cutout.gm-portrait,
+.cutout.hero-cutout {
+  aspect-ratio: auto;
+  width: 100%;
+  height: 100%;
+  filter: none;
+  opacity: 1;
+}
+
+/* Dev-only portrait lab (/?portrait-lab). */
+.portrait-lab {
+  display: grid;
+  grid-template-columns: 18rem minmax(0, 1fr);
+  gap: 2rem;
+  padding: 5.5rem 1.5rem 2rem;
+  color: rgb(var(--ash-100));
+}
+
+.portrait-lab aside {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+}
+
+.portrait-lab label {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.portrait-lab button,
+.portrait-lab select {
+  padding: 0.4rem;
+  color: rgb(var(--ash-900));
+  background: rgb(var(--ash-100));
+}
+
+.portrait-lab pre {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.portrait-lab-stage {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.portrait-lab-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.portrait-lab figcaption {
+  margin-top: 0.5rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: rgb(var(--ash-300));
 }
 
 /* ---------- Detail screen: Career entries and Stack skills (DESIGN.md §16) ---------- */

@@ -306,3 +306,80 @@ The v6 report in the chat was cut off after task 1. The task 2–7 summary was a
 **Test hook**: `window.__propScreenPos()` → `{ frame, props: [{ id, visible, x, y }] }`. It holds the world position of each prop mesh (`getWorldPosition`), projected with the camera of the frame that was just rendered, in viewport px. It is only set in dev or with `?e2e=1` (`scene.js`) and removed on dispose. `screenPositions(camera)` in `descent-props.js` reads only the meshes and never the DOM.
 
 **Test**: `.github/tests/e2e.spec.js` › "Prop screen positions (test hook)" checks four things: no hook without `?e2e=1`; 5 ids; `frame` increases; hook and proxy centre differ by < 1.5 px. Desktop only, because props are hidden below 1024 px. Full suite: 24 passed, 2 skipped (both mobile, by design). `test:security` green.
+
+## 2026-11-10 · Claude Code (Opus 5.5) · changelog v7
+
+**Step 0**: PR #19: checks green, set from draft to ready, merged into `feat/atlus-menu` (`baa6c22`). Worktree `../rz-atlus-v7`, branch `feat/atlus-v7` from `origin/feat/atlus-menu`. `design/REVIEW-v6.md` is not on `feat/atlus-menu`; it lives on `test/e2e-v6` (PR #18, not merged) and was read from there.
+
+**Task 1: descent props disappear (P0)**
+
+Evidence before the fix (per-prop log through the extended hook: visible, scene, frustum, layout reason; script outside the repo):
+- (a) **Confirmed, cause.** `layout()` hid a prop when no parallax candidate passed the runtime text-collision sweep. The result depended on the moment of measurement. 2560×1440, three cold loads: first measure `all ok`, re-measure after ~400 ms (fonts/images) → `monitor: collision, dome: collision`. The camera (panel 05) disappeared and stayed gone until the next layout change. Other viewports, zoom levels or font timings flip other props. In addition each prop took a parallax constant other than its panel's (up to ±150 px × depth), so at some scroll positions it hung far from its panel, and Richard read that as "missing". Richard's "chip on panel 02" also did not match the old map (chip was on 01, PCB on 02).
+- (b) **Ruled out.** No object is shared: all builders are factories, the `/about` camera is its own instance in its own renderer (`prop-viewer.js`, `prop="domeCamera"`, by design). Every descent prop reported `scene: descent` before and after opening/closing all four sub-screens.
+- (c) **Not the cause.** Every prop with `visible` was `inFrustum`. Still set `frustumCulled = false` for the five, as the brief asks.
+- (d) **Ruled out.** No IntersectionObserver or enter/leave state on the props; 5 fast wheel bursts changed nothing.
+
+Fix: see DESIGN.md §18 (rows with reserved slots, fixed map, visibility by breakpoint only, collision code deleted). Found while verifying: the drawn mesh sat 8–25 px off its rest point, because the props live at z = −0.4 while the px→world scale is for z = 0 (4 % per distance from the screen centre) plus camera damping. Now each prop is placed by a ray through the frame's camera.
+
+Acceptance (script outside the repo): 1440×900, 20 random scroll positions + after opening/closing `/about`, `/work`, `/stack`, `/career` + after 5× fast top→bottom→top: 108 checks, 0 fails. Every prop whose panel is in view is visible, in scene `descent`, in the frustum when its slot is on screen, has a rest error ≤ 0.07 px to its slot, has a mesh within the idle amplitude (≤ 7 px), and has no on-screen overlap with any text block. Same result at 1024×768 (106), 1920×1080 (115), 2560×1440 (140). At 1023, 768 and 390 px all five are hidden. Screenshots: `design/screenshots/v7/props/panel-0{1..5}-1440.png`, `descent-390.png`.
+
+Review (§10): round 1 at 1440: PCB, chip and camera sit beside their panels; 13rem slot → the footprint touched panel 01 at the top edge, but only off screen. Slot set to 11rem, check limited to on-screen overlap. Round 2 at 390: layout unchanged, no slots.
+
+e2e: the hook test now also checks the fixed slot order, all five `visible` in scene `descent` and, at each panel, rest = slot (±1 px). Note: a leftover `vite preview` from the v6 worktree on :4173 had served the old build to Playwright (`reuseExistingServer`); stopped, then 24 passed, 2 skipped.
+
+**Task 2: pause menu = real pause state (P0)**
+- Reproduced at 1440×900 on the bonfire: with the menu open, wheel + PageUp scrolled the page from 11955 to 11168; `<main>` was neither inert nor aria-hidden (only `body` had overflow hidden). The page itself was not readable behind the opaque panel in my build. Richard's screenshot may come from an older deploy or the wipe; the new backdrop is opaque either way.
+- No Lenis in the project (native scroll), so `lenis.stop()` does not apply. The lock is `overflow: hidden` on `<html>` plus a capture listener for wheel/touch, and the position is restored on close.
+- Layout rebuilt as the 12-column grid of the brief (DESIGN.md §18). The old giant echo is now the preview label (`clamp(48px, 6vw, 112px)`, measured 61 / 77 / 86 / 112 px at 1024 / 1280 / 1440 / 1920). New keys `atlus.menuPreview.*` (DE/EN): one line per section describing what it contains, no claims about Richard.
+- Checks (script outside the repo) at 1024, 1280, 1440, 1920, 390, 360: scroll unchanged while open and restored exactly; letters height = list height (283 / 346 / 385 / 503 / 238 / 222 px); no overlap between list, preview, footer zones, chips and close button; nothing wider than the viewport. Menu entries still land (Projekte → `#arcana` at top 64, Werdegang → ride landing, Kontakt → end).
+- Review (§10): round 1: MENU showed only "M E" (container-query units in the container's own font-size fall back to the viewport → moved to the spans); at 1024 the legal links ran under GITHUB (footer tracks `auto auto auto` + space-between, compact chips below 1280). Round 2: at 360 the numbers broke into two lines ("01" / "/") → nowrap; umlaut dots of "Ü" clipped in the label and the slab → line height / padding.
+- e2e: new test "Pause menu (v7)": wheel + PageUp don't move the page, `main` inert + aria-hidden, letters = list height, no footer chip overlap, Escape restores the exact position and releases `main`. 26 passed, 2 skipped.
+- Screenshots: `design/screenshots/v7/menu-{1024,1280,1440,1920,390,360}.png`.
+
+**Stopped after task 2** (brief: "if the session gets long, finish the current task, push, report, stop"). Tasks 3–6 are open in TASKS.md.
+- `design/ABOUT.md`: Richard's ABOUT template taken over as the source for `/about`, plus a section for the requested world map (countries filled white). Richard's chat note "erfinde vorerst die about seite grob" conflicts with the brief's "never invent hobbies, ages, numbers or levels". Planned for task 3: build the screen structure roughly, but with TODO keys instead of invented facts (hidden in production).
+- Task 6 blocker: `src/assets/portraits/raw/about.png` does not exist, not in this worktree and not in the main checkout (`raw/` is gitignored, so it doesn't travel with git).
+
+**Checks**: `npm run build` ok, `npm run test:security` ok, `npx playwright test` 26 passed, 2 skipped (both mobile, by design).
+
+## 2026-11-10 · Claude Code (Opus 5.5) · v7 tasks 3–6 (replacement brief)
+
+**Step 0**: PR #19 was already merged into `feat/atlus-menu` (`baa6c22`). The replacement brief's tasks 1 (props) and 2 (pause menu) match what the earlier v7 run did (`fdb2fd3`, `e69a41d`, entry above) and were not redone; the full e2e suite still passes on top of the new work. Continued in `../rz-atlus-v7` on `feat/atlus-v7`.
+
+**Content note**: the ABOUT block in the brief arrived empty ("…"), and `design/ABOUT.md` is still the unfilled template. `/about` therefore uses only what that template names (base Flensburg; languages German, English, Latvian, Russian without levels; hobbies Powerlifting and Home lab without lines) plus the role from the brief and the published NOW entries for "building". Everything else is a TODO key. No age (the old "20 Jahre" quick fact is not in the ABOUT block).
+
+**Task 3: /about rework**
+- Copied descent panels removed; one line "Skills → Stack". New status screen (DESIGN.md §18): portrait with HUD rings, STATUS · WEEK · INVENTORY · NOW, intro, own camera prop instance (`PropViewer`, unchanged), idle motion.
+- **Intro draft for Richard's review** (`src/data/profile.js` → `intro`, DE + EN, 52 / 58 words), built only from the facts above: "Ich bin Richard, Azubi zum IT-Systemelektroniker bei R2P in Flensburg, fertig 2027. Im Außendienst verlege ich Netzwerke und nehme Kamerasysteme beim Kunden in Betrieb. Zu Hause steht mein Home-Lab, und an eigenen Platinen sitze ich auch. Hier geht es nicht um Skills, sondern darum, wer ich daneben bin."
+- In production WEEK is hidden (all seven days are TODO); STATUS, INVENTORY (2 tiles) and NOW (building only) show.
+- Review (§10): round 1: the intro under the title pushed the portrait below the fold → intro moved into the body grid beside the portrait; rings re-centred; on phones the portrait is 12rem. Round 2 (dev, all tabs): TODO text inherited Anton in tiles / NOW → mono; the week staircase wrapped Sunday's text → 0.2rem steps.
+- New icons `barbell`, `rack`, `slot` (design/assets-src/icons, src/assets/svg/icons). e2e: `/about` route + "status screen (v7)" test.
+- Screenshots: `design/screenshots/v7/about-{1440,1024,390}.png`, `about-dev-tab{2,3,4}-1440.png`, `about-dev-week-390.png`.
+
+**Task 4: Career ride**
+- Speedline strip and the conic entrance lines removed. Three ink wedges with their own rates, outline year behind the active role, rank pips, active inverted, others dimmed.
+- REVIEW-v6 P1: at 1440×900 role 0 now lands at x 713 with the year column ending at 561 (152 px). The year column has no ink box any more (it showed as a black rectangle over the wedges).
+- Review: round 1: pips broke the bar grid (role pushed under the rank), the wedges were cut at the content edge (pin is 76rem wide), and the year's ink box showed → explicit grid placement, `overflow: visible clip` on the pin + full-bleed wedges, box removed. Round 2: the leaving role left a dark stub next to the year → mask fades leaving roles out before the column.
+- Screenshots: `design/screenshots/v7/career-ride-{land,y1500,last}.png`, `career-screen-1440.png`, `career-390.png`.
+
+**Task 5: the 90° turn**
+- Own pinned beat of 0.6 × viewport height after the last role (`data-turn-start`, `data-turn-len` on `#record`); phases exactly as the brief (`turnState()` in `RecordBoard.jsx`). Measured: 25 % → 2.1°, 50 % → 72.5°, ≥ 70 % → 90°, scroll back → 0°.
+- Review: round 1: the yaw container became a flex column, which stretched "SCREEN ÖFFNEN" across the board; and at 100 % the turned board covered the incoming title → `align-items: flex-start`; the board leaves upward along its new axis and fades while the title comes in. Round 2: strip fine; mid-turn the board passes under the header, which is intended.
+- The year counter-rotates through the `rotate` property, because its entrance uses a transition on `transform` that would lag the scrub.
+- e2e: "Record turn beat (v7)": hold = 0°, 75 % = 90° with the pin still at 64 px and the year at −90°, back = 0°.
+- Strip: `design/screenshots/v7/turn-{0,25,50,75,100}.png`, `turn-strip.png`.
+
+**Task 6: portrait poster**
+- **Blocker**: `src/assets/portraits/raw/about.png` does not exist (not in this worktree, not in the main checkout, nowhere under ~/Projects, ~/Media, ~/Downloads). The pipeline was built and checked on a synthetic green-screen image in the scratchpad; its output was never committed. `/about` keeps the silhouette until real files exist in `src/assets/portraits/poster/`.
+- Found while testing: `-border` inherited the `copy_opacity` compose and turned the colour cut-out bilevel → compose reset; IM's channel compositing turned the key mask grey → `-fx` for the key and despill (~5 s for 2000×2400). AVIF forced to 8 bit.
+- Found in the lab: React StrictMode runs the effect twice, and `dispose()` called `loseContext()` on the canvas that the second run reuses → white canvas. `loseContext()` removed.
+- The lab's JS is not in the production bundle (DEV guard); its few CSS rules are.
+- Screenshot: `design/screenshots/v7/portrait-lab-synthetic.png` (default params · edge 4 / rim 6 · colour reveal mid · full).
+
+**Not touched**: `labs/`, `src/labs/`. `design/REVIEW-v7.md` (untracked, written by agy during this session) was read but not committed; it reviews the earlier v7 state.
+
+**Open questions for Richard**
+- Fill `design/ABOUT.md` (languages + levels, week, a dry line per hobby, more hobbies, learning / reading, age if you want it shown).
+- Review the intro draft.
+- `about.png` (green screen) into `raw/`, then `npm run poster -- about`.
+- World map: still waits for the country list (not part of this brief).

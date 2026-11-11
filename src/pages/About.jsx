@@ -1,60 +1,158 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../hooks/use-language';
-import { portraits } from '../data/portraits';
 import Screen, { SubMenu } from '../components/atlus/Screen';
-import PanelIllustration from '../components/stage/PanelIllustration';
+import ProfilePortrait from '../components/atlus/ProfilePortrait';
+import { Icon } from '../components/atlus/glyphs';
+import { LEVELS, intro, inventory, isTodo, now, pick, shown, status, week } from '../data/profile';
+
+// /about (DESIGN.md §18, v7 task 3): Richard as a person, as a status screen. Skills live in
+// Descent / Stack. Left the profile portrait, then the sub-menu, then the detail panel.
+// Facts come only from data/profile.js; TODO strings show in development only.
+
+// Monday = 0 … Sunday = 6.
+const todayIndex = () => (new Date().getDay() + 6) % 7;
+
+function Pips({ level, label }) {
+  return (
+    <span className="prof-pips" role="img" aria-label={label}>
+      {[1, 2, 3, 4].map((n) => <span key={n} className={n <= level ? 'is-on' : ''} />)}
+    </span>
+  );
+}
+
+function StatusPanel({ copy, language }) {
+  const rows = [
+    { label: copy.name, value: status.name },
+    { label: copy.base, value: pick(status.base, language) },
+    { label: copy.role, value: pick(status.role, language) },
+    ...(status.age ? [{ label: copy.age, value: status.age }] : []),
+  ];
+  const missingLevels = status.languages.some((entry) => !entry.level);
+  return (
+    <>
+      <h2 className="prof-h">{copy.tabs.status}</h2>
+      <dl className="prof-status">
+        {rows.map((row) => (
+          <div key={row.label} className="scr-stat">
+            <dt>{row.label}</dt>
+            <dd>{row.value}</dd>
+          </div>
+        ))}
+      </dl>
+      <h3 className="prof-sub">{copy.languages}</h3>
+      <ul className="prof-langs">
+        {status.languages.map((entry) => {
+          const level = LEVELS[entry.level];
+          return (
+            <li key={entry.id}>
+              <span>{pick(entry.name, language)}</span>
+              {level && <Pips level={level} label={copy.levels[level]} />}
+            </li>
+          );
+        })}
+      </ul>
+      {missingLevels && import.meta.env.DEV && <p className="prof-todo">{pick(status.todoLevels, language)}</p>}
+    </>
+  );
+}
+
+function WeekPanel({ copy, language }) {
+  const today = todayIndex();
+  return (
+    <>
+      <h2 className="prof-h">{copy.weekTitle}</h2>
+      <ol className="prof-week">
+        {week.map((entry, index) => {
+          const text = pick(entry.text, language);
+          return (
+            <li key={entry.day.en} className={index === today ? 'is-today' : ''} style={{ '--i': index }}>
+              <span className="prof-day">{pick(entry.day, language)}</span>
+              {shown(text) && <span className={`prof-day-text ${isTodo(text) ? 'prof-todo' : ''}`}>{text}</span>}
+              {index === today && <span className="prof-today">{copy.today}</span>}
+            </li>
+          );
+        })}
+      </ol>
+    </>
+  );
+}
+
+function InventoryPanel({ copy, language, items }) {
+  return (
+    <>
+      <h2 className="prof-h">{copy.inventoryTitle}</h2>
+      <ul className="prof-inv">
+        {items.map((item) => {
+          const name = pick(item.name, language);
+          const flavor = pick(item.flavor, language);
+          return (
+            <li key={item.id} className="prof-item">
+              <Icon name={item.icon} className="prof-item-icon" />
+              <span className={`prof-item-name ${isTodo(name) ? 'prof-todo' : ''}`}>{name}</span>
+              {shown(flavor) && <span className={`prof-item-flavor ${isTodo(flavor) ? 'prof-todo' : ''}`}>{flavor}</span>}
+            </li>
+          );
+        })}
+      </ul>
+    </>
+  );
+}
+
+function NowPanel({ copy, language }) {
+  const rows = [
+    { label: copy.building, value: now.building.join(' · ') },
+    { label: copy.learning, value: pick(now.learning, language) },
+    { label: copy.reading, value: pick(now.reading, language) },
+  ].filter((row) => shown(row.value));
+  return (
+    <>
+      <h2 className="prof-h">{copy.tabs.now}</h2>
+      <dl className="prof-now">
+        {rows.map((row) => (
+          <div key={row.label}>
+            <dt>{row.label}</dt>
+            <dd className={isTodo(row.value) ? 'prof-todo' : ''}>{row.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </>
+  );
+}
 
 export default function About() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const copy = t.atlus.about.profile;
   const [active, setActive] = useState(0);
-  const portrait = portraits.about;
-  // Age is left out; focus, target and location are the facts a visitor needs here.
-  const stats = t.about.quickFacts.slice(1);
-  const entries = t.about.logEntries;
-  const items = [{ id: 'profile', label: t.atlus.about.who }, ...entries.map((entry) => ({ id: entry.title, label: entry.title }))];
-  const entry = active > 0 ? entries[active - 1] : null;
+
+  const items = inventory.filter((item) => shown(pick(item.name, language)));
+  const weekFilled = week.some((entry) => shown(pick(entry.text, language)));
+  const tabs = [
+    { id: 'status', label: copy.tabs.status },
+    ...(weekFilled ? [{ id: 'week', label: copy.tabs.week }] : []),
+    ...(items.length ? [{ id: 'inventory', label: copy.tabs.inventory }] : []),
+    { id: 'now', label: copy.tabs.now },
+  ];
+  const tab = tabs[Math.min(active, tabs.length - 1)].id;
+  const introText = pick(intro, language);
 
   return (
     <Screen id="about" number="01" title={t.landing.nav.about} hud={t.atlus.hud.about} prop="domeCamera">
-      <div className="scr-body">
-        <SubMenu label={t.landing.nav.about} items={items} active={active} onSelect={setActive} />
-        <section key={active} aria-live="polite" className="scr-detail slash-wipe">
-          {entry ? (
-            <>
-              <div className="flex items-start justify-between gap-5">
-                <span aria-hidden="true" className="font-anton text-6xl leading-none text-ash-600">{String(active).padStart(2, '0')}</span>
-                <PanelIllustration index={active - 1} />
-              </div>
-              <h2 className="font-anton uppercase text-3xl tracking-wide mt-3">{entry.title}</h2>
-              <p className="mt-3 text-base leading-relaxed text-ash-200">{entry.desc}</p>
-              {/* TODO strings are placeholders for facts still to be supplied, so visitors never see them. */}
-              {import.meta.env.DEV && <p className="mt-3 font-mono text-xs text-ash-300">{entry.todo}</p>}
-            </>
-          ) : (
-            <div className="grid gap-6 sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-start">
-              <img
-                src={portrait.large}
-                srcSet={portrait.isPlaceholder ? undefined : `${portrait.small} 700h, ${portrait.large} 1400h`}
-                alt={portrait.isPlaceholder ? '' : 'Richard Zuikov'}
-                className="w-full max-h-[22rem] object-contain object-bottom grayscale"
-              />
-              <div className="space-y-4">
-                <h2 className="font-anton uppercase text-3xl tracking-wide">{t.atlus.about.who}</h2>
-                <p className="text-base leading-relaxed text-ash-100">{t.about.headline}</p>
-                <p className="text-sm leading-relaxed text-ash-300">{t.career.summary}</p>
-                <dl className="space-y-2">
-                  {stats.map((stat) => (
-                    <div key={stat.label} className="scr-stat">
-                      <dt>{stat.label}</dt>
-                      <dd>{stat.val}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            </div>
-          )}
+      <div className="prof-body">
+        <div className="prof-intro">
+          <p>{introText}</p>
+          {import.meta.env.DEV && <p className="prof-todo">{copy.draft}</p>}
+        </div>
+        <ProfilePortrait label={copy.portrait} />
+        <SubMenu label={t.landing.nav.about} items={tabs} active={active} onSelect={setActive} />
+        <section key={tab} aria-live="polite" className="scr-detail prof-detail slash-wipe">
+          {tab === 'status' && <StatusPanel copy={copy} language={language} />}
+          {tab === 'week' && <WeekPanel copy={copy} language={language} />}
+          {tab === 'inventory' && <InventoryPanel copy={copy} language={language} items={items} />}
+          {tab === 'now' && <NowPanel copy={copy} language={language} />}
         </section>
       </div>
+      <Link to="/stack" className="prof-skills">{copy.skills}</Link>
     </Screen>
   );
 }

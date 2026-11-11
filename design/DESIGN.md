@@ -49,6 +49,7 @@ sections, deeper and darker, until it reaches the only warm light on the whole s
 Rules
 - **Rest state is monochrome. Color appears only (a) in the bonfire and (b) as the real color of real photos while the user interacts with them. UI chrome, text, frames and backgrounds never get color.** (v6)
   - Works / arcana cards: photo grayscale at rest → original colour on hover / focus, 250 ms ease-out; nothing else changes (no glow, frame stays monochrome). Touch: the centred deck card and the card in the inspect view are in colour. Reduced motion: instant.
+  - Portraits of Richard (v7, Richard's call): the black-and-white cut-out at rest → the real colour photo on hover / focus and for the whole stage → about turn, 300 ms ease-out cross-fade. Touch: colour on tap or while the portrait's centre sits in the middle 20 % of the viewport. Reduced motion: instant swap. Same rule as the cards; no tint, no glow, plain ink behind (§18 "Portraits").
   - Earned certificate badges on the KEY ITEMS back are shown unmodified, in their own colours (§7).
 - No hue in UI tokens: remove `#FFB000` and every amber / pink / rose / red token from the codebase.
 - Accent = **inversion** (paper slab + ink text), halftone, ink splatter, white speedlines.
@@ -401,3 +402,47 @@ Owner review of v5, 2026-11-10. Open work is in TASKS.md.
 
 **Stack** — Hardware vignette: Fourier square-wave build-up (odd harmonics 1 … 15, Gibbs overshoot), label "Σ sin(nωt)/n".
 
+
+---
+
+## §18 Changelog v7
+
+Owner review of v6, 2026-11-10. Open work is in TASKS.md.
+
+**Descent props** (replaces the collision rules of §16/§17)
+- Fixed map: 01 PCB tile · 02 chip · 03 monitor · 04 rack unit · 05 security camera.
+- Each panel sits in a `.descent-row` with a reserved, empty `.prop-slot[data-slot]` in its gutter (CSS grid, ≥ 1024 px). The prop rests on the slot centre and takes its panel's translateY (`--depth × --parallax`), so it can't touch text by construction. No runtime collision test, no measured hiding.
+- Visibility by breakpoint only: ≥ 1024 px all five, < 1024 px none. Never scroll-dependent; the five props are never frustum-culled.
+- Each prop is placed through the camera of the current frame (ray onto its plane), so camera damping and perspective can't move it off its slot.
+- Every screen builds its own prop instances (factories); nothing is re-parented between scenes. `/about` keeps its own camera instance.
+- Test hook `window.__propScreenPos()` (dev or `?e2e=1`, sticky for the tab session): `{ frame, props: [{ id, visible, inFrustum, scene, x, y, rest }] }`.
+
+**Pause menu** (supersedes the menu layout of §17)
+- Real pause: while open, `<html>` has `overflow: hidden`, `<main>` and the site footer are `inert` + `aria-hidden`, wheel/touch never reach the page's listeners; on close the exact scroll position comes back (unless an entry sent the visitor elsewhere). The site scrolls natively; there is no Lenis.
+- Backdrop: ink-0 (`--ash-900` = #050505), opaque, with screentone; nothing of the page shows.
+- Desktop: 12 columns inside the safe area. Cols 1–2 the vertical MENU, exactly as tall as the list, letters evenly spaced. Cols 3–6 the list; numbers in one column directly left of their item, 16 px gap, no staircase. Cols 7–12 the preview of the selected item: name + role, portrait (shrinks first), kicker, label `clamp(48px, 6vw, 112px)`, one teaser line.
+- Footer: one row, three zones: DE/EN · THEME | Impressum · Datenschutz | GITHUB · LINKEDIN · MAIL · QUICK READ. Below 1024 px the preview drops to the name in the top row (clear of the close button), and the footer stacks.
+
+**/about** (replaces the copied descent panels)
+- Richard as a person, not skills (one line "Skills → Stack"). Status-screen spirit, our own design, no game wording or assets.
+- Grid ≥ 1024 px: portrait (cols 1–4, spans both rows) · intro above sub-menu (cols 5–7) + detail panel (cols 8–12). Below: portrait beside the intro, then sub-menu + detail; < 640 px stacked.
+- Sub-menu STATUS · WEEK · INVENTORY · NOW (↑↓, ESC like the other screens), own camera prop instance, idle motion = turning HUD rings + 1.2 % breathing.
+- STATUS: name, base, role, languages with 4 level pips (native / fluent / good / basic); age only if given. WEEK: 7 slanted day slabs Mon–Sun, today inverted. INVENTORY: item tiles with own line icons (barbell, rack, empty slot) and one dry line each. NOW: building (from the NOW entries) / learning / reading.
+- Source: `src/data/profile.js`, filled only from `design/ABOUT.md`. TODO strings show in development only; a section whose entries are all TODO leaves the sub-menu in production.
+
+**Career ride**
+- No lines of any kind in the background. Three large slanted ink wedges (`--ash-800`, `--ash-700`/45 %) move with the ride at 0.22 / 0.38 / 0.55 of its speed; they run full bleed.
+- A huge outline year (Anton, 2 px stroke `--ash-600`) sits behind the active role at the reading line.
+- Roles are slanted slabs with rank pips (I = one pip …); the active one inverted (paper), the others at 45 %. Role 0 lands ≥ 120 px right of the year column; leaving roles fade out before it.
+
+**The 90° turn** (replaces the v6 roll during the scroll-out)
+- Its own pinned beat of 60 vh after the last role, scrubbed by scroll and reversible: 0 % hold on the last role · 0–15 % radial speedline burst + 3 % scale-up · 15–70 % the whole board turns 90° clockwise around the screen centre (cubic in-out) while the year counter-rotates and stays upright · 70–100 % the board leaves upward along its new axis and the next title ("REST HERE, TRAVELLER") slides in from below.
+- Reduced motion: no ride, the vertical list (cut). Phones (< 768 px): a 300 ms paper slab wipe at the end of the list.
+
+**Portraits** (replaces the v7 poster shader; Richard, 2026-11-11)
+- Sources: four green-screen photos, 572×1024, in `src/assets/portraits/raw/` (gitignored, never committed). Mapping: `stage` → hero (≥ 768 px) · `about` → the profile on `/about` and in the stage's About beat · `head` → pause-menu preview (≥ 1024 px; below that the preview stays name-only) and the hero below 768 px · `night` → exported, unused, behind `FLAGS.nightPortrait` in `src/data/portraits.js` (left out of the eager glob, never requested while off).
+- `npm run cutout`: EXIF strip → chroma key on g − max(r, b) with spill suppression (g ≤ max(r, b)) for the hair edge → alpha erode 1 px + feather 1 px → crop (the frame is edge-extended first, so a figure cut by the frame gets no rim along the cut) → plain Lanczos resize to 900 / 1400 / 1800 px height, at most 1.75× the crop (heights above that are skipped; no AI upscaling) → AVIF + WebP, metadata stripped, `cutout/<id>-<color|bw>-<w>x<h>.*`.
+- Colour: the despilled photo. B/W: luminance → CLAHE (25 % tiles, clip 2.5) → strong S-curve (sigmoidal contrast 5 at 50 %) → subtle film grain (σ ≈ 0.017). Both carry the same 1.5 px paper rim (`#f4f4f0`) behind the silhouette, so it reads on `#050505` and the cross-fade never moves an edge.
+- Current sources allow: `stage` and `about` at 900 + 1400 px, `head` and `night` at 900 px; 1800 px exceeds 1.75× for all four.
+- Render: DOM `CutoutPortrait` (B/W picture + colour picture cross-faded in CSS) on `/about`, in the pause menu and for the no-WebGL hero; in the WebGL stage the hero and profile planes blend the two textures by `uColour` (same 300 ms ease-out). The hero is one `<picture>` per layer with a `(max-width: 767px)` source for `head`, so a resize swaps `stage` / `head` without JS; with WebGL the picture stays hidden in layout and the scene reloads its textures from the `currentSrc` the media query picked. The ink-water stage background stays. Plain ink behind every portrait, no backdrop slab. HUD rings and the 1.2 % breathing stay.
+- Dev-only `/?portrait-lab`: live contrast / grain / rim sliders on the CLAHE luminance the pipeline leaves in `raw/lab/` (gitignored), next to the baked cut-out with its colour hover; prints the `CONTRAST=… GRAIN=… RIM=… npm run cutout` line. The poster / posterize path and its tone sliders are gone.

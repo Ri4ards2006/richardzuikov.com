@@ -5,6 +5,7 @@ import path from 'path';
 const ROUTES = [
   { path: '/', name: 'home' },
   { path: '/quick', name: 'quick' },
+  { path: '/about', name: 'about' },
   { path: '/stack', name: 'stack' },
   { path: '/career', name: 'career' },
   { path: '/impressum', name: 'impressum' },
@@ -258,10 +259,27 @@ test.describe('Prop screen positions (test hook)', () => {
 
     const first = await page.evaluate(() => window.__propScreenPos());
     expect(first.props.map((p) => p.id).sort()).toEqual(['chip', 'dome', 'monitor', 'pcb', 'rack']);
-    const shown = first.props.filter((p) => p.visible);
-    expect(shown.length).toBeGreaterThan(0);
-    for (const p of shown) {
+    // v7: visibility by breakpoint only, every prop in the descent scene, never culled.
+    for (const p of first.props) {
+      expect(p.visible).toBe(true);
+      expect(p.scene).toBe('descent');
       expect(Number.isFinite(p.x) && Number.isFinite(p.y)).toBe(true);
+    }
+
+    // Fixed map, and each prop rests on its reserved slot (±1 px) at every scroll position.
+    const order = await page.evaluate(() => [...document.querySelectorAll('.descent-row [data-slot]')].map((n) => n.dataset.slot));
+    expect(order).toEqual(['pcb', 'chip', 'monitor', 'rack', 'dome']);
+    for (const index of [0, 1, 2, 3, 4]) {
+      await page.evaluate((i) => document.querySelectorAll('.descent-row')[i].scrollIntoView({ block: 'center' }), index);
+      await page.waitForTimeout(700);
+      const { slot, prop } = await page.evaluate((i) => {
+        const node = document.querySelectorAll('.descent-row [data-slot]')[i];
+        const r = node.getBoundingClientRect();
+        return { slot: { x: r.left + r.width / 2, y: r.top + r.height / 2 }, prop: window.__propScreenPos().props.find((p) => p.id === node.dataset.slot) };
+      }, index);
+      expect(prop.visible && prop.inFrustum).toBe(true);
+      expect(Math.abs(prop.rest.x - slot.x)).toBeLessThanOrEqual(1);
+      expect(Math.abs(prop.rest.y - slot.y)).toBeLessThanOrEqual(1);
     }
 
     // The DOM proxies are written from the same mesh position in the same frame.
@@ -282,5 +300,99 @@ test.describe('Prop screen positions (test hook)', () => {
     await page.waitForTimeout(200);
     const second = await page.evaluate(() => window.__propScreenPos());
     expect(second.frame).toBeGreaterThan(first.frame);
+  });
+});
+
+test.describe('Pause menu (v7)', () => {
+  test('the open menu pauses the page: no scroll, main inert, exact position restored', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(1000);
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await page.waitForTimeout(800);
+    const before = await page.evaluate(() => window.scrollY);
+
+    await page.locator('.menu-dots').first().click();
+    await expect(page.locator('.gm')).toBeVisible();
+    const vp = page.viewportSize();
+    await page.mouse.move(vp.width / 2, vp.height / 2);
+    await page.mouse.wheel(0, -1500);
+    await page.keyboard.press('PageUp');
+    await page.waitForTimeout(400);
+    const during = await page.evaluate(() => ({
+      y: window.scrollY,
+      inert: document.querySelector('main').inert,
+      hidden: document.querySelector('main').getAttribute('aria-hidden'),
+    }));
+    expect(during).toEqual({ y: before, inert: true, hidden: 'true' });
+
+    // Letters column exactly as tall as the list; no footer chip overlaps another.
+    const layout = await page.evaluate(() => {
+      const box = (n) => n.getBoundingClientRect();
+      const letters = box(document.querySelector('.gm-letters'));
+      const list = box(document.querySelector('.gm-list'));
+      const chips = [...document.querySelectorAll('.gm-foot .gm-chip, .gm-legal button')].map(box);
+      const overlaps = chips.some((a, i) => chips.some((b, j) => i < j && a.left < b.right - 0.5 && b.left < a.right - 0.5 && a.top < b.bottom - 0.5 && b.top < a.bottom - 0.5));
+      return { dh: Math.abs(letters.height - list.height), overlaps };
+    });
+    expect(layout.dh).toBeLessThanOrEqual(1);
+    expect(layout.overlaps).toBe(false);
+
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.gm')).toHaveCount(0);
+    const after = await page.evaluate(() => ({ y: window.scrollY, inert: document.querySelector('main').inert }));
+    expect(after).toEqual({ y: before, inert: false });
+  });
+});
+
+test.describe('/about status screen (v7)', () => {
+  test('person, not skills: status sub-menu, arrow keys, no TODO or skill panels in production', async ({ page }) => {
+    await page.goto('/about');
+    const tabs = page.locator('.scr-tab');
+    await expect(tabs.first()).toContainText(/STATUS/);
+    await expect(tabs.last()).toContainText(/JETZT|NOW/);
+    await expect(page.locator('.prof-detail')).toContainText('Richard Zuikov');
+    await expect(page.locator('body')).not.toContainText('Register-Level');
+    await expect(page.locator('body')).not.toContainText('TODO');
+    const words = (await page.locator('.prof-intro p').first().innerText()).trim().split(/\s+/).length;
+    expect(words).toBeLessThanOrEqual(90);
+    await tabs.first().focus();
+    await page.keyboard.press('ArrowDown');
+    await expect(tabs.nth(1)).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('a[href="/stack"].prof-skills')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page).toHaveURL(/\/$/);
+  });
+});
+
+test.describe('Record turn beat (v7)', () => {
+  test('the 90° turn is its own pinned, reversible beat after the last role', async ({ page, viewport }) => {
+    if (viewport.width < 768) test.skip();
+    await page.goto('/');
+    await page.waitForFunction(() => document.querySelector('#record')?.dataset.turnLen);
+    const geo = await page.evaluate(() => {
+      const s = document.querySelector('#record');
+      return { top: s.getBoundingClientRect().top + scrollY - 64, start: Number(s.dataset.turnStart), len: Number(s.dataset.turnLen) };
+    });
+    expect(geo.len).toBeGreaterThanOrEqual(Math.round(viewport.height * 0.6) - 1);
+    const at = async (p) => {
+      await page.evaluate((y) => window.scrollTo(0, y), geo.top + geo.start + geo.len * p);
+      await page.waitForTimeout(300);
+      return page.evaluate(() => {
+        const s = document.querySelector('#record');
+        return {
+          turn: parseFloat(s.style.getPropertyValue('--turn')),
+          pinTop: Math.round(s.querySelector('.record-pin').getBoundingClientRect().top),
+          yearRotate: getComputedStyle(s.querySelector('.record-year')).rotate,
+        };
+      });
+    };
+    const hold = await at(0);
+    expect(hold.turn).toBe(0);
+    const turned = await at(0.75);
+    expect(turned.turn).toBeCloseTo(90, 1);
+    expect(turned.pinTop).toBe(64);
+    expect(turned.yearRotate).toBe('-90deg');
+    const back = await at(0.05);
+    expect(back.turn).toBe(0);
   });
 });

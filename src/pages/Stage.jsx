@@ -5,7 +5,8 @@ import { useLanguage } from '../hooks/use-language';
 import { useReducedMotion } from '../hooks/use-reduced-motion';
 import { ROMAN, getActiveMenuId, landOnSection, menuItems, scrollTargets, setActiveMenuId } from '../lib/atlus';
 import { QUICK_PATH } from '../lib/sections';
-import { portraits } from '../data/portraits';
+import { cutouts, cutoutUrl, portraits } from '../data/portraits';
+import CutoutPortrait from '../components/atlus/CutoutPortrait';
 import { PROP_IDS } from '../components/stage/prop-ids';
 import { featuredProjects } from '../data/featured-projects';
 import IntroOverlay from '../components/stage/IntroOverlay';
@@ -15,7 +16,7 @@ import ProjectDeck from '../components/stage/ProjectDeck';
 import NowSection from '../components/stage/NowSection';
 import CardInspect from '../components/stage/CardInspect';
 import SkillBoard from '../components/atlus/SkillBoard';
-import RecordBoard, { SpeedLines } from '../components/atlus/RecordBoard';
+import RecordBoard, { RecordWipe, RideWedges } from '../components/atlus/RecordBoard';
 import ContactList from '../three/bonfire/ContactList';
 import { grainTexture } from '../lib/noise-textures';
 import { ImpactInk, InkSplat, TraceStar } from '../components/atlus/glyphs';
@@ -29,8 +30,24 @@ const SLAB_SIZES = [1, 0.84, 1.12, 0.92, 1.04];
 const SLAB_OFFSETS = [0, 1.1, 0.4, 1.6, 0.7];
 // Depth layer per descent panel: near panels move against the scroll, far ones trail it.
 const PANEL_LAYERS = ['near', 'far', 'mid', 'near', 'far'];
+// Fixed prop per descent panel: 01 PCB tile · 02 chip · 03 monitor · 04 rack unit · 05 security camera.
+const DESCENT_SLOTS = ['pcb', 'chip', 'monitor', 'rack', 'dome'];
 const LAND_PIN_MS = 1500;
 const LAND_RELEASE_EVENTS = ['wheel', 'touchstart', 'keydown', 'pointerdown'];
+
+// Hero art direction (DESIGN.md §18 "Portraits"): `head` below 768 px, `stage` above, chosen by the
+// <picture> media query so a resize swaps it without JS. The WebGL scene uploads whatever these
+// <img> elements loaded.
+const HERO_ART = cutouts.head ? [{ media: '(max-width: 767px)', set: cutouts.head }] : [];
+
+// Profile texture for the scene: the cut-out size whose height covers the viewport at this DPR.
+const sceneCutout = (set, fallback) => {
+  if (!set) return { bw: fallback, color: fallback };
+  const px = window.innerHeight * Math.min(window.devicePixelRatio || 1, 1.5);
+  return { bw: cutoutUrl(set, 'bw', px), color: cutoutUrl(set, 'color', px) };
+};
+
+const heroSet = cutouts.stage ?? cutouts.head;
 
 const delay = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
 
@@ -63,6 +80,12 @@ export default function Stage() {
   const canvasRef = useRef(null);
   const stageRef = useRef(null);
   const portraitRef = useRef(null);
+  // The hero's two <img> elements ({ bw, color }), filled by CutoutPortrait's refs.
+  const heroImages = useRef({});
+  const heroImgRefs = useRef({
+    bw: (node) => { heroImages.current.bw = node; },
+    color: (node) => { heroImages.current.color = node; },
+  }).current;
   const aboutRef = useRef(null);
   const aboutPortraitRef = useRef(null);
   const fireRef = useRef(null);
@@ -85,9 +108,8 @@ export default function Stage() {
       const stage = createStage({
         canvas: canvasRef.current,
         projects: featuredProjects,
-        portraitSrc: portraits.stage.large,
-        profileSrc: portraits.about.large,
-        profilePlaceholder: portraits.about.isPlaceholder,
+        portrait: heroSet ? heroImages.current : sceneCutout(null, portraits.stage.large),
+        profile: sceneCutout(cutouts.about, portraits.about.large),
         onDiveEnd: () => setPhase('done'),
         anchors: () => ({
           portrait: portraitRef.current,
@@ -98,8 +120,6 @@ export default function Stage() {
           slots: slotRefs.current.filter(Boolean),
           panels: panelRefs.current.filter(Boolean),
           skillProp: stageRef.current?.querySelector('.skill-prop'),
-          // Text the descent props must keep clear of.
-          obstacles: [...(stageRef.current?.querySelectorAll('.manga-panel, .stage-descent h2, .stage-descent > p, .stage-now h2, .now-panel') ?? [])],
           propProxies: [...(stageRef.current?.querySelectorAll('[data-prop]') ?? [])],
         }),
       });
@@ -346,7 +366,12 @@ export default function Stage() {
           </nav>
         </div>
         <div ref={portraitRef} className="stage-portrait">
-          {!webgl && <img src={portraits.stage.large} alt="" className="h-full w-full object-contain grayscale" />}
+          {heroSet ? (
+            // Always rendered: visible without WebGL; with WebGL hidden (still loading) as the scene's source.
+            <CutoutPortrait set={heroSet} art={HERO_ART} imgRefs={heroImgRefs} className={`hero-cutout ${webgl ? 'is-scene-source' : ''}`} sizes="(min-width: 768px) 34vw, 70vw" />
+          ) : (
+            !webgl && <img src={portraits.stage.large} alt="" className="h-full w-full object-contain grayscale" />
+          )}
         </div>
       </section>
 
@@ -357,20 +382,23 @@ export default function Stage() {
         <h2 id="descent-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight mt-2">{t.atlus.stage.descentTitle}</h2>
         <div className="mt-16 space-y-24 md:space-y-32">
           {t.about.logEntries.map((entry, index) => (
-            <article
-              key={entry.title}
-              ref={(node) => { panelRefs.current[index] = node; }}
-              className={`manga-panel is-${PANEL_LAYERS[index % PANEL_LAYERS.length]} ${index % 2 ? 'is-right' : ''}`}
-            >
-              <div className="flex items-start justify-between gap-5">
-                <span aria-hidden="true" className="font-anton text-6xl leading-none text-ash-600">{String(index + 1).padStart(2, '0')}</span>
-                <PanelIllustration index={index} />
-              </div>
-              <h3 className="font-anton uppercase text-3xl tracking-wide mt-2">{entry.title}</h3>
-              <p className="mt-3 text-base leading-relaxed text-ash-200">{entry.desc}</p>
-              {/* TODO strings are placeholders for facts still to be supplied, so visitors never see them. */}
-              {import.meta.env.DEV && <p className="mt-3 font-mono text-xs text-ash-300">{entry.todo}</p>}
-            </article>
+            // Row = panel + its reserved gutter slot for the 3D prop (DESIGN.md §18); the slot is empty markup.
+            <div key={entry.title} className={`descent-row ${index % 2 ? 'is-right' : ''}`}>
+              <article
+                ref={(node) => { panelRefs.current[index] = node; }}
+                className={`manga-panel is-${PANEL_LAYERS[index % PANEL_LAYERS.length]} ${index % 2 ? 'is-right' : ''}`}
+              >
+                <div className="flex items-start justify-between gap-5">
+                  <span aria-hidden="true" className="font-anton text-6xl leading-none text-ash-600">{String(index + 1).padStart(2, '0')}</span>
+                  <PanelIllustration index={index} />
+                </div>
+                <h3 className="font-anton uppercase text-3xl tracking-wide mt-2">{entry.title}</h3>
+                <p className="mt-3 text-base leading-relaxed text-ash-200">{entry.desc}</p>
+                {/* TODO strings are placeholders for facts still to be supplied, so visitors never see them. */}
+                {import.meta.env.DEV && <p className="mt-3 font-mono text-xs text-ash-300">{entry.todo}</p>}
+              </article>
+              {DESCENT_SLOTS[index] && <div aria-hidden="true" className="prop-slot" data-slot={DESCENT_SLOTS[index]} />}
+            </div>
           ))}
         </div>
       </section>
@@ -421,7 +449,7 @@ export default function Stage() {
 
       <section id="record" aria-labelledby="record-title" className="stage-works scroll-mt-16">
         <div className="record-pin">
-          <SpeedLines />
+          <RideWedges />
           <div className="record-yaw">
             <ImpactInk variant={2} />
             <p className="font-mono text-xs tracking-widest text-ash-300">04 / {t.atlus.hud.career}</p>
@@ -429,7 +457,10 @@ export default function Stage() {
             <RecordBoard ride onEnter={() => sceneRef.current?.travel()} onRide={(camera) => sceneRef.current?.setRide(camera)} />
             <OpenScreen to="/career" />
           </div>
+          <span aria-hidden="true" className="turn-burst" />
+          <p aria-hidden="true" className="record-next">{t.atlus.contact.headline}</p>
         </div>
+        <RecordWipe />
       </section>
 
       <section id="bonfire" ref={abyssRef} aria-labelledby="abyss-title" className="stage-abyss scroll-mt-16">

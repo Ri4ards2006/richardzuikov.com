@@ -399,3 +399,21 @@ Reviewer items already listed above are not repeated. The review was written bef
 | done | claude-code | Record ride: speedlines, own year column on ink, 90° roll hand-over (reversible) |
 | done | claude-code | Stack → Hardware: Fourier square-wave build-up (P3) |
 | todo | owner | `feat/portrait-poster` (+ colour cutout, `colorReveal` toggle): task text not in the repo, not run |
+
+## Changelog v7 (DESIGN.md §18)
+
+| Status | Owner | Item |
+|---|---|---|
+| done | claude-code | Merge PR #19 (v6 + test hook) into `feat/atlus-menu`, checks green |
+| done | claude-code | P0 descent props: cause proven (time-dependent runtime collision hiding + per-prop parallax); reserved gutter slots, fixed map 01 PCB · 02 chip · 03 monitor · 04 rack · 05 camera, visibility by breakpoint only, hook with `inFrustum` / `scene` / `rest` |
+| done | claude-code | P0 pause menu: scroll lock + inert page + exact restore, 12-column layout, one-row footer, mobile stack, close button at ≤ 375 px |
+| todo | Richard | Fill `design/ABOUT.md` (status, languages + levels, week, hobbies, now, travel, what you're looking for) |
+| todo | Richard | World map on `/about`: list of countries to fill white (`design/ABOUT.md`) |
+| done | claude-code | Task 3: `/about` rework: portrait + HUD rings, STATUS · WEEK · INVENTORY · NOW, intro draft (DE/EN), own camera instance; content only from `design/ABOUT.md`, the rest TODO keys (hidden in production) |
+| todo | Richard | Review the `/about` intro draft (`src/data/profile.js` → `intro`) |
+| todo | claude-code | World map on `/about` (not in the v7 brief; waits for the country list) |
+| done | claude-code | Task 4: Career: no hairlines, ink wedges + outline year, role 0 ≥ 120 px right of the year column (REVIEW-v6 P1), slanted slabs with rank pips |
+| done | claude-code | Task 5: 90° turn as its own pinned 60 vh beat (scrubbed, reversible; reduced motion = cut; mobile = slab wipe), screenshot strip |
+| done | claude-code | Task 6: poster pipeline (`npm run poster`: chroma key, CLAHE, 5-tone shader, AVIF/WebP, `/?portrait-lab` with `colorReveal`); tested on a synthetic image only |
+| done | Richard | Green-screen sources `stage` / `about` / `head` / `night` in `src/assets/portraits/raw/` (gitignored) |
+| done | claude-code | Portraits (replaces the poster shader): `npm run cutout` → colour + B/W cut-outs (CLAHE, S-curve, grain, paper rim), B/W at rest → colour on hover / focus / tap / centred / stage → about turn; stage → hero, about → /about, head → menu + mobile hero, night behind a flag; lab keeps contrast / grain / rim; screenshots in `design/screenshots/v7/portraits/` |
