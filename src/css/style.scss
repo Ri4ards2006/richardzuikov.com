@@ -240,7 +240,7 @@ h1[tabindex='-1']:focus-visible {
   width: 100%;
   max-width: 76rem;
   margin-inline: auto;
-  padding-inline: 1.25rem;
+  padding-inline: var(--space-edge);
 }
 
 .stage-hero {
@@ -256,20 +256,23 @@ h1[tabindex='-1']:focus-visible {
   position: absolute;
   z-index: 10;
   top: 0.5rem;
-  right: 1.25rem;
+  right: var(--space-edge);
   text-align: right;
   pointer-events: none;
 }
 
 .stage-name-block {
   font-family: Anton, Impact, sans-serif;
-  /* ~1.4× the v3 size on desktop; 7.4vw → 10.4vw keeps it fluid from 1280 to 1920 px. */
-  font-size: clamp(3.25rem, 10.4vw, 10rem);
+  /* ~1.4× the v3 size on desktop; 7.4vw → 10.4vw keeps it fluid from 1280 to 1920 px. The 15vh cap
+     (§19) keeps the role line above the hero's face on short, wide viewports. */
+  font-size: clamp(3.25rem, min(10.4vw, 15vh), 10rem);
   font-weight: 400;
   line-height: 0.94;
   letter-spacing: 0.01em;
   text-transform: uppercase;
   color: rgb(var(--ash-100));
+  /* Hard ink offset (no blur): the name stays legible where it crosses the hero's hair (§19). */
+  text-shadow: 0.035em 0.035em 0 rgb(var(--ash-900));
   transform: rotate(-4deg) skewX(-6deg);
   transform-origin: right top;
 }
@@ -284,6 +287,7 @@ h1[tabindex='-1']:focus-visible {
 
 .stage-role {
   margin-top: 1.5rem;
+  text-shadow: 1px 1px 0 rgb(var(--ash-900)), -1px -1px 0 rgb(var(--ash-900));
   font-family: ui-monospace, monospace;
   font-size: 0.75rem;
   letter-spacing: 0.18em;
@@ -293,10 +297,22 @@ h1[tabindex='-1']:focus-visible {
 
 .stage-portrait {
   min-height: 18rem;
-  /* Starts below the larger name block, so the HUD rings never run into the role line. */
-  margin-top: clamp(9rem, 19vw, 19rem);
   align-self: stretch;
   pointer-events: none;
+}
+
+/* One hero (DESIGN.md §19): the figure is ~70 % of the viewport tall, in the right half, and its crop
+   line (hip) sits on the viewport's bottom edge. The box is exactly the figure, so the scene, the
+   no-WebGL <picture> and the water mask all use the same rect. */
+@media (min-width: 761px) {
+  .stage-portrait {
+    position: absolute;
+    left: 48%;
+    bottom: 0;
+    height: 70vh;
+    min-height: 0;
+    aspect-ratio: var(--hero-aspect);
+  }
 }
 
 .stage-menu {
@@ -355,7 +371,7 @@ h1[tabindex='-1']:focus-visible {
 
 /* HUD bottom-right: the only place for control hints (DESIGN.md §16). */
 .stage-hud-br {
-  right: 1.25rem;
+  right: var(--space-edge);
   bottom: 0.625rem;
   display: flex;
   flex-direction: column;
@@ -448,7 +464,7 @@ h1[tabindex='-1']:focus-visible {
   grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
   gap: 2.5rem;
   align-items: center;
-  padding-block: 6rem;
+  padding-block: var(--space-section);
 }
 
 .about-portrait {
@@ -483,8 +499,8 @@ h1[tabindex='-1']:focus-visible {
 
 .about-panel {
   max-width: 34rem;
-  margin-top: 2.25rem;
-  padding: 1.75rem 2.25rem 2.5rem 1.75rem;
+  margin-top: var(--space-block);
+  padding: var(--space-panel);
   background: rgb(var(--ash-800) / 0.94);
   border: 3px solid rgb(var(--ash-100));
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2rem), calc(100% - 2rem) 100%, 0 100%);
@@ -520,14 +536,18 @@ h1[tabindex='-1']:focus-visible {
 }
 
 .stage-descent {
-  padding-block: 7rem;
+  padding-block: var(--space-section);
+}
+
+.descent-rows {
+  margin-top: var(--space-block);
 }
 
 .manga-panel {
   position: relative;
   --tilt: 9deg;
   max-width: 34rem;
-  padding: 1.75rem;
+  padding: var(--space-panel);
   background: rgb(var(--ash-800) / 0.94);
   border: 3px solid rgb(var(--ash-100));
   box-shadow: 10px 10px 0 rgb(var(--ash-900));
@@ -549,6 +569,9 @@ h1[tabindex='-1']:focus-visible {
     display: grid;
     grid-template-columns: minmax(0, 34rem) minmax(0, 1fr);
     align-items: center;
+    /* Near panels (scale 1.06 + 9° yaw) reach ~1.75rem past their box; the inset keeps them clear of
+       the 24 px edge gutter (§19). */
+    padding-inline: 1.75rem;
   }
 
   .descent-row.is-right {
@@ -563,12 +586,18 @@ h1[tabindex='-1']:focus-visible {
   .descent-row.is-right .prop-slot {
     grid-column: 1;
     grid-row: 1;
+    /* Mirror of the default: 10 % closer to the panel on its right. */
+    margin-inline: 10% 0;
   }
 
+  /* v8 (§19): 1.5× the v7 slot (11rem), and 10 % closer to its panel: a margin of 10 % of the gutter on
+     the far side moves the centred slot 5 % of the gutter toward the panel, i.e. the prop's distance
+     to the panel edge (half the gutter) shrinks by 10 %. Still its own grid cell, so never on text. */
   .prop-slot {
     display: block;
     justify-self: center;
-    width: min(11rem, 100%);
+    margin-inline: 0 10%;
+    width: min(16.5rem, 90%);
     aspect-ratio: 1;
     pointer-events: none;
     transform: translateY(calc(var(--depth, 0) * var(--parallax, 0px)));
@@ -791,11 +820,11 @@ h1[tabindex='-1']:focus-visible {
 }
 
 .stage-works {
-  padding-block: 5rem;
+  padding-block: var(--space-section);
 }
 
 .stage-tarot {
-  margin-top: 3.5rem;
+  margin-top: var(--space-block);
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 2.5rem;
@@ -1100,7 +1129,6 @@ h1[tabindex='-1']:focus-visible {
 
   .stage-about {
     grid-template-columns: minmax(0, 1fr);
-    padding-block: 4rem;
   }
 
   .about-portrait {
@@ -1167,7 +1195,7 @@ h1[tabindex='-1']:focus-visible {
   position: fixed;
   z-index: 60;
   top: 0.625rem;
-  right: 1.25rem;
+  right: var(--space-edge);
   width: 3.25rem;
   height: 2.75rem;
   display: flex;
@@ -1584,7 +1612,7 @@ html.gm-open .menu-dots {
   position: fixed;
   z-index: 96;
   top: 0.625rem;
-  right: 1.25rem;
+  right: var(--space-edge);
   width: 3.25rem;
   height: 2.75rem;
   display: flex;
@@ -1942,7 +1970,7 @@ html.gm-open .menu-dots {
 
 .skill-panel {
   position: relative;
-  padding: 1.5rem;
+  padding: var(--space-panel);
   background: rgb(var(--ash-800) / 0.94);
   border: 3px solid rgb(var(--ash-100));
 }
@@ -2288,7 +2316,7 @@ html.gm-open .menu-dots {
   grid-template-columns: auto minmax(0, 1fr);
   gap: 2.5rem;
   align-items: start;
-  margin-top: 2.5rem;
+  margin-top: var(--space-block);
 }
 
 .record-year {
@@ -2648,6 +2676,8 @@ html.gm-open .menu-dots {
 }
 
 .ink-stage-name {
+  /* Holds still: the hero is the only thing that moves on the stage (§19). */
+  animation: none;
   right: -1rem;
   bottom: 1.6rem;
   width: clamp(14rem, 34vw, 30rem);
@@ -2725,7 +2755,7 @@ html.gm-open .menu-dots {
 
 .stage-now {
   position: relative;
-  padding-block: 6rem 5rem;
+  padding-block: var(--space-section);
 }
 
 .now-list {
@@ -2733,14 +2763,13 @@ html.gm-open .menu-dots {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 2.25rem;
   align-items: start;
-  padding-bottom: 3rem;
-  margin-top: 3rem;
+  margin-top: var(--space-block);
   perspective: 1200px;
 }
 
 .now-panel {
   position: relative;
-  padding: 1.5rem 1.5rem 1.75rem;
+  padding: var(--space-panel);
   background: rgb(var(--ash-800) / 0.94);
   border: 3px solid rgb(var(--ash-100));
   box-shadow: 10px 10px 0 rgb(var(--ash-900));
@@ -3312,7 +3341,7 @@ html.gm-open .menu-dots {
   position: relative;
   max-width: 76rem;
   margin-inline: auto;
-  padding: 1.5rem 1.25rem 4rem;
+  padding: 1.5rem var(--space-edge) 4rem;
 }
 
 .scr-back {
@@ -3434,7 +3463,7 @@ html.gm-open .menu-dots {
   position: sticky;
   top: 5.5rem;
   min-width: 0;
-  padding: 1.5rem;
+  padding: var(--space-panel);
   background: rgb(var(--ash-800) / 0.94);
   border: 3px solid rgb(var(--ash-100));
 }
@@ -3651,10 +3680,6 @@ html.gm-open .menu-dots {
   .prof-figure {
     animation: prof-breathe 6s ease-in-out infinite alternate;
   }
-
-  .prof-week li {
-    animation: slab-slam 220ms cubic-bezier(0.2, 0.9, 0.1, 1) calc(var(--i, 0) * 40ms) both;
-  }
 }
 
 @keyframes prof-spin {
@@ -3662,7 +3687,7 @@ html.gm-open .menu-dots {
 }
 
 @keyframes prof-breathe {
-  to { transform: scale(1.012); }
+  to { transform: scale(1.006); }
 }
 
 .prof-h {
@@ -3726,53 +3751,6 @@ html.gm-open .menu-dots {
   border-color: rgb(var(--ash-100));
 }
 
-/* Week: seven slanted day slabs, today inverted. */
-.prof-week {
-  display: grid;
-  gap: 0.35rem;
-  margin-top: 1rem;
-}
-
-.prof-week li {
-  display: grid;
-  grid-template-columns: 3.25rem minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 0.75rem;
-  min-height: 2.75rem;
-  padding: 0.35rem 1.75rem 0.35rem 0.75rem;
-  background: rgb(var(--ash-900));
-  clip-path: polygon(0.75rem 0, 100% 0, calc(100% - 0.75rem) 100%, 0 100%);
-  margin-left: calc(var(--i, 0) * 0.2rem);
-}
-
-.prof-day {
-  font-family: Anton, Impact, sans-serif;
-  font-size: 1.25rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.prof-day-text {
-  font-size: 0.875rem;
-  color: rgb(var(--ash-200));
-}
-
-.prof-today {
-  font-family: ui-monospace, monospace;
-  font-size: 0.6875rem;
-  letter-spacing: 0.16em;
-}
-
-.prof-week li.is-today {
-  background: rgb(var(--ash-100));
-  color: rgb(var(--ash-900));
-}
-
-.prof-week li.is-today .prof-day-text,
-.prof-week li.is-today .prof-todo {
-  color: rgb(var(--ash-700));
-}
-
 /* Inventory: item tiles with a line icon and one dry line. */
 .prof-inv {
   display: grid;
@@ -3830,24 +3808,20 @@ html.gm-open .menu-dots {
   margin-top: 1rem;
 }
 
-.prof-now dt {
-  font-family: ui-monospace, monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.16em;
-  color: rgb(var(--ash-300));
+.prof-now li {
+  display: grid;
+  gap: 0.15rem;
 }
 
-.prof-now dd {
-  margin-top: 0.15rem;
+.prof-now-label {
   font-family: Anton, Impact, sans-serif;
   font-size: 1.375rem;
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
-.prof-now dd.prof-todo {
+.prof-now-detail {
   font-size: 0.75rem;
-  text-transform: none;
 }
 
 .prof-skills {
@@ -3888,10 +3862,6 @@ html.gm-open .menu-dots {
   .prof-portrait {
     width: min(100%, 12rem);
   }
-
-  .prof-week li {
-    margin-left: 0;
-  }
 }
 
 /* ---------- Real-photo portraits (DESIGN.md §2 + §18 "Portraits") ---------- */
@@ -3902,6 +3872,32 @@ html.gm-open .menu-dots {
   display: block;
   aspect-ratio: var(--cutout-aspect);
   outline-offset: 6px;
+  /* Edge fade (§19): every edge where the figure hits its source frame fades into ink over 18–25 %
+     of the figure (--fade-* from data/portraits.js). The box is the photo's box, so the mask lands on
+     the figure, not on letterboxing. */
+  --fade-l: 0%;
+  --fade-r: 0%;
+  --fade-b: 0%;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 var(--fade-l)),
+    linear-gradient(to left, transparent, #000 var(--fade-r)),
+    linear-gradient(to top, transparent, #000 var(--fade-b));
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent, #000 var(--fade-l)),
+    linear-gradient(to left, transparent, #000 var(--fade-r)),
+    linear-gradient(to top, transparent, #000 var(--fade-b));
+  mask-composite: intersect;
+}
+
+/* Art direction: the same media query as the hero's <picture> source (`head` below 768 px). */
+@media (max-width: 767px) {
+  .cutout[data-art] {
+    --cutout-aspect: var(--art-aspect);
+    --fade-l: var(--art-fade-l);
+    --fade-r: var(--art-fade-r);
+    --fade-b: var(--art-fade-b);
+  }
 }
 
 .cutout img {
@@ -3959,15 +3955,22 @@ html.gm-open .menu-dots {
   object-position: right bottom;
 }
 
-/* Fills the 4:5 portrait cell; object-fit keeps both layers on the same box. */
+/* As tall as its cell, as wide as the photo's aspect ratio: the box is exactly the figure, so the
+   edge-fade mask sits on the photo's own edges (§19). */
 .cutout.prof-figure,
 .cutout.gm-portrait,
 .cutout.hero-cutout {
-  aspect-ratio: auto;
-  width: 100%;
+  aspect-ratio: var(--cutout-aspect);
+  width: auto;
   height: 100%;
+  max-width: 100%;
+  margin-inline: auto;
   filter: none;
   opacity: 1;
+}
+
+.cutout.gm-portrait {
+  margin-inline: auto 0;
 }
 
 /* Dev-only portrait lab (/?portrait-lab). */

@@ -5,6 +5,7 @@ import { stackUses } from '../../data/stack-uses';
 import SkillVignette from './SkillVignette';
 import KeyItems from './KeyItems';
 import StackDetail from './StackDetail';
+import { DEV_HINTS } from '../../lib/dev-hints';
 
 const pad = (value) => String(value).padStart(2, '0');
 
@@ -57,7 +58,7 @@ export default function SkillBoard({ onCategory, showProp = true }) {
                     </ul>
                   )}
                   {/* TODO strings are placeholders for facts still to be supplied, so visitors never see them. */}
-                  {!uses && import.meta.env.DEV && <p className="mt-1.5 font-mono text-[11px] text-ash-300">{t.atlus.todoStackUse}</p>}
+                  {!uses && DEV_HINTS && <p className="mt-1.5 font-mono text-[11px] text-ash-300">{t.atlus.todoStackUse}</p>}
                 </div>
               </li>
             );

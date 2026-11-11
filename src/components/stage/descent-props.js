@@ -8,7 +8,8 @@ const GUTTER_SCREEN = 1024;
 // Half the screen footprint of a prop while it rotates, in world units at SIZE 1; plus a clear margin in px.
 const PROP_RADIUS = 0.82;
 const SPIN = 0.22;
-const SIZE = 1.05;
+// v8 (§19): 1.5× the v7 size; the slot (16.5rem) is what actually bounds it.
+const SIZE = 1.6;
 // Depth of the prop plane in world units (the camera sits at z = 10).
 const PLANE_Z = -0.4;
 // Without a mouse the dome camera pans slowly on its own.

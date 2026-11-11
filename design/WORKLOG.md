@@ -383,3 +383,23 @@ e2e: the hook test now also checks the fixed slot order, all five `visible` in s
 - Review the intro draft.
 - `about.png` (green screen) into `raw/`, then `npm run poster -- about`.
 - World map: still waits for the country list (not part of this brief).
+
+## 2026-11-11 — v8 polish (DESIGN.md §19), branch feat/atlus-v8
+
+Stacked on `feat/atlus-v7` because PR #24 was still open; the PR targets `feat/atlus-v7` and gets retargeted to `feat/atlus-menu` once #24 is merged.
+
+**Task 1: hero** — Review round 1: the figure (70 vh, left edge at 50 %) put the role line across the glasses and ZUIKOV across the hair → name capped at 15vh, figure at 48 %, hard ink offset on name + role. Round 2 (1280 / 1440 / 1920): face clear of the role line everywhere; the hair still passes under ZUIKOV, which reads as layering, not collision. The HUD hints sit in the faded bottom of the figure. 0 s vs 3 s: only breathing and water differ. `/about`'s figure breathing also dropped to 0.6 %.
+
+**Task 2: edges** — Cut edges measured on the alpha channel (share of opaque pixels on the edge row/column). Before: hard hip line + vertical right edge on Who Am I and /about, hard bottom on the hero. After: all fade into ink; the WebGL hero follows the stage / head swap.
+
+**Task 3: props** — The slot (11rem) was what bounded the drawn size, not SIZE; slot 16.5rem + SIZE 1.6. No overlap at 1024 / 1440 / 1920.
+
+**Task 4: TODO / DRAFT** — Production builds were already clean, but `import.meta.env.DEV` follows NODE_ENV: `NODE_ENV=development vite build` leaked TODO / ENTWURF on `/`, `/quick`, `/about`, `/stack` (new test red). Gate now `DEV_HINTS` from `command === 'serve'`; the same build is green, the dev server still shows the hints.
+
+**Task 5: /about** — WEEK gone; NOW + INVENTORY from Richard's list; own line icons book / code window / mountains + sun.
+
+**Task 6: spacing** — Audit script (all visible text / boxed elements, scrolled through, at rest) at 1024 / 1440 / 1920: before, the `…` button and every section gutter sat at 20 px, near descent panels at 9 px at 1024. After: none under 24 px except the record ride bars and the clipped project deck (full bleed by design) and transient entrance / yaw states.
+
+Screenshots: `design/screenshots/v8/` — `hero-0s`, `hero-3s`, `whoami`, `descent-{1,2,4}`, `about` at 1440×900 and 390×844; `descent-{1,4}-1024x768`.
+
+**Open for Richard**: one dry line per hobby; details for the three NOW items; language levels; the intro draft.

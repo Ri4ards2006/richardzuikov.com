@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { fadeVars } from '../../data/portraits';
 
 // Real-photo portrait (DESIGN.md §2 + §18 "Portraits"): the black-and-white cut-out at rest, the
 // colour cut-out cross-faded on top on hover / focus (300 ms ease-out, CSS), instantly under reduced
@@ -7,6 +8,9 @@ import React, { useEffect, useRef, useState } from 'react';
 // `art`: [{ media, set }] art direction — a <source media> per entry ahead of the default `set`, so the
 // browser swaps the photo on resize with no JS (the hero: `head` below 768 px, `stage` above).
 // `imgRefs`: { bw, color } refs to the two <img> elements (the WebGL stage uploads what they loaded).
+// Edge fade (DESIGN.md §19): the wrapper is locked to the photo's aspect ratio and masks the edges where
+// the figure hits its source frame (set.fade). An art-directed set carries its own aspect and fade as
+// --art-* properties, which style.scss swaps in under the same media query (data-art).
 const srcSet = (set, layer, format) => set.sizes.map(({ w, h }) => `${set[layer][h][format]} ${w}w`).join(', ');
 
 const TOUCH = '(hover: none)';
@@ -59,7 +63,12 @@ export default function CutoutPortrait({ set, art = [], imgRefs, alt = '', sizes
     <span
       ref={ref}
       className={`cutout ${on ? 'is-colour' : ''} ${className}`}
-      style={{ '--cutout-aspect': `${small.w} / ${small.h}` }}
+      data-art={art.length ? '' : undefined}
+      style={{
+        '--cutout-aspect': `${small.w} / ${small.h}`,
+        ...fadeVars(set.fade),
+        ...(art[0] ? { '--art-aspect': `${art[0].set.sizes[0].w} / ${art[0].set.sizes[0].h}`, ...fadeVars(art[0].set.fade, 'art-fade') } : {}),
+      }}
       tabIndex={focusable ? 0 : undefined}
       role={focusable ? 'img' : undefined}
       aria-label={focusable ? alt : undefined}

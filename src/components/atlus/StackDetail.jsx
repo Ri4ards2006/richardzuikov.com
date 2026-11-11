@@ -7,6 +7,7 @@ import { projectImageLift, projectImages } from '../../data/project-images';
 import { ROMAN } from '../../lib/atlus';
 import DetailScreen from './DetailScreen';
 import { CardFrame } from './glyphs';
+import { DEV_HINTS } from '../../lib/dev-hints';
 
 // Stack skill detail: what it is, where it was used (project cards that open the Work screen on
 // that project), experience in words. No ratings. ←/→ browse the items of the category.
@@ -24,7 +25,7 @@ export default function StackDetail({ category, index, onIndex, onClose }) {
       <h2 className="dts-title">{item}</h2>
 
       <h3 className="dts-label">{t.atlus.detail.what}</h3>
-      <p className="text-base leading-relaxed text-ash-100 max-w-[68ch]">{what ?? (import.meta.env.DEV ? t.atlus.detail.todoWhat : '')}</p>
+      <p className="text-base leading-relaxed text-ash-100 max-w-[68ch]">{what ?? (DEV_HINTS ? t.atlus.detail.todoWhat : '')}</p>
 
       <h3 className="dts-label">{t.atlus.detail.where}</h3>
       {uses.length ? (
@@ -54,7 +55,7 @@ export default function StackDetail({ category, index, onIndex, onClose }) {
 
       {/* Experience in words is still missing: a TODO key in development, nothing (not even the
           heading) for visitors. */}
-      {import.meta.env.DEV && (
+      {DEV_HINTS && (
         <>
           <h3 className="dts-label">{t.atlus.detail.experience}</h3>
           <p className="font-mono text-xs text-ash-300">{t.atlus.detail.todoExperience}</p>

@@ -21,6 +21,7 @@ import ContactList from '../three/bonfire/ContactList';
 import { grainTexture } from '../lib/noise-textures';
 import { ImpactInk, InkSplat, TraceStar } from '../components/atlus/glyphs';
 import OpenScreen, { RETURN_KEY } from '../components/atlus/OpenScreen';
+import { DEV_HINTS } from '../lib/dev-hints';
 
 const INTRO_KEY = 'seen-stage-intro';
 const BOOT_MS = 800;
@@ -113,6 +114,7 @@ export default function Stage() {
         onDiveEnd: () => setPhase('done'),
         anchors: () => ({
           portrait: portraitRef.current,
+          menu: stageRef.current?.querySelector('.stage-menu ul'),
           about: aboutRef.current,
           aboutPortrait: aboutPortraitRef.current,
           fire: fireRef.current,
@@ -365,7 +367,8 @@ export default function Stage() {
             </ul>
           </nav>
         </div>
-        <div ref={portraitRef} className="stage-portrait">
+        {/* The figure's box: 70 vh tall, bottom edge on the viewport's bottom edge (desktop, §19). */}
+        <div ref={portraitRef} className="stage-portrait" style={{ '--hero-aspect': heroSet?.aspect ?? 0.62 }}>
           {heroSet ? (
             // Always rendered: visible without WebGL; with WebGL hidden (still loading) as the scene's source.
             <CutoutPortrait set={heroSet} art={HERO_ART} imgRefs={heroImgRefs} className={`hero-cutout ${webgl ? 'is-scene-source' : ''}`} sizes="(min-width: 768px) 34vw, 70vw" />
@@ -380,7 +383,7 @@ export default function Stage() {
       <section aria-labelledby="descent-title" className="stage-descent">
         <p className="font-mono text-xs tracking-widest text-ash-300">{t.atlus.stage.descent}</p>
         <h2 id="descent-title" className="heading-skew font-anton uppercase text-5xl sm:text-7xl tracking-wide leading-tight mt-2">{t.atlus.stage.descentTitle}</h2>
-        <div className="mt-16 space-y-24 md:space-y-32">
+        <div className="descent-rows space-y-24 md:space-y-32">
           {t.about.logEntries.map((entry, index) => (
             // Row = panel + its reserved gutter slot for the 3D prop (DESIGN.md §18); the slot is empty markup.
             <div key={entry.title} className={`descent-row ${index % 2 ? 'is-right' : ''}`}>
@@ -395,7 +398,7 @@ export default function Stage() {
                 <h3 className="font-anton uppercase text-3xl tracking-wide mt-2">{entry.title}</h3>
                 <p className="mt-3 text-base leading-relaxed text-ash-200">{entry.desc}</p>
                 {/* TODO strings are placeholders for facts still to be supplied, so visitors never see them. */}
-                {import.meta.env.DEV && <p className="mt-3 font-mono text-xs text-ash-300">{entry.todo}</p>}
+                {DEV_HINTS && <p className="mt-3 font-mono text-xs text-ash-300">{entry.todo}</p>}
               </article>
               {DESCENT_SLOTS[index] && <div aria-hidden="true" className="prop-slot" data-slot={DESCENT_SLOTS[index]} />}
             </div>
